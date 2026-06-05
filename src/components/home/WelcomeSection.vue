@@ -1,5 +1,5 @@
 <template>
-  <section id="tentang" class="relative py-16 lg:py-20 bg-white dark:bg-dark overflow-hidden transition-colors duration-500">
+  <section id="tentang" class="relative py-20 lg:py-28 bg-cream dark:bg-[#121220] overflow-hidden transition-colors duration-500">
     <!-- Animated Islamic Pattern Background -->
     <IslamicPattern pattern-color="#0D4F4F" />
 
@@ -47,7 +47,7 @@
         <div ref="imageContent" class="relative">
           <div class="relative rounded-3xl overflow-hidden shadow-2xl">
             <img :src="interiorImg" alt="Interior Masjid Jami Kassiti" class="w-full h-[400px] lg:h-[550px] object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-primary/30 to-transparent"></div>
           </div>
 
           <!-- Floating Card -->

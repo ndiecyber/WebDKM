@@ -21,7 +21,7 @@
     <!-- Play/Pause Button -->
     <button 
       @click="togglePlay"
-      class="relative w-14 h-14 rounded-full bg-gradient-to-br from-secondary to-secondary-light flex items-center justify-center text-dark shadow-[0_0_30px_rgba(197,165,90,0.3)] hover:shadow-[0_0_40px_rgba(197,165,90,0.5)] transition-all duration-300 active:scale-90 z-10"
+      class="relative w-14 h-14 rounded-full bg-linear-to-br from-secondary to-secondary-light flex items-center justify-center text-dark shadow-[0_0_30px_rgba(197,165,90,0.3)] hover:shadow-[0_0_40px_rgba(197,165,90,0.5)] transition-all duration-300 active:scale-90 z-10"
       aria-label="Putar Murottal"
     >
       <!-- Pulse rings when playing -->

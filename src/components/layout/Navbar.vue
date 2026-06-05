@@ -53,10 +53,11 @@
 
           <a
             href="#"
-            class="ml-4 px-6 py-2.5 bg-secondary text-dark font-semibold text-sm rounded-full hover:bg-secondary-light transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30"
+            class="ml-4 px-6 py-2.5 bg-secondary text-dark font-semibold text-sm rounded-full hover:bg-secondary-light transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group"
             @click.prevent="isDonationModalOpen = true"
           >
-            💛 Donasi
+            <HandCoins class="w-5 h-5 text-dark group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
+            Donasi
           </a>
         </div>
 
@@ -104,8 +105,9 @@
           <span class="font-medium">{{ isDark ? 'Mode Terang' : 'Mode Gelap' }}</span>
         </button>
 
-        <a href="#" class="block mt-2 px-4 py-3 bg-secondary text-dark font-semibold rounded-xl text-center hover:bg-secondary-light transition-all duration-300" @click.prevent="isDonationModalOpen = true; mobileOpen = false">
-          💛 Donasi
+        <a href="#" class="flex items-center justify-center gap-2 mt-2 px-4 py-3 bg-secondary text-dark font-semibold rounded-xl hover:bg-secondary-light transition-all duration-300 group" @click.prevent="isDonationModalOpen = true; mobileOpen = false">
+          <HandCoins class="w-5 h-5 text-dark group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
+          Donasi
         </a>
       </div>
     </Transition>
@@ -116,7 +118,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { gsap } from 'gsap'
 import { useDark, useToggle } from '@vueuse/core'
-import { Sun, Moon } from 'lucide-vue-next'
+import { Sun, Moon, HandCoins } from 'lucide-vue-next'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import logoLight from '@/assets/images/logo-kustom.png'
 import logoDark from '@/assets/images/logo-kustom2.png'
@@ -161,7 +163,7 @@ const activeTextClass = computed(() => {
 
 const buttonClass = computed(() => {
   if (!scrolled.value || isDark.value) return 'bg-white/10 text-white/90 hover:bg-white/20 border border-white/20'
-  return 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
+  return 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm hover:shadow-md'
 })
 
 // Mini Prayer Logic synced from global store

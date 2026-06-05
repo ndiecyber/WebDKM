@@ -1,0 +1,7 @@
+{
+  "CommandLine": "\"python -c \\\"import json; lines = [json.loads(l) for l in open(r'C:\\\\Users\\\\Asus ROG\\\\.gemini\\\\antigravity-ide\\\\brain\\\\89fbbe42-2e82-4f43-9e37-bbecd7b7ec51\\\\.system_generated\\\\logs\\\\transcript.jsonl', encoding='utf-8') if 'Enhance CTASection' in l]; open('cta_restore.vue', 'w', encoding='utf-8').write(lines[-1]['tool_calls'][0]['args'].get('CodeContent', lines[-1]['tool_calls'][0]['args']))\\\"\"",
+  "Cwd": "\"c:\\\\Users\\\\Asus ROG\\\\Desktop\\\\KP Masjid Jami Kassiti\"",
+  "WaitMsBeforeAsync": "5000",
+  "toolAction": "\"Restore CTA code directly\"",
+  "toolSummary": "\"Restore CTA code directly\""
+}

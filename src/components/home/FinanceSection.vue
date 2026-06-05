@@ -1,14 +1,14 @@
 <template>
-  <section id="laporan-keuangan" class="relative py-16 lg:py-24 bg-cream dark:bg-[#121220] overflow-hidden transition-colors duration-500">
+  <section id="keuangan" class="relative py-16 lg:py-24 bg-white dark:bg-dark overflow-hidden transition-colors duration-500">
     <!-- Background Elements -->
     <div class="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-100">
       <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 dark:bg-secondary/10 rounded-full blur-[100px]"></div>
-      <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 dark:bg-cyan-900/20 rounded-full blur-[120px]"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 dark:bg-primary/10 rounded-full blur-[100px]"></div>
     </div>
     <IslamicPattern pattern-color="#C5A55A" :show-sparkles="false" class="opacity-10 dark:opacity-[0.15]" />
 
     <!-- Floating Particles -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-1">
       <div
         v-for="p in particles"
         :key="p.id"
@@ -51,7 +51,7 @@
           :style="{ transform: cardTilts[0] || 'scale3d(1, 1, 1)' }"
           class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
-          <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <!-- Decorative Icon -->
           <div class="absolute -right-4 -top-4 w-20 h-20 bg-primary/5 dark:bg-secondary/10 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-125 group-hover:rotate-12">
             <Wallet class="w-8 h-8 text-primary/20 dark:text-secondary/20" />
@@ -86,7 +86,7 @@
             </div>
             <div class="flex items-center gap-2 mt-3">
               <div class="flex-1 h-1 rounded-full bg-primary/10 dark:bg-secondary/10 overflow-hidden">
-                <div ref="progressBar1" class="h-full bg-gradient-to-r from-primary to-primary-light dark:from-secondary dark:to-secondary-light rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div ref="progressBar1" class="h-full bg-linear-to-r from-primary to-primary-light dark:from-secondary dark:to-secondary-light rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
               <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 84.739.781</span>
             </div>
@@ -100,7 +100,7 @@
           :style="{ transform: cardTilts[1] || 'scale3d(1, 1, 1)' }"
           class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
-          <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-linear-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="absolute -right-4 -top-4 w-20 h-20 bg-green-500/5 dark:bg-green-500/10 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-125 group-hover:rotate-12">
             <TrendingUp class="w-8 h-8 text-green-500/20 dark:text-green-400/20" />
           </div>
@@ -133,7 +133,7 @@
             </div>
             <div class="flex items-center gap-2 mt-3">
               <div class="flex-1 h-1 rounded-full bg-green-500/10 overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full" style="width: 0%"></div>
+                <div class="h-full bg-linear-to-r from-green-500 to-emerald-400 rounded-full" style="width: 0%"></div>
               </div>
               <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 0</span>
             </div>
@@ -147,7 +147,7 @@
           :style="{ transform: cardTilts[2] || 'scale3d(1, 1, 1)' }"
           class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
-          <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-linear-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="absolute -right-4 -top-4 w-20 h-20 bg-red-500/5 dark:bg-red-500/10 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-125 group-hover:rotate-12">
             <TrendingDown class="w-8 h-8 text-red-500/20 dark:text-red-400/20" />
           </div>
@@ -180,7 +180,7 @@
             </div>
             <div class="flex items-center gap-2 mt-3">
               <div class="flex-1 h-1 rounded-full bg-red-500/10 overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-red-500 to-orange-400 rounded-full" style="width: 0%"></div>
+                <div class="h-full bg-linear-to-r from-red-500 to-orange-400 rounded-full" style="width: 0%"></div>
               </div>
               <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 0</span>
             </div>
@@ -192,15 +192,15 @@
           @mousemove="handleMouseMove($event, 3)"
           @mouseleave="resetTilt(3)"
           :style="{ transform: cardTilts[3] || 'scale3d(1, 1, 1)' }"
-          class="finance-card group w-full bg-gradient-to-br from-white/90 to-cyan-50/50 dark:from-[#1a2035]/80 dark:to-[#152030]/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] border border-cyan-400 dark:border-cyan-500/50 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all duration-300 transform-gpu relative overflow-hidden"
+          class="finance-card group w-full bg-linear-to-br from-white/90 to-cyan-50/50 dark:from-[#1a2035]/80 dark:to-[#152030]/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] border border-cyan-400 dark:border-cyan-500/50 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
-          <div class="absolute -right-12 -top-12 w-40 h-40 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 dark:from-cyan-400/10 dark:to-blue-500/10 rounded-full blur-2xl z-0 transition-all duration-500 group-hover:scale-150"></div>
-          <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-gradient-to-tr from-blue-400/10 to-transparent rounded-full blur-2xl z-0"></div>
+          <div class="absolute -right-12 -top-12 w-40 h-40 bg-linear-to-br from-cyan-400/20 to-blue-500/20 dark:from-cyan-400/10 dark:to-blue-500/10 rounded-full blur-2xl z-0 transition-all duration-500 group-hover:scale-150"></div>
+          <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-linear-to-tr from-blue-400/10 to-transparent rounded-full blur-2xl z-0"></div>
           
           <div class="relative z-10">
             <div class="flex items-center justify-between mb-1">
               <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
+                <div class="w-9 h-9 rounded-xl bg-linear-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
                   <BadgeCheck class="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <h3 class="text-dark dark:text-white font-bold text-base transition-colors duration-500">Saldo Akhir</h3>
@@ -229,12 +229,12 @@
             
             <div class="flex items-end gap-1 font-bold font-heading">
               <span class="text-base sm:text-2xl text-cyan-600 dark:text-cyan-400">Rp</span>
-              <span class="text-2xl sm:text-4xl leading-none text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 drop-shadow-sm" ref="counter4">0</span>
+              <span class="text-2xl sm:text-4xl leading-none text-transparent bg-clip-text bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 drop-shadow-sm" ref="counter4">0</span>
               <span class="text-sm sm:text-xl pb-0.5 text-cyan-600 dark:text-cyan-400">jt</span>
             </div>
             <div class="flex items-center gap-2 mt-3">
               <div class="flex-1 h-1 rounded-full bg-cyan-500/10 overflow-hidden">
-                <div ref="progressBar4" class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div ref="progressBar4" class="h-full bg-linear-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
               <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 84.739.781</span>
             </div>
@@ -257,34 +257,43 @@
               <ArrowUpRight class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Total Masuk</span>
             </div>
-            <p class="text-green-600 dark:text-green-400 font-bold text-xs sm:text-base">Rp 0</p>
+            <div class="flex items-end justify-center gap-1 text-green-600 dark:text-green-400 font-bold">
+              <span class="text-xs sm:text-sm">Rp</span>
+              <span class="text-xs sm:text-base leading-none" ref="sumIn">0</span>
+            </div>
           </div>
           <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-red-500/5 transition-colors duration-300">
             <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
               <ArrowDownRight class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Total Keluar</span>
             </div>
-            <p class="text-red-500 font-bold text-xs sm:text-base">Rp 0</p>
+            <div class="flex items-end justify-center gap-1 text-red-500 font-bold">
+              <span class="text-xs sm:text-sm">Rp</span>
+              <span class="text-xs sm:text-base leading-none" ref="sumOut">0</span>
+            </div>
           </div>
           <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-cyan-500/5 transition-colors duration-300">
             <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
               <Activity class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-500" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Selisih Bersih</span>
             </div>
-            <p class="text-cyan-600 dark:text-cyan-400 font-bold text-xs sm:text-base">Rp 0</p>
+            <div class="flex items-end justify-center gap-1 text-cyan-600 dark:text-cyan-400 font-bold">
+              <span class="text-xs sm:text-sm">Rp</span>
+              <span class="text-xs sm:text-base leading-none" ref="sumDiff">0</span>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Bottom Decorative Divider -->
       <div class="flex items-center gap-4 mt-10" ref="dividerRef">
-        <div class="flex-1 h-px bg-gradient-to-r from-transparent via-primary/20 dark:via-secondary/20 to-transparent"></div>
+        <div class="flex-1 h-px bg-linear-to-r from-transparent via-primary/20 dark:via-secondary/20 to-transparent"></div>
         <div class="flex items-center gap-2 text-dark/30 dark:text-white/20">
           <ShieldCheck class="w-4 h-4" />
           <span class="text-[10px] font-semibold tracking-widest uppercase">Dikelola Dengan Amanah</span>
           <ShieldCheck class="w-4 h-4" />
         </div>
-        <div class="flex-1 h-px bg-gradient-to-r from-transparent via-primary/20 dark:via-secondary/20 to-transparent"></div>
+        <div class="flex-1 h-px bg-linear-to-r from-transparent via-primary/20 dark:via-secondary/20 to-transparent"></div>
       </div>
     </div>
   </section>
@@ -309,6 +318,10 @@ const counter3 = ref(null)
 const counter4 = ref(null)
 const progressBar1 = ref(null)
 const progressBar4 = ref(null)
+
+const sumIn = ref(null)
+const sumOut = ref(null)
+const sumDiff = ref(null)
 
 // Sparkline refs
 const sparkline1 = ref(null)
@@ -413,19 +426,19 @@ const resetTilt = (index) => {
 
 onMounted(() => {
   // Header animation
-  gsap.fromTo(headerRef.value.children, { opacity: 0, y: 30 }, {
-    opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.15,
-    scrollTrigger: { trigger: '#laporan-keuangan', start: 'top 80%', once: true },
+  gsap.fromTo(headerRef.value.children, { opacity: 0, y: 40 }, {
+    opacity: 1, y: 0, duration: 1.2, ease: 'power4.out', stagger: 0.2,
+    scrollTrigger: { trigger: '#keuangan', start: 'top 80%', once: true },
   })
   
-  // Cards bounce in
-  gsap.fromTo(cardsRef.value.children, { opacity: 0, y: 50, scale: 0.95 }, {
-    opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'back.out(1.2)', stagger: 0.15,
-    scrollTrigger: { trigger: '#laporan-keuangan', start: 'top 75%', once: true },
+  // Cards smooth entrance
+  gsap.fromTo(cardsRef.value.children, { opacity: 0, y: 40, scale: 0.98 }, {
+    opacity: 1, y: 0, scale: 1, duration: 1.0, ease: 'power3.out', stagger: 0.1,
+    scrollTrigger: { trigger: '#keuangan', start: 'top 75%', once: true },
   })
 
   // Sparkline draw animations
-  const stConfig = { trigger: '#laporan-keuangan', start: 'top 75%', once: true }
+  const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }
   
   // Calculate actual path lengths after mount
   setTimeout(() => {
@@ -433,40 +446,40 @@ onMounted(() => {
       const len = sparkline1.value.getTotalLength()
       sparklineLength1.value = len
       sparklineOffset1.value = len
-      gsap.to(sparklineOffset1, { value: 0, duration: 2, ease: 'power2.out', delay: 0.5, scrollTrigger: stConfig })
+      gsap.to(sparklineOffset1, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.2, scrollTrigger: stConfig })
     }
     if (sparkline2.value) {
       const len = sparkline2.value.getTotalLength()
       sparklineLength2.value = len
       sparklineOffset2.value = len
-      gsap.to(sparklineOffset2, { value: 0, duration: 2, ease: 'power2.out', delay: 0.7, scrollTrigger: stConfig })
+      gsap.to(sparklineOffset2, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.3, scrollTrigger: stConfig })
     }
     if (sparkline3.value) {
       const len = sparkline3.value.getTotalLength()
       sparklineLength3.value = len
       sparklineOffset3.value = len
-      gsap.to(sparklineOffset3, { value: 0, duration: 2, ease: 'power2.out', delay: 0.9, scrollTrigger: stConfig })
+      gsap.to(sparklineOffset3, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.4, scrollTrigger: stConfig })
     }
     if (sparkline4.value) {
       const len = sparkline4.value.getTotalLength()
       sparklineLength4.value = len
       sparklineOffset4.value = len
-      gsap.to(sparklineOffset4, { value: 0, duration: 2.5, ease: 'power2.out', delay: 1.1, scrollTrigger: stConfig })
+      gsap.to(sparklineOffset4, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.5, scrollTrigger: stConfig })
     }
   }, 100)
 
   // Progress bars
   if (progressBar1.value) {
-    gsap.to(progressBar1.value, { width: '100%', duration: 2, ease: 'power3.out', delay: 0.5, scrollTrigger: stConfig })
+    gsap.to(progressBar1.value, { width: '100%', duration: 1.2, ease: 'power3.out', delay: 0.3, scrollTrigger: stConfig })
   }
   if (progressBar4.value) {
-    gsap.to(progressBar4.value, { width: '100%', duration: 2.5, ease: 'power3.out', delay: 0.8, scrollTrigger: stConfig })
+    gsap.to(progressBar4.value, { width: '100%', duration: 1.2, ease: 'power3.out', delay: 0.6, scrollTrigger: stConfig })
   }
 
   // Summary row
   if (summaryRef.value) {
-    gsap.fromTo(summaryRef.value, { opacity: 0, y: 30 }, {
-      opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+    gsap.fromTo(summaryRef.value, { opacity: 0, y: 20 }, {
+      opacity: 1, y: 0, duration: 1.0, ease: 'power3.out', delay: 0.4,
       scrollTrigger: { trigger: summaryRef.value, start: 'top 90%', once: true }
     })
   }
@@ -474,13 +487,13 @@ onMounted(() => {
   // Divider
   if (dividerRef.value) {
     gsap.fromTo(dividerRef.value, { opacity: 0, scaleX: 0 }, {
-      opacity: 1, scaleX: 1, duration: 1, ease: 'power2.out',
+      opacity: 1, scaleX: 1, duration: 1.0, ease: 'power3.out', delay: 0.5,
       scrollTrigger: { trigger: dividerRef.value, start: 'top 90%', once: true }
     })
   }
 
   // Counter animations
-  const animateCounter = (element, targetValue, duration = 2.5, isDecimal = false) => {
+  const animateCounter = (element, targetValue, duration = 1.5, isDecimal = false) => {
     gsap.to(element, {
       innerHTML: targetValue,
       duration: duration,
@@ -490,17 +503,22 @@ onMounted(() => {
         if (isDecimal) {
           element.innerHTML = Number(this.targets()[0].innerHTML).toFixed(2).replace('.', ',')
         } else {
-          element.innerHTML = Math.round(this.targets()[0].innerHTML)
+          element.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString('id-ID')
         }
       },
       scrollTrigger: stConfig
     })
   }
 
-  if (counter1.value) animateCounter(counter1.value, 84.74, 2.5, true)
-  if (counter2.value) animateCounter(counter2.value, 0, 1.5)
-  if (counter3.value) animateCounter(counter3.value, 0, 1.5)
-  if (counter4.value) animateCounter(counter4.value, 84.74, 3, true)
+  if (counter1.value) animateCounter(counter1.value, 84.74, 1.5, true)
+  if (counter2.value) animateCounter(counter2.value, 15, 1.2, false)
+  if (counter3.value) animateCounter(counter3.value, 8, 1.2, false)
+  if (counter4.value) animateCounter(counter4.value, 91.74, 1.5, true)
+  
+  // Summary counters
+  if (sumIn.value) animateCounter(sumIn.value, 15000000, 1.2, false)
+  if (sumOut.value) animateCounter(sumOut.value, 8000000, 1.2, false)
+  if (sumDiff.value) animateCounter(sumDiff.value, 7000000, 1.2, false)
 })
 </script>
 

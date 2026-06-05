@@ -3,7 +3,7 @@
     <Transition name="modal">
       <div 
         v-if="isOpen" 
-        class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+        class="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6"
       >
         <!-- Backdrop -->
         <div 
@@ -28,7 +28,7 @@
             />
             
             <IslamicPattern pattern-color="#C5A55A" :show-sparkles="false" class="opacity-20 mix-blend-overlay" />
-            <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-dark-light via-transparent to-black/40"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark-light via-transparent to-black/40"></div>
             
             <button 
               @click="$emit('close')"

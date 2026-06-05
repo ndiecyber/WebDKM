@@ -1,5 +1,5 @@
 <template>
-  <section id="galeri" class="relative py-16 lg:py-20 bg-gray-50 dark:bg-dark overflow-hidden transition-colors duration-500">
+  <section id="galeri" class="relative py-16 lg:py-24 bg-gray-50 dark:bg-dark overflow-hidden transition-colors duration-500">
     <!-- Animated Islamic Pattern Background -->
     <IslamicPattern pattern-color="#5D2E2E" :show-sparkles="true" />
 
@@ -40,7 +40,7 @@
           </Transition>
           
           <!-- Glassmorphism Overlay -->
-          <div class="absolute inset-x-0 bottom-0 pt-32 pb-6 px-6 sm:pb-10 sm:px-10 bg-gradient-to-t from-dark/95 via-dark/50 to-transparent">
+          <div class="absolute inset-x-0 bottom-0 pt-32 pb-6 px-6 sm:pb-10 sm:px-10 bg-linear-to-t from-dark/95 via-dark/50 to-transparent">
             <Transition name="slide-up" mode="out-in">
               <div :key="activeIndex" class="relative">
                 <div class="flex items-center gap-3 mb-3">

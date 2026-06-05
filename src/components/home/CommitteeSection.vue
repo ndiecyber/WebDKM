@@ -1,6 +1,6 @@
 <template>
-  <section id="pengurus" class="relative py-16 lg:py-20 bg-white dark:bg-dark overflow-hidden transition-colors duration-500">
-    <!-- Background Patterns -->
+  <section id="pengurus" class="relative py-16 lg:py-24 bg-cream dark:bg-[#121220] overflow-hidden transition-colors duration-500">
+    <!-- Animated Islamic Pattern Background -->
     <IslamicPattern pattern-color="#0D4F4F" :show-sparkles="false" class="opacity-5 dark:opacity-10" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,13 +31,13 @@
             <img 
               :src="member.image" 
               :alt="member.name" 
-              class="w-full h-full object-cover object-top filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              class="w-full h-full object-cover object-top filter grayscale-20 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-dark/80 via-dark/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
           </div>
           
           <!-- Content -->
-          <div class="relative p-6 -mt-12 bg-gradient-to-b from-transparent to-light dark:to-[#1A2525]">
+          <div class="relative p-6 -mt-12 bg-linear-to-b from-transparent to-light dark:to-[#1A2525]">
             <div class="bg-white dark:bg-dark-light rounded-xl p-4 shadow-lg border border-gray-100 dark:border-white/10 transform -translate-y-4 group-hover:-translate-y-6 transition-transform duration-500 relative z-10">
               <h3 class="font-heading text-lg font-bold text-dark dark:text-white text-center mb-1 transition-colors">{{ member.name }}</h3>
               <p class="text-primary dark:text-secondary text-sm font-medium text-center uppercase tracking-wide">{{ member.role }}</p>

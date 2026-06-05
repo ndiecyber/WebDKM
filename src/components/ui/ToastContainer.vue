@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
+  <div class="fixed top-6 right-6 z-100 flex flex-col gap-3 pointer-events-none">
     <TransitionGroup name="toast">
       <div 
         v-for="toast in toastStore.toasts" 
@@ -8,7 +8,7 @@
         :class="toast.type === 'success' ? 'border-green-500/30' : 'border-red-500/30'"
       >
         <!-- Progress bar effect -->
-        <div class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r"
+        <div class="absolute bottom-0 left-0 h-0.5 bg-linear-to-r"
              :class="toast.type === 'success' ? 'from-green-500/50 to-green-400' : 'from-red-500/50 to-red-400'"
              style="width: 100%; animation: toast-progress 3.5s linear forwards;">
         </div>

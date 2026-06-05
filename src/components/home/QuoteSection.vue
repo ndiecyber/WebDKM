@@ -1,7 +1,7 @@
 <template>
   <section class="relative py-16 lg:py-24 bg-gray-50 dark:bg-[#061c1c] overflow-hidden transition-colors duration-500" ref="sectionRef">
     <!-- Islamic Pattern -->
-    <div class="absolute inset-0 islamic-pattern-bg opacity-5 dark:opacity-10"></div>
+    <IslamicPattern pattern-color="#0D4F4F" class="absolute inset-0 opacity-5 dark:opacity-10" />
 
     <!-- Enhanced Gradient Orbs for depth -->
     <div ref="orb1Ref" class="absolute top-[-20%] right-[-10%] w-[40rem] h-[40rem] bg-primary/20 dark:bg-secondary/15 rounded-full blur-[120px] transition-colors duration-500"></div>
@@ -16,21 +16,21 @@
         <Quote ref="quoteIconRight" class="absolute bottom-6 right-6 w-24 h-24 lg:w-32 lg:h-32 text-secondary/5 dark:text-primary-light/5 rotate-[168deg] transition-transform duration-700 group-hover:scale-110 group-hover:rotate-[174deg]" />
 
         <!-- Shine effect on card -->
-        <div class="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent dark:from-white/10 dark:to-transparent opacity-50 pointer-events-none transition-opacity duration-700 group-hover:opacity-100"></div>
+        <div class="absolute inset-0 bg-linear-to-br from-white/60 via-transparent to-transparent dark:from-white/10 dark:to-transparent opacity-50 pointer-events-none transition-opacity duration-700 group-hover:opacity-100"></div>
 
         <div class="relative z-20">
           <!-- Intricate Decorative Lines -->
           <div ref="linesRef" class="relative flex items-center justify-center gap-4 mb-8">
-            <div class="w-16 h-px bg-gradient-to-r from-transparent to-primary/40 dark:to-secondary/50"></div>
+            <div class="w-16 h-px bg-linear-to-r from-transparent to-primary/40 dark:to-secondary/50"></div>
             <div class="w-3 h-3 rotate-45 border-2 border-primary/40 dark:border-secondary/50 flex items-center justify-center">
               <div class="w-1 h-1 bg-secondary dark:bg-primary-light"></div>
             </div>
-            <div class="w-16 h-px bg-gradient-to-l from-transparent to-primary/40 dark:to-secondary/50"></div>
+            <div class="w-16 h-px bg-linear-to-l from-transparent to-primary/40 dark:to-secondary/50"></div>
           </div>
 
           <!-- Arabic Verse with Gradient -->
           <div class="overflow-hidden mb-8">
-            <p ref="arabicRef" class="relative font-arabic text-3xl sm:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-primary-dark dark:from-white dark:to-gray-300 leading-[1.6] drop-shadow-sm" dir="rtl">
+            <p ref="arabicRef" class="relative font-arabic text-3xl sm:text-4xl lg:text-5xl bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-primary-dark dark:from-white dark:to-gray-300 leading-[1.6] drop-shadow-sm" dir="rtl">
               إِنَّمَا يَعْمُرُ مَسَاجِدَ اللَّهِ مَنْ آمَنَ بِاللَّهِ وَالْيَوْمِ الْآخِرِ
             </p>
           </div>
@@ -59,6 +59,7 @@ import { ref, onMounted } from 'vue'
 import { Quote } from 'lucide-vue-next'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 
 gsap.registerPlugin(ScrollTrigger)
 

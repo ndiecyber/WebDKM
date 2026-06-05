@@ -1,6 +1,6 @@
 <template>
   <Transition name="fade">
-    <div v-if="isOpen" class="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4 sm:px-6">
+    <div v-if="isOpen" class="fixed inset-0 z-100 flex items-start justify-center pt-[15vh] px-4 sm:px-6">
       <!-- Backdrop -->
       <div class="absolute inset-0 bg-gray-950/80 backdrop-blur-sm" @click="close"></div>
       

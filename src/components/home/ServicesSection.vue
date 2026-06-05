@@ -2,7 +2,6 @@
   <section id="layanan" class="relative py-16 lg:py-20 bg-white dark:bg-dark overflow-hidden transition-colors duration-500">
     <!-- Animated Islamic Pattern Background -->
     <IslamicPattern pattern-color="#C5A55A" :show-sparkles="false" />
-
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-16" ref="headerRef">
@@ -19,20 +18,22 @@
       </div>
 
       <!-- Filters -->
-      <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-10" ref="filterRef">
-        <button
-          v-for="cat in categories"
-          :key="cat"
-          @click="activeCategory = cat"
-          :class="[
-            'px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-full font-medium transition-all duration-300 transform active:scale-95 shrink-0',
-            activeCategory === cat 
-              ? 'bg-primary border-primary text-white shadow-lg shadow-primary/30' 
-              : 'bg-white dark:bg-dark-light border border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/40 hover:text-gray-900 dark:hover:text-white'
-          ]"
-        >
-          {{ cat }}
-        </button>
+      <div class="flex justify-center mb-8 w-full px-4" ref="filterRef">
+        <div class="inline-flex flex-wrap justify-center gap-1 p-1 sm:p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl sm:rounded-full w-full sm:w-auto shadow-sm">
+          <button
+            v-for="cat in categories"
+            :key="cat"
+            @click="activeCategory = cat"
+            :class="[
+              'px-3 py-2 sm:px-8 sm:py-3 text-xs sm:text-base font-semibold rounded-xl sm:rounded-full transition-all duration-300 shrink-0 flex-1 sm:flex-none text-center',
+              activeCategory === cat 
+                ? 'bg-primary text-white shadow-md' 
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-white/5'
+            ]"
+          >
+            {{ cat }}
+          </button>
+        </div>
       </div>
 
       <!-- Services Grid -->
@@ -53,11 +54,11 @@
           <!-- Watermark Background -->
           <div class="absolute inset-0 z-0 pointer-events-none">
             <img :src="service.bgImage" alt="" class="w-full h-full object-cover opacity-5 group-hover:opacity-[0.15] dark:mix-blend-screen transition-all duration-700 scale-110 group-hover:scale-100" />
-            <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-dark via-white/80 dark:via-dark/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark via-white/80 dark:via-dark/80 to-transparent"></div>
           </div>
 
           <!-- Hover Gradient -->
-          <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <!-- Decorative corner -->
           <div class="absolute top-0 right-0 w-24 h-24 bg-secondary/10 rounded-bl-[50px] -translate-y-2 translate-x-2 group-hover:bg-secondary/20 group-hover:scale-110 transition-all duration-500"></div>
           

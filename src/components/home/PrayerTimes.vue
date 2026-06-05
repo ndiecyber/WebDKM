@@ -3,7 +3,7 @@
     <!-- Layer 0: Sky Gradient & Base Pattern -->
     <div class="absolute inset-0 z-0">
       <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-30 dark:opacity-50" />
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20 dark:to-black/50 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-linear-to-b from-transparent to-black/20 dark:to-black/50 pointer-events-none"></div>
     </div>
     
     <!-- Layer 1: Deep Stars -->
@@ -54,7 +54,7 @@
           </svg>
 
           <!-- Sun Body -->
-          <div class="relative w-12 h-12 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.9),0_0_30px_rgba(252,211,77,0.6)] border border-yellow-200/50 bg-gradient-to-br from-yellow-50 via-yellow-400 to-orange-600">
+          <div class="relative w-12 h-12 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.9),0_0_30px_rgba(252,211,77,0.6)] border border-yellow-200/50 bg-linear-to-br from-yellow-50 via-yellow-400 to-orange-600">
             <!-- Surface texture/spots -->
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.9)_0%,transparent_60%)]"></div>
             <div class="absolute w-[150%] h-[150%] -top-1/4 -left-1/4 bg-[radial-gradient(circle,rgba(255,255,255,0.4)_10%,transparent_10%)] bg-[length:12px_12px] opacity-20 rotate-45 mix-blend-overlay"></div>
@@ -68,7 +68,7 @@
           <div class="absolute inset-0 bg-slate-100/60 rounded-full blur-[10px]"></div>
 
           <!-- Moon Surface -->
-          <div class="relative w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-slate-100 via-slate-300 to-slate-600 shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.6),inset_5px_5px_15px_rgba(255,255,255,0.9),0_0_20px_rgba(226,232,240,0.4)] border border-slate-200/40">
+          <div class="relative w-full h-full rounded-full overflow-hidden bg-linear-to-br from-slate-100 via-slate-300 to-slate-600 shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.6),inset_5px_5px_15px_rgba(255,255,255,0.9),0_0_20px_rgba(226,232,240,0.4)] border border-slate-200/40">
             <!-- Craters using SVG for exact placement -->
             <svg class="absolute inset-0 w-full h-full opacity-70 mix-blend-multiply" viewBox="0 0 100 100">
               <filter id="craterBlur">
@@ -132,18 +132,18 @@
     <!-- Layer 5: Weather Particle Overlay (Rain / Fog) -->
     <div ref="layerWeather" class="absolute inset-0 z-40 pointer-events-none overflow-hidden transition-opacity duration-1000" :class="weatherOverlay.opacity">
       <!-- Rain / Storm -->
-      <div v-if="weatherOverlay.type === 'rain' || weatherOverlay.type === 'storm'" class="absolute inset-0 opacity-60">
-        <div v-for="i in 50" :key="'rain'+i" class="absolute w-0.5 bg-gradient-to-b from-transparent to-white/60"
+      <div v-if="weatherOverlay.type === 'rain' || weatherOverlay.type === 'storm'" class="absolute inset-0 opacity-40 pointer-events-none">
+        <div v-for="i in 60" :key="'rain'+i" class="absolute w-px bg-linear-to-b from-transparent via-white/20 to-white/40"
           :style="{ 
-            left: `${Math.random() * 100}%`, 
+            left: `${Math.random() * 120 - 10}%`, 
             top: `-${Math.random() * 20 + 10}%`, 
             height: `${Math.random() * 20 + 10}%`, 
-            animation: `rain-fall ${Math.random() * 0.5 + 0.5}s linear infinite ${Math.random()}s` 
+            animation: `rain-fall ${Math.random() * 0.5 + 0.6}s linear infinite ${Math.random()}s` 
           }">
         </div>
       </div>
       <!-- Lightning (only for storm) -->
-      <div v-if="weatherOverlay.type === 'storm'" class="absolute inset-0 bg-white lightning-flash mix-blend-overlay opacity-0"></div>
+      <div v-if="weatherOverlay.type === 'storm'" class="absolute inset-0 bg-white lightning-flash mix-blend-overlay pointer-events-none"></div>
       <!-- Fog -->
       <div v-if="weatherOverlay.type === 'fog'" class="w-full h-full bg-white/20 backdrop-blur-md"></div>
     </div>
@@ -246,6 +246,7 @@
           {{ weather.temp }}°C
         </div>
       </div>
+
 
       <!-- Countdown to Next Prayer -->
       <div v-if="nextPrayer && !loading" class="flex justify-center mb-12" ref="countdownRef">
@@ -398,7 +399,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { Sunrise, Sun, CloudSun, Sunset, Moon, MapPin, Globe, Check, Compass, CalendarDays, MoonStar, Cloud, CloudRain, CloudLightning, CloudSnow, Thermometer } from 'lucide-vue-next'
+import { MapPin, Globe, Compass, Sun, Moon, Cloud, CloudRain, CloudLightning, CloudSnow, CloudSun, Sunrise, Sunset, MoonStar, Check, CalendarDays, Thermometer } from 'lucide-vue-next'
 import { usePrayerStore } from '@/stores/prayer'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import PrayerCalendarModal from '@/components/ui/PrayerCalendarModal.vue'
@@ -413,7 +414,7 @@ const countdownRef = ref(null)
 const cardsRef = ref(null)
 
 const loading = ref(true)
-const locationName = ref('')
+const locationName = ref('Memuat lokasi...')
 const locationError = ref('')
 const prayerStore = usePrayerStore()
 const hijriDate = ref('')
@@ -430,6 +431,7 @@ const showClouds = ref(false)
 const showBirds = ref(false)
 
 const weather = ref({ temp: null, icon: null, desc: '' })
+
 
 const stars = ref([])
 const shootingStars = ref([])
@@ -652,14 +654,16 @@ function updateCountdown() {
 function updateCelestialBody() {
   if (prayers.value[0].time === '--:--') return
   
-  const now = new Date()
-  const currentMinutes = now.getHours() * 60 + now.getMinutes()
-  
   const fajr = prayers.value[1].timeMinutes || 270 // Subuh
   const dhuhr = prayers.value[3].timeMinutes || 715 // Dzuhur
   const asr = prayers.value[4].timeMinutes || 915 // Ashar
   const maghrib = prayers.value[5].timeMinutes || 1065 // Maghrib
   const isha = prayers.value[6].timeMinutes || 1138 // Isya
+  
+  const now = new Date()
+  let currentMinutes = now.getHours() * 60 + now.getMinutes()
+
+
   
   let type = 'sun'
   let progress = 0 // 0 to 1 across the sky
@@ -683,14 +687,14 @@ function updateCelestialBody() {
     glow = '0 0 80px 20px rgba(241, 245, 249, 0.4)'
     progress = 0.5 + (currentMinutes / fajr) * 0.5 // 50% to 100%
     yOffset = 1 - Math.sin(progress * Math.PI)
-    skyClass = 'bg-gradient-to-b from-[#0f172a] to-[#020617]'
+    skyClass = 'bg-linear-to-b from-[#0f172a] to-[#020617]'
     silhouette = 'text-slate-800'
     sStars = true; sClouds = false; rayOpacity = 0.2; rayColor = 'rgba(200,220,255,0.05)'
   } else if (currentMinutes < dhuhr) {
     // Pagi (Fajr to Dhuhr)
     progress = (currentMinutes - fajr) / (dhuhr - fajr) * 0.5 // 0% to 50%
     yOffset = 1 - Math.sin(progress * Math.PI)
-    skyClass = 'bg-gradient-to-b from-sky-900 to-slate-800'
+    skyClass = 'bg-linear-to-b from-sky-900 to-slate-800'
     silhouette = 'text-slate-900'
     sStars = false; sClouds = true; rayOpacity = 0.7; rayColor = 'rgba(255,255,255,0.1)'
   } else if (currentMinutes < maghrib) {
@@ -701,14 +705,14 @@ function updateCelestialBody() {
       // Sore (Late afternoon / Orange Sun)
       color = 'bg-orange-500'
       glow = '0 0 150px 60px rgba(249, 115, 22, 0.5)'
-      skyClass = 'bg-gradient-to-b from-orange-950 to-slate-900'
+      skyClass = 'bg-linear-to-b from-orange-950 to-slate-900'
       silhouette = 'text-slate-950'
       sStars = false; sClouds = true; rayOpacity = 0.5; rayColor = 'rgba(249,115,22,0.1)'
     } else {
       // Siang (Noon)
       color = 'bg-amber-200'
       glow = '0 0 120px 40px rgba(253, 230, 138, 0.4)'
-      skyClass = 'bg-gradient-to-b from-slate-800 to-slate-700'
+      skyClass = 'bg-linear-to-b from-slate-800 to-slate-700'
       silhouette = 'text-slate-900'
       sStars = false; sClouds = true; rayOpacity = 0.8; rayColor = 'rgba(255,255,255,0.1)'
     }
@@ -719,7 +723,7 @@ function updateCelestialBody() {
     glow = '0 0 80px 20px rgba(241, 245, 249, 0.4)'
     progress = (currentMinutes - maghrib) / (isha - maghrib) * 0.2 // 0% to 20%
     yOffset = 1 - Math.sin(progress * Math.PI)
-    skyClass = 'bg-gradient-to-b from-indigo-950 to-slate-900'
+    skyClass = 'bg-linear-to-b from-indigo-950 to-slate-900'
     silhouette = 'text-slate-900'
     sStars = true; sClouds = true; rayOpacity = 0.1; rayColor = 'rgba(200,200,255,0.05)'
   } else {
@@ -729,13 +733,16 @@ function updateCelestialBody() {
     glow = '0 0 80px 20px rgba(241, 245, 249, 0.4)'
     progress = 0.2 + (currentMinutes - isha) / (24 * 60 - isha) * 0.3 // 20% to 50%
     yOffset = 1 - Math.sin(progress * Math.PI)
-    skyClass = 'bg-gradient-to-b from-[#0f172a] to-[#020617]'
+    skyClass = 'bg-linear-to-b from-[#0f172a] to-[#020617]'
     silhouette = 'text-slate-800'
     sStars = true; sClouds = false; rayOpacity = 0.2; rayColor = 'rgba(200,220,255,0.05)'
   }
   
   // Weather Overrides
-  const desc = weather.value.desc
+  let desc = weather.value.desc
+  
+
+
   let wType = 'none'
   let wOpacity = 'opacity-0'
   
@@ -753,16 +760,21 @@ function updateCelestialBody() {
     wType = 'rain'
     wOpacity = 'opacity-100'
     rayOpacity = rayOpacity * 0.3
+    skyClass = 'bg-linear-to-b from-slate-800 to-slate-900' // Make it dark
+    silhouette = 'text-slate-950'
   } else if (desc === 'Badai Petir') {
     sClouds = true
     sStars = false
     wType = 'storm'
     wOpacity = 'opacity-100'
     rayOpacity = rayOpacity * 0.2
+    skyClass = 'bg-linear-to-b from-[#0a0f18] to-slate-900' // Very dark
+    silhouette = 'text-black'
   }
   
   // Calculate moon phase based on hijri day
   let mPhase = 'full'
+  
   const hd = hijriDay.value
   if (hd <= 4 || hd >= 26) mPhase = 'crescent'
   else if ((hd >= 5 && hd <= 9) || (hd >= 21 && hd <= 25)) mPhase = 'quarter'
@@ -1016,16 +1028,16 @@ onUnmounted(() => {
 
 @keyframes lightning {
   0% { opacity: 0; }
-  1% { opacity: 0.8; }
+  1% { opacity: 0.3; }
   2% { opacity: 0; }
-  10% { opacity: 0; }
-  11% { opacity: 1; }
-  12% { opacity: 0; }
+  3% { opacity: 0.4; }
+  4% { opacity: 0; }
   100% { opacity: 0; }
 }
 
 .lightning-flash {
-  animation: lightning 10s infinite;
+  animation: lightning 7s infinite;
+  opacity: 0;
 }
 
 @keyframes spin-slow {
@@ -1035,24 +1047,5 @@ onUnmounted(() => {
 
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
-}
-
-.rain-bg {
-  background-image: 
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect x='15' y='10' width='1' height='15' fill='rgba(255,255,255,0.4)'/%3E%3Crect x='55' y='60' width='1' height='20' fill='rgba(255,255,255,0.2)'/%3E%3Crect x='85' y='30' width='1.5' height='12' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect x='30' y='40' width='1' height='18' fill='rgba(255,255,255,0.3)'/%3E%3Crect x='100' y='90' width='2' height='25' fill='rgba(255,255,255,0.15)'/%3E%3Crect x='140' y='20' width='1' height='15' fill='rgba(255,255,255,0.4)'/%3E%3C/svg%3E");
-  animation: rain-fall 0.8s linear infinite;
-  transform: rotate(10deg);
-  transform-origin: center;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  position: absolute;
-}
-
-@keyframes rain-fall {
-  0% { background-position: 0px 0px, 0px 0px; }
-  100% { background-position: 50px 1000px, 75px 1500px; }
 }
 </style>

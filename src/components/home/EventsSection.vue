@@ -1,11 +1,11 @@
 <template>
-  <section id="kegiatan" class="relative py-16 lg:py-20 bg-cream dark:bg-[#121220] overflow-hidden transition-colors duration-500">
+  <section id="kegiatan" class="relative py-16 lg:py-24 bg-cream dark:bg-[#121220] overflow-hidden transition-colors duration-500">
     <!-- Animated Islamic Pattern Background -->
     <IslamicPattern pattern-color="#5D2E2E" :show-sparkles="false" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
-      <div class="text-center mb-16" ref="headerRef">
+      <div class="text-center mb-10" ref="headerRef">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
           <span class="text-primary text-xs font-semibold tracking-wider uppercase">Agenda</span>
@@ -18,73 +18,95 @@
         </p>
       </div>
 
-      <!-- Events -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" ref="eventsRef">
+      <!-- Events Grid -->
+      <TransitionGroup name="event-list" tag="div" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 relative" ref="eventsRef">
         <div
-          v-for="event in events"
+          v-for="(event, index) in visibleEvents"
           :key="event.title"
-          class="group bg-white/90 dark:bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden card-hover border-2 border-primary/20 dark:border-white/20 hover:border-primary/50 dark:hover:border-secondary/50 transition-colors duration-500"
+          @mousemove="handleMouseMove($event, event.title)"
+          @mouseleave="handleMouseLeave(event.title)"
+          :style="{ 
+            transform: cardTilts[event.title] || 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', 
+            transition: isHovered[event.title] ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out' 
+          }"
+          class="group relative bg-white/70 dark:bg-dark/40 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/50 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 transition-colors duration-500 will-change-transform shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex flex-col"
         >
-          <!-- Image -->
-          <div class="relative h-48 overflow-hidden">
+          <!-- Glassmorphism Glow Background -->
+          <div class="absolute inset-0 bg-linear-to-br from-primary/0 via-transparent to-secondary/0 group-hover:from-primary/10 group-hover:to-secondary/10 transition-colors duration-700 pointer-events-none z-0"></div>
+
+          <!-- Image Area -->
+          <div class="relative h-56 overflow-hidden z-10 shrink-0">
             <img
               :src="event.image"
               :alt="event.title"
               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-dark/80 via-dark/20 to-transparent"></div>
 
             <!-- Badge -->
             <div
               v-if="event.badge"
-              class="absolute top-4 left-4 px-3 py-1 bg-secondary text-dark text-xs font-bold rounded-full shadow-md"
+              class="absolute top-4 left-4 px-3 py-1 bg-secondary text-dark text-xs font-bold rounded-full shadow-lg z-10"
             >
               {{ event.badge }}
             </div>
+          </div>
 
-            <!-- Date Card -->
-            <div class="absolute bottom-4 left-4 bg-white dark:bg-dark rounded-xl px-4 py-2 text-center shadow-lg transition-colors duration-500">
-              <p class="font-heading text-2xl font-bold text-primary dark:text-secondary leading-none">{{ event.day }}</p>
-              <p class="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase">{{ event.month }}</p>
-            </div>
+          <!-- Date Card (Positioned exactly on the boundary between image and content) -->
+          <div class="absolute top-56 left-6 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-2xl px-5 py-2.5 text-center shadow-xl border border-gray-100 dark:border-white/10 transition-colors duration-500 z-20">
+            <p class="font-heading text-2xl font-bold text-primary dark:text-secondary leading-none">{{ event.day }}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">{{ event.month }}</p>
           </div>
 
           <!-- Content -->
-          <div class="p-6">
-            <div class="flex items-center gap-4 text-dark/40 dark:text-white/40 text-xs mb-3 transition-colors duration-500">
-              <span class="flex items-center gap-1">
-                <Clock class="w-3.5 h-3.5" />
+          <div class="p-6 pt-10 sm:p-8 sm:pt-12 flex flex-col flex-grow z-10 relative">
+            <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-xs font-medium mb-4 transition-colors duration-500">
+              <span class="flex items-center gap-1.5">
+                <Clock class="w-4 h-4 text-primary dark:text-secondary" />
                 {{ event.time }}
               </span>
-              <span class="flex items-center gap-1">
-                <MapPin class="w-3.5 h-3.5" />
+              <span class="flex items-center gap-1.5">
+                <MapPin class="w-4 h-4 text-primary dark:text-secondary" />
                 {{ event.location }}
               </span>
             </div>
 
-            <h3 class="font-heading text-lg font-bold text-dark dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300">
+            <h3 class="font-heading text-xl font-bold text-dark dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300">
               {{ event.title }}
             </h3>
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 transition-colors duration-500">
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed transition-colors duration-500 line-clamp-3 mb-6">
               {{ event.description }}
             </p>
 
-            <a
-              href="#"
-              class="inline-flex items-center gap-1 text-primary text-sm font-semibold group-hover:gap-2 transition-all duration-300"
-            >
-              Detail Acara
-              <ArrowRight class="w-4 h-4" />
-            </a>
+            <div class="mt-auto">
+              <a
+                href="#"
+                class="inline-flex items-center gap-2 text-primary dark:text-secondary text-sm font-bold uppercase tracking-wider group-hover:gap-3 transition-all duration-300"
+              >
+                Detail Acara
+                <ArrowRight class="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
+      </TransitionGroup>
+
+      <!-- View More Button -->
+      <div class="mt-12 flex justify-center" v-if="events.length > 3">
+        <button 
+          @click="toggleEvents"
+          class="inline-flex items-center gap-2 px-8 py-3.5 bg-white dark:bg-white/5 border border-primary/20 dark:border-white/10 hover:border-primary text-primary dark:text-white rounded-full font-bold tracking-wide transition-all duration-300 hover:shadow-[0_8px_30px_rgb(20,184,166,0.2)] hover:-translate-y-1"
+        >
+          <span>{{ showAll ? 'Sembunyikan' : 'Muat Lebih Banyak' }}</span>
+          <ArrowRight class="w-4 h-4" :class="{ 'rotate-90': !showAll, '-rotate-90': showAll }" style="transition: transform 0.3s ease" />
+        </button>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import { Clock, MapPin, ArrowRight } from 'lucide-vue-next'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -97,10 +119,41 @@ gsap.registerPlugin(ScrollTrigger)
 
 const headerRef = ref(null)
 const eventsRef = ref(null)
+const showAll = ref(false)
+
+// 3D Tilt State
+const cardTilts = ref({})
+const isHovered = ref({})
+
+const handleMouseMove = (e, title) => {
+  const card = e.currentTarget
+  const rect = card.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+  const centerX = rect.width / 2
+  const centerY = rect.height / 2
+  
+  // Calculate tilt (adjust multipliers for stronger/weaker effect)
+  const tiltX = ((y - centerY) / centerY) * -8
+  const tiltY = ((x - centerX) / centerX) * 8
+  
+  cardTilts.value[title] = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`
+  isHovered.value[title] = true
+}
+
+const handleMouseLeave = (title) => {
+  cardTilts.value[title] = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
+  isHovered.value[title] = false
+}
+
+const toggleEvents = async () => {
+  showAll.value = !showAll.value
+}
 
 const events = [
   {
     title: 'Kajian Akbar Bulanan',
+    category: 'Kajian',
     description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah dan muamalah kontemporer.',
     image: communityImg,
     day: '15',
@@ -111,6 +164,7 @@ const events = [
   },
   {
     title: 'Wisuda Santri TPA/TPQ',
+    category: 'Pendidikan',
     description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz dan tilawah.',
     image: quranStudyImg,
     day: '22',
@@ -121,6 +175,7 @@ const events = [
   },
   {
     title: 'Bakti Sosial Ramadhan',
+    category: 'Sosial',
     description: 'Kegiatan bakti sosial pembagian sembako dan santunan untuk dhuafa dan yatim piatu.',
     image: exteriorImg,
     day: '01',
@@ -129,7 +184,44 @@ const events = [
     location: 'Halaman Masjid',
     badge: null,
   },
+  {
+    title: 'Kajian Muslimah',
+    category: 'Kajian',
+    description: 'Kajian khusus muslimah membahas peranan wanita dalam membangun keluarga Islami.',
+    image: communityImg,
+    day: '10',
+    month: 'Jul',
+    time: '13:00 - 15:00',
+    location: 'Aula Lt. 2',
+    badge: null,
+  },
+  {
+    title: 'Pelatihan Pengurusan Jenazah',
+    category: 'Pendidikan',
+    description: 'Pelatihan tata cara memandikan, mengkafani, dan menyalatkan jenazah sesuai sunnah.',
+    image: quranStudyImg,
+    day: '18',
+    month: 'Jul',
+    time: '08:30 - 11:30',
+    location: 'Serambi Masjid',
+    badge: null,
+  },
+  {
+    title: 'Mabit & Qiyamullail',
+    category: 'Ibadah',
+    description: 'Malam bina iman dan taqwa, diisi dengan kajian, muhasabah, dan shalat malam berjamaah.',
+    image: exteriorImg,
+    day: '25',
+    month: 'Jul',
+    time: '20:00 - 04:30',
+    location: 'Masjid Utama',
+    badge: 'Terbatas',
+  },
 ]
+
+const visibleEvents = computed(() => {
+  return showAll.value ? events : events.slice(0, 3)
+})
 
 onMounted(() => {
   gsap.fromTo(
@@ -141,14 +233,32 @@ onMounted(() => {
     }
   )
 
-  gsap.fromTo(
-    eventsRef.value.children,
-    { opacity: 0, y: 50 },
-    {
-      opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
-      stagger: 0.15,
-      scrollTrigger: { trigger: '#kegiatan', start: 'top 65%', once: true },
-    }
-  )
+  if (eventsRef.value) {
+    gsap.fromTo(
+      eventsRef.value.children,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.15, delay: 0.2,
+        scrollTrigger: { trigger: '#kegiatan', start: 'top 80%', once: true },
+      }
+    )
+  }
 })
 </script>
+
+<style scoped>
+.event-list-move,
+.event-list-enter-active,
+.event-list-leave-active {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.event-list-enter-from,
+.event-list-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(20px);
+}
+
+/* Ensure leaves don't break the grid layout abruptly if not using absolute positioning,
+   we omit position: absolute for a smoother responsive grid flow */
+</style>

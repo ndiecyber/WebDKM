@@ -4,7 +4,7 @@
     <div class="absolute inset-0 islamic-pattern-bg opacity-5"></div>
 
     <!-- Top Gold Line -->
-    <div class="h-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
+    <div class="h-1 bg-linear-to-r from-transparent via-secondary to-transparent"></div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
@@ -40,17 +40,38 @@
           </div>
         </div>
 
-        <!-- Column 2: Mutiara Hadits -->
+        <!-- Column 2: Kemakmuran Masjid -->
         <div>
-          <h4 class="text-secondary font-heading text-lg font-semibold mb-6">Mutiara Hadits</h4>
-          <div class="bg-white/5 border border-white/10 rounded-xl p-5 relative overflow-hidden group hover:border-secondary/30 transition-all duration-300">
-            <Quote class="w-12 h-12 text-white/5 absolute -top-2 -right-2 transform scale-x-[-1] group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-500" />
-            <p class="text-white/80 text-sm leading-relaxed italic mb-4 relative z-10 font-serif">
-              "Barangsiapa yang membangun masjid karena Allah, maka Allah akan membangunkan baginya semisal itu di surga."
-            </p>
-            <div class="flex items-center gap-2 text-[11px] text-white/50 border-t border-white/10 pt-3 font-semibold uppercase tracking-wider">
-              <BookOpen class="w-3.5 h-3.5 text-secondary" />
-              <span>HR. Bukhari & Muslim</span>
+          <h4 class="text-secondary font-heading text-lg font-semibold mb-6">Kemakmuran Masjid</h4>
+          <div class="space-y-3">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-4 hover:border-secondary/30 transition-all duration-300 group">
+              <div class="w-10 h-10 shrink-0 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                <Users class="w-5 h-5 text-secondary" />
+              </div>
+              <div>
+                <p class="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Kapasitas</p>
+                <p class="text-white font-bold text-base leading-none">500+ <span class="text-white/50 text-xs font-normal">Jamaah</span></p>
+              </div>
+            </div>
+            
+            <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-4 hover:border-secondary/30 transition-all duration-300 group">
+              <div class="w-10 h-10 shrink-0 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                <BookOpen class="w-5 h-5 text-secondary" />
+              </div>
+              <div>
+                <p class="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Kajian Rutin</p>
+                <p class="text-white font-bold text-base leading-none">12+ <span class="text-white/50 text-xs font-normal">Sesi/Bulan</span></p>
+              </div>
+            </div>
+
+            <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-4 hover:border-secondary/30 transition-all duration-300 group">
+              <div class="w-10 h-10 shrink-0 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                <HeartHandshake class="w-5 h-5 text-secondary" />
+              </div>
+              <div>
+                <p class="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Mustahik Terbantu</p>
+                <p class="text-white font-bold text-base leading-none">200+ <span class="text-white/50 text-xs font-normal">Keluarga</span></p>
+              </div>
             </div>
           </div>
         </div>
@@ -139,7 +160,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Quote, BookOpen } from 'lucide-vue-next'
+import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake } from 'lucide-vue-next'
 import logoImg from '@/assets/images/logo-kustom.png'
 
 const currentYear = computed(() => new Date().getFullYear())

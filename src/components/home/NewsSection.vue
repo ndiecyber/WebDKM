@@ -1,8 +1,9 @@
 <template>
-  <section id="berita" class="relative py-16 lg:py-24 bg-white dark:bg-dark overflow-hidden transition-colors duration-500">
+  <section id="berita" class="relative py-16 lg:py-24 bg-white dark:bg-[#0B1120] overflow-hidden transition-colors duration-500">
     <!-- Background -->
     <div class="absolute inset-0 bg-primary/5 dark:bg-white/[0.02] transform -skew-y-3 origin-top-left z-0 pointer-events-none"></div>
-    <IslamicPattern pattern-color="#0D4F4F" :show-sparkles="false" class="opacity-5 dark:opacity-[0.03]" />
+    <IslamicPattern pattern-color="#0D4F4F" :show-sparkles="false" class="absolute top-0 left-0 w-full opacity-5 dark:opacity-[0.03]" />
+    <IslamicPattern pattern-color="#0D4F4F" :show-sparkles="false" class="absolute bottom-0 right-0 w-full rotate-180 opacity-5 dark:opacity-[0.03]" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
@@ -36,7 +37,7 @@
               :alt="item.title" 
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-dark/60 to-transparent"></div>
             
             <!-- Category Badge -->
             <div class="absolute top-4 left-4 px-3 py-1 bg-white/90 dark:bg-dark/90 backdrop-blur-sm text-primary dark:text-secondary text-xs font-bold uppercase tracking-wider rounded-md">
