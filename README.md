@@ -11,7 +11,7 @@ Ini merupakan bagian dari proyek Kerja Praktek (KP) kolaboratif.
 
 ---
 
-## ✨ Fitur Unggulan (Premium UI/UX)
+## ✨ Fitur 
 
 - ⛅ **Simulasi Cuaca & Langit Dinamis**: Integrasi dengan *Open-Meteo API* untuk mendeteksi cuaca lokal secara otomatis. Menampilkan efek hujan deras, badai petir, hingga kabut secara visual langsung di latar belakang jadwal sholat.
 - 🌙 **Fase Bulan & Kalender Hijriah**: Terkoneksi dengan *Aladhan API* untuk menyajikan penanggalan Hijriah serta mengubah bentuk fase bulan (sabit, separuh, purnama) secara presisi sesuai kalender Islam.
