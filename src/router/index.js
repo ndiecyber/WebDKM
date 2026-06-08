@@ -30,6 +30,21 @@ const routes = [
         component: () => import('@/views/admin/KeuanganDashboardView.vue')
       },
       {
+        path: 'keuangan-transaksi',
+        name: 'admin-keuangan-transaksi',
+        component: () => import('@/views/admin/KeuanganTransaksiView.vue')
+      },
+      {
+        path: 'keuangan-bank-kas',
+        name: 'admin-keuangan-bank-kas',
+        component: () => import('@/views/admin/KeuanganBankKasView.vue')
+      },
+      {
+        path: 'keuangan-laporan',
+        name: 'admin-keuangan-laporan',
+        component: () => import('@/views/admin/KeuanganLaporanView.vue')
+      },
+      {
         path: 'keuangan-pengaturan',
         name: 'admin-keuangan-pengaturan',
         component: () => import('@/views/admin/KeuanganPengaturanView.vue')
