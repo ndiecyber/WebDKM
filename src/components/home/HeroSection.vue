@@ -46,11 +46,7 @@
           ref="heading"
           class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6 opacity-0"
         >
-          Membangun
-          <span class="text-gradient-gold">Iman</span>,
-          <br class="hidden sm:block" />
-          Ilmu, dan
-          <span class="text-gradient-gold">Ukhuwah</span>
+          {{ settings.slogan }}
         </h2>
 
         <!-- Subtitle -->
@@ -58,7 +54,7 @@
           ref="subtitle"
           class="text-white/70 text-sm sm:text-base md:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10 opacity-0"
         >
-          Selamat datang di Masjid Jami Kassiti. Bergabunglah bersama kami dalam ibadah, pembelajaran, dakwah, dan pelayanan umat.
+          {{ settings.description }}
         </p>
 
         <!-- CTA Buttons -->
@@ -96,11 +92,15 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { ArrowRight, Clock, MapPin } from 'lucide-vue-next'
 import { gsap } from 'gsap'
+import { useAdminStore } from '@/stores/admin'
 import heroImg1 from '@/assets/images/hero-mosque.png'
 import heroImg2 from '@/assets/images/mosque-exterior.png'
 import heroImg3 from '@/assets/images/community-prayer.png'
 import heroImg4 from '@/assets/images/mosque-interior.png'
 import logoImg from '@/assets/images/logo-kustom.png'
+
+const adminStore = useAdminStore()
+const settings = adminStore.generalSettings
 
 const sliderImages = [heroImg1, heroImg2, heroImg3, heroImg4]
 const currentImageIndex = ref(0)

@@ -170,34 +170,120 @@
         </div>
       </section>
 
+      <!-- Donasi & Amal Jariyah (CTA) Section -->
+      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl shadow-sm">
+        <div class="p-6 sm:p-8 border-b border-gray-200 dark:border-white/5">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Heart class="w-5 h-5 text-gray-400" />
+            Donasi & Amal Jariyah (CTA)
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Atur teks ajakan berdonasi beserta grafik progress bar yang ditampilkan di halaman beranda.</p>
+        </div>
+        
+        <div class="p-6 sm:p-8 space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="space-y-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Donasi</label>
+              <input 
+                v-model="ctaSettings.title"
+                type="text" 
+                class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+              />
+            </div>
+            <div class="space-y-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kutipan / Hadist</label>
+              <input 
+                v-model="ctaSettings.quote"
+                type="text" 
+                class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+              />
+            </div>
+            <div class="sm:col-span-2 space-y-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi / Subjudul</label>
+              <textarea 
+                v-model="ctaSettings.subtitle"
+                rows="2"
+                class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all resize-none text-sm"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-gray-200 dark:border-white/5 pt-6 mt-6">
+            <div class="space-y-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sumber Kutipan</label>
+              <input 
+                v-model="ctaSettings.quoteSource"
+                type="text" 
+                class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+              />
+            </div>
+            <div class="space-y-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Donatur</label>
+              <input 
+                v-model.number="ctaSettings.totalDonors"
+                type="number" 
+                class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+              />
+            </div>
+          </div>
+
+          <div class="border-t border-gray-200 dark:border-white/5 pt-6 mt-6 space-y-4">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Grafik Target Donasi (Progress Bar)</label>
+            
+            <div v-for="(prog, index) in ctaSettings.programs" :key="prog.id" class="flex flex-col sm:flex-row gap-4 p-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10">
+              <div class="flex-1 space-y-1.5">
+                <label class="block text-xs font-medium text-gray-500">Nama Program</label>
+                <input 
+                  v-model="prog.name"
+                  type="text" 
+                  class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-1.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+                />
+              </div>
+              <div class="w-full sm:w-32 space-y-1.5">
+                <label class="block text-xs font-medium text-gray-500">Persentase (%)</label>
+                <input 
+                  v-model.number="prog.progress"
+                  type="number" 
+                  min="0"
+                  max="100"
+                  class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-1.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   </form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter } from 'lucide-vue-next'
+import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart } from 'lucide-vue-next'
+import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
 
 const toastStore = useToastStore()
+const adminStore = useAdminStore()
 const isSaving = ref(false)
 
-// Mock Data Settings
-const settings = ref({
-  name: 'Masjid Jami Kassiti',
-  slogan: 'Pusat Ibadah dan Peradaban Umat',
-  description: 'Selamat datang di website resmi Masjid Jami Kassiti. Kami berkomitmen untuk menjadikan masjid sebagai pusat kegiatan ibadah, pendidikan, dan sosial kemasyarakatan.',
-  history: 'Didirikan sejak tahun 1990, Masjid Kassiti berawal dari sebuah mushola kecil yang kemudian direnovasi dan diperluas berkat gotong royong warga. Kini, masjid kami menampung hingga 500 jamaah dan aktif mengadakan berbagai program keagamaan unggulan.',
-  instagram: 'https://instagram.com/masjidkassiti',
-  whatsapp: '6281234567890',
-  maps: 'https://maps.google.com'
-})
+// Use settings from store
+const settings = ref({ ...adminStore.generalSettings })
+const ctaSettings = ref({ ...JSON.parse(JSON.stringify(adminStore.ctaSettings)) })
 
 function saveSettings() {
   isSaving.value = true
   
   // Simulate API call
   setTimeout(() => {
+    adminStore.generalSettings = { ...settings.value }
+    adminStore.ctaSettings = JSON.parse(JSON.stringify(ctaSettings.value))
+    adminStore.saveGeneralSettings()
+    adminStore.saveCtaSettings()
+    
+    isSaving.value = false
     isSaving.value = false
     toastStore.addToast('Pengaturan umum berhasil disimpan')
   }, 1000)

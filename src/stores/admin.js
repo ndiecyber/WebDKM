@@ -15,7 +15,7 @@ import kaligrafiImg from '@/assets/images/kaligrafi_masjid.png'
 export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: localStorage.getItem('admin_auth') === 'true',
-    kegiatan: JSON.parse(localStorage.getItem('admin_kegiatan_v2')) || [
+    kegiatan: JSON.parse(localStorage.getItem('admin_kegiatan_v3')) || [
       { id: 1, title: 'Kajian Akbar Bulanan', category: 'Kajian', description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah dan muamalah kontemporer.', image: communityImg, day: '15', month: 'Jun', time: '09:00 - 12:00', location: 'Aula Utama', badge: 'Segera' },
       { id: 2, title: 'Wisuda Santri TPA/TPQ', category: 'Pendidikan', description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz dan tilawah.', image: quranImg, day: '22', month: 'Jun', time: '08:00 - 11:00', location: 'Masjid Utama', badge: null },
       { id: 3, title: 'Bakti Sosial Ramadhan', category: 'Sosial', description: 'Kegiatan bakti sosial pembagian sembako dan santunan untuk dhuafa dan yatim piatu.', image: exteriorImg, day: '01', month: 'Jul', time: '07:00 - 10:00', location: 'Halaman Masjid', badge: null },
@@ -59,6 +59,26 @@ export const useAdminStore = defineStore('admin', {
       { id: 5, title: 'Zakat & Infaq', category: 'Ibadah', bgImage: exteriorImg, description: 'Pengelolaan dan penyaluran zakat, infaq, dan sedekah secara transparan.', iconName: 'HandCoins', badge: 'Aktif', badgeColor: 'bg-primary/10 text-primary-dark dark:text-primary-light border border-primary/20', details: { fullDescription: 'Unit Pengumpul Zakat (UPZ) Masjid Jami Kassiti memfasilitasi jamaah dalam menunaikan Zakat Fitrah, Zakat Maal, Infaq, dan Sedekah. Dana yang terkumpul disalurkan kepada asnaf yang berhak dan untuk operasional kemakmuran masjid dengan laporan keuangan yang dipublikasikan rutin.', schedule: 'Layanan 24 Jam (Transfer) / 08.00-17.00 (Offline)', location: 'Kantor Sekretariat Masjid', contact: 'Divisi ZISWAF (Bpk. Lukman)', requirements: ['Menerima konsultasi hitung Zakat Maal', 'Menerima jemput zakat khusus area terdekat'] } },
       { id: 6, title: 'Akad Nikah', category: 'Sosial', bgImage: interiorImg, description: 'Pelayanan akad nikah dan fasilitas memadai untuk membina keluarga sakinah.', iconName: 'Gem', badge: 'Tersedia', badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border border-purple-200 dark:border-purple-800', details: { fullDescription: 'Menyediakan fasilitas tempat untuk melangsungkan prosesi Akad Nikah di ruang utama masjid yang nyaman, sakral, dan ber-AC. Kami juga menyediakan ustadz untuk memberikan tausiyah pernikahan/khutbah nikah.', schedule: 'Sesuai Booking (Sabtu/Ahad Pagi)', location: 'Ruang Utama Masjid Jami Kassiti', contact: 'Sekretariat (Bpk. Hendra)', requirements: ['Booking jadwal maksimal H-30', 'Melampirkan surat pengantar KUA', 'Maksimal hadirin 100 orang'] } }
     ],
+    generalSettings: JSON.parse(localStorage.getItem('admin_general_settings')) || {
+      name: 'Masjid Jami Kassiti',
+      slogan: 'Membangun Iman, Ilmu, dan Ukhuwah',
+      description: 'Selamat datang di Masjid Jami Kassiti. Bergabunglah bersama kami dalam ibadah, pembelajaran, dakwah, dan pelayanan umat.',
+      history: 'Masjid Jami Kassiti yang berlokasi di Perumahan Arjamukti, Desa Arjasari, adalah pusat ibadah dan kegiatan keislaman yang melayani umat dengan penuh dedikasi. Kami berkomitmen untuk menjadi rumah Allah yang menyejukkan, tempat berkumpulnya jamaah dalam menuntut ilmu, beribadah, dan mempererat ukhuwah islamiah.\n\nDengan berbagai program kegiatan rutin seperti kajian, TPA/TPQ, dan kegiatan sosial, kami berusaha membangun generasi muslim yang beriman, berilmu, dan bermanfaat bagi masyarakat sekitar.',
+      instagram: 'https://instagram.com/masjidkassiti',
+      whatsapp: '6281234567890',
+      maps: 'https://maps.google.com'
+    },
+    ctaSettings: JSON.parse(localStorage.getItem('admin_cta_settings')) || {
+      title: 'Investasi Terbaik Untuk Akhirat',
+      subtitle: 'Setiap rupiah yang Anda sedekahkan tidak hanya memakmurkan masjid, tapi juga mengalirkan pahala yang tak terputus bagi Anda dan keluarga.',
+      quote: '"Barang siapa yang membangun masjid karena Allah, maka Allah akan membangunkan baginya rumah di surga."',
+      quoteSource: 'HR. Bukhari & Muslim',
+      totalDonors: 128,
+      programs: [
+        { id: 1, name: 'Renovasi Aula Utama', progress: 75 },
+        { id: 2, name: 'Sarana Pendidikan TPQ', progress: 60 }
+      ]
+    },
   }),
   actions: {
     login(username, password) {
@@ -91,7 +111,7 @@ export const useAdminStore = defineStore('admin', {
       this.saveKegiatan()
     },
     saveKegiatan() {
-      localStorage.setItem('admin_kegiatan_v2', JSON.stringify(this.kegiatan))
+      localStorage.setItem('admin_kegiatan_v3', JSON.stringify(this.kegiatan))
     },
     updateFinance(data) {
       this.finance = { ...this.finance, ...data }
@@ -134,6 +154,12 @@ export const useAdminStore = defineStore('admin', {
     },
     saveLayanan() {
       localStorage.setItem('admin_layanan', JSON.stringify(this.layanan))
+    },
+    saveGeneralSettings() {
+      localStorage.setItem('admin_general_settings', JSON.stringify(this.generalSettings))
+    },
+    saveCtaSettings() {
+      localStorage.setItem('admin_cta_settings', JSON.stringify(this.ctaSettings))
     }
   }
 })

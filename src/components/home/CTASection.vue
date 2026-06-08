@@ -37,13 +37,10 @@
               <span class="text-white text-xs font-bold tracking-widest uppercase">Peluang Amal Jariyah</span>
             </div>
 
-            <h2 class="font-heading text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight">
-              Investasi Terbaik <br class="hidden sm:block" />
-              <span class="text-transparent bg-clip-text bg-linear-to-r from-primary to-amber-200">Untuk Akhirat</span>
-            </h2>
-
-            <p class="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0">
-              Setiap rupiah yang Anda sedekahkan tidak hanya memakmurkan masjid, tapi juga mengalirkan pahala yang tak terputus bagi Anda dan keluarga.
+            <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-[1.1] mb-6" v-html="cta.title"></h2>
+            
+            <p class="text-white/80 text-sm sm:text-base md:text-lg leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
+              {{ cta.subtitle }}
             </p>
 
             <button
@@ -83,40 +80,24 @@
               <!-- Hadith Quote -->
               <div class="mb-5 sm:mb-8 relative z-10">
                 <Quote class="w-6 h-6 sm:w-8 sm:h-8 text-primary/40 mb-2 sm:mb-3" />
-                <p class="text-white/90 font-serif italic leading-relaxed mb-2 sm:mb-3 text-sm sm:text-base">
-                  "Barang siapa yang membangun masjid karena Allah, maka Allah akan membangunkan baginya rumah di surga."
+                <p class="text-white/90 text-sm sm:text-base italic leading-relaxed mb-3">
+                  {{ cta.quote }}
                 </p>
-                <p class="text-primary text-xs sm:text-sm font-semibold tracking-wider">
-                  — HR. Bukhari & Muslim
-                </p>
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-[1px] bg-primary/50"></div>
+                  <span class="text-primary/80 text-xs font-semibold tracking-wider uppercase">{{ cta.quoteSource }}</span>
+                </div>
               </div>
 
               <!-- Progress Tracking -->
-              <div class="space-y-4 sm:space-y-6 relative z-10">
-                <!-- Program 1 -->
-                <div>
-                  <div class="flex justify-between items-end mb-1.5 sm:mb-2">
-                    <span class="text-white font-medium text-xs sm:text-sm">Renovasi Aula Utama</span>
-                    <span class="text-primary font-bold text-xs sm:text-sm">75%</span>
+              <div class="space-y-6 mb-8 relative z-10">
+                <div v-for="prog in cta.programs" :key="prog.id" class="space-y-2">
+                  <div class="flex justify-between text-xs sm:text-sm font-semibold">
+                    <span class="text-white">{{ prog.name }}</span>
+                    <span class="text-primary">{{ prog.progress }}%</span>
                   </div>
-                  <div class="h-2 w-full bg-slate-800/50 rounded-full overflow-hidden">
-                    <div ref="progressBar1" class="h-full bg-linear-to-r from-primary to-amber-300 rounded-full relative" style="width: 0%">
-                       <!-- Moving light effect on progress bar -->
-                       <div class="absolute top-0 right-0 bottom-0 left-0 bg-linear-to-r from-transparent via-white/50 to-transparent w-full -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Program 2 -->
-                <div>
-                  <div class="flex justify-between items-end mb-1.5 sm:mb-2">
-                    <span class="text-white font-medium text-xs sm:text-sm">Sarana Pendidikan TPQ</span>
-                    <span class="text-primary font-bold text-xs sm:text-sm">60%</span>
-                  </div>
-                  <div class="h-2 w-full bg-slate-800/50 rounded-full overflow-hidden">
-                    <div ref="progressBar2" class="h-full bg-linear-to-r from-primary to-amber-300 rounded-full relative" style="width: 0%">
-                      <div class="absolute top-0 right-0 bottom-0 left-0 bg-linear-to-r from-transparent via-white/50 to-transparent w-full -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                    </div>
+                  <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-linear-to-r from-primary to-amber-300 rounded-full progress-bar" :style="{ width: prog.progress + '%' }"></div>
                   </div>
                 </div>
               </div>
@@ -126,7 +107,7 @@
                 <p class="text-white/60 text-[10px] sm:text-xs uppercase tracking-widest mb-1.5 sm:mb-2">Total Donatur Bulan Ini</p>
                 <div class="flex items-center justify-between">
                   <div class="flex items-baseline gap-1.5 sm:gap-2">
-                    <span ref="donationCount" class="text-3xl sm:text-4xl font-heading font-extrabold text-white">0</span>
+                    <span class="text-3xl sm:text-4xl font-heading font-extrabold text-white">{{ animatedDonors }}</span>
                     <span class="text-primary text-xs sm:text-sm font-medium">Orang</span>
                   </div>
                   
@@ -153,6 +134,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { Heart, HandCoins, Quote } from 'lucide-vue-next'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useAdminStore } from '@/stores/admin'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import DonationModal from '@/components/ui/DonationModal.vue'
 import img1 from '@/assets/images/mosque-exterior.png'
@@ -168,10 +150,8 @@ let sliderInterval = null
 
 const containerRef = ref(null)
 const bgImageRef = ref(null)
-const progressBar1 = ref(null)
-const progressBar2 = ref(null)
-const donationCount = ref(null)
 const cardRef = ref(null)
+const animatedDonors = ref(0)
 
 // 3D Tilt Effect Logic
 const cardTilt = ref('perspective(1000px) rotateX(0deg) rotateY(0deg)')
@@ -231,35 +211,27 @@ onMounted(() => {
     }
   })
 
-  // Animate progress bars
-  gsap.to(progressBar1.value, {
-    width: '75%',
+  // Animate progress bars dynamically based on their bound width style
+  // Since the style binding already sets the width, we can animate it from 0
+  gsap.from('.progress-bar', {
+    width: '0%',
     duration: 1.5,
     ease: 'power2.out',
+    stagger: 0.2,
     delay: 0.5,
-    scrollTrigger: triggerConfig,
-  })
-
-  gsap.to(progressBar2.value, {
-    width: '60%',
-    duration: 1.5,
-    ease: 'power2.out',
-    delay: 0.7,
     scrollTrigger: triggerConfig,
   })
 
   // Animate counter
   const counter = { value: 0 }
   gsap.to(counter, {
-    value: 128,
+    value: cta.value.totalDonors,
     duration: 2,
     ease: 'power2.out',
     snap: { value: 1 },
     scrollTrigger: triggerConfig,
     onUpdate: () => {
-      if (donationCount.value) {
-        donationCount.value.textContent = counter.value
-      }
+      animatedDonors.value = counter.value
     },
   })
 })

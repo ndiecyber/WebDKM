@@ -20,12 +20,8 @@
 
           <div class="section-divider mb-8"></div>
 
-          <p class="text-dark/60 dark:text-white/60 text-base sm:text-lg leading-relaxed mb-6 transition-colors duration-500">
-            Masjid Jami Kassiti yang berlokasi di Perumahan Arjamukti, Desa Arjasari, adalah pusat ibadah dan kegiatan keislaman yang melayani umat dengan penuh dedikasi. Kami berkomitmen untuk menjadi rumah Allah yang menyejukkan, tempat berkumpulnya jamaah dalam menuntut ilmu, beribadah, dan mempererat ukhuwah islamiah.
-          </p>
-
-          <p class="text-dark/60 dark:text-white/60 text-base sm:text-lg leading-relaxed mb-10 transition-colors duration-500">
-            Dengan berbagai program kegiatan rutin seperti kajian, TPA/TPQ, dan kegiatan sosial, kami berusaha membangun generasi muslim yang beriman, berilmu, dan bermanfaat bagi masyarakat sekitar.
+          <p class="text-dark/60 dark:text-white/60 text-base sm:text-lg leading-relaxed mb-6 transition-colors duration-500 whitespace-pre-line">
+            {{ settings.history }}
           </p>
 
           <!-- Stats -->
@@ -74,8 +70,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import interiorImage from '@/assets/images/mosque-interior.png'
+import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
+
+const adminStore = useAdminStore()
+const settings = adminStore.generalSettings
 
 const interiorImg = interiorImage
 const textContent = ref(null)
