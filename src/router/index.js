@@ -71,7 +71,7 @@ const routes = [
       },
       {
         path: 'laporan-publik',
-        name: 'admin-keuangan',
+        name: 'admin-laporan-publik',
         component: () => import('../views/admin/KeuanganView.vue'),
       },
       {
