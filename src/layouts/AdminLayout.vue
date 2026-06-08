@@ -20,7 +20,7 @@
         <div class="absolute inset-0 bg-linear-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
         
         <div class="relative z-10 flex items-center justify-between w-full">
-          <img src="@/assets/images/logo-kustom2.png" alt="Logo" class="h-12 sm:h-14 w-auto object-contain drop-shadow-sm transition-transform duration-500 group-hover:scale-105 origin-left" />
+          <img :src="isDarkMode ? logoDark : logoLight" alt="Logo" class="h-12 sm:h-14 w-auto object-contain drop-shadow-sm transition-transform duration-500 group-hover:scale-105 origin-left" />
           <span class="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-md border border-emerald-200 dark:border-emerald-800/50 shadow-sm">
             Admin
           </span>
@@ -61,8 +61,7 @@
             <router-link 
               :to="{ name: 'admin-dashboard' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-dashboard' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Home class="w-5 h-5" />
               <span>Dashboard Web</span>
@@ -79,8 +78,7 @@
             <router-link 
               :to="{ name: 'admin-keuangan-dashboard' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-keuangan-dashboard' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-keuangan-dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Wallet class="w-5 h-5" />
               <span>Dashboard Keuangan</span>
@@ -97,8 +95,7 @@
             <router-link 
               :to="{ name: 'admin-kegiatan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-kegiatan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-kegiatan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Calendar class="w-5 h-5" />
               <span>Kegiatan Masjid</span>
@@ -107,8 +104,7 @@
             <router-link 
               :to="{ name: 'admin-galeri' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-galeri' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-galeri' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Image class="w-5 h-5" />
               <span>Galeri Foto</span>
@@ -117,8 +113,7 @@
             <router-link 
               :to="{ name: 'admin-layanan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-layanan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-layanan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Briefcase class="w-5 h-5" />
               <span>Layanan & Fasilitas</span>
@@ -127,8 +122,7 @@
             <router-link 
               :to="{ name: 'admin-laporan-publik' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-laporan-publik' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-laporan-publik' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Wallet class="w-5 h-5" />
               <span>Laporan Publik</span>
@@ -189,8 +183,7 @@
               v-show="activeModule === 'web'"
               :to="{ name: 'admin-pengaturan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-pengaturan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Settings class="w-5 h-5" />
               <span>Pengaturan Umum</span>
@@ -201,8 +194,7 @@
               v-show="activeModule === 'keuangan'"
               :to="{ name: 'admin-keuangan-pengaturan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              active-class="text-emerald-400"
-              :class="$route.name === 'admin-keuangan-pengaturan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-keuangan-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
             >
               <Settings class="w-5 h-5" />
               <span>Pengaturan Umum</span>
@@ -283,6 +275,8 @@ import ToastContainer from '../components/ui/ToastContainer.vue'
 import { 
   LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon
 } from 'lucide-vue-next'
+import logoLight from '@/assets/images/logo-kustom.png'
+import logoDark from '@/assets/images/logo-kustom2.png'
 
 const route = useRoute()
 const router = useRouter()

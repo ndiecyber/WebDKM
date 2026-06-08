@@ -21,7 +21,7 @@
             Pusat ibadah, pendidikan, dan kegiatan sosial untuk membangun umat yang beriman, berilmu, dan berakhlak mulia.
           </p>
           <p class="text-white/40 text-xs leading-relaxed">
-            Perumahan Arjamukti, Desa Arjasari
+            Masjid Kassiti Arjamukti Kencana Raya, Arjasari, Kec. Leuwisari, Kabupaten Tasikmalaya, Jawa Barat 46464
           </p>
           
           <!-- Social Media -->
@@ -111,7 +111,7 @@
             <li class="flex items-start gap-3 group">
               <MapPin class="w-5 h-5 text-secondary mt-0.5 shrink-0 group-hover:animate-bounce" />
               <div class="flex flex-col gap-2">
-                <span class="text-white/60 text-sm leading-relaxed group-hover:text-white transition-colors">Perumahan Arjamukti, Desa Arjasari, Kab. Bandung, Jawa Barat</span>
+                <span class="text-white/60 text-sm leading-relaxed group-hover:text-white transition-colors">Masjid Kassiti Arjamukti Kencana Raya, Arjasari, Kec. Leuwisari, Kabupaten Tasikmalaya, Jawa Barat 46464</span>
                 <a 
                   href="https://maps.app.goo.gl/HMDmpx7zZFn8GRUaA" 
                   target="_blank" 
@@ -123,10 +123,15 @@
                 </a>
               </div>
             </li>
-            <li class="flex items-center gap-3 group">
-              <Phone class="w-5 h-5 text-secondary shrink-0 group-hover:animate-pulse" />
-              <a href="https://wa.me/6285320132014" target="_blank" rel="noopener noreferrer" class="text-secondary hover:text-white underline decoration-secondary/50 hover:decoration-white underline-offset-4 transition-all text-sm font-medium">
-                0853-2013-2014 (Ustadz Randi Rizal)
+            <li class="flex items-start gap-3 group">
+              <Phone class="w-5 h-5 text-secondary mt-0.5 shrink-0 group-hover:animate-pulse" />
+              <a href="https://wa.me/6285320132014" target="_blank" rel="noopener noreferrer" class="flex flex-col group/phone">
+                <span class="text-secondary group-hover/phone:text-white underline decoration-secondary/50 group-hover/phone:decoration-white underline-offset-4 transition-all text-sm font-medium">
+                  0853-2013-2014
+                </span>
+                <span class="text-white/60 group-hover/phone:text-white/80 text-xs mt-1 transition-colors">
+                  Ustadz Randi Rizal
+                </span>
               </a>
             </li>
             <li class="flex items-center gap-3">
@@ -153,11 +158,6 @@
             <span class="group-hover:underline underline-offset-2 decoration-secondary/50">Portal Admin</span>
           </router-link>
         </div>
-        <p class="text-white/30 text-xs flex items-center gap-1">
-          Dibuat dengan
-          <Heart class="w-3 h-3 text-red-400 inline" />
-          untuk umat
-        </p>
       </div>
     </div>
   </footer>

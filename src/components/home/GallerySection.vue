@@ -176,7 +176,7 @@ const goToSlide = (index) => {
 
 const startAutoPlay = () => {
   autoPlayInterval = setInterval(() => {
-    activeIndex.value = (activeIndex.value + 1) % gallery.length
+    activeIndex.value = (activeIndex.value + 1) % gallery.value.length
   }, 5000)
 }
 
@@ -206,11 +206,11 @@ const closeLightbox = () => {
 }
 
 const nextImage = () => {
-  lightboxIndex.value = (lightboxIndex.value + 1) % gallery.length
+  lightboxIndex.value = (lightboxIndex.value + 1) % gallery.value.length
 }
 
 const prevImage = () => {
-  lightboxIndex.value = (lightboxIndex.value - 1 + gallery.length) % gallery.length
+  lightboxIndex.value = (lightboxIndex.value - 1 + gallery.value.length) % gallery.value.length
 }
 
 const handleKeydown = (e) => {
