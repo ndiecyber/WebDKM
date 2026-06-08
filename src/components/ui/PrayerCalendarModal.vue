@@ -65,43 +65,97 @@
             <button @click="fetchCalendar" class="mt-4 px-6 py-2 bg-secondary text-dark rounded-full font-bold">Coba Lagi</button>
           </div>
 
-          <div v-else class="min-w-[800px]">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider rounded-tl-xl">Tanggal</th>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider">Imsak</th>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider text-secondary">Subuh</th>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider">Terbit</th>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider text-secondary">Dzuhur</th>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider text-secondary">Ashar</th>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider text-secondary">Maghrib</th>
-                  <th class="py-3 px-4 bg-gray-100 dark:bg-white/5 text-dark dark:text-white/80 font-bold text-sm uppercase tracking-wider text-secondary rounded-tr-xl">Isya</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr 
-                  v-for="(day, index) in calendarData" 
-                  :key="index"
-                  :class="[
-                    'border-b border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors',
-                    isToday(day) ? 'bg-secondary/10 dark:bg-secondary/20' : ''
-                  ]"
-                >
-                  <td class="py-3 px-4 font-medium text-dark dark:text-white">
-                    <span v-if="isToday(day)" class="inline-block w-2 h-2 rounded-full bg-secondary mr-2"></span>
+          <div v-else>
+            <!-- Mobile View (Cards) -->
+            <div class="block lg:hidden space-y-3 pb-2">
+              <div 
+                v-for="(day, index) in calendarData" 
+                :key="'m-'+index"
+                class="bg-white dark:bg-[#1A1A2E] border border-gray-100 dark:border-white/10 rounded-xl p-4 shadow-sm transition-all"
+                :class="isToday(day) ? 'ring-2 ring-secondary bg-secondary/5 dark:bg-secondary/10' : ''"
+              >
+                <div class="flex items-center justify-between mb-3 border-b border-gray-100 dark:border-white/10 pb-2">
+                  <div class="font-bold text-dark dark:text-white flex items-center gap-2">
+                    <span v-if="isToday(day)" class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
                     {{ formatDate(day.date.readable) }}
-                  </td>
-                  <td class="py-3 px-4 font-mono text-gray-500 dark:text-white/60">{{ cleanTime(day.timings.Imsak) }}</td>
-                  <td class="py-3 px-4 font-mono text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Fajr) }}</td>
-                  <td class="py-3 px-4 font-mono text-gray-500 dark:text-white/60">{{ cleanTime(day.timings.Sunrise) }}</td>
-                  <td class="py-3 px-4 font-mono text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Dhuhr) }}</td>
-                  <td class="py-3 px-4 font-mono text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Asr) }}</td>
-                  <td class="py-3 px-4 font-mono text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Maghrib) }}</td>
-                  <td class="py-3 px-4 font-mono text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Isha) }}</td>
-                </tr>
-              </tbody>
-            </table>
+                  </div>
+                  <span v-if="isToday(day)" class="text-[10px] font-bold text-secondary uppercase bg-secondary/10 px-2 py-0.5 rounded-full">Hari Ini</span>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-2 text-center">
+                  <div class="bg-gray-50 dark:bg-white/5 rounded-lg p-1.5">
+                    <p class="text-[10px] text-gray-500 dark:text-white/50 uppercase mb-0.5">Imsak</p>
+                    <p class="font-mono text-xs font-semibold text-dark dark:text-white">{{ cleanTime(day.timings.Imsak) }}</p>
+                  </div>
+                  <div class="bg-secondary/10 rounded-lg p-1.5 ring-1 ring-secondary/20">
+                    <p class="text-[10px] text-secondary uppercase mb-0.5 font-bold">Subuh</p>
+                    <p class="font-mono text-xs font-bold text-dark dark:text-white">{{ cleanTime(day.timings.Fajr) }}</p>
+                  </div>
+                  <div class="bg-gray-50 dark:bg-white/5 rounded-lg p-1.5">
+                    <p class="text-[10px] text-gray-500 dark:text-white/50 uppercase mb-0.5">Terbit</p>
+                    <p class="font-mono text-xs font-semibold text-dark dark:text-white">{{ cleanTime(day.timings.Sunrise) }}</p>
+                  </div>
+                  <div class="bg-secondary/10 rounded-lg p-1.5 ring-1 ring-secondary/20">
+                    <p class="text-[10px] text-secondary uppercase mb-0.5 font-bold">Dzuhur</p>
+                    <p class="font-mono text-xs font-bold text-dark dark:text-white">{{ cleanTime(day.timings.Dhuhr) }}</p>
+                  </div>
+                  <div class="bg-secondary/10 rounded-lg p-1.5 ring-1 ring-secondary/20">
+                    <p class="text-[10px] text-secondary uppercase mb-0.5 font-bold">Ashar</p>
+                    <p class="font-mono text-xs font-bold text-dark dark:text-white">{{ cleanTime(day.timings.Asr) }}</p>
+                  </div>
+                  <div class="bg-secondary/10 rounded-lg p-1.5 ring-1 ring-secondary/20">
+                    <p class="text-[10px] text-secondary uppercase mb-0.5 font-bold">Maghrib</p>
+                    <p class="font-mono text-xs font-bold text-dark dark:text-white">{{ cleanTime(day.timings.Maghrib) }}</p>
+                  </div>
+                  <div class="bg-secondary/10 rounded-lg p-1.5 ring-1 ring-secondary/20">
+                    <p class="text-[10px] text-secondary uppercase mb-0.5 font-bold">Isya</p>
+                    <p class="font-mono text-xs font-bold text-dark dark:text-white">{{ cleanTime(day.timings.Isha) }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Desktop View (Table) -->
+            <div class="hidden lg:block overflow-x-auto custom-scrollbar pb-2">
+              <div class="min-w-[800px] bg-white dark:bg-[#1A1A2E] rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-gray-100 dark:bg-white/5 border-b border-gray-200 dark:border-white/10">
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap">Tanggal</th>
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap">Imsak</th>
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap text-secondary">Subuh</th>
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap">Terbit</th>
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap text-secondary">Dzuhur</th>
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap text-secondary">Ashar</th>
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap text-secondary">Maghrib</th>
+                      <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap text-secondary">Isya</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 dark:divide-white/5">
+                    <tr 
+                      v-for="(day, index) in calendarData" 
+                      :key="'d-'+index"
+                      :class="[
+                        'hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors',
+                        isToday(day) ? 'bg-secondary/10 dark:bg-secondary/20' : ''
+                      ]"
+                    >
+                      <td class="py-3 px-4 font-medium text-sm text-dark dark:text-white whitespace-nowrap">
+                        <span v-if="isToday(day)" class="inline-block w-2 h-2 rounded-full bg-secondary mr-2"></span>
+                        {{ formatDate(day.date.readable) }}
+                      </td>
+                      <td class="py-3 px-4 font-mono text-sm text-gray-500 dark:text-white/60">{{ cleanTime(day.timings.Imsak) }}</td>
+                      <td class="py-3 px-4 font-mono text-sm text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Fajr) }}</td>
+                      <td class="py-3 px-4 font-mono text-sm text-gray-500 dark:text-white/60">{{ cleanTime(day.timings.Sunrise) }}</td>
+                      <td class="py-3 px-4 font-mono text-sm text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Dhuhr) }}</td>
+                      <td class="py-3 px-4 font-mono text-sm text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Asr) }}</td>
+                      <td class="py-3 px-4 font-mono text-sm text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Maghrib) }}</td>
+                      <td class="py-3 px-4 font-mono text-sm text-dark dark:text-white font-semibold">{{ cleanTime(day.timings.Isha) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 

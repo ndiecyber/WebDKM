@@ -205,7 +205,7 @@
                 </div>
                 <h3 class="text-dark dark:text-white font-bold text-base transition-colors duration-500">Saldo Akhir</h3>
               </div>
-              <button class="px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-800 rounded-full hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-white transition-all duration-300 flex-shrink-0 shadow-sm">
+              <button class="px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-800 rounded-full hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-white transition-all duration-300 shrink-0 shadow-sm">
                 Detail
               </button>
             </div>
@@ -289,13 +289,72 @@
       <div class="flex items-center gap-4 mt-10" ref="dividerRef">
         <div class="flex-1 h-px bg-linear-to-r from-transparent via-primary/20 dark:via-secondary/20 to-transparent"></div>
         <div class="flex items-center gap-2 text-dark/30 dark:text-white/20">
-          <ShieldCheck class="w-4 h-4" />
-          <span class="text-[10px] font-semibold tracking-widest uppercase">Dikelola Dengan Amanah</span>
-          <ShieldCheck class="w-4 h-4" />
+          <ShieldCheck class="w-5 h-5" />
+          <span class="text-sm sm:text-base font-bold tracking-widest uppercase text-center text-primary dark:text-secondary">Laporan Kegiatan Keagamaan & Sosial</span>
+          <ShieldCheck class="w-5 h-5" />
         </div>
         <div class="flex-1 h-px bg-linear-to-r from-transparent via-primary/20 dark:via-secondary/20 to-transparent"></div>
       </div>
+
+      <!-- Laporan Khusus / Acara -->
+      <div class="mt-6 sm:mt-8 max-w-5xl mx-auto" ref="specialReportsRef">
+        <!-- Judul lama (Laporan Keuangan Khusus) dihilangkan sesuai request dosen -->
+        <div class="text-center mb-6 hidden">
+          <h3 class="text-xl sm:text-2xl font-bold font-heading text-dark dark:text-white">Laporan Keuangan Khusus</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">Transparansi pendanaan untuk berbagai acara dan kepanitiaan masjid.</p>
+        </div>
+        <div class="flex flex-col gap-3 sm:gap-4">
+          <div 
+            v-for="(report, index) in specialReports" 
+            :key="report.id"
+            @click="openSpecialReport(report)"
+            class="group cursor-pointer bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-primary/50 dark:hover:border-secondary/50 rounded-2xl p-4 sm:p-5 transition-all duration-300 shadow-sm hover:shadow-xl flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6"
+          >
+            <!-- Title & Icon -->
+            <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-[35%] lg:w-[30%] shrink-0">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 dark:bg-secondary/10 flex items-center justify-center text-primary dark:text-secondary group-hover:scale-110 transition-transform duration-300 shrink-0">
+                <component :is="report.icon" class="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div class="text-left flex-1">
+                <h4 class="font-bold text-sm text-dark dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors leading-tight">{{ report.title }}</h4>
+                <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1 uppercase line-clamp-1">{{ report.date }}</p>
+              </div>
+            </div>
+
+            <!-- Stats (Responsive) -->
+            <div class="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-2 sm:gap-4 text-xs items-center border-t sm:border-t-0 border-gray-100 dark:border-white/5 pt-3 sm:pt-0">
+              <div class="border-r border-gray-100 dark:border-white/5 pr-2 sm:pr-4 sm:border-l sm:border-gray-200 sm:dark:border-white/10 sm:pl-4">
+                <span class="block text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Total Masuk</span>
+                <span class="font-bold text-green-600 dark:text-green-400 text-[11px] sm:text-xs">Rp {{ formatRupiah(report.totalPemasukan) }}</span>
+              </div>
+              <div class="pl-2 sm:pr-4 sm:border-r sm:border-gray-100 sm:dark:border-white/5">
+                <span class="block text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Total Keluar</span>
+                <span class="font-bold text-red-500 text-[11px] sm:text-xs">Rp {{ formatRupiah(report.totalPengeluaran) }}</span>
+              </div>
+              <div class="col-span-2 sm:col-span-1 mt-1 sm:mt-0 pt-2 pb-2 px-3 sm:p-0 border border-gray-100 dark:border-white/5 sm:border-0 bg-gray-50 dark:bg-transparent rounded-lg sm:rounded-none flex sm:block justify-between items-center sm:items-start sm:pl-4">
+                <span class="block text-[10px] text-gray-500 dark:text-gray-400 uppercase font-semibold tracking-wider sm:mb-0.5">Selisih Bersih</span>
+                <span class="font-bold text-cyan-600 dark:text-cyan-400 text-sm">Rp {{ formatRupiah(report.sisaSaldo) }}</span>
+              </div>
+            </div>
+
+            <!-- Action -->
+            <div class="hidden sm:flex items-center justify-end shrink-0 pl-2">
+              <div class="px-4 py-1.5 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-transparent group-hover:border-primary/30 dark:group-hover:border-secondary/30 group-hover:bg-primary/5 dark:group-hover:bg-secondary/5 transition-all flex items-center gap-1.5">
+                <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-secondary uppercase tracking-wider transition-colors">Detail</span>
+                <ArrowUpRight class="w-3 h-3 text-gray-400 group-hover:text-primary dark:group-hover:text-secondary transition-colors" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Special Report Modal -->
+    <SpecialReportModal 
+      :show="isSpecialReportModalOpen" 
+      :report="selectedSpecialReport" 
+      @close="closeSpecialReport" 
+    />
   </section>
 </template>
 
@@ -303,8 +362,9 @@
 import { ref, onMounted, computed } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Wallet, TrendingUp, TrendingDown, BadgeCheck, ShieldCheck, CalendarDays, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-vue-next'
+import { Wallet, TrendingUp, TrendingDown, BadgeCheck, ShieldCheck, CalendarDays, ArrowUpRight, ArrowDownRight, Activity, BookOpen, HeartHandshake, Gift, GraduationCap, LayoutList, Star } from 'lucide-vue-next'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+import SpecialReportModal from '@/components/ui/SpecialReportModal.vue'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -314,6 +374,208 @@ const headerRef = ref(null)
 const cardsRef = ref(null)
 const dividerRef = ref(null)
 const summaryRef = ref(null)
+const specialReportsRef = ref(null)
+
+const isSpecialReportModalOpen = ref(false)
+const selectedSpecialReport = ref(null)
+
+const openSpecialReport = (report) => {
+  selectedSpecialReport.value = report
+  isSpecialReportModalOpen.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeSpecialReport = () => {
+  isSpecialReportModalOpen.value = false
+  setTimeout(() => {
+    selectedSpecialReport.value = null
+  }, 300)
+  document.body.style.overflow = ''
+}
+
+const formatRupiah = (angka) => {
+  if (angka === undefined || angka === null) return '0'
+  return new Intl.NumberFormat('id-ID').format(angka)
+}
+
+// Data Mockup Laporan Khusus
+const specialReports = [
+  {
+    id: 'isra-miraj',
+    title: 'PHBI Isra’ Mi’raj',
+    icon: Star,
+    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
+    date: '18 Januari 2026M / 1447H',
+    pemasukan: [
+      { no: 1, tanggal: '10 Jan 2026', uraian: 'Total Open Donasi Warga Perum Arjamukti', jumlah: 6682000 }
+    ],
+    pengeluaran: [
+      { no: 1, tanggal: '12 Jan 2026', uraian: '170 Box Nasi Kuning Dewasa', jumlah: 1360000 },
+      { no: 2, tanggal: '12 Jan 2026', uraian: '150 Box Nasi Kuning Anak', jumlah: 900000 },
+      { no: 3, tanggal: '12 Jan 2026', uraian: '25 Porsi Paket Nasi Prasmanan', jumlah: 500000 },
+      { no: 4, tanggal: '15 Jan 2026', uraian: 'Mubaligh / Penceramah', jumlah: 700000 },
+      { no: 5, tanggal: '15 Jan 2026', uraian: 'Qori Al-Quran', jumlah: 100000 },
+      { no: 6, tanggal: '16 Jan 2026', uraian: 'Bingkisan Mubalig', jumlah: 110000 },
+      { no: 7, tanggal: '16 Jan 2026', uraian: '2 Runtuy Kopi dan Rokok', jumlah: 97000 },
+      { no: 8, tanggal: '17 Jan 2026', uraian: 'Air Mineral 4 Dus @18.000', jumlah: 72000 },
+      { no: 9, tanggal: '17 Jan 2026', uraian: 'Air Mineral 8 Dus @17.000', jumlah: 136000 },
+      { no: 10, tanggal: '17 Jan 2026', uraian: '1 Banner Frontlite 280 (3x2M) @25.000', jumlah: 150000 },
+      { no: 11, tanggal: '18 Jan 2026', uraian: 'TIM Petugas Kebersihan', jumlah: 100000 },
+      { no: 12, tanggal: '18 Jan 2026', uraian: 'Akomodasi', jumlah: 20000 }
+    ],
+    totalPemasukan: 6682000,
+    totalPengeluaran: 4245000,
+    sisaSaldo: 2437000,
+    terbilang: 'Dua Juta Empat Ratus Tiga Puluh Tujuh Ribu Rupiah',
+    keterangan: '',
+    ketua: 'Irvan Ruchiat',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'Ketua Panitia'
+  },
+  {
+    id: 'maulid-nabi',
+    title: 'PHBI Maulid Nabi',
+    icon: BookOpen,
+    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
+    date: '12 Rabiul Awal 1447H',
+    pemasukan: [
+      { no: 1, tanggal: '01 Rabiul Awal', uraian: 'Infaq Jamaah Pengajian Rutin', jumlah: 4500000 },
+      { no: 2, tanggal: '05 Rabiul Awal', uraian: 'Donasi Hamba Allah', jumlah: 1500000 }
+    ],
+    pengeluaran: [
+      { no: 1, tanggal: '10 Rabiul Awal', uraian: 'Honor Penceramah', jumlah: 1000000 },
+      { no: 2, tanggal: '11 Rabiul Awal', uraian: 'Konsumsi (200 Box @15.000)', jumlah: 3000000 },
+      { no: 3, tanggal: '11 Rabiul Awal', uraian: 'Dekorasi & Tenda', jumlah: 1200000 },
+      { no: 4, tanggal: '12 Rabiul Awal', uraian: 'Kebersihan', jumlah: 200000 }
+    ],
+    totalPemasukan: 6000000,
+    totalPengeluaran: 5400000,
+    sisaSaldo: 600000,
+    terbilang: 'Enam Ratus Ribu Rupiah',
+    keterangan: 'Sisa dana disetorkan ke Kas Utama DKM',
+    ketua: 'Ahmad Syafiq',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'Ketua Panitia'
+  },
+  {
+    id: 'kegiatan-zakat',
+    title: 'Kegiatan Zakat',
+    icon: HeartHandshake,
+    subtitle: 'PANITIA ZAKAT 1447 H / 2026 M PERUM ARJAMUKTI KENCANA RAYA',
+    date: 'Sabtu, 21 Maret 2026',
+    pemasukan: [
+      { no: 1, tanggal: '01 Mar 2026', uraian: 'Zakat Fitrah 493 Jiwa', jumlah: 12654000 },
+      { no: 2, tanggal: '15 Mar 2026', uraian: 'Total Infaq / Sedekah', jumlah: 1498000 }
+    ],
+    pengeluaran: [
+      { no: 1, tanggal: '18 Mar 2026', uraian: 'Fotocopy Formulir Zakat (Diambil dari pos sedekah)', jumlah: 38500 },
+      { no: 2, tanggal: '18 Mar 2026', uraian: '2 Pack Paperline (Diambil dari pos sedekah)', jumlah: 28000 },
+      { no: 3, tanggal: '19 Mar 2026', uraian: '3 Pack K.30 Piala (Diambil dari pos sedekah)', jumlah: 69000 },
+      { no: 4, tanggal: '20 Mar 2026', uraian: 'Bensin Akomodasi (Diambil dari pos sedekah)', jumlah: 10000 },
+      { no: 5, tanggal: '20 Mar 2026', uraian: 'Setoran ke Desa (Baznas)', jumlah: 250000 },
+      { no: 6, tanggal: '21 Mar 2026', uraian: '92 Amplop x @100.000 (Mustahik Zakat Dalam Perum)', jumlah: 9200000 },
+      { no: 7, tanggal: '21 Mar 2026', uraian: '33 Amplop x @100.000 (Mustahik Zakat Luar Perum)', jumlah: 3300000 },
+      { no: 8, tanggal: '21 Mar 2026', uraian: '6 Amil Zakat Inti (Diambil dari pos sedekah)', jumlah: 800000 }
+    ],
+    totalPemasukan: 14152000,
+    totalPengeluaran: 13695500,
+    sisaSaldo: 456500,
+    terbilang: 'Empat Ratus Lima Puluh Enam Ribu Lima Ratus Rupiah',
+    keterangan: 'Sisa saldo disetorkan ke KAS DKMJ KASSITI',
+    ketua: 'H. Redi Sasriandi',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'Ketua Panitia'
+  },
+  {
+    id: 'kegiatan-qurban',
+    title: 'Kegiatan Qurban',
+    icon: Gift,
+    subtitle: 'PANITIA QURBAN DKMJ KASSITI 1447H / 2026M',
+    date: 'Perum Arjamukti Kencana Raya',
+    pemasukan: [
+      { no: 1, uraian: 'Kas awal dari DKM Kassiti', jumlah: 1000000 },
+      { no: 2, uraian: 'Titipan 21 Peserta Qurban Hewan Sapi', jumlah: 81900000 },
+      { no: 3, uraian: 'Infak OPS 24 Peserta Qurban Hewan Sapi & Domba', jumlah: 2550000 },
+      { no: 4, uraian: 'Penjualan Kulit Hewan Qurban Sapi & Domba', jumlah: 437000 }
+    ],
+    pengeluaran: [
+      { no: 1, uraian: 'DP Pembelian 3 Ekor Hewan Qurban Sapi', jumlah: 6000000 },
+      { no: 2, uraian: 'Biaya Mempertajam Perkakas Pisau & Kapak', jumlah: 150000 },
+      { no: 3, uraian: 'ATK, Print dan Foto Copy', jumlah: 50000 },
+      { no: 4, uraian: 'Pelunasan Pembelian 3 Ekor Hewan Qurban Sapi', jumlah: 76500000 },
+      { no: 5, uraian: '5 Karung BB 6 @12.000', jumlah: 60000 },
+      { no: 6, uraian: '6 Pack Keresek Apel 26 Hitam', jumlah: 90000 },
+      { no: 7, uraian: '5 Leunjer Bambu Haur', jumlah: 75000 },
+      { no: 8, uraian: '3 Pack Cup Gelas Plastik Zetta', jumlah: 21000 },
+      { no: 9, uraian: 'Gas Elpiji 3 Kg', jumlah: 21000 },
+      { no: 10, uraian: 'Isi Ulang Galon Aqua', jumlah: 23000 },
+      { no: 11, uraian: '1/2 ons Karet Hijau', jumlah: 3000 },
+      { no: 12, uraian: 'Tenda 120 Meter', jumlah: 1000000 },
+      { no: 13, uraian: 'Konsumsi Makan & Snack Hari Raya', jumlah: 693700 },
+      { no: 14, uraian: 'Mata Gerinda WD 5 Inch', jumlah: 30000 },
+      { no: 15, uraian: '2 Petugas Tim Kebersihan', jumlah: 150000 },
+      { no: 16, uraian: 'Pengembalian Kas awal ke DKM Kassiti', jumlah: 1000000 }
+    ],
+    totalPemasukan: 85887000,
+    totalPengeluaran: 85866700,
+    sisaSaldo: 20300,
+    terbilang: 'Dua Puluh Ribu Tiga Ratus Rupiah',
+    keterangan: 'Sisa saldo KAS Kegiatan Qurban di Infaqkan ke Masjid Kassiti.',
+    ketua: 'H. Redi Sasriandi',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'Mengetahui, Ketua Panitia'
+  },
+  {
+    id: 'imtihan-akhirussanah',
+    title: 'Imtihan Akhirussanah',
+    icon: GraduationCap,
+    subtitle: 'TPQ / MADRASAH DKMJ KASSITI',
+    date: 'Tahun Ajaran 2025/2026',
+    pemasukan: [
+      { no: 1, uraian: 'Iuran Wali Santri', jumlah: 3500000 },
+      { no: 2, uraian: 'Donasi Simpatisan', jumlah: 1200000 },
+      { no: 3, uraian: 'Subsidi Kas DKM', jumlah: 500000 }
+    ],
+    pengeluaran: [
+      { no: 1, uraian: 'Sewa Tenda & Panggung', jumlah: 1500000 },
+      { no: 2, uraian: 'Piala dan Piagam Penghargaan', jumlah: 800000 },
+      { no: 3, uraian: 'Konsumsi Santri dan Undangan', jumlah: 1800000 },
+      { no: 4, uraian: 'Dokumentasi', jumlah: 300000 },
+      { no: 5, uraian: 'Hadiah Lomba', jumlah: 500000 }
+    ],
+    totalPemasukan: 5200000,
+    totalPengeluaran: 4900000,
+    sisaSaldo: 300000,
+    terbilang: 'Tiga Ratus Ribu Rupiah',
+    keterangan: 'Disimpan untuk kas TPQ',
+    ketua: 'Ust. Hasan Basri',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'Kepala TPQ'
+  },
+  {
+    id: 'kegiatan-lainnya',
+    title: 'Kegiatan Lainnya',
+    icon: LayoutList,
+    subtitle: 'LAPORAN KEGIATAN LAINNYA',
+    date: 'Periode 2026',
+    pemasukan: [
+      { no: 1, uraian: 'Infaq Insidental', jumlah: 1000000 }
+    ],
+    pengeluaran: [
+      { no: 1, uraian: 'Pembelian Peralatan Kebersihan', jumlah: 450000 },
+      { no: 2, uraian: 'Perbaikan Sound System Ringan', jumlah: 300000 }
+    ],
+    totalPemasukan: 1000000,
+    totalPengeluaran: 750000,
+    sisaSaldo: 250000,
+    terbilang: 'Dua Ratus Lima Puluh Ribu Rupiah',
+    keterangan: 'Kegiatan gotong royong dan pemeliharaan',
+    ketua: 'Ahmad Nasa\'i',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'Ketua DKM'
+  }
+]
+
 const counter1 = ref(null)
 const counter2 = ref(null)
 const counter3 = ref(null)
@@ -438,6 +700,14 @@ onMounted(() => {
     opacity: 1, y: 0, scale: 1, duration: 1.0, ease: 'power3.out', stagger: 0.1,
     scrollTrigger: { trigger: '#keuangan', start: 'top 75%', once: true },
   })
+
+  // Special Reports entrance
+  if (specialReportsRef.value) {
+    gsap.fromTo(specialReportsRef.value.children, { opacity: 0, y: 30 }, {
+      opacity: 1, y: 0, duration: 1.0, ease: 'power3.out', stagger: 0.15,
+      scrollTrigger: { trigger: specialReportsRef.value, start: 'top 85%', once: true },
+    })
+  }
 
   // Sparkline draw animations
   const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }

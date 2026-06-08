@@ -48,9 +48,9 @@
 
         <!-- Elegant Divider -->
         <div class="flex items-center gap-4 w-full justify-center mb-8 opacity-80" ref="dividerRef">
-          <div class="h-[1px] w-12 sm:w-20 bg-linear-to-r from-transparent to-[#D4AF37]/70"></div>
+          <div class="h-px w-12 sm:w-20 bg-linear-to-r from-transparent to-[#D4AF37]/70"></div>
           <div class="w-2 h-2 rotate-45 bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]"></div>
-          <div class="h-[1px] w-12 sm:w-20 bg-linear-to-l from-transparent to-[#D4AF37]/70"></div>
+          <div class="h-px w-12 sm:w-20 bg-linear-to-l from-transparent to-[#D4AF37]/70"></div>
         </div>
 
         <!-- Typography -->

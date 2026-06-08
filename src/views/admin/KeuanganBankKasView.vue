@@ -24,7 +24,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Card: BSI -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-800 text-white p-6 shadow-lg shadow-emerald-900/20 group">
+      <div class="relative overflow-hidden rounded-2xl bg-linear-to-br from-emerald-600 to-teal-800 text-white p-6 shadow-lg shadow-emerald-900/20 group">
         <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform duration-500">
           <Landmark class="w-24 h-24" />
         </div>
@@ -41,7 +41,7 @@
       </div>
 
       <!-- Card: Kotak Amal -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-800 text-white p-6 shadow-lg shadow-blue-900/20 group">
+      <div class="relative overflow-hidden rounded-2xl bg-linear-to-br from-blue-600 to-indigo-800 text-white p-6 shadow-lg shadow-blue-900/20 group">
         <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform duration-500">
           <Wallet class="w-24 h-24" />
         </div>
@@ -58,7 +58,7 @@
       </div>
 
       <!-- Card: Kas Operasional -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-700 to-gray-900 text-white p-6 shadow-lg shadow-gray-900/20 group">
+      <div class="relative overflow-hidden rounded-2xl bg-linear-to-br from-gray-700 to-gray-900 text-white p-6 shadow-lg shadow-gray-900/20 group">
         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
           <Briefcase class="w-24 h-24" />
         </div>

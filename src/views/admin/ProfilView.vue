@@ -14,7 +14,7 @@
       <!-- Left Column: Avatar & Summary -->
       <div class="space-y-6">
         <div class="bg-gray-900 ring-1 ring-white/10 rounded-xl shadow-sm overflow-hidden relative">
-          <div class="h-24 bg-gradient-to-r from-gray-800 to-gray-700 w-full border-b border-white/5"></div>
+          <div class="h-24 bg-linear-to-r from-gray-800 to-gray-700 w-full border-b border-white/5"></div>
           <div class="px-6 pb-6 relative">
             <div class="flex justify-between items-end -mt-10 mb-4">
               <div class="relative group">

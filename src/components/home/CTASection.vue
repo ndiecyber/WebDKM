@@ -84,7 +84,7 @@
                   {{ cta.quote }}
                 </p>
                 <div class="flex items-center gap-2">
-                  <div class="w-6 h-[1px] bg-primary/50"></div>
+                  <div class="w-6 h-px bg-primary/50"></div>
                   <span class="text-primary/80 text-xs font-semibold tracking-wider uppercase">{{ cta.quoteSource }}</span>
                 </div>
               </div>

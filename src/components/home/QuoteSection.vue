@@ -36,11 +36,11 @@
           <div class="relative z-20">
             <!-- Decorative Top Line -->
             <div ref="linesRef" class="flex items-center justify-center gap-6 mb-8">
-              <div class="h-[1px] w-12 sm:w-20 bg-linear-to-r from-transparent to-secondary/60"></div>
+              <div class="h-px w-12 sm:w-20 bg-linear-to-r from-transparent to-secondary/60"></div>
               <div class="w-2.5 h-2.5 rotate-45 border border-secondary/60 flex items-center justify-center group-hover:animate-spin transition-all duration-500">
                 <div class="w-1 h-1 bg-secondary shadow-[0_0_10px_rgba(234,179,8,1)]"></div>
               </div>
-              <div class="h-[1px] w-12 sm:w-20 bg-linear-to-l from-transparent to-secondary/60"></div>
+              <div class="h-px w-12 sm:w-20 bg-linear-to-l from-transparent to-secondary/60"></div>
             </div>
 
             <!-- Arabic Verse -->
