@@ -15,31 +15,36 @@
       :class="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Logo -->
-      <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-white/5 shrink-0">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg flex items-center justify-center">
-            <img src="@/assets/images/logo-kustom2.png" alt="Logo" class="w-full h-full object-contain" />
-          </div>
-          <span class="font-heading font-bold text-lg text-gray-900 dark:text-white tracking-tight">Admin Panel</span>
+      <div class="h-24 flex flex-col justify-center px-6 border-b border-gray-200 dark:border-white/5 shrink-0 relative overflow-hidden group">
+        <!-- Subtle animated gradient background -->
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        
+        <div class="relative z-10 flex items-center justify-between w-full">
+          <img src="@/assets/images/logo-kustom2.png" alt="Logo" class="h-12 sm:h-14 w-auto object-contain drop-shadow-sm transition-transform duration-500 group-hover:scale-105 origin-left" />
+          <span class="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-md border border-emerald-200 dark:border-emerald-800/50 shadow-sm">
+            Admin
+          </span>
         </div>
       </div>
 
       <!-- Module Switcher -->
-      <div class="px-4 py-4 border-b border-gray-200 dark:border-white/5 shrink-0">
-        <div class="bg-gray-100 dark:bg-gray-950 p-1 rounded-lg flex items-center ring-1 ring-gray-200 dark:ring-white/10">
+      <div class="px-4 py-4 border-b border-gray-200 dark:border-white/5 shrink-0 bg-gray-50/50 dark:bg-gray-900/20">
+        <div class="bg-gray-200/50 dark:bg-gray-950 p-1.5 rounded-xl flex items-center shadow-inner ring-1 ring-black/5 dark:ring-white/5">
           <button 
             @click="switchModule('web')" 
-            :class="activeModule === 'web' ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'" 
-            class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all flex justify-center items-center gap-1.5"
+            :class="activeModule === 'web' ? 'bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10 font-bold' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium hover:bg-white/50 dark:hover:bg-gray-800/50'" 
+            class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group"
           >
-            Web DKM
+            <div v-if="activeModule === 'web'" class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent"></div>
+            <span class="relative z-10">Web DKM</span>
           </button>
           <button 
             @click="switchModule('keuangan')" 
-            :class="activeModule === 'keuangan' ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'" 
-            class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all flex justify-center items-center gap-1.5"
+            :class="activeModule === 'keuangan' ? 'bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10 font-bold' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium hover:bg-white/50 dark:hover:bg-gray-800/50'" 
+            class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group"
           >
-            Keuangan DKM
+            <div v-if="activeModule === 'keuangan'" class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent"></div>
+            <span class="relative z-10">Keuangan DKM</span>
           </button>
         </div>
       </div>
