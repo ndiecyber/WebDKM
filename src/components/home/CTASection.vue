@@ -144,6 +144,9 @@ import { isDonationModalOpen } from '@/composables/useDonationModal'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const adminStore = useAdminStore()
+const cta = ref(adminStore.ctaSettings)
+
 const sliderImages = [img1, img2, img3]
 const currentImageIndex = ref(0)
 let sliderInterval = null

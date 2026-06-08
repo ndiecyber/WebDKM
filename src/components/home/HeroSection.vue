@@ -45,8 +45,8 @@
         <h2
           ref="heading"
           class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6 opacity-0"
+          v-html="settings.slogan"
         >
-          {{ settings.slogan }}
         </h2>
 
         <!-- Subtitle -->
