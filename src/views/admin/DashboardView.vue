@@ -2,21 +2,27 @@
   <div class="space-y-6 sm:space-y-8 animate-fade-in">
     
     <!-- Welcome Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard Ringkasan</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Selamat datang kembali. Berikut adalah ringkasan performa website Anda hari ini.
-        </p>
-      </div>
-      <div class="flex items-center gap-3">
-        <button class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-200 dark:ring-white/10 shadow-sm text-sm flex items-center gap-2">
-          <Calendar class="w-4 h-4" />
-          <span>Bulan Ini</span>
-        </button>
-        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm">
-          Unduh Laporan
-        </button>
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-800 via-emerald-600 to-teal-900 p-8 sm:p-10 shadow-lg text-white mb-8 group">
+      <!-- Decorative background elements -->
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-1000 ease-out"></div>
+      <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent"></div>
+      
+      <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2 drop-shadow-md">Dashboard Ringkasan</h1>
+          <p class="text-emerald-50 text-sm sm:text-base max-w-xl leading-relaxed">
+            Selamat datang kembali di pusat kendali Masjid Jami Kassiti. Pantau aktivitas, layanan, dan perkembangan umat secara real-time.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 font-medium px-4 py-2.5 rounded-xl transition-all shadow-sm text-sm flex items-center gap-2">
+            <Calendar class="w-4 h-4" />
+            <span>Bulan Ini</span>
+          </button>
+          <button class="bg-secondary hover:bg-yellow-400 text-emerald-950 font-bold px-4 py-2.5 rounded-xl transition-all shadow-md text-sm hover:shadow-lg hover:-translate-y-0.5 transform">
+            Unduh Laporan
+          </button>
+        </div>
       </div>
     </div>
 
@@ -24,73 +30,86 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       
       <!-- Stat 1 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Kegiatan</p>
-          <div class="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <Calendar class="w-5 h-5 text-gray-600 dark:text-gray-400" />
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+        <div class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 dark:bg-emerald-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Kegiatan</p>
+            <div class="p-2.5 bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-800/20 text-emerald-600 dark:text-emerald-400 rounded-xl ring-1 ring-emerald-200 dark:ring-emerald-800/50">
+              <Calendar class="w-5 h-5" />
+            </div>
           </div>
-        </div>
-        <div>
-          <div v-if="isLoading" class="h-8 w-16 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
-          <h3 v-else class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{{ totalKegiatan }}</h3>
-          <p class="text-sm text-gray-500 mt-2 flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-            Di seluruh kategori
-          </p>
+          <div>
+            <div v-if="isLoading" class="h-8 w-16 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
+            <h3 v-else class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">{{ totalKegiatan }}</h3>
+            <p class="text-sm text-gray-500 mt-2 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Di seluruh kategori
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- Stat 2 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Kunjungan Web</p>
-          <div class="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <Users class="w-5 h-5 text-gray-600 dark:text-gray-400" />
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+        <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Kunjungan Web</p>
+            <div class="p-2.5 bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/40 dark:to-blue-800/20 text-blue-600 dark:text-blue-400 rounded-xl ring-1 ring-blue-200 dark:ring-blue-800/50">
+              <Users class="w-5 h-5" />
+            </div>
           </div>
-        </div>
-        <div>
-          <div v-if="isLoading" class="h-8 w-24 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
-          <h3 v-else class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">4,204</h3>
-          <p class="text-sm text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-medium">
-            <TrendingUp class="w-4 h-4" />
-            +12% dari bulan lalu
-          </p>
+          <div>
+            <div v-if="isLoading" class="h-8 w-24 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
+            <h3 v-else class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">4,204</h3>
+            <p class="text-sm text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-semibold">
+              <TrendingUp class="w-4 h-4" />
+              +12% dari bulan lalu
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- Stat 3 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Pengumuman Aktif</p>
-          <div class="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <MessageSquare class="w-5 h-5 text-gray-600 dark:text-gray-400" />
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+        <div class="absolute -right-6 -top-6 w-24 h-24 bg-amber-50 dark:bg-amber-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pengumuman Aktif</p>
+            <div class="p-2.5 bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-900/40 dark:to-amber-800/20 text-amber-600 dark:text-amber-400 rounded-xl ring-1 ring-amber-200 dark:ring-amber-800/50">
+              <MessageSquare class="w-5 h-5" />
+            </div>
           </div>
-        </div>
-        <div>
-          <div v-if="isLoading" class="h-8 w-12 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
-          <h3 v-else class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">2</h3>
-          <p class="text-sm text-secondary mt-2 flex items-center gap-1 font-medium">
-            Ditampilkan di beranda
-          </p>
+          <div>
+            <div v-if="isLoading" class="h-8 w-12 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
+            <h3 v-else class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">2</h3>
+            <p class="text-sm text-amber-600 dark:text-amber-500 mt-2 flex items-center gap-1.5 font-medium">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              Ditampilkan di beranda
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- Stat 4 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Foto Galeri</p>
-          <div class="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <Image class="w-5 h-5 text-gray-600 dark:text-gray-400" />
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+        <div class="absolute -right-6 -top-6 w-24 h-24 bg-purple-50 dark:bg-purple-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Foto Galeri</p>
+            <div class="p-2.5 bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/40 dark:to-purple-800/20 text-purple-600 dark:text-purple-400 rounded-xl ring-1 ring-purple-200 dark:ring-purple-800/50">
+              <Image class="w-5 h-5" />
+            </div>
           </div>
-        </div>
-        <div>
-          <div v-if="isLoading" class="h-8 w-16 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
-          <h3 v-else class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">45</h3>
-          <p class="text-sm text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-medium">
-            <TrendingUp class="w-4 h-4" />
-            3 foto baru minggu ini
-          </p>
+          <div>
+            <div v-if="isLoading" class="h-8 w-16 bg-gray-100 dark:bg-white/5 rounded animate-pulse mb-1"></div>
+            <h3 v-else class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">45</h3>
+            <p class="text-sm text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-semibold">
+              <TrendingUp class="w-4 h-4" />
+              3 foto baru minggu ini
+            </p>
+          </div>
         </div>
       </div>
 

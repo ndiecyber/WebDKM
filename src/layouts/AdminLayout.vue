@@ -17,8 +17,8 @@
       <!-- Logo -->
       <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-white/5 shrink-0">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary to-yellow-600 flex items-center justify-center shadow-sm ring-1 ring-black/5 dark:ring-white/10">
-            <LayoutDashboard class="w-4 h-4 text-white dark:text-gray-950" />
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center">
+            <img src="@/assets/images/logo-kustom2.png" alt="Logo" class="w-full h-full object-contain" />
           </div>
           <span class="font-heading font-bold text-lg text-gray-900 dark:text-white tracking-tight">Admin Panel</span>
         </div>
