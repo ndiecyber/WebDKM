@@ -18,7 +18,7 @@
     <!-- Gallery Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <div 
-        v-for="item in gallery" 
+        v-for="item in adminStore.gallery" 
         :key="item.id"
         class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl overflow-hidden group shadow-sm flex flex-col"
       >
@@ -47,7 +47,7 @@
     </div>
 
     <!-- Empty State -->
-    <div v-if="gallery.length === 0" class="text-center py-20 bg-gray-50 dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl border-dashed">
+    <div v-if="adminStore.gallery.length === 0" class="text-center py-20 bg-gray-50 dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl border-dashed">
       <Image class="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
       <h3 class="text-gray-900 dark:text-gray-200 font-medium text-lg tracking-tight">Belum ada foto galeri</h3>
       <p class="text-gray-500 text-sm mt-1">Klik tombol "Tambah Foto Baru" untuk mulai mengunggah.</p>
@@ -108,14 +108,52 @@
             </div>
             
             <div class="space-y-1">
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Caption / Keterangan</label>
-              <textarea 
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Foto / Caption</label>
+              <input 
                 v-model="form.caption"
                 required
-                rows="3"
-                placeholder="Tuliskan keterangan foto di sini..."
+                type="text"
+                placeholder="Contoh: Kawasan Masjid Kassiti"
+                class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm"
+              />
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sub-keterangan Singkat</label>
+              <textarea 
+                v-model="form.subcaption"
+                required
+                rows="2"
+                placeholder="Pemandangan udara masjid dan perumahan..."
                 class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all resize-none text-sm"
               ></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Label (Tag)</label>
+                <input 
+                  v-model="form.tag"
+                  required
+                  type="text"
+                  placeholder="Contoh: Eksterior"
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm"
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ikon Tema</label>
+                <select 
+                  v-model="form.iconName"
+                  required
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
+                >
+                  <option value="Camera">Kamera</option>
+                  <option value="Building">Gedung / Arsitektur</option>
+                  <option value="Users">Orang / Sosial</option>
+                  <option value="BookOpen">Edukasi / Buku</option>
+                  <option value="MapPin">Lokasi</option>
+                </select>
+              </div>
             </div>
 
           </form>
@@ -146,21 +184,15 @@
 import { ref } from 'vue'
 import { Plus, Edit2, Trash2, X, Image, UploadCloud } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
+import { useAdminStore } from '../../stores/admin'
 
 const toastStore = useToastStore()
-
-// Mock Data
-const gallery = ref([
-  { id: 1, image: 'https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=1470&auto=format&fit=crop', caption: 'Masjid tampak depan saat senja' },
-  { id: 2, image: 'https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1470&auto=format&fit=crop', caption: 'Suasana sholat Jumat berjamaah' },
-  { id: 3, image: 'https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=1470&auto=format&fit=crop', caption: 'Kajian rutin mingguan' },
-  { id: 4, image: 'https://images.unsplash.com/photo-1579487785973-74d2ca7ab4eb?q=80&w=1470&auto=format&fit=crop', caption: 'Interior kubah utama masjid' },
-])
+const adminStore = useAdminStore()
 
 const showModal = ref(false)
 const isEditing = ref(false)
 const isDragging = ref(false)
-const form = ref({ id: null, image: '', caption: '' })
+const form = ref({ id: null, image: '', caption: '', subcaption: '', tag: '', iconName: 'Camera' })
 
 function openModal(item = null) {
   if (item) {
@@ -168,7 +200,7 @@ function openModal(item = null) {
     form.value = { ...item }
   } else {
     isEditing.value = false
-    form.value = { id: null, image: '', caption: '' }
+    form.value = { id: null, image: '', caption: '', subcaption: '', tag: '', iconName: 'Camera' }
   }
   showModal.value = true
   document.body.style.overflow = 'hidden'
@@ -183,15 +215,14 @@ function saveItem() {
   if (!form.value.image || !form.value.caption) return
   
   if (isEditing.value) {
-    const index = gallery.value.findIndex(g => g.id === form.value.id)
-    if (index !== -1) {
-      gallery.value[index] = { ...form.value }
-    }
+    adminStore.updateGallery(form.value.id, { ...form.value })
   } else {
-    gallery.value.push({
-      id: Date.now(),
+    adminStore.addGallery({
       image: form.value.image,
       caption: form.value.caption,
+      subcaption: form.value.subcaption,
+      tag: form.value.tag,
+      iconName: form.value.iconName,
       date: 'Baru saja'
     })
   }
@@ -219,7 +250,7 @@ function handleFileSelect(e) {
 
 function deleteItem(id) {
   if (confirm('Apakah Anda yakin ingin menghapus foto ini?')) {
-    gallery.value = gallery.value.filter(g => g.id !== id)
+    adminStore.deleteGallery(id)
     toastStore.addToast('Foto berhasil dihapus', 'error')
   }
 }
