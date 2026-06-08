@@ -1,8 +1,6 @@
 <template>
-  <div :class="[isDarkMode ? 'dark' : '']">
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-950 flex text-gray-600 dark:text-gray-300 font-sans relative selection:bg-secondary/30 selection:text-secondary transition-colors duration-300">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-950 flex text-gray-600 dark:text-gray-300 font-sans relative selection:bg-secondary/30 selection:text-secondary transition-colors duration-300">
     <ToastContainer />
-    <CommandPalette v-model="isCommandPaletteOpen" />
     
     <!-- Mobile Sidebar Overlay -->
     <div 
@@ -235,23 +233,6 @@
             <Moon v-else class="w-5 h-5" />
           </button>
 
-          <!-- Global Search -->
-          <div 
-            @click="isCommandPaletteOpen = true"
-            class="hidden lg:flex items-center px-3 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-white/20 transition-colors cursor-pointer w-64 group"
-          >
-            <Search class="w-4 h-4 mr-2 group-hover:text-secondary transition-colors" />
-            <span class="text-sm">Global search</span>
-            <span class="ml-auto text-xs font-mono bg-gray-200 dark:bg-white/5 px-1.5 py-0.5 rounded text-gray-600 dark:text-gray-500">Ctrl+K</span>
-          </div>
-
-          <button 
-            @click="isCommandPaletteOpen = true"
-            class="lg:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors"
-          >
-            <Search class="w-5 h-5" />
-          </button>
-
           <router-link :to="{ name: 'home' }" target="_blank" class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors" title="Lihat Website">
             <Globe class="w-5 h-5" />
           </router-link>
@@ -277,7 +258,6 @@
       </div>
     </main>
   </div>
-  </div>
 </template>
 
 <script setup>
@@ -285,21 +265,24 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminStore } from '../stores/admin'
 import ToastContainer from '../components/ui/ToastContainer.vue'
-import CommandPalette from '../components/admin/CommandPalette.vue'
 import { 
-  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, Search, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon
+  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon
 } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
 const adminStore = useAdminStore()
-const isCommandPaletteOpen = ref(false)
 const isMobileMenuOpen = ref(false)
 const activeModule = ref('web')
 const isDarkMode = ref(true)
 
 const toggleTheme = () => {
   isDarkMode.value = !isDarkMode.value
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
   localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
 }
 
@@ -307,6 +290,17 @@ onMounted(() => {
   const savedTheme = localStorage.getItem('theme')
   if (savedTheme) {
     isDarkMode.value = savedTheme === 'dark'
+  } else {
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      isDarkMode.value = true
+    }
+  }
+
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
   }
   
   if (route.name?.startsWith('admin-keuangan')) {
