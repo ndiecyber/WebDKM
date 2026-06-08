@@ -25,11 +25,31 @@
         </div>
       </div>
 
+      <!-- Module Switcher -->
+      <div class="px-4 py-4 border-b border-white/5 shrink-0">
+        <div class="bg-gray-950 p-1 rounded-lg flex items-center ring-1 ring-white/10">
+          <button 
+            @click="switchModule('web')" 
+            :class="activeModule === 'web' ? 'bg-gray-800 text-white shadow-sm ring-1 ring-white/5' : 'text-gray-500 hover:text-gray-300'" 
+            class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all flex justify-center items-center gap-1.5"
+          >
+            Web DKM
+          </button>
+          <button 
+            @click="switchModule('keuangan')" 
+            :class="activeModule === 'keuangan' ? 'bg-gray-800 text-white shadow-sm ring-1 ring-white/5' : 'text-gray-500 hover:text-gray-300'" 
+            class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all flex justify-center items-center gap-1.5"
+          >
+            Keuangan
+          </button>
+        </div>
+      </div>
+
       <!-- Navigation -->
       <nav class="flex-1 py-6 px-4 overflow-y-auto hide-scrollbar space-y-8">
         
-        <!-- Group: Utama -->
-        <div>
+        <!-- Group: Utama (Web DKM) -->
+        <div v-show="activeModule === 'web'">
           <div class="px-3 mb-2">
             <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Utama</p>
           </div>
@@ -41,13 +61,31 @@
               :class="$route.name === 'admin-dashboard' ? 'bg-white/5 text-secondary' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'"
             >
               <Home class="w-5 h-5" />
-              <span>Dashboard</span>
+              <span>Dashboard Web</span>
             </router-link>
           </div>
         </div>
 
-        <!-- Group: Manajemen Konten -->
-        <div>
+        <!-- Group: Utama (Keuangan DKM) -->
+        <div v-show="activeModule === 'keuangan'">
+          <div class="px-3 mb-2">
+            <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Utama</p>
+          </div>
+          <div class="space-y-1">
+            <router-link 
+              :to="{ name: 'admin-keuangan-dashboard' }"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm font-medium"
+              active-class="bg-white/5 text-secondary"
+              :class="$route.name === 'admin-keuangan-dashboard' ? 'bg-white/5 text-secondary' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'"
+            >
+              <Wallet class="w-5 h-5" />
+              <span>Dashboard Keuangan</span>
+            </router-link>
+          </div>
+        </div>
+
+        <!-- Group: Manajemen Konten (Web DKM) -->
+        <div v-show="activeModule === 'web'">
           <div class="px-3 mb-2">
             <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Manajemen Konten</p>
           </div>
@@ -82,20 +120,36 @@
               <span>Layanan & Fasilitas</span>
             </router-link>
 
-            <router-link 
-              :to="{ name: 'admin-keuangan' }"
-              class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm font-medium"
-              active-class="bg-white/5 text-secondary"
-              :class="$route.name === 'admin-keuangan' ? 'bg-white/5 text-secondary' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'"
-            >
-              <Wallet class="w-5 h-5" />
-              <span>Laporan Keuangan</span>
-            </router-link>
+            <!-- Old Laporan Keuangan link can be hidden or removed now that we have a full Keuangan DKM module -->
+          </div>
+        </div>
+
+        <!-- Group: Keuangan (Keuangan DKM) -->
+        <div v-show="activeModule === 'keuangan'">
+          <div class="px-3 mb-2">
+            <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Keuangan</p>
+          </div>
+          <div class="space-y-1">
+            <span class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 cursor-not-allowed">
+              <ArrowLeftRight class="w-5 h-5" />
+              <span>Transaksi</span>
+              <span class="ml-auto text-[10px] font-mono bg-white/5 px-1.5 py-0.5 rounded text-gray-600">Soon</span>
+            </span>
+            <span class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 cursor-not-allowed">
+              <Landmark class="w-5 h-5" />
+              <span>Bank & Kas</span>
+              <span class="ml-auto text-[10px] font-mono bg-white/5 px-1.5 py-0.5 rounded text-gray-600">Soon</span>
+            </span>
+            <span class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 cursor-not-allowed">
+              <FileBarChart class="w-5 h-5" />
+              <span>Laporan</span>
+              <span class="ml-auto text-[10px] font-mono bg-white/5 px-1.5 py-0.5 rounded text-gray-600">Soon</span>
+            </span>
           </div>
         </div>
 
         <!-- Group: Sistem -->
-        <div>
+        <div v-show="activeModule === 'web'">
           <div class="px-3 mb-2">
             <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Sistem</p>
           </div>
@@ -193,13 +247,13 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminStore } from '../stores/admin'
 import ToastContainer from '../components/ui/ToastContainer.vue'
 import CommandPalette from '../components/admin/CommandPalette.vue'
 import { 
-  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, Search 
+  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, Search, ArrowLeftRight, Landmark, FileBarChart
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -207,17 +261,33 @@ const router = useRouter()
 const adminStore = useAdminStore()
 const isCommandPaletteOpen = ref(false)
 const isMobileMenuOpen = ref(false)
+const activeModule = ref('web')
+
+onMounted(() => {
+  if (route.name === 'admin-keuangan-dashboard') {
+    activeModule.value = 'keuangan'
+  }
+})
+
+const switchModule = (module) => {
+  activeModule.value = module
+  if (module === 'web') {
+    router.push({ name: 'admin-dashboard' })
+  } else if (module === 'keuangan') {
+    router.push({ name: 'admin-keuangan-dashboard' })
+  }
+}
 
 watch(() => route.path, () => {
   isMobileMenuOpen.value = false
 })
 
 const pageTitle = computed(() => {
-  if (route.name === 'admin-dashboard') return 'Dashboard'
+  if (route.name === 'admin-keuangan-dashboard') return 'Dashboard Keuangan'
+  if (route.name === 'admin-dashboard') return 'Dashboard Web'
   if (route.name === 'admin-kegiatan') return 'Kegiatan Masjid'
   if (route.name === 'admin-galeri') return 'Galeri Foto'
   if (route.name === 'admin-layanan') return 'Layanan & Fasilitas'
-  if (route.name === 'admin-keuangan') return 'Laporan Keuangan'
   if (route.name === 'admin-pengaturan') return 'Pengaturan Umum'
   return 'Admin Panel'
 })

@@ -91,16 +91,6 @@
             </div>
           </button>
 
-          <!-- Admin Portal Link (Desktop) -->
-          <router-link
-            to="/admin/login"
-            class="ml-2 flex items-center justify-center h-8 w-8 rounded-full transition-all duration-300 border hover:scale-105 shrink-0"
-            :class="isDark ? 'bg-white/5 border-white/10 text-white/70 hover:text-white hover:bg-white/10' : 'bg-gray-100 border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-200'"
-            title="Portal Admin"
-          >
-            <ShieldCheck class="w-4 h-4" />
-          </router-link>
-
           <a
             href="#"
             class="ml-3 px-6 py-2.5 bg-secondary text-dark font-semibold text-sm rounded-full hover:bg-secondary-light transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group shrink-0"
@@ -172,23 +162,6 @@
             ></div>
           </div>
         </button>
-
-        <!-- Mobile Admin Portal Button -->
-        <router-link 
-          to="/admin/login" 
-          class="w-full mt-2 flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 border hover:bg-white/10"
-          :class="isDark ? 'border-white/10 bg-white/5' : 'border-white/20 bg-white/10'"
-          @click="mobileOpen = false"
-        >
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-white/10">
-              <ShieldCheck class="w-4 h-4 text-white" />
-            </div>
-            <span class="text-sm font-semibold tracking-wide text-white">
-              Portal Admin
-            </span>
-          </div>
-        </router-link>
 
         <a href="#" class="flex items-center justify-center gap-2 mt-2 px-4 py-3 bg-secondary text-dark font-semibold rounded-xl hover:bg-secondary-light transition-all duration-300 group" @click.prevent="isDonationModalOpen = true; mobileOpen = false">
           <HandCoins class="w-5 h-5 text-dark group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
