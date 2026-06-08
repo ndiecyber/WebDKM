@@ -259,8 +259,8 @@
           <div class="w-px h-6 bg-gray-200 dark:bg-white/10 hidden sm:block"></div>
           <div class="flex items-center gap-3">
             <div class="text-right hidden sm:block">
-              <p class="text-sm font-medium text-gray-900 dark:text-white">{{ adminStore.profile.name || 'Admin' }}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">{{ adminStore.profile.role || 'Administrator' }}</p>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">Admin Utama</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Administrator</p>
             </div>
             <div class="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center ring-1 ring-secondary/30">
               <User class="w-5 h-5 text-secondary" />
