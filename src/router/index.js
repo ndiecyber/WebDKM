@@ -25,6 +25,11 @@ const routes = [
         component: () => import('../views/admin/DashboardView.vue'),
       },
       {
+        path: 'keuangan',
+        name: 'admin-keuangan-dashboard',
+        component: () => import('@/views/admin/KeuanganDashboardView.vue')
+      },
+      {
         path: 'kegiatan',
         name: 'admin-kegiatan',
         component: () => import('../views/admin/KegiatanView.vue'),
