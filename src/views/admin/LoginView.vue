@@ -3,8 +3,8 @@
     <!-- Stunning Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
       <img src="@/assets/images/mosque-exterior.png" alt="Background" class="w-full h-full object-cover opacity-40 scale-105 animate-pulse-slow" />
-      <div class="absolute inset-0 bg-gradient-to-br from-gray-950/90 via-emerald-950/80 to-gray-950/90 mix-blend-multiply"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-linear-to-br from-gray-950/90 via-emerald-950/80 to-gray-950/90 mix-blend-multiply"></div>
+      <div class="absolute inset-0 bg-linear-to-t from-gray-950 via-transparent to-transparent"></div>
     </div>
 
     <!-- Animated Ambient Glows -->
@@ -82,7 +82,7 @@
           <!-- Submit Button -->
           <button 
             type="submit" 
-            class="w-full relative group overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2 mt-8 border border-white/10"
+            class="w-full relative group overflow-hidden bg-linear-to-r from-emerald-600 to-teal-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2 mt-8 border border-white/10"
           >
             <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
             <span class="relative z-10 tracking-wide text-sm">Masuk Sistem</span>

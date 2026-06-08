@@ -34,7 +34,7 @@
               <img 
                 :src="gallery[activeIndex].image" 
                 :alt="gallery[activeIndex].caption" 
-                class="w-full h-full object-cover transition-transform duration-[10000ms] ease-out hover:scale-110" 
+                class="w-full h-full object-cover transition-transform duration-10000 ease-out hover:scale-110" 
               />
             </div>
           </Transition>
@@ -104,7 +104,7 @@
     >
       <div
         v-if="lightboxOpen"
-        class="fixed inset-0 z-[60] bg-dark/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
+        class="fixed inset-0 z-60 bg-dark/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
         @click.self="closeLightbox"
       >
         <!-- Close Button -->

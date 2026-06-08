@@ -59,7 +59,7 @@
           </div>
 
           <!-- Content -->
-          <div class="p-6 pt-10 sm:p-8 sm:pt-12 flex flex-col flex-grow z-10 relative">
+          <div class="p-6 pt-10 sm:p-8 sm:pt-12 flex flex-col grow z-10 relative">
             <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-xs font-medium mb-4 transition-colors duration-500">
               <span class="flex items-center gap-1.5">
                 <Clock class="w-4 h-4 text-primary dark:text-secondary" />

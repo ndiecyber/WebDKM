@@ -17,7 +17,7 @@
       <!-- Logo -->
       <div class="h-24 flex flex-col justify-center px-6 border-b border-gray-200 dark:border-white/5 shrink-0 relative overflow-hidden group">
         <!-- Subtle animated gradient background -->
-        <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        <div class="absolute inset-0 bg-linear-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
         
         <div class="relative z-10 flex items-center justify-between w-full">
           <img src="@/assets/images/logo-kustom2.png" alt="Logo" class="h-12 sm:h-14 w-auto object-contain drop-shadow-sm transition-transform duration-500 group-hover:scale-105 origin-left" />
@@ -35,7 +35,7 @@
             :class="activeModule === 'web' ? 'bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10 font-bold' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium hover:bg-white/50 dark:hover:bg-gray-800/50'" 
             class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group"
           >
-            <div v-if="activeModule === 'web'" class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent"></div>
+            <div v-if="activeModule === 'web'" class="absolute inset-0 bg-linear-to-r from-emerald-500/10 to-transparent"></div>
             <span class="relative z-10">Web DKM</span>
           </button>
           <button 
@@ -43,7 +43,7 @@
             :class="activeModule === 'keuangan' ? 'bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10 font-bold' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium hover:bg-white/50 dark:hover:bg-gray-800/50'" 
             class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group"
           >
-            <div v-if="activeModule === 'keuangan'" class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent"></div>
+            <div v-if="activeModule === 'keuangan'" class="absolute inset-0 bg-linear-to-r from-emerald-500/10 to-transparent"></div>
             <span class="relative z-10">Keuangan DKM</span>
           </button>
         </div>
@@ -62,7 +62,7 @@
               :to="{ name: 'admin-dashboard' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-dashboard' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-dashboard' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Home class="w-5 h-5" />
               <span>Dashboard Web</span>
@@ -80,7 +80,7 @@
               :to="{ name: 'admin-keuangan-dashboard' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-keuangan-dashboard' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-keuangan-dashboard' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Wallet class="w-5 h-5" />
               <span>Dashboard Keuangan</span>
@@ -98,7 +98,7 @@
               :to="{ name: 'admin-kegiatan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-kegiatan' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-kegiatan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Calendar class="w-5 h-5" />
               <span>Kegiatan Masjid</span>
@@ -108,7 +108,7 @@
               :to="{ name: 'admin-galeri' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-galeri' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-galeri' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Image class="w-5 h-5" />
               <span>Galeri Foto</span>
@@ -118,7 +118,7 @@
               :to="{ name: 'admin-layanan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-layanan' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-layanan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Briefcase class="w-5 h-5" />
               <span>Layanan & Fasilitas</span>
@@ -128,7 +128,7 @@
               :to="{ name: 'admin-laporan-publik' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-laporan-publik' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-laporan-publik' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Wallet class="w-5 h-5" />
               <span>Laporan Publik</span>
@@ -190,7 +190,7 @@
               :to="{ name: 'admin-pengaturan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-pengaturan' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-pengaturan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Settings class="w-5 h-5" />
               <span>Pengaturan Umum</span>
@@ -202,7 +202,7 @@
               :to="{ name: 'admin-keuangan-pengaturan' }"
               class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               active-class="text-emerald-400"
-              :class="$route.name === 'admin-keuangan-pengaturan' ? 'text-emerald-400 font-bold bg-gradient-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
+              :class="$route.name === 'admin-keuangan-pengaturan' ? 'text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 transform'"
             >
               <Settings class="w-5 h-5" />
               <span>Pengaturan Umum</span>

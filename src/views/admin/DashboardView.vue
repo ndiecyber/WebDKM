@@ -6,10 +6,10 @@
     <div class="relative z-10 space-y-6 sm:space-y-8">
     
     <!-- Welcome Header -->
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-800 via-emerald-600 to-teal-900 p-8 sm:p-10 shadow-lg text-white mb-8 group">
+    <div class="relative overflow-hidden rounded-2xl bg-linear-to-br from-emerald-800 via-emerald-600 to-teal-900 p-8 sm:p-10 shadow-lg text-white mb-8 group">
       <!-- Decorative background elements -->
       <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-1000 ease-out"></div>
-      <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent"></div>
+      <div class="absolute bottom-0 left-0 w-full h-1/2 bg-linear-to-t from-black/20 to-transparent"></div>
       
       <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
@@ -39,7 +39,7 @@
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Kegiatan</p>
-            <div class="p-2.5 bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-800/20 text-emerald-600 dark:text-emerald-400 rounded-xl ring-1 ring-emerald-200 dark:ring-emerald-800/50">
+            <div class="p-2.5 bg-linear-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-800/20 text-emerald-600 dark:text-emerald-400 rounded-xl ring-1 ring-emerald-200 dark:ring-emerald-800/50">
               <Calendar class="w-5 h-5" />
             </div>
           </div>
@@ -60,7 +60,7 @@
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Kunjungan Web</p>
-            <div class="p-2.5 bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/40 dark:to-blue-800/20 text-blue-600 dark:text-blue-400 rounded-xl ring-1 ring-blue-200 dark:ring-blue-800/50">
+            <div class="p-2.5 bg-linear-to-br from-blue-100 to-blue-50 dark:from-blue-900/40 dark:to-blue-800/20 text-blue-600 dark:text-blue-400 rounded-xl ring-1 ring-blue-200 dark:ring-blue-800/50">
               <Users class="w-5 h-5" />
             </div>
           </div>
@@ -81,7 +81,7 @@
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pengumuman Aktif</p>
-            <div class="p-2.5 bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-900/40 dark:to-amber-800/20 text-amber-600 dark:text-amber-400 rounded-xl ring-1 ring-amber-200 dark:ring-amber-800/50">
+            <div class="p-2.5 bg-linear-to-br from-amber-100 to-amber-50 dark:from-amber-900/40 dark:to-amber-800/20 text-amber-600 dark:text-amber-400 rounded-xl ring-1 ring-amber-200 dark:ring-amber-800/50">
               <MessageSquare class="w-5 h-5" />
             </div>
           </div>
@@ -102,7 +102,7 @@
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Foto Galeri</p>
-            <div class="p-2.5 bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/40 dark:to-purple-800/20 text-purple-600 dark:text-purple-400 rounded-xl ring-1 ring-purple-200 dark:ring-purple-800/50">
+            <div class="p-2.5 bg-linear-to-br from-purple-100 to-purple-50 dark:from-purple-900/40 dark:to-purple-800/20 text-purple-600 dark:text-purple-400 rounded-xl ring-1 ring-purple-200 dark:ring-purple-800/50">
               <Image class="w-5 h-5" />
             </div>
           </div>

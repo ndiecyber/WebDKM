@@ -133,7 +133,7 @@
     </div>
 
     <!-- Form Modal (Tambah/Edit) -->
-    <div v-if="showModal" class="fixed inset-0 z-[60] flex items-center justify-center px-4">
+    <div v-if="showModal" class="fixed inset-0 z-60 flex items-center justify-center px-4">
       <div class="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
       
       <div class="bg-white dark:bg-[#112323] border border-gray-200 dark:border-white/10 rounded-3xl w-full max-w-xl relative z-10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-enter">
