@@ -1,5 +1,9 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 animate-fade-in">
+  <div class="relative space-y-6 sm:space-y-8 animate-fade-in pb-10">
+    <!-- Premium Grid Pattern Background -->
+    <div class="absolute inset-0 z-0 pointer-events-none opacity-[0.02] dark:opacity-[0.05]" style="background-image: radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0); background-size: 32px 32px;"></div>
+    
+    <div class="relative z-10 space-y-6 sm:space-y-8">
     
     <!-- Welcome Header -->
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-800 via-emerald-600 to-teal-900 p-8 sm:p-10 shadow-lg text-white mb-8 group">
@@ -30,7 +34,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       
       <!-- Stat 1 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+      <div class="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl ring-1 ring-gray-200/50 dark:ring-white/10 rounded-2xl p-6 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/5 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 dark:bg-emerald-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
@@ -51,7 +55,7 @@
       </div>
 
       <!-- Stat 2 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+      <div class="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl ring-1 ring-gray-200/50 dark:ring-white/10 rounded-2xl p-6 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/5 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
@@ -72,7 +76,7 @@
       </div>
 
       <!-- Stat 3 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+      <div class="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl ring-1 ring-gray-200/50 dark:ring-white/10 rounded-2xl p-6 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/5 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-amber-50 dark:bg-amber-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
@@ -93,7 +97,7 @@
       </div>
 
       <!-- Stat 4 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
+      <div class="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl ring-1 ring-gray-200/50 dark:ring-white/10 rounded-2xl p-6 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/5 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-purple-50 dark:bg-purple-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
@@ -118,7 +122,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
       <!-- Chart Widget -->
-      <div class="lg:col-span-2 bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl shadow-sm flex flex-col">
+      <div class="lg:col-span-2 bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl ring-1 ring-gray-200/50 dark:ring-white/10 rounded-2xl shadow-sm flex flex-col hover:shadow-xl transition-shadow duration-500">
         <div class="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
           <h2 class="text-base font-semibold text-gray-900 dark:text-white">Tren Kunjungan Website</h2>
           <button class="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
@@ -163,7 +167,7 @@
       </div>
 
       <!-- Upcoming Activities Widget -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl shadow-sm flex flex-col">
+      <div class="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl ring-1 ring-gray-200/50 dark:ring-white/10 rounded-2xl shadow-sm flex flex-col hover:shadow-xl transition-shadow duration-500">
         <div class="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
           <h2 class="text-base font-semibold text-gray-900 dark:text-white">Kegiatan Mendatang</h2>
           <router-link :to="{ name: 'admin-kegiatan' }" class="text-sm font-medium text-secondary hover:text-yellow-600 transition-colors">
@@ -174,15 +178,18 @@
           <div v-if="isLoading" class="space-y-2 p-4">
             <div v-for="i in 3" :key="i" class="h-16 bg-gray-100 dark:bg-white/5 rounded-xl animate-pulse"></div>
           </div>
-          <ul v-else class="divide-y divide-gray-100 dark:divide-white/5">
-            <li v-for="kegiatan in upcomingKegiatan" :key="kegiatan.id" class="p-4 hover:bg-gray-50 dark:hover:bg-white/[0.02] rounded-xl transition-colors">
-              <div class="flex gap-4">
-                <div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-gray-200 dark:border-white/5">
-                  <Calendar class="w-5 h-5 text-gray-500" />
+          <ul v-else class="space-y-1">
+            <li v-for="kegiatan in upcomingKegiatan" :key="kegiatan.id" class="p-3 sm:p-4 rounded-xl transition-all duration-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group cursor-pointer border border-transparent hover:border-emerald-100 dark:hover:border-emerald-800/30 hover:shadow-sm">
+              <div class="flex gap-4 items-center">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-gray-100 dark:border-white/5 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-800/50 group-hover:scale-105 transition-all duration-300 shadow-inner">
+                  <Calendar class="w-5 h-5 text-gray-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" />
                 </div>
-                <div>
-                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ kegiatan.title }}</h4>
-                  <p class="text-xs text-gray-500 mt-1">{{ kegiatan.date }}</p>
+                <div class="flex-1">
+                  <h4 class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{{ kegiatan.title }}</h4>
+                  <p class="text-xs text-gray-500 mt-1 flex items-center gap-1.5 font-medium"><Clock class="w-3.5 h-3.5 opacity-70" /> {{ kegiatan.date }}</p>
+                </div>
+                <div class="opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                  <ChevronRight class="w-5 h-5 text-emerald-500" />
                 </div>
               </div>
             </li>
@@ -199,7 +206,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useAdminStore } from '../../stores/admin'
 import { 
   Calendar, Users, MessageSquare, Image, 
-  TrendingUp, TrendingDown, MoreHorizontal 
+  TrendingUp, TrendingDown, MoreHorizontal, Clock, ChevronRight
 } from 'lucide-vue-next'
 
 const adminStore = useAdminStore()
