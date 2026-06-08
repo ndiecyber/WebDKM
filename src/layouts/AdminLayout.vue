@@ -154,11 +154,25 @@
             <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Sistem</p>
           </div>
           <div class="space-y-1">
+            <!-- Pengaturan Umum Web DKM -->
             <router-link 
+              v-show="activeModule === 'web'"
               :to="{ name: 'admin-pengaturan' }"
               class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm font-medium"
               active-class="bg-white/5 text-secondary"
               :class="$route.name === 'admin-pengaturan' ? 'bg-white/5 text-secondary' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'"
+            >
+              <Settings class="w-5 h-5" />
+              <span>Pengaturan Umum</span>
+            </router-link>
+
+            <!-- Pengaturan Umum Keuangan DKM -->
+            <router-link 
+              v-show="activeModule === 'keuangan'"
+              :to="{ name: 'admin-keuangan-pengaturan' }"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm font-medium"
+              active-class="bg-white/5 text-secondary"
+              :class="$route.name === 'admin-keuangan-pengaturan' ? 'bg-white/5 text-secondary' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'"
             >
               <Settings class="w-5 h-5" />
               <span>Pengaturan Umum</span>
@@ -264,7 +278,7 @@ const isMobileMenuOpen = ref(false)
 const activeModule = ref('web')
 
 onMounted(() => {
-  if (route.name === 'admin-keuangan-dashboard') {
+  if (route.name === 'admin-keuangan-dashboard' || route.name === 'admin-keuangan-pengaturan') {
     activeModule.value = 'keuangan'
   }
 })
@@ -278,12 +292,18 @@ const switchModule = (module) => {
   }
 }
 
-watch(() => route.path, () => {
+watch(() => route.name, (newName) => {
   isMobileMenuOpen.value = false
+  if (newName === 'admin-keuangan-dashboard' || newName === 'admin-keuangan-pengaturan') {
+    activeModule.value = 'keuangan'
+  } else if (newName?.startsWith('admin-')) {
+    activeModule.value = 'web'
+  }
 })
 
 const pageTitle = computed(() => {
   if (route.name === 'admin-keuangan-dashboard') return 'Dashboard Keuangan'
+  if (route.name === 'admin-keuangan-pengaturan') return 'Pengaturan Keuangan'
   if (route.name === 'admin-dashboard') return 'Dashboard Web'
   if (route.name === 'admin-kegiatan') return 'Kegiatan Masjid'
   if (route.name === 'admin-galeri') return 'Galeri Foto'

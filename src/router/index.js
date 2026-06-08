@@ -30,6 +30,11 @@ const routes = [
         component: () => import('@/views/admin/KeuanganDashboardView.vue')
       },
       {
+        path: 'keuangan-pengaturan',
+        name: 'admin-keuangan-pengaturan',
+        component: () => import('@/views/admin/KeuanganPengaturanView.vue')
+      },
+      {
         path: 'kegiatan',
         name: 'admin-kegiatan',
         component: () => import('../views/admin/KegiatanView.vue'),
