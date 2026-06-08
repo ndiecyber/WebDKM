@@ -73,7 +73,7 @@
           <div class="relative z-10">
             <!-- Icon -->
             <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-500">
-              <component :is="service.icon" class="w-7 h-7 text-primary group-hover:text-white transition-colors duration-500" />
+              <component :is="iconMap[service.iconName] || iconMap.Users" class="w-7 h-7 text-primary group-hover:text-white transition-colors duration-500" />
             </div>
 
             <h3 class="font-heading text-xl font-bold text-dark dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300">
@@ -109,14 +109,19 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import ServiceModal from '@/components/ui/ServiceModal.vue'
 
-// Import Images for Watermarks
 import communityImg from '@/assets/images/community-prayer.png'
 import quranImg from '@/assets/images/quran-study.png'
 import interiorImg from '@/assets/images/mosque-interior.png'
 import exteriorImg from '@/assets/images/mosque-exterior.png'
 import heroImg from '@/assets/images/hero-mosque.png'
+import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
+
+const adminStore = useAdminStore()
+const iconMap = {
+  Users, BookOpen, GraduationCap, Heart, HandCoins, Gem
+}
 
 const headerRef = ref(null)
 const filterRef = ref(null)
@@ -126,13 +131,14 @@ const isModalOpen = ref(false)
 const selectedService = ref({})
 const cardTilts = ref({})
 
-// Filters
 const categories = ['Semua', 'Ibadah', 'Pendidikan', 'Sosial']
 const activeCategory = ref('Semua')
 
+const services = computed(() => adminStore.layanan)
+
 const filteredServices = computed(() => {
-  if (activeCategory.value === 'Semua') return services
-  return services.filter(s => s.category === activeCategory.value)
+  if (activeCategory.value === 'Semua') return services.value
+  return services.value.filter(s => s.category === activeCategory.value)
 })
 
 const openModal = (service) => {
@@ -164,106 +170,7 @@ const handleMouseMove = (e, index) => {
 
 const resetTilt = (index) => {
   cardTilts.value[index] = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
-}
-
-const services = [
-  { 
-    title: 'Sholat Berjamaah', 
-    category: 'Ibadah',
-    bgImage: communityImg,
-    description: 'Sholat lima waktu dan sholat Jumat berjamaah dengan imam yang berpengalaman.', 
-    icon: Users,
-    badge: 'Tersedia',
-    badgeColor: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800',
-    details: {
-      fullDescription: 'Masjid Jami Kassiti menyelenggarakan sholat berjamaah lima waktu secara rutin, dilengkapi dengan fasilitas tempat wudhu yang bersih, karpet yang nyaman, dan pendingin ruangan. Kami juga menyelenggarakan Sholat Jumat dengan khatib-khatib pilihan yang membawakan materi khutbah inspiratif dan aktual.',
-      schedule: 'Setiap Waktu Sholat & Jumat 11.30 WIB',
-      location: 'Ruang Utama & Lantai 2 Masjid Jami Kassiti',
-      contact: 'DKM Masjid (Bpk. Ahmad)',
-      requirements: ['Pakaian sopan dan menutup aurat', 'Menjaga ketertiban dan kebersihan']
-    }
-  },
-  { 
-    title: 'Kajian Rutin', 
-    category: 'Pendidikan',
-    bgImage: interiorImg,
-    description: 'Kajian ilmu agama setiap pekan meliputi tafsir, hadits, fiqih, dan akhlak.', 
-    icon: BookOpen,
-    badge: 'Terjadwal',
-    badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800',
-    details: {
-      fullDescription: 'Program kajian rutin terbuka untuk umum (Ikhwan & Akhwat) yang diisi oleh asatidzah berkompeten. Materi kajian disusun secara terstruktur mulai dari dasar hingga lanjutan, mencakup pembahasan Tafsir Al-Quran, Hadits Arbain, Fiqih Ibadah, dan Sirah Nabawiyah.',
-      schedule: 'Rabu (Ba\'da Maghrib) & Ahad (Ba\'da Subuh)',
-      location: 'Ruang Utama Masjid',
-      contact: 'Divisi Dakwah (Bpk. Rizky)',
-      requirements: ['Membawa alat tulis (opsional)', 'Terbuka untuk umum']
-    }
-  },
-  { 
-    title: 'TPA / TPQ', 
-    category: 'Pendidikan',
-    bgImage: quranImg,
-    description: 'Program pendidikan Al-Quran untuk anak-anak dengan metode pembelajaran modern.', 
-    icon: GraduationCap,
-    badge: 'Pendaftaran Buka',
-    badgeColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800',
-    details: {
-      fullDescription: 'Taman Pendidikan Al-Quran (TPQ) Masjid Jami Kassiti mendidik generasi muda agar cinta Al-Quran. Kurikulum mencakup baca tulis Al-Quran (Metode Iqro/Tilawati), hafalan surat pendek, doa sehari-hari, praktik ibadah, dan pembentukan akhlakul karimah.',
-      schedule: 'Senin - Kamis, 15.30 - 17.00 WIB',
-      location: 'Ruang Kelas TPA (Lantai 2)',
-      contact: 'Kepala TPA (Ust. Salman)',
-      requirements: ['Usia 5 - 12 Tahun', 'Mengisi formulir pendaftaran', 'Fotokopi Akta Kelahiran']
-    }
-  },
-  { 
-    title: 'Konsultasi Agama', 
-    category: 'Sosial',
-    bgImage: heroImg,
-    description: 'Layanan konsultasi keagamaan untuk masyarakat seputar ibadah dan keluarga.', 
-    icon: Heart,
-    badge: 'Gratis',
-    badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800',
-    details: {
-      fullDescription: 'Layanan bimbingan dan konsultasi keagamaan yang ditangani langsung oleh ustadz/ulama rujukan masjid. Kami melayani pertanyaan seputar fiqih keseharian, waris, rumah tangga (konsultasi pra dan pasca nikah), serta pendampingan psikologis spiritual.',
-      schedule: 'Berdasarkan Perjanjian (Appointment)',
-      location: 'Ruang Konsultasi DKM / Online (WhatsApp)',
-      contact: 'Layanan Konsultasi (Ust. Hidayat)',
-      requirements: ['Membuat janji temu via WhatsApp maksimal H-1']
-    }
-  },
-  { 
-    title: 'Zakat & Infaq', 
-    category: 'Ibadah',
-    bgImage: exteriorImg,
-    description: 'Pengelolaan dan penyaluran zakat, infaq, dan sedekah secara transparan.', 
-    icon: HandCoins,
-    badge: 'Aktif',
-    badgeColor: 'bg-primary/10 text-primary-dark dark:text-primary-light border border-primary/20',
-    details: {
-      fullDescription: 'Unit Pengumpul Zakat (UPZ) Masjid Jami Kassiti memfasilitasi jamaah dalam menunaikan Zakat Fitrah, Zakat Maal, Infaq, dan Sedekah. Dana yang terkumpul disalurkan kepada asnaf yang berhak dan untuk operasional kemakmuran masjid dengan laporan keuangan yang dipublikasikan rutin.',
-      schedule: 'Layanan 24 Jam (Transfer) / 08.00-17.00 (Offline)',
-      location: 'Kantor Sekretariat Masjid',
-      contact: 'Divisi ZISWAF (Bpk. Lukman)',
-      requirements: ['Menerima konsultasi hitung Zakat Maal', 'Menerima jemput zakat khusus area terdekat']
-    }
-  },
-  { 
-    title: 'Akad Nikah', 
-    category: 'Sosial',
-    bgImage: interiorImg,
-    description: 'Pelayanan akad nikah dan fasilitas memadai untuk membina keluarga sakinah.', 
-    icon: Gem,
-    badge: 'Tersedia',
-    badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border border-purple-200 dark:border-purple-800',
-    details: {
-      fullDescription: 'Masjid Jami Kassiti menyediakan fasilitas area utama untuk prosesi ibadah Akad Nikah yang sakral dan khidmat. Kami memfasilitasi sound system, karpet akad, ruang transit, dan area parkir. Diperuntukkan khusus acara akad nikah tanpa pesta resepsi berlebihan di area suci masjid.',
-      schedule: 'Sabtu & Ahad (Sesuai Ketersediaan Jadwal)',
-      location: 'Area Utama Masjid',
-      contact: 'Bagian Sarana & Prasarana (Bpk. Budi)',
-      requirements: ['Surat rekomendasi KUA', 'Booking maksimal 1 bulan sebelum hari H', 'Menjaga adab berpakaian dan kebersihan']
-    }
-  },
-]
+} 
 
 onMounted(() => {
   gsap.fromTo(headerRef.value, { opacity: 0, y: 40 }, {

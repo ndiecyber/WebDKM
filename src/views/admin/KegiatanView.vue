@@ -2,12 +2,12 @@
   <div>
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-2xl font-heading font-bold text-white mb-1">Daftar Kegiatan</h1>
-        <p class="text-white/50 text-sm">Kelola jadwal kajian dan kegiatan masjid</p>
+        <h1 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-1">Daftar Kegiatan</h1>
+        <p class="text-gray-500 dark:text-white/50 text-sm">Kelola jadwal kajian dan kegiatan masjid</p>
       </div>
       <button 
         @click="openAddModal"
-        class="bg-secondary hover:bg-secondary-light text-dark font-bold px-5 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-secondary/20 flex items-center gap-2 w-full sm:w-auto justify-center active:scale-95"
+        class="bg-secondary hover:bg-secondary-light text-white dark:text-dark font-bold px-5 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-secondary/20 flex items-center gap-2 w-full sm:w-auto justify-center active:scale-95"
       >
         <Plus class="w-5 h-5" />
         <span>Tambah Kegiatan</span>
@@ -15,76 +15,82 @@
     </div>
 
     <!-- Table Container -->
-    <div class="bg-white/5 border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
+    <div class="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm dark:shadow-2xl">
       
       <!-- Table -->
       <div v-if="adminStore.kegiatan.length > 0" class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-dark/50 border-b border-white/5 text-white/50 text-sm uppercase tracking-wider">
+            <tr class="bg-gray-50 dark:bg-dark/50 border-b border-gray-200 dark:border-white/5 text-gray-500 dark:text-white/50 text-sm uppercase tracking-wider">
               <th class="py-5 px-6 font-semibold w-16">No</th>
-              <th class="py-5 px-6 font-semibold">Judul Kegiatan</th>
-              <th class="py-5 px-6 font-semibold">Waktu</th>
-              <th class="py-5 px-6 font-semibold">Pemateri / Ustadz</th>
-              <th class="py-5 px-6 font-semibold text-center">Status</th>
+              <th class="py-5 px-6 font-semibold">Kegiatan</th>
+              <th class="py-5 px-6 font-semibold">Waktu & Tempat</th>
+              <th class="py-5 px-6 font-semibold text-center">Kategori</th>
               <th class="py-5 px-6 font-semibold text-right">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-white/5 text-white text-sm">
-            <tr v-for="(item, index) in adminStore.kegiatan" :key="item.id" class="hover:bg-white/[0.03] transition-colors group">
-              <td class="py-4 px-6 text-white/50 font-medium">{{ index + 1 }}</td>
+          <tbody class="divide-y divide-gray-200 dark:divide-white/5 text-gray-900 dark:text-white text-sm">
+            <tr v-for="(item, index) in adminStore.kegiatan" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors group">
+              <td class="py-4 px-6 text-gray-500 dark:text-white/50 font-medium">{{ index + 1 }}</td>
               <td class="py-4 px-6">
-                <p class="font-bold text-white mb-1">{{ item.title }}</p>
-                <span class="inline-block px-2.5 py-0.5 rounded-full border border-white/10 bg-white/5 text-white/60 text-[11px] font-medium tracking-wide">
-                  {{ item.type }}
-                </span>
+                <div class="flex items-center gap-4">
+                  <!-- Thumbnail Image if available, otherwise just Date Box -->
+                  <div v-if="item.image" class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-gray-200 dark:border-white/10 relative">
+                    <img :src="item.image" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white">
+                      <span class="text-[12px] font-bold leading-none">{{ item.day }}</span>
+                      <span class="text-[8px] font-bold uppercase">{{ item.month }}</span>
+                    </div>
+                  </div>
+                  <div v-else class="w-14 h-14 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center shrink-0 border border-gray-200 dark:border-white/10 overflow-hidden text-center">
+                    <div>
+                      <p class="text-[14px] font-bold text-primary dark:text-secondary leading-none">{{ item.day }}</p>
+                      <p class="text-[8px] font-bold text-gray-500 uppercase">{{ item.month }}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <p class="font-bold text-gray-900 dark:text-white">{{ item.title }}</p>
+                      <span v-if="item.badge" class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-secondary text-dark shrink-0">
+                        {{ item.badge }}
+                      </span>
+                    </div>
+                    <span class="text-xs text-gray-500 dark:text-white/50 line-clamp-1 max-w-xs">{{ item.description }}</span>
+                  </div>
+                </div>
               </td>
               <td class="py-4 px-6">
-                <div class="flex items-center gap-2 text-white/80 mb-1">
-                  <Calendar class="w-4 h-4 text-secondary/70" />
-                  <span>{{ item.date }}</span>
-                </div>
-                <div class="flex items-center gap-2 text-xs text-white/50">
-                  <Clock class="w-3.5 h-3.5" />
+                <div class="flex items-center gap-2 text-gray-700 dark:text-white/80 mb-1">
+                  <Clock class="w-4 h-4 text-secondary/70" />
                   <span>{{ item.time }}</span>
                 </div>
-              </td>
-              <td class="py-4 px-6">
-                <div class="flex items-center gap-2 text-white/80">
-                  <User class="w-4 h-4 text-white/40" />
-                  <span>{{ item.ustadz || '-' }}</span>
+                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-white/50">
+                  <MapPin class="w-3.5 h-3.5" />
+                  <span>{{ item.location }}</span>
                 </div>
               </td>
               <td class="py-4 px-6 text-center">
-                <span 
-                  class="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-bold tracking-wide"
-                  :class="item.status === 'Aktif' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full mr-2" :class="item.status === 'Aktif' ? 'bg-green-400' : 'bg-red-400'"></span>
-                  {{ item.status }}
+                <span class="inline-block px-3 py-1 rounded-full border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-white/70 text-[11px] font-bold tracking-wide">
+                  {{ item.category }}
                 </span>
               </td>
               <td class="py-4 px-6 text-right">
                 <div class="flex items-center justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                   
-                  <!-- Edit Button with Tooltip -->
                   <div class="relative group/tooltip">
-                    <button @click="openEditModal(item)" class="p-2.5 hover:bg-white/10 rounded-xl text-white/60 hover:text-white transition-all active:scale-90">
+                    <button @click="openEditModal(item)" class="p-2.5 hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-all active:scale-90">
                       <Edit class="w-4 h-4" />
                     </button>
-                    <!-- Tooltip -->
-                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-dark text-white text-[10px] font-bold rounded shadow-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">
+                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-dark text-white text-[10px] font-bold rounded shadow-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">
                       Edit Data
                     </div>
                   </div>
 
-                  <!-- Delete Button with Tooltip -->
                   <div class="relative group/tooltip">
-                    <button @click="openDeleteModal(item)" class="p-2.5 hover:bg-red-500/10 rounded-xl text-white/60 hover:text-red-400 transition-all active:scale-90">
+                    <button @click="openDeleteModal(item)" class="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-gray-500 dark:text-white/60 hover:text-red-600 dark:hover:text-red-400 transition-all active:scale-90">
                       <Trash2 class="w-4 h-4" />
                     </button>
-                    <!-- Tooltip -->
-                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-dark text-white text-[10px] font-bold rounded shadow-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">
+                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-dark text-white text-[10px] font-bold rounded shadow-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">
                       Hapus
                     </div>
                   </div>
@@ -96,28 +102,28 @@
         </table>
       </div>
 
-      <!-- Empty State (Artistic) -->
+      <!-- Empty State -->
       <div v-else class="py-24 px-6 text-center flex flex-col items-center justify-center">
         <!-- Abstract Calendar SVG Illustration -->
         <div class="w-48 h-48 mb-6 relative">
           <div class="absolute inset-0 bg-secondary/10 rounded-full blur-[40px]"></div>
           <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="relative z-10 w-full h-full opacity-60">
-            <rect x="50" y="60" width="100" height="100" rx="16" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.2" stroke-width="4"/>
-            <path d="M50 90H150" stroke="#ffffff" stroke-opacity="0.2" stroke-width="4"/>
+            <rect x="50" y="60" width="100" height="100" rx="16" class="fill-gray-900/5 dark:fill-white/5 stroke-gray-900/20 dark:stroke-white/20" stroke-width="4"/>
+            <path d="M50 90H150" class="stroke-gray-900/20 dark:stroke-white/20" stroke-width="4"/>
             <rect x="70" y="40" width="12" height="40" rx="6" fill="#D4AF37"/>
             <rect x="118" y="40" width="12" height="40" rx="6" fill="#D4AF37"/>
             <!-- Sparkles -->
             <path d="M30 40 L35 55 L50 60 L35 65 L30 80 L25 65 L10 60 L25 55 Z" fill="#D4AF37" fill-opacity="0.5"/>
-            <path d="M170 120 L172 128 L180 130 L172 132 L170 140 L168 132 L160 130 L168 128 Z" fill="#ffffff" fill-opacity="0.3"/>
+            <path d="M170 120 L172 128 L180 130 L172 132 L170 140 L168 132 L160 130 L168 128 Z" class="fill-gray-900/30 dark:fill-white/30"/>
           </svg>
         </div>
-        <h3 class="text-xl font-heading font-bold text-white mb-2">Jadwal Masih Kosong</h3>
-        <p class="text-white/50 max-w-sm mx-auto mb-8">
+        <h3 class="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">Jadwal Masih Kosong</h3>
+        <p class="text-gray-500 dark:text-white/50 max-w-sm mx-auto mb-8">
           Belum ada agenda atau kegiatan yang terdaftar bulan ini. Mari buat jadwal kegiatan pertama Anda.
         </p>
         <button 
           @click="openAddModal"
-          class="bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 active:scale-95"
+          class="bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 active:scale-95"
         >
           <Plus class="w-5 h-5" />
           <span>Buat Kegiatan Baru</span>
@@ -128,111 +134,204 @@
 
     <!-- Form Modal (Tambah/Edit) -->
     <div v-if="showModal" class="fixed inset-0 z-[60] flex items-center justify-center px-4">
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
+      <div class="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
       
-      <div class="bg-[#112323] border border-white/10 rounded-3xl w-full max-w-lg relative z-10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-enter">
-        <div class="p-6 border-b border-white/10 flex items-center justify-between shrink-0 bg-white/5">
+      <div class="bg-white dark:bg-[#112323] border border-gray-200 dark:border-white/10 rounded-3xl w-full max-w-xl relative z-10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-enter">
+        <div class="p-6 border-b border-gray-200 dark:border-white/10 flex items-center justify-between shrink-0 bg-gray-50 dark:bg-white/5">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
               <Edit v-if="isEditing" class="w-5 h-5" />
               <Plus v-else class="w-5 h-5" />
             </div>
-            <h2 class="text-xl font-heading font-bold text-white">{{ isEditing ? 'Edit Kegiatan' : 'Tambah Kegiatan Baru' }}</h2>
+            <h2 class="text-xl font-heading font-bold text-gray-900 dark:text-white">{{ isEditing ? 'Edit Kegiatan' : 'Tambah Kegiatan Baru' }}</h2>
           </div>
-          <button @click="closeModal" class="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-90">
+          <button @click="closeModal" class="p-2 text-gray-400 dark:text-white/50 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/10 rounded-xl transition-all active:scale-90">
             <X class="w-5 h-5" />
           </button>
         </div>
         
         <div class="p-6 overflow-y-auto custom-scrollbar">
           <form @submit.prevent="saveKegiatan" class="space-y-5">
-            <div>
-              <label class="block text-white/70 text-sm font-medium mb-2">Judul Kegiatan</label>
-              <input v-model="formData.title" type="text" required class="w-full bg-dark/50 border border-white/10 rounded-xl py-3 px-4 text-white placeholder-white/30 focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Contoh: Kajian Rutin Ahad Pagi">
-            </div>
             
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-white/70 text-sm font-medium mb-2">Kategori</label>
-                <div class="relative">
-                  <select v-model="formData.type" required class="w-full bg-dark/50 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-secondary transition-all appearance-none cursor-pointer">
-                    <option>Kajian Rutin</option>
-                    <option>Kajian Tematik</option>
-                    <option>Pendidikan</option>
-                    <option>Sosial</option>
-                    <option>Lainnya</option>
-                  </select>
-                  <ChevronDown class="w-4 h-4 text-white/40 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <!-- Image Upload Area -->
+            <div>
+              <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Banner / Foto Kegiatan</label>
+              <div 
+                class="relative border-2 border-dashed rounded-xl p-6 transition-all text-center flex flex-col items-center justify-center min-h-[160px]"
+                :class="[
+                  isDragging ? 'border-secondary bg-secondary/5' : 'border-gray-300 dark:border-white/10 hover:border-secondary hover:bg-gray-50 dark:hover:bg-white/5',
+                  form.image ? 'p-1' : 'p-6'
+                ]"
+                @dragover.prevent="isDragging = true"
+                @dragleave.prevent="isDragging = false"
+                @drop.prevent="handleDrop"
+              >
+                <!-- Upload Area -->
+                <div v-if="!form.image" class="pointer-events-none flex flex-col items-center">
+                  <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-3">
+                    <UploadCloud class="w-5 h-5" />
+                  </div>
+                  <p class="text-sm font-medium text-gray-700 dark:text-white/80 mb-1">
+                    Tarik dan lepas foto ke sini
+                  </p>
+                  <p class="text-xs text-gray-500 dark:text-white/50 mb-3">
+                    atau klik tombol di bawah
+                  </p>
+                  <input type="file" accept="image/*" class="hidden" ref="fileInput" @change="handleFileSelect" />
+                  <button type="button" @click="$refs.fileInput.click()" class="pointer-events-auto px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-xs transition-transform active:scale-95 shadow-sm hover:shadow-md">
+                    Pilih File
+                  </button>
                 </div>
-              </div>
-              <div>
-                <label class="block text-white/70 text-sm font-medium mb-2">Status</label>
-                <div class="relative">
-                  <select v-model="formData.status" class="w-full bg-dark/50 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-secondary transition-all appearance-none cursor-pointer">
-                    <option>Aktif</option>
-                    <option>Nonaktif</option>
-                  </select>
-                  <ChevronDown class="w-4 h-4 text-white/40 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+
+                <!-- Preview Overlay -->
+                <div v-if="form.image" class="absolute inset-0 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center group">
+                  <img :src="form.image" class="h-full w-full object-cover opacity-90 dark:opacity-80" />
+                  <button @click.prevent="form.image = ''" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                    <X class="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label class="block text-white/70 text-sm font-medium mb-2">Hari / Tanggal</label>
-                <div class="relative">
-                  <input v-model="formData.date" type="text" required class="w-full bg-dark/50 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30 focus:border-secondary transition-all" placeholder="Setiap Ahad">
-                  <Calendar class="w-4 h-4 text-white/40 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Judul Kegiatan</label>
+                <input 
+                  v-model="form.title"
+                  type="text" 
+                  required
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
+                  placeholder="Misal: Kajian Akbar Bulanan"
+                />
               </div>
+              
               <div>
-                <label class="block text-white/70 text-sm font-medium mb-2">Waktu</label>
-                <div class="relative">
-                  <input v-model="formData.time" type="text" required class="w-full bg-dark/50 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30 focus:border-secondary transition-all" placeholder="05:00 - Selesai">
-                  <Clock class="w-4 h-4 text-white/40 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Kategori</label>
+                <select 
+                  v-model="form.category"
+                  required
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all appearance-none"
+                >
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="Kajian">Kajian</option>
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="Pendidikan">Pendidikan</option>
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="Sosial">Sosial</option>
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="Ibadah">Ibadah</option>
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="Umum">Umum</option>
+                </select>
               </div>
             </div>
 
             <div>
-              <label class="block text-white/70 text-sm font-medium mb-2">Pemateri / Ustadz (Opsional)</label>
-              <div class="relative">
-                <input v-model="formData.ustadz" type="text" class="w-full bg-dark/50 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30 focus:border-secondary transition-all" placeholder="Contoh: Ust. Abdul Somad">
-                <User class="w-4 h-4 text-white/40 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Deskripsi Singkat</label>
+              <textarea 
+                v-model="form.description"
+                required
+                rows="2"
+                class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all resize-none"
+                placeholder="Penjelasan singkat mengenai acara..."
+              ></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-200 dark:border-white/10 pt-5 mt-5">
+              <div>
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Tanggal (Angka)</label>
+                <input 
+                  v-model="form.day"
+                  type="text" 
+                  required
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all text-center"
+                  placeholder="15"
+                />
+              </div>
+              <div>
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Bulan (Singkat)</label>
+                <input 
+                  v-model="form.month"
+                  type="text" 
+                  required
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all text-center uppercase"
+                  placeholder="Jun"
+                />
+              </div>
+              <div class="col-span-2">
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Waktu (Jam)</label>
+                <input 
+                  v-model="form.time"
+                  type="text" 
+                  required
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
+                  placeholder="09:00 - 12:00"
+                />
               </div>
             </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Lokasi / Tempat</label>
+                <input 
+                  v-model="form.location"
+                  type="text" 
+                  required
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
+                  placeholder="Misal: Aula Utama"
+                />
+              </div>
+              <div>
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Badge / Label (Opsional)</label>
+                <input 
+                  v-model="form.badge"
+                  type="text" 
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
+                  placeholder="Misal: Segera, Terbatas"
+                />
+              </div>
+            </div>
+
           </form>
         </div>
-
-        <div class="p-6 border-t border-white/10 flex items-center justify-end gap-3 shrink-0 bg-dark/30">
-          <button @click="closeModal" class="px-6 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/10 font-medium transition-all active:scale-95">
+        
+        <div class="p-6 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 flex items-center justify-end gap-3 shrink-0">
+          <button 
+            type="button" 
+            @click="closeModal"
+            class="px-5 py-2.5 rounded-xl text-gray-600 dark:text-white/70 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all active:scale-95"
+          >
             Batal
           </button>
-          <button @click="saveKegiatan" class="px-6 py-3 rounded-xl bg-secondary hover:bg-secondary-light text-dark font-bold transition-all shadow-lg hover:shadow-secondary/20 active:scale-95 flex items-center gap-2">
+          <button 
+            @click="saveKegiatan"
+            class="px-6 py-2.5 rounded-xl bg-secondary hover:bg-secondary-light text-white dark:text-dark font-bold shadow-lg shadow-secondary/20 transition-all active:scale-95 flex items-center gap-2"
+          >
             <Save class="w-5 h-5" />
-            <span>Simpan Data</span>
+            <span>{{ isEditing ? 'Simpan Perubahan' : 'Tambah Kegiatan' }}</span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Custom Delete Confirmation Modal -->
+    <!-- Confirmation Modal (Hapus) -->
     <div v-if="showDeleteModal" class="fixed inset-0 z-[70] flex items-center justify-center px-4">
-      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="closeDeleteModal"></div>
+      <div class="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity" @click="closeDeleteModal"></div>
       
-      <div class="bg-[#112323] border border-red-500/20 rounded-3xl w-full max-w-sm relative z-10 shadow-2xl p-8 text-center animate-modal-enter">
-        <div class="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-5">
-          <AlertTriangle class="w-8 h-8 text-red-500" />
+      <div class="bg-white dark:bg-[#112323] border border-gray-200 dark:border-red-500/20 rounded-3xl w-full max-w-sm relative z-10 shadow-2xl p-6 text-center animate-modal-enter">
+        <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-4 text-red-500">
+          <AlertTriangle class="w-8 h-8 text-red-600 dark:text-red-500" />
         </div>
-        <h2 class="text-2xl font-bold text-white mb-2">Hapus Kegiatan?</h2>
-        <p class="text-white/60 mb-8 text-sm leading-relaxed">
-          Apakah Anda yakin ingin menghapus <strong>"{{ itemToDelete?.title }}"</strong>? Data yang sudah dihapus tidak dapat dikembalikan.
+        <h3 class="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">Hapus Kegiatan?</h3>
+        <p class="text-gray-500 dark:text-white/60 text-sm mb-8">
+          Tindakan ini tidak dapat dibatalkan. Kegiatan <strong>"{{ itemToDelete?.title }}"</strong> akan dihapus secara permanen.
         </p>
-        <div class="flex items-center gap-3">
-          <button @click="closeDeleteModal" class="flex-1 px-5 py-3 rounded-xl text-white font-medium bg-white/5 hover:bg-white/10 transition-all active:scale-95">
+        <div class="flex items-center gap-3 w-full">
+          <button 
+            @click="closeDeleteModal"
+            class="flex-1 py-3 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-white/70 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all active:scale-95 border border-gray-200 dark:border-transparent"
+          >
             Batal
           </button>
-          <button @click="confirmDelete" class="flex-1 px-5 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold transition-all shadow-lg shadow-red-500/20 active:scale-95">
+          <button 
+            @click="confirmDelete"
+            class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg shadow-red-500/20 transition-all active:scale-95"
+          >
             Ya, Hapus
           </button>
         </div>
@@ -244,117 +343,147 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useAdminStore } from '../../stores/admin'
+import { Plus, Edit, Trash2, X, Calendar, Clock, MapPin, UploadCloud, AlertTriangle, Save } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
-import { Plus, Edit, Trash2, X, Calendar, Clock, User, ChevronDown, Save, AlertTriangle } from 'lucide-vue-next'
+import { useAdminStore } from '../../stores/admin'
 
-const adminStore = useAdminStore()
 const toastStore = useToastStore()
+const adminStore = useAdminStore()
 
+// Modal States
 const showModal = ref(false)
 const isEditing = ref(false)
-const formData = ref({
-  id: null,
-  title: '',
-  type: 'Kajian Rutin',
-  date: '',
-  time: '',
-  ustadz: '',
-  status: 'Aktif'
-})
-
-// Delete Modal State
 const showDeleteModal = ref(false)
 const itemToDelete = ref(null)
 
-function openAddModal() {
-  isEditing.value = false
-  formData.value = {
-    id: null,
-    title: '',
-    type: 'Kajian Rutin',
-    date: '',
-    time: '',
-    ustadz: '',
-    status: 'Aktif'
-  }
-  showModal.value = true
-}
+const isDragging = ref(false)
+const fileInput = ref(null)
 
-function openEditModal(item) {
-  isEditing.value = true
-  formData.value = { ...item }
-  showModal.value = true
-}
+const getDefaultForm = () => ({
+  id: null,
+  title: '',
+  category: 'Kajian',
+  description: '',
+  day: '',
+  month: '',
+  time: '',
+  location: '',
+  badge: '',
+  image: ''
+})
 
-function closeModal() {
-  showModal.value = false
-}
+const form = ref(getDefaultForm())
 
-function saveKegiatan() {
-  if (!formData.value.title || !formData.value.date || !formData.value.time) {
-    toastStore.addToast('Mohon lengkapi judul, tanggal, dan waktu', 'error')
-    return
-  }
-
-  if (isEditing.value) {
-    adminStore.updateKegiatan(formData.value.id, formData.value)
-    toastStore.addToast('Jadwal kegiatan berhasil diperbarui!')
+const handleDrop = (e) => {
+  isDragging.value = false
+  const file = e.dataTransfer?.files[0]
+  if (file && file.type.startsWith('image/')) {
+    form.value.image = URL.createObjectURL(file)
   } else {
-    adminStore.addKegiatan(formData.value)
-    toastStore.addToast('Kegiatan baru berhasil ditambahkan!')
+    toastStore.addToast('Format file tidak didukung', 'error')
+  }
+}
+
+const handleFileSelect = (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    form.value.image = URL.createObjectURL(file)
+  }
+}
+
+const openAddModal = () => {
+  isEditing.value = false
+  form.value = getDefaultForm()
+  showModal.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const openEditModal = (item) => {
+  isEditing.value = true
+  form.value = { ...item }
+  showModal.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeModal = () => {
+  showModal.value = false
+  document.body.style.overflow = ''
+}
+
+const saveKegiatan = () => {
+  if (!form.value.title || !form.value.category || !form.value.description) return
+  
+  if (isEditing.value) {
+    const index = adminStore.kegiatan.findIndex(k => k.id === form.value.id)
+    if (index !== -1) {
+      adminStore.kegiatan[index] = { ...form.value }
+      adminStore.saveKegiatan()
+    }
+    toastStore.addToast('Kegiatan berhasil diperbarui', 'success')
+  } else {
+    const newId = adminStore.kegiatan.length > 0 ? Math.max(...adminStore.kegiatan.map(k => k.id)) + 1 : 1
+    
+    // Pick a default image if available and user didn't upload one
+    let defImg = form.value.image
+    if (!defImg && adminStore.kegiatan.length > 0) {
+      defImg = adminStore.kegiatan[0].image
+    }
+
+    adminStore.kegiatan.push({
+      ...form.value,
+      id: newId,
+      image: defImg
+    })
+    adminStore.saveKegiatan()
+    toastStore.addToast('Kegiatan baru berhasil ditambahkan', 'success')
   }
   
   closeModal()
 }
 
-function openDeleteModal(item) {
+const openDeleteModal = (item) => {
   itemToDelete.value = item
   showDeleteModal.value = true
+  document.body.style.overflow = 'hidden'
 }
 
-function closeDeleteModal() {
+const closeDeleteModal = () => {
   showDeleteModal.value = false
   itemToDelete.value = null
+  document.body.style.overflow = ''
 }
 
-function confirmDelete() {
+const confirmDelete = () => {
   if (itemToDelete.value) {
-    adminStore.deleteKegiatan(itemToDelete.value.id)
-    toastStore.addToast(`Kegiatan "${itemToDelete.value.title}" berhasil dihapus.`)
-    closeDeleteModal()
+    adminStore.kegiatan = adminStore.kegiatan.filter(k => k.id !== itemToDelete.value.id)
+    adminStore.saveKegiatan()
+    toastStore.addToast('Kegiatan berhasil dihapus', 'error')
   }
+  closeDeleteModal()
 }
 </script>
 
 <style scoped>
-.animate-modal-enter {
-  animation: modalEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
 @keyframes modalEnter {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Custom Scrollbar for modal content */
+.animate-modal-enter {
+  animation: modalEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background-color: rgba(156, 163, 175, 0.3);
   border-radius: 10px;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 </style>

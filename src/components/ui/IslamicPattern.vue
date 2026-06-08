@@ -1,7 +1,7 @@
 <template>
   <div class="absolute inset-0 overflow-hidden pointer-events-none" :class="containerClass">
     <!-- Premium Modern Islamic Geometric Mesh -->
-    <div class="absolute inset-y-0 flex animate-pan-smooth w-[200%]" :class="patternOpacity">
+    <div class="absolute inset-y-0 flex w-full" :class="patternOpacity">
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="islamic-mosaic-modern" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
@@ -90,15 +90,6 @@ defineProps({
 </script>
 
 <style scoped>
-.animate-pan-smooth {
-  animation: pan-smooth 50s linear infinite;
-}
-
-@keyframes pan-smooth {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
 @keyframes sparkle-float {
   0% { opacity: 0; transform: translateY(0) scale(0); }
   20% { opacity: 1; transform: translateY(-10px) scale(1.2); }
