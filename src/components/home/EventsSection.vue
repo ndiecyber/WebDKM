@@ -119,11 +119,11 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import EventModal from '@/components/ui/EventModal.vue'
-import { useAdminStore } from '@/stores/admin'
+import communityImg from '@/assets/images/community-prayer.png'
+import quranStudyImg from '@/assets/images/quran-study.png'
+import exteriorImg from '@/assets/images/mosque-exterior.png'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const adminStore = useAdminStore()
 
 const headerRef = ref(null)
 const eventsRef = ref(null)
@@ -167,10 +167,77 @@ const toggleEvents = async () => {
   showAll.value = !showAll.value
 }
 
-const events = computed(() => adminStore.kegiatan)
+const events = [
+  {
+    title: 'Kajian Akbar Bulanan',
+    category: 'Kajian',
+    description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah dan muamalah kontemporer.',
+    image: communityImg,
+    day: '15',
+    month: 'Jun',
+    time: '09:00 - 12:00',
+    location: 'Aula Utama',
+    badge: 'Segera',
+  },
+  {
+    title: 'Wisuda Santri TPA/TPQ',
+    category: 'Pendidikan',
+    description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz dan tilawah.',
+    image: quranStudyImg,
+    day: '22',
+    month: 'Jun',
+    time: '08:00 - 11:00',
+    location: 'Masjid Utama',
+    badge: null,
+  },
+  {
+    title: 'Bakti Sosial Ramadhan',
+    category: 'Sosial',
+    description: 'Kegiatan bakti sosial pembagian sembako dan santunan untuk dhuafa dan yatim piatu.',
+    image: exteriorImg,
+    day: '01',
+    month: 'Jul',
+    time: '07:00 - 10:00',
+    location: 'Halaman Masjid',
+    badge: null,
+  },
+  {
+    title: 'Kajian Muslimah',
+    category: 'Kajian',
+    description: 'Kajian khusus muslimah membahas peranan wanita dalam membangun keluarga Islami.',
+    image: communityImg,
+    day: '10',
+    month: 'Jul',
+    time: '13:00 - 15:00',
+    location: 'Aula Lt. 2',
+    badge: null,
+  },
+  {
+    title: 'Pelatihan Pengurusan Jenazah',
+    category: 'Pendidikan',
+    description: 'Pelatihan tata cara memandikan, mengkafani, dan menyalatkan jenazah sesuai sunnah.',
+    image: quranStudyImg,
+    day: '18',
+    month: 'Jul',
+    time: '08:30 - 11:30',
+    location: 'Serambi Masjid',
+    badge: null,
+  },
+  {
+    title: 'Mabit & Qiyamullail',
+    category: 'Ibadah',
+    description: 'Malam bina iman dan taqwa, diisi dengan kajian, muhasabah, dan shalat malam berjamaah.',
+    image: exteriorImg,
+    day: '25',
+    month: 'Jul',
+    time: '20:00 - 04:30',
+    location: 'Masjid Utama',
+    badge: 'Terbatas',
+  },
+]
 
 const visibleEvents = computed(() => {
-  return showAll.value ? events.value : events.value.slice(0, 3)
+  return showAll.value ? events : events.slice(0, 3)
 })
 
 onMounted(() => {
