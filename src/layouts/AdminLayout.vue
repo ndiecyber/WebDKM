@@ -118,6 +118,16 @@
               <Briefcase class="w-5 h-5" />
               <span>Layanan & Fasilitas</span>
             </router-link>
+
+            <router-link 
+              :to="{ name: 'admin-keuangan' }"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm font-medium"
+              active-class="bg-white/5 text-secondary"
+              :class="$route.name === 'admin-keuangan' ? 'bg-white/5 text-secondary' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'"
+            >
+              <Wallet class="w-5 h-5" />
+              <span>Laporan Publik</span>
+            </router-link>
           </div>
         </div>
 
