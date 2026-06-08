@@ -38,9 +38,8 @@
               <X class="w-5 h-5" />
             </button>
             
-            <!-- Icon floating -->
             <div class="absolute -bottom-8 left-6 sm:left-8 w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-xl border-4 border-white dark:border-dark-light z-10">
-              <component :is="service.icon" class="w-10 h-10 text-dark" />
+              <component :is="iconMap[service.iconName] || iconMap.Users" class="w-10 h-10 text-dark" />
             </div>
           </div>
 
@@ -126,8 +125,12 @@
 
 <script setup>
 import { onMounted, onUnmounted, watch } from 'vue'
-import { X, Calendar, MapPin, User, FileText, MessageCircle } from 'lucide-vue-next'
+import { X, Calendar, MapPin, User, FileText, MessageCircle, Users, BookOpen, GraduationCap, Heart, HandCoins, Gem } from 'lucide-vue-next'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+
+const iconMap = {
+  Users, BookOpen, GraduationCap, Heart, HandCoins, Gem
+}
 
 const props = defineProps({
   isOpen: {
