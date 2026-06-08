@@ -16,9 +16,12 @@ export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: localStorage.getItem('admin_auth') === 'true',
     kegiatan: JSON.parse(localStorage.getItem('admin_kegiatan')) || [
-      { id: 1, title: 'Kajian Rutin Ahad Pagi', type: 'Kajian Rutin', date: 'Setiap Ahad', time: '05:00 - 06:30', ustadz: 'Ust. Abdul Somad', status: 'Aktif' },
-      { id: 2, title: 'Tahsin Al-Quran', type: 'Pendidikan', date: 'Setiap Selasa', time: '18:30 - 20:00', ustadz: 'Ust. Hanan Attaki', status: 'Aktif' },
-      { id: 3, title: 'Buka Puasa Sunnah', type: 'Sosial', date: 'Setiap Senin & Kamis', time: '17:30 - Selesai', ustadz: '-', status: 'Aktif' },
+      { id: 1, title: 'Kajian Akbar Bulanan', category: 'Kajian', description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah dan muamalah kontemporer.', image: communityImg, day: '15', month: 'Jun', time: '09:00 - 12:00', location: 'Aula Utama', badge: 'Segera' },
+      { id: 2, title: 'Wisuda Santri TPA/TPQ', category: 'Pendidikan', description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz dan tilawah.', image: quranImg, day: '22', month: 'Jun', time: '08:00 - 11:00', location: 'Masjid Utama', badge: '' },
+      { id: 3, title: 'Bakti Sosial Ramadhan', category: 'Sosial', description: 'Kegiatan bakti sosial pembagian sembako dan santunan untuk dhuafa dan yatim piatu.', image: exteriorImg, day: '01', month: 'Jul', time: '07:00 - 10:00', location: 'Halaman Masjid', badge: '' },
+      { id: 4, title: 'Kajian Muslimah', category: 'Kajian', description: 'Kajian khusus muslimah membahas peranan wanita dalam membangun keluarga Islami.', image: communityImg, day: '10', month: 'Jul', time: '13:00 - 15:00', location: 'Aula Lt. 2', badge: '' },
+      { id: 5, title: 'Pelatihan Pengurusan Jenazah', category: 'Pendidikan', description: 'Pelatihan tata cara memandikan, mengkafani, dan menyalatkan jenazah sesuai sunnah.', image: quranImg, day: '18', month: 'Jul', time: '08:30 - 11:30', location: 'Serambi Masjid', badge: '' },
+      { id: 6, title: 'Mabit & Qiyamullail', category: 'Ibadah', description: 'Malam bina iman dan taqwa, diisi dengan kajian, muhasabah, dan shalat malam berjamaah.', image: exteriorImg, day: '25', month: 'Jul', time: '20:00 - 04:30', location: 'Masjid Utama', badge: 'Terbatas' },
     ],
     finance: JSON.parse(localStorage.getItem('admin_finance')) || {
       saldoAwal: '84,74',

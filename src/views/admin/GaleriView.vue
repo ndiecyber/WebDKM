@@ -147,11 +147,11 @@
                   required
                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
                 >
-                  <option value="Camera">Kamera</option>
-                  <option value="Building">Gedung / Arsitektur</option>
-                  <option value="Users">Orang / Sosial</option>
-                  <option value="BookOpen">Edukasi / Buku</option>
-                  <option value="MapPin">Lokasi</option>
+                  <option class="bg-white dark:bg-slate-800" value="Camera">Kamera</option>
+                  <option class="bg-white dark:bg-slate-800" value="Building">Gedung / Arsitektur</option>
+                  <option class="bg-white dark:bg-slate-800" value="Users">Orang / Sosial</option>
+                  <option class="bg-white dark:bg-slate-800" value="BookOpen">Edukasi / Buku</option>
+                  <option class="bg-white dark:bg-slate-800" value="MapPin">Lokasi</option>
                 </select>
               </div>
             </div>
