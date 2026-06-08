@@ -138,7 +138,8 @@
             left: `${Math.random() * 120 - 10}%`, 
             top: `-${Math.random() * 20 + 10}%`, 
             height: `${Math.random() * 20 + 10}%`, 
-            animation: `rain-fall ${Math.random() * 0.5 + 0.6}s linear infinite ${Math.random()}s` 
+            animation: `rain-fall ${Math.random() * 0.5 + 0.6}s linear infinite ${Math.random()}s`,
+            willChange: 'transform, opacity'
           }">
         </div>
       </div>
@@ -1020,10 +1021,10 @@ onUnmounted(() => {
 }
 
 @keyframes rain-fall {
-  0% { transform: translateY(0) rotate(15deg); opacity: 0; }
+  0% { transform: translate3d(0, 0, 0) rotate(15deg); opacity: 0; }
   10% { opacity: 1; }
   80% { opacity: 1; }
-  100% { transform: translateY(100vh) rotate(15deg); opacity: 0; }
+  100% { transform: translate3d(0, 100vh, 0) rotate(15deg); opacity: 0; }
 }
 
 @keyframes lightning {

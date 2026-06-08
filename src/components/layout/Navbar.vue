@@ -7,12 +7,20 @@
     ]"
   >
     <!-- Top Announcement Bar (Prayer Time) -->
-    <div v-if="nextPrayer" :class="['border-b bg-transparent transition-all duration-300', (!scrolled || isDark) ? 'border-white/10' : 'border-gray-400']">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-center sm:justify-end py-1.5">
-          <div class="flex items-center gap-2">
+    <div 
+      class="h-8 border-b bg-transparent transition-all duration-500"
+      :class="isDark ? 'border-white/10' : 'border-gray-300'"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div class="flex justify-center sm:justify-end items-center h-full">
+          <div class="flex items-center gap-2" v-if="nextPrayer">
             <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-            <span :class="['text-[10px] sm:text-[11px] font-medium tracking-wide uppercase', (!scrolled || isDark) ? 'text-white/60' : 'text-gray-500']">Waktu Berikutnya:</span>
+            <span 
+              class="text-[10px] sm:text-[11px] font-medium tracking-wide uppercase transition-colors duration-500" 
+              :class="(!scrolled || isDark) ? 'text-white/80' : 'text-gray-600'"
+            >
+              Waktu Berikutnya:
+            </span>
             <span class="text-secondary font-bold text-[11px] sm:text-xs">{{ nextPrayer.name }} {{ nextPrayer.time }}</span>
           </div>
         </div>
@@ -32,28 +40,70 @@
             v-for="item in menuItems"
             :key="item.id"
             :href="'#' + item.id"
+            class="relative px-3.5 py-2 text-sm font-semibold transition-colors duration-300 group"
             :class="[
-              'px-4 py-2 text-sm rounded-lg transition-all duration-300 font-medium',
-              activeSection === item.id ? activeTextClass : textClass,
+              activeSection === item.id 
+                ? (!scrolled ? 'text-white' : (isDark ? 'text-secondary' : 'text-primary'))
+                : (!scrolled ? 'text-white/80 hover:text-white' : (isDark ? 'text-white/70 hover:text-white' : 'text-gray-600 hover:text-gray-900'))
             ]"
             @click.prevent="scrollToSection(item.id)"
           >
             {{ item.label }}
+            <!-- Animated Underline -->
+            <span 
+              class="absolute bottom-1 left-0 w-full h-[2px] rounded-full transition-transform duration-300 origin-center"
+              :class="[
+                !scrolled ? 'bg-white' : (isDark ? 'bg-secondary' : 'bg-primary'),
+                activeSection === item.id ? 'scale-x-50' : 'scale-x-0 group-hover:scale-x-25'
+              ]"
+            ></span>
           </a>
           
           <!-- Dark Mode Toggle -->
           <button 
             @click="toggleDark()" 
-            :class="['ml-2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95', buttonClass]"
+            class="ml-2 relative flex items-center h-8 w-24 rounded-full p-1 transition-all duration-300 overflow-hidden shrink-0 border"
+            :class="isDark ? 'bg-[#1e1e1e] border-white/10' : 'bg-gray-200 border-gray-300'"
             :aria-label="isDark ? 'Ganti ke mode terang' : 'Ganti ke mode gelap'"
           >
-            <Sun v-if="isDark" class="w-5 h-5 text-secondary" />
-            <Moon v-else class="w-5 h-5" />
+            <!-- Text Day Mode -->
+            <span 
+              class="absolute left-2 text-[7.5px] font-bold tracking-wider transition-opacity duration-300"
+              :class="isDark ? 'opacity-0' : 'opacity-100 text-gray-800'"
+            >
+              MODE TERANG
+            </span>
+            <!-- Text Night Mode -->
+            <span 
+              class="absolute right-1.5 text-[7.5px] font-bold tracking-wider transition-opacity duration-300"
+              :class="isDark ? 'opacity-100 text-white' : 'opacity-0'"
+            >
+              MODE GELAP
+            </span>
+
+            <!-- Sliding Knob -->
+            <div 
+              class="absolute w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-md transition-all duration-300 z-10"
+              :class="isDark ? 'left-1' : 'left-[68px]'"
+            >
+              <Moon v-if="isDark" class="w-3.5 h-3.5 text-gray-900" />
+              <Sun v-else class="w-3.5 h-3.5 text-gray-900" />
+            </div>
           </button>
+
+          <!-- Admin Portal Link (Desktop) -->
+          <router-link
+            to="/admin/login"
+            class="ml-2 flex items-center justify-center h-8 w-8 rounded-full transition-all duration-300 border hover:scale-105 shrink-0"
+            :class="isDark ? 'bg-white/5 border-white/10 text-white/70 hover:text-white hover:bg-white/10' : 'bg-gray-100 border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-200'"
+            title="Portal Admin"
+          >
+            <ShieldCheck class="w-4 h-4" />
+          </router-link>
 
           <a
             href="#"
-            class="ml-4 px-6 py-2.5 bg-secondary text-dark font-semibold text-sm rounded-full hover:bg-secondary-light transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group"
+            class="ml-3 px-6 py-2.5 bg-secondary text-dark font-semibold text-sm rounded-full hover:bg-secondary-light transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group shrink-0"
             @click.prevent="isDonationModalOpen = true"
           >
             <HandCoins class="w-5 h-5 text-dark group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
@@ -98,12 +148,47 @@
         <!-- Mobile Dark Mode Toggle -->
         <button 
           @click="toggleDark()" 
-          class="w-full mt-2 flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white/80 hover:bg-white/10 transition-all duration-300"
+          class="w-full mt-2 flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 border"
+          :class="isDark ? 'bg-dark-light border-white/10' : 'bg-gray-100 border-gray-200'"
         >
-          <Sun v-if="isDark" class="w-5 h-5 text-secondary" />
-          <Moon v-else class="w-5 h-5" />
-          <span class="font-medium">{{ isDark ? 'Mode Terang' : 'Mode Gelap' }}</span>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" :class="isDark ? 'bg-white/10' : 'bg-white shadow-sm'">
+              <Moon v-if="isDark" class="w-4 h-4 text-white" />
+              <Sun v-else class="w-4 h-4 text-gray-700" />
+            </div>
+            <span class="text-sm font-semibold tracking-wide" :class="isDark ? 'text-white' : 'text-gray-800'">
+              {{ isDark ? 'Mode Gelap' : 'Mode Terang' }}
+            </span>
+          </div>
+          
+          <!-- Small Switch Indicator -->
+          <div 
+            class="relative flex items-center h-6 w-11 rounded-full p-0.5 transition-colors duration-300"
+            :class="isDark ? 'bg-secondary' : 'bg-gray-300'"
+          >
+            <div 
+              class="w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300"
+              :class="isDark ? 'translate-x-5' : 'translate-x-0'"
+            ></div>
+          </div>
         </button>
+
+        <!-- Mobile Admin Portal Button -->
+        <router-link 
+          to="/admin/login" 
+          class="w-full mt-2 flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 border hover:bg-white/10"
+          :class="isDark ? 'border-white/10 bg-white/5' : 'border-white/20 bg-white/10'"
+          @click="mobileOpen = false"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-white/10">
+              <ShieldCheck class="w-4 h-4 text-white" />
+            </div>
+            <span class="text-sm font-semibold tracking-wide text-white">
+              Portal Admin
+            </span>
+          </div>
+        </router-link>
 
         <a href="#" class="flex items-center justify-center gap-2 mt-2 px-4 py-3 bg-secondary text-dark font-semibold rounded-xl hover:bg-secondary-light transition-all duration-300 group" @click.prevent="isDonationModalOpen = true; mobileOpen = false">
           <HandCoins class="w-5 h-5 text-dark group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
@@ -118,7 +203,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { gsap } from 'gsap'
 import { useDark, useToggle } from '@vueuse/core'
-import { Sun, Moon, HandCoins } from 'lucide-vue-next'
+import { Sun, Moon, HandCoins, ShieldCheck } from 'lucide-vue-next'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import logoLight from '@/assets/images/logo-kustom.png'
 import logoDark from '@/assets/images/logo-kustom2.png'
@@ -143,23 +228,12 @@ const prayerStore = usePrayerStore()
 const navBgClass = computed(() => {
   if (!scrolled.value) return 'bg-transparent'
   return isDark.value 
-    ? 'bg-[#111827]/95 backdrop-blur-md shadow-lg border-b border-white/5' 
-    : 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-400'
+    ? 'bg-[#111827]/98 shadow-lg border-b border-white/5' 
+    : 'bg-white/98 shadow-md border-b border-gray-400'
 })
 
-const textClass = computed(() => {
-  if (!scrolled.value) return 'text-white/90 hover:text-white hover:bg-white/10'
-  return isDark.value
-    ? 'text-white/80 hover:text-white hover:bg-white/10'
-    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-})
-
-const activeTextClass = computed(() => {
-  if (!scrolled.value) return 'text-white bg-white/20 shadow-lg shadow-white/10'
-  return isDark.value
-    ? 'text-secondary bg-white/10 shadow-md shadow-secondary/10'
-    : 'text-primary bg-primary/10 shadow-md shadow-primary/20 ring-1 ring-primary/20'
-})
+const textClass = computed(() => '') // Deprecated
+const activeTextClass = computed(() => '') // Deprecated
 
 const buttonClass = computed(() => {
   if (!scrolled.value || isDark.value) return 'bg-white/10 text-white/90 hover:bg-white/20 border border-white/20'

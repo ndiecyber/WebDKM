@@ -79,13 +79,13 @@
             </p>
 
             <div class="mt-auto">
-              <a
-                href="#"
+              <button
+                @click.prevent="openEventModal(event)"
                 class="inline-flex items-center gap-2 text-primary dark:text-secondary text-sm font-bold uppercase tracking-wider group-hover:gap-3 transition-all duration-300"
               >
                 Detail Acara
                 <ArrowRight class="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -102,6 +102,13 @@
         </button>
       </div>
     </div>
+
+    <!-- Event Modal -->
+    <EventModal 
+      :is-open="isModalOpen" 
+      :event="selectedEvent" 
+      @close="isModalOpen = false" 
+    />
   </section>
 </template>
 
@@ -111,6 +118,7 @@ import { Clock, MapPin, ArrowRight } from 'lucide-vue-next'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+import EventModal from '@/components/ui/EventModal.vue'
 import communityImg from '@/assets/images/community-prayer.png'
 import quranStudyImg from '@/assets/images/quran-study.png'
 import exteriorImg from '@/assets/images/mosque-exterior.png'
@@ -120,6 +128,15 @@ gsap.registerPlugin(ScrollTrigger)
 const headerRef = ref(null)
 const eventsRef = ref(null)
 const showAll = ref(false)
+
+// Modal State
+const isModalOpen = ref(false)
+const selectedEvent = ref({})
+
+const openEventModal = (event) => {
+  selectedEvent.value = event
+  isModalOpen.value = true
+}
 
 // 3D Tilt State
 const cardTilts = ref({})

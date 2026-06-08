@@ -40,39 +40,37 @@
           </div>
         </div>
 
-        <!-- Column 2: Kemakmuran Masjid -->
+        <!-- Column 2: Layanan Masjid -->
         <div>
-          <h4 class="text-secondary font-heading text-lg font-semibold mb-6">Kemakmuran Masjid</h4>
-          <div class="space-y-3">
-            <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-4 hover:border-secondary/30 transition-all duration-300 group">
-              <div class="w-10 h-10 shrink-0 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                <Users class="w-5 h-5 text-secondary" />
+          <h4 class="text-secondary font-heading text-lg font-semibold mb-6">Layanan Utama</h4>
+          <div class="flex flex-col gap-2">
+            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
+                <BookOpen class="w-4 h-4 text-secondary" />
               </div>
-              <div>
-                <p class="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Kapasitas</p>
-                <p class="text-white font-bold text-base leading-none">500+ <span class="text-white/50 text-xs font-normal">Jamaah</span></p>
-              </div>
-            </div>
+              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Taman Pendidikan Al-Quran</span>
+            </a>
             
-            <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-4 hover:border-secondary/30 transition-all duration-300 group">
-              <div class="w-10 h-10 shrink-0 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                <BookOpen class="w-5 h-5 text-secondary" />
+            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
+                <Users class="w-4 h-4 text-secondary" />
               </div>
-              <div>
-                <p class="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Kajian Rutin</p>
-                <p class="text-white font-bold text-base leading-none">12+ <span class="text-white/50 text-xs font-normal">Sesi/Bulan</span></p>
+              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Majelis Taklim & Kajian</span>
+            </a>
+            
+            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
+                <HeartHandshake class="w-4 h-4 text-secondary" />
               </div>
-            </div>
-
-            <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-4 hover:border-secondary/30 transition-all duration-300 group">
-              <div class="w-10 h-10 shrink-0 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                <HeartHandshake class="w-5 h-5 text-secondary" />
+              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Penerimaan ZISWAF</span>
+            </a>
+            
+            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
+                <Car class="w-4 h-4 text-secondary" />
               </div>
-              <div>
-                <p class="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Mustahik Terbantu</p>
-                <p class="text-white font-bold text-base leading-none">200+ <span class="text-white/50 text-xs font-normal">Keluarga</span></p>
-              </div>
-            </div>
+              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Layanan Ambulans Gratis</span>
+            </a>
           </div>
         </div>
 
@@ -145,9 +143,16 @@
 
       <!-- Bottom Bar -->
       <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p class="text-white/40 text-sm text-center md:text-left">
-          &copy; {{ currentYear }} Masjid Jami Kassiti. Hak Cipta Dilindungi.
-        </p>
+        <div class="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+          <p class="text-white/40 text-sm text-center md:text-left">
+            &copy; {{ currentYear }} Masjid Jami Kassiti. Hak Cipta Dilindungi.
+          </p>
+          <span class="text-white/20 hidden md:block">•</span>
+          <router-link to="/admin/login" class="group flex items-center gap-1.5 text-white/30 hover:text-secondary text-xs font-medium transition-colors">
+            <ShieldCheck class="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+            <span class="group-hover:underline underline-offset-2 decoration-secondary/50">Portal Admin</span>
+          </router-link>
+        </div>
         <p class="text-white/30 text-xs flex items-center gap-1">
           Dibuat dengan
           <Heart class="w-3 h-3 text-red-400 inline" />
@@ -160,8 +165,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake } from 'lucide-vue-next'
-import logoImg from '@/assets/images/logo-kustom.png'
+import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck } from 'lucide-vue-next'
+import logoImg from '@/assets/images/logo-kustom2.png'
 
 const currentYear = computed(() => new Date().getFullYear())
 
