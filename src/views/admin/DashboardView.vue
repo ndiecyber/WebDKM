@@ -177,7 +177,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useAdminStore } from '../stores/admin'
+import { useAdminStore } from '../../stores/admin'
 import { 
   Calendar, Users, MessageSquare, Image, 
   TrendingUp, TrendingDown, MoreHorizontal 
