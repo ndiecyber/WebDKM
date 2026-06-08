@@ -39,7 +39,7 @@
             :class="activeModule === 'keuangan' ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'" 
             class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all flex justify-center items-center gap-1.5"
           >
-            Keuangan
+            Keuangan DKM
           </button>
         </div>
       </div>
@@ -197,15 +197,15 @@
       </nav>
 
       <!-- User Profile Bottom -->
-      <div class="p-4 border-t border-white/5 bg-gray-900 shrink-0">
+      <div class="p-4 border-t border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-gray-900 shrink-0">
         <div class="flex items-center justify-between">
           <router-link :to="{ name: 'admin-profil' }" class="flex items-center gap-3 truncate hover:opacity-80 transition-opacity">
-            <div class="w-9 h-9 rounded-full bg-gray-800 flex items-center justify-center ring-1 ring-white/10 shrink-0">
-              <User class="w-4 h-4 text-gray-400" />
+            <div class="w-9 h-9 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center ring-1 ring-gray-200 dark:ring-white/10 shrink-0">
+              <User class="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </div>
             <div class="truncate">
-              <p class="text-sm font-medium text-white truncate">Admin Utama</p>
-              <p class="text-xs text-gray-500 truncate">admin@masjidkassiti.com</p>
+              <p class="text-sm font-medium text-gray-900 dark:text-white truncate">Admin Utama</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">admin@masjidkassiti.com</p>
             </div>
           </router-link>
           <button @click="handleLogout" class="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors shrink-0" title="Keluar">
