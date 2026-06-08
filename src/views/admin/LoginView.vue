@@ -2,7 +2,7 @@
   <div class="min-h-screen relative flex items-center justify-center overflow-hidden bg-gray-950">
     <!-- Stunning Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
-      <img src="@/assets/images/mosque-exterior-C.png" alt="Background" class="w-full h-full object-cover opacity-40 scale-105 animate-pulse-slow" />
+      <img src="@/assets/images/mosque-exterior.png" alt="Background" class="w-full h-full object-cover opacity-40 scale-105 animate-pulse-slow" />
       <div class="absolute inset-0 bg-gradient-to-br from-gray-950/90 via-emerald-950/80 to-gray-950/90 mix-blend-multiply"></div>
       <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent"></div>
     </div>
