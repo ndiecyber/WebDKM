@@ -97,7 +97,7 @@
                     <span class="text-primary">{{ prog.progress }}%</span>
                   </div>
                   <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                    <div class="h-full bg-linear-to-r from-primary to-amber-300 rounded-full progress-bar" :style="{ width: prog.progress + '%' }"></div>
+                    <div class="h-full bg-linear-to-r from-primary to-amber-300 rounded-full progress-bar" :data-width="prog.progress" style="width: 0%;"></div>
                   </div>
                 </div>
               </div>
@@ -107,7 +107,7 @@
                 <p class="text-white/60 text-[10px] sm:text-xs uppercase tracking-widest mb-1.5 sm:mb-2">Total Donatur Bulan Ini</p>
                 <div class="flex items-center justify-between">
                   <div class="flex items-baseline gap-1.5 sm:gap-2">
-                    <span class="text-3xl sm:text-4xl font-heading font-extrabold text-white">{{ animatedDonors }}</span>
+                    <span ref="donationCount" class="text-3xl sm:text-4xl font-heading font-extrabold text-white">0</span>
                     <span class="text-primary text-xs sm:text-sm font-medium">Orang</span>
                   </div>
                   
@@ -154,7 +154,7 @@ let sliderInterval = null
 const containerRef = ref(null)
 const bgImageRef = ref(null)
 const cardRef = ref(null)
-const animatedDonors = ref(0)
+const donationCount = ref(null)
 
 // 3D Tilt Effect Logic
 const cardTilt = ref('perspective(1000px) rotateX(0deg) rotateY(0deg)')
@@ -214,15 +214,15 @@ onMounted(() => {
     }
   })
 
-  // Animate progress bars dynamically based on their bound width style
-  // Since the style binding already sets the width, we can animate it from 0
-  gsap.from('.progress-bar', {
-    width: '0%',
-    duration: 1.5,
-    ease: 'power2.out',
-    stagger: 0.2,
-    delay: 0.5,
-    scrollTrigger: triggerConfig,
+  // Animate progress bars
+  gsap.utils.toArray('.progress-bar').forEach((el, index) => {
+    gsap.to(el, {
+      width: el.dataset.width + '%',
+      duration: 1.5,
+      ease: 'power2.out',
+      delay: 0.5 + (index * 0.2),
+      scrollTrigger: triggerConfig,
+    })
   })
 
   // Animate counter
@@ -234,7 +234,9 @@ onMounted(() => {
     snap: { value: 1 },
     scrollTrigger: triggerConfig,
     onUpdate: () => {
-      animatedDonors.value = counter.value
+      if (donationCount.value) {
+        donationCount.value.textContent = Math.round(counter.value)
+      }
     },
   })
 })
