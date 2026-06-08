@@ -63,7 +63,7 @@
               </div>
               <h3 class="text-dark dark:text-white/90 font-semibold text-base transition-colors duration-500">Saldo Awal</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">Jumat, 29 Mei 2026</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">{{ adminStore.finance.periodeAwal }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-3 sm:mb-4 ml-1">
@@ -88,7 +88,7 @@
               <div class="flex-1 h-1 rounded-full bg-primary/10 dark:bg-secondary/10 overflow-hidden">
                 <div ref="progressBar1" class="h-full bg-linear-to-r from-primary to-primary-light dark:from-secondary dark:to-secondary-light rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 84.739.781</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.saldoAwalFull }}</span>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@
               <div class="flex-1 h-1 rounded-full bg-green-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-green-500 to-emerald-400 rounded-full" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 0</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.pemasukanFull }}</span>
             </div>
           </div>
         </div>
@@ -182,7 +182,7 @@
               <div class="flex-1 h-1 rounded-full bg-red-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-red-500 to-orange-400 rounded-full" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 0</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.pengeluaranFull }}</span>
             </div>
           </div>
         </div>
@@ -209,7 +209,7 @@
                 Detail
               </button>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">Hari ini (Selasa, 2 Juni 2026)</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">{{ adminStore.finance.periodeAkhir }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-3 sm:mb-4 ml-1">
@@ -236,7 +236,7 @@
               <div class="flex-1 h-1 rounded-full bg-cyan-500/10 overflow-hidden">
                 <div ref="progressBar4" class="h-full bg-linear-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp 84.739.781</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.saldoAkhirFull }}</span>
             </div>
           </div>
         </div>
@@ -250,7 +250,7 @@
               <CalendarDays class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary dark:text-secondary" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Periode</span>
             </div>
-            <p class="text-dark dark:text-white font-bold text-xs sm:text-base transition-colors duration-500">29 Mei – 2 Jun</p>
+            <p class="text-dark dark:text-white font-bold text-xs sm:text-base transition-colors duration-500">{{ adminStore.finance.periodeSingkat }}</p>
           </div>
           <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-green-500/5 transition-colors duration-300">
             <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
@@ -305,9 +305,11 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Wallet, TrendingUp, TrendingDown, BadgeCheck, ShieldCheck, CalendarDays, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-vue-next'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const adminStore = useAdminStore()
 const headerRef = ref(null)
 const cardsRef = ref(null)
 const dividerRef = ref(null)
@@ -510,15 +512,17 @@ onMounted(() => {
     })
   }
 
-  if (counter1.value) animateCounter(counter1.value, 84.74, 1.5, true)
-  if (counter2.value) animateCounter(counter2.value, 15, 1.2, false)
-  if (counter3.value) animateCounter(counter3.value, 8, 1.2, false)
-  if (counter4.value) animateCounter(counter4.value, 91.74, 1.5, true)
+  const parseNumber = (val) => parseFloat(val.toString().replace(/\./g, '').replace(',', '.')) || 0
+
+  if (counter1.value) animateCounter(counter1.value, parseNumber(adminStore.finance.saldoAwal), 1.5, true)
+  if (counter2.value) animateCounter(counter2.value, parseNumber(adminStore.finance.pemasukan), 1.2, false)
+  if (counter3.value) animateCounter(counter3.value, parseNumber(adminStore.finance.pengeluaran), 1.2, false)
+  if (counter4.value) animateCounter(counter4.value, parseNumber(adminStore.finance.saldoAkhir), 1.5, true)
   
   // Summary counters
-  if (sumIn.value) animateCounter(sumIn.value, 15000000, 1.2, false)
-  if (sumOut.value) animateCounter(sumOut.value, 8000000, 1.2, false)
-  if (sumDiff.value) animateCounter(sumDiff.value, 7000000, 1.2, false)
+  if (sumIn.value) animateCounter(sumIn.value, parseNumber(adminStore.finance.pemasukanFull), 1.2, false)
+  if (sumOut.value) animateCounter(sumOut.value, parseNumber(adminStore.finance.pengeluaranFull), 1.2, false)
+  if (sumDiff.value) animateCounter(sumDiff.value, parseNumber(adminStore.finance.selisihBersih), 1.2, false)
 })
 </script>
 

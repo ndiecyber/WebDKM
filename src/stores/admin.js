@@ -8,6 +8,20 @@ export const useAdminStore = defineStore('admin', {
       { id: 2, title: 'Tahsin Al-Quran', type: 'Pendidikan', date: 'Setiap Selasa', time: '18:30 - 20:00', ustadz: 'Ust. Hanan Attaki', status: 'Aktif' },
       { id: 3, title: 'Buka Puasa Sunnah', type: 'Sosial', date: 'Setiap Senin & Kamis', time: '17:30 - Selesai', ustadz: '-', status: 'Aktif' },
     ],
+    finance: JSON.parse(localStorage.getItem('admin_finance')) || {
+      saldoAwal: '84,74',
+      saldoAwalFull: '84.739.781',
+      periodeAwal: 'Jumat, 29 Mei 2026',
+      pemasukan: '15',
+      pemasukanFull: '15.000.000',
+      pengeluaran: '8',
+      pengeluaranFull: '8.000.000',
+      saldoAkhir: '91,74',
+      saldoAkhirFull: '91.739.781',
+      periodeAkhir: 'Selasa, 2 Juni 2026',
+      periodeSingkat: '29 Mei - 2 Jun',
+      selisihBersih: '7.000.000'
+    },
   }),
   actions: {
     login(username, password) {
@@ -41,6 +55,10 @@ export const useAdminStore = defineStore('admin', {
     },
     saveKegiatan() {
       localStorage.setItem('admin_kegiatan', JSON.stringify(this.kegiatan))
+    },
+    updateFinance(data) {
+      this.finance = { ...this.finance, ...data }
+      localStorage.setItem('admin_finance', JSON.stringify(this.finance))
     }
   }
 })
