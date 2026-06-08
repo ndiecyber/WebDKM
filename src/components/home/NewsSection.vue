@@ -17,7 +17,7 @@
             Berita & <span class="text-primary dark:text-secondary">Artikel</span>
           </h2>
         </div>
-        <a href="#" class="hidden md:inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full font-medium text-dark dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-300 group">
+        <a href="#" class="hidden md:inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-full font-medium text-dark dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-300 group">
           Lihat Semua Berita
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -28,7 +28,7 @@
         <article
           v-for="(item, index) in news"
           :key="index"
-          class="group bg-white dark:bg-[#1A2525] rounded-2xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full"
+          class="group bg-white dark:bg-[#1A2525] rounded-2xl overflow-hidden border border-gray-300 dark:border-white/5 shadow-md hover:shadow-xl transition-all duration-500 flex flex-col h-full"
         >
           <!-- Image -->
           <div class="relative h-56 overflow-hidden">
@@ -66,7 +66,7 @@
               {{ item.excerpt }}
             </p>
             
-            <div class="mt-auto pt-4 border-t border-gray-100 dark:border-white/10 transition-colors">
+            <div class="mt-auto pt-4 border-t border-gray-300 dark:border-white/10 transition-colors">
               <a href="#" class="inline-flex items-center gap-2 text-primary dark:text-secondary font-medium text-sm hover:underline underline-offset-4">
                 Baca Selengkapnya
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -78,7 +78,7 @@
       
       <!-- Mobile View All Button -->
       <div class="mt-8 text-center md:hidden">
-        <a href="#" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full font-medium text-dark dark:text-white transition-colors">
+        <a href="#" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-full font-medium text-dark dark:text-white transition-colors">
           Lihat Semua Berita
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>

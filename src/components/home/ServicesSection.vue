@@ -19,7 +19,7 @@
 
       <!-- Filters -->
       <div class="flex justify-center mb-8 w-full px-4" ref="filterRef">
-        <div class="inline-flex flex-wrap justify-center gap-1 p-1 sm:p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl sm:rounded-full w-full sm:w-auto shadow-sm">
+        <div class="inline-flex flex-wrap justify-center gap-1 p-1 sm:p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-2xl sm:rounded-full w-full sm:w-auto shadow-md">
           <button
             v-for="cat in categories"
             :key="cat"
@@ -49,7 +49,7 @@
           @mousemove="handleMouseMove($event, index)"
           @mouseleave="resetTilt(index)"
           :style="{ transform: cardTilts[index] || 'scale3d(1, 1, 1)' }"
-          class="group bg-light/80 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-5 sm:p-8 border-2 border-primary/20 dark:border-white/20 relative overflow-hidden transition-all duration-300 transform-gpu cursor-pointer shadow-sm hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 dark:hover:border-secondary/50"
+          class="group bg-light/80 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-5 sm:p-8 border-2 border-primary/20 dark:border-white/20 relative overflow-hidden transition-all duration-300 transform-gpu cursor-pointer shadow-md hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 dark:hover:border-secondary/50"
         >
           <!-- Watermark Background -->
           <div class="absolute inset-0 z-0 pointer-events-none">

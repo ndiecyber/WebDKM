@@ -49,7 +49,7 @@
           @mousemove="handleMouseMove($event, 0)"
           @mouseleave="resetTilt(0)"
           :style="{ transform: cardTilts[0] || 'scale3d(1, 1, 1)' }"
-          class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
+          class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-3xl p-4 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
           <div class="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <!-- Decorative Icon -->
@@ -58,16 +58,16 @@
           </div>
           <div class="relative z-10">
             <div class="flex items-center gap-2.5 mb-1">
-              <div class="w-9 h-9 rounded-xl bg-primary/10 dark:bg-secondary/15 flex items-center justify-center">
-                <Wallet class="w-4 h-4 text-primary dark:text-secondary" />
+              <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-primary/10 dark:bg-secondary/15 flex items-center justify-center">
+                <Wallet class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary dark:text-secondary" />
               </div>
-              <h3 class="text-dark dark:text-white/90 font-semibold text-base transition-colors duration-500">Saldo Awal</h3>
+              <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Saldo Awal</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">{{ adminStore.finance.periodeAwal }}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">{{ adminStore.finance.periodeAwal }}</p>
             
             <!-- Sparkline Chart -->
-            <div class="mb-3 sm:mb-4 ml-1">
-              <svg class="w-full h-8 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <div class="mb-2 sm:mb-4 ml-1">
+              <svg class="w-full h-6 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="sparkGold" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="currentColor" stop-opacity="0.3"/>
@@ -80,11 +80,11 @@
             </div>
 
             <div class="flex items-end gap-1 font-bold font-heading">
-              <span class="text-base sm:text-2xl text-primary dark:text-secondary">Rp</span>
-              <span class="text-2xl sm:text-4xl leading-none text-gradient-gold" ref="counter1">0</span>
+              <span class="text-sm sm:text-2xl text-primary dark:text-secondary">Rp</span>
+              <span class="text-xl sm:text-4xl leading-none text-gradient-gold" ref="counter1">0</span>
               <span class="text-sm sm:text-xl pb-0.5 text-primary dark:text-secondary">jt</span>
             </div>
-            <div class="flex items-center gap-2 mt-3">
+            <div class="flex items-center gap-2 mt-2 sm:mt-3">
               <div class="flex-1 h-1 rounded-full bg-primary/10 dark:bg-secondary/10 overflow-hidden">
                 <div ref="progressBar1" class="h-full bg-linear-to-r from-primary to-primary-light dark:from-secondary dark:to-secondary-light rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
@@ -98,7 +98,7 @@
           @mousemove="handleMouseMove($event, 1)"
           @mouseleave="resetTilt(1)"
           :style="{ transform: cardTilts[1] || 'scale3d(1, 1, 1)' }"
-          class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
+          class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-3xl p-4 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
           <div class="absolute inset-0 bg-linear-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="absolute -right-4 -top-4 w-20 h-20 bg-green-500/5 dark:bg-green-500/10 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-125 group-hover:rotate-12">
@@ -106,16 +106,16 @@
           </div>
           <div class="relative z-10">
             <div class="flex items-center gap-2.5 mb-1">
-              <div class="w-9 h-9 rounded-xl bg-green-500/10 flex items-center justify-center">
-                <TrendingUp class="w-4 h-4 text-green-600 dark:text-green-400" />
+              <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-green-500/10 flex items-center justify-center">
+                <TrendingUp class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-400" />
               </div>
-              <h3 class="text-dark dark:text-white/90 font-semibold text-base transition-colors duration-500">Pemasukan</h3>
+              <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Pemasukan</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">Hingga hari ini</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Hingga hari ini</p>
             
             <!-- Sparkline Chart -->
-            <div class="mb-3 sm:mb-4 ml-1">
-              <svg class="w-full h-8 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <div class="mb-2 sm:mb-4 ml-1">
+              <svg class="w-full h-6 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="sparkGreen" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="#22c55e" stop-opacity="0.3"/>
@@ -128,10 +128,10 @@
             </div>
 
             <div class="flex items-end gap-1 text-green-600 dark:text-green-400 font-bold font-heading">
-              <span class="text-base sm:text-2xl">Rp</span>
-              <span class="text-2xl sm:text-4xl leading-none drop-shadow-sm" ref="counter2">0</span>
+              <span class="text-sm sm:text-2xl">Rp</span>
+              <span class="text-xl sm:text-4xl leading-none drop-shadow-md" ref="counter2">0</span>
             </div>
-            <div class="flex items-center gap-2 mt-3">
+            <div class="flex items-center gap-2 mt-2 sm:mt-3">
               <div class="flex-1 h-1 rounded-full bg-green-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-green-500 to-emerald-400 rounded-full" style="width: 0%"></div>
               </div>
@@ -145,7 +145,7 @@
           @mousemove="handleMouseMove($event, 2)"
           @mouseleave="resetTilt(2)"
           :style="{ transform: cardTilts[2] || 'scale3d(1, 1, 1)' }"
-          class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
+          class="finance-card group w-full bg-white/80 dark:bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-3xl p-4 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-gray-300 dark:border-white/20 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
           <div class="absolute inset-0 bg-linear-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="absolute -right-4 -top-4 w-20 h-20 bg-red-500/5 dark:bg-red-500/10 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-125 group-hover:rotate-12">
@@ -153,16 +153,16 @@
           </div>
           <div class="relative z-10">
             <div class="flex items-center gap-2.5 mb-1">
-              <div class="w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center">
-                <TrendingDown class="w-4 h-4 text-red-500 dark:text-red-400" />
+              <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-red-500/10 flex items-center justify-center">
+                <TrendingDown class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500 dark:text-red-400" />
               </div>
-              <h3 class="text-dark dark:text-white/90 font-semibold text-base transition-colors duration-500">Pengeluaran</h3>
+              <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Pengeluaran</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">Hingga hari ini</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Hingga hari ini</p>
             
             <!-- Sparkline Chart -->
-            <div class="mb-3 sm:mb-4 ml-1">
-              <svg class="w-full h-8 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <div class="mb-2 sm:mb-4 ml-1">
+              <svg class="w-full h-6 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="sparkRed" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="#ef4444" stop-opacity="0.3"/>
@@ -175,10 +175,10 @@
             </div>
 
             <div class="flex items-end gap-1 text-red-500 font-bold font-heading">
-              <span class="text-base sm:text-2xl">Rp</span>
-              <span class="text-2xl sm:text-4xl leading-none drop-shadow-sm" ref="counter3">0</span>
+              <span class="text-sm sm:text-2xl">Rp</span>
+              <span class="text-xl sm:text-4xl leading-none drop-shadow-md" ref="counter3">0</span>
             </div>
-            <div class="flex items-center gap-2 mt-3">
+            <div class="flex items-center gap-2 mt-2 sm:mt-3">
               <div class="flex-1 h-1 rounded-full bg-red-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-red-500 to-orange-400 rounded-full" style="width: 0%"></div>
               </div>
@@ -192,7 +192,7 @@
           @mousemove="handleMouseMove($event, 3)"
           @mouseleave="resetTilt(3)"
           :style="{ transform: cardTilts[3] || 'scale3d(1, 1, 1)' }"
-          class="finance-card group w-full bg-linear-to-br from-white/90 to-cyan-50/50 dark:from-[#1a2035]/80 dark:to-[#152030]/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] border border-cyan-400 dark:border-cyan-500/50 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all duration-300 transform-gpu relative overflow-hidden"
+          class="finance-card group w-full bg-linear-to-br from-white/90 to-cyan-50/50 dark:from-[#1a2035]/80 dark:to-[#152030]/80 backdrop-blur-xl rounded-xl sm:rounded-3xl p-4 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] border border-cyan-400 dark:border-cyan-500/50 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all duration-300 transform-gpu relative overflow-hidden"
         >
           <div class="absolute -right-12 -top-12 w-40 h-40 bg-linear-to-br from-cyan-400/20 to-blue-500/20 dark:from-cyan-400/10 dark:to-blue-500/10 rounded-full blur-2xl z-0 transition-all duration-500 group-hover:scale-150"></div>
           <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-linear-to-tr from-blue-400/10 to-transparent rounded-full blur-2xl z-0"></div>
@@ -200,20 +200,20 @@
           <div class="relative z-10">
             <div class="flex items-center justify-between mb-1">
               <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-linear-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
-                  <BadgeCheck class="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-linear-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
+                  <BadgeCheck class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-600 dark:text-cyan-400" />
                 </div>
-                <h3 class="text-dark dark:text-white font-bold text-base transition-colors duration-500">Saldo Akhir</h3>
+                <h3 class="text-dark dark:text-white font-bold text-sm sm:text-base transition-colors duration-500">Saldo Akhir</h3>
               </div>
-              <button class="px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-800 rounded-full hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-white transition-all duration-300 shrink-0 shadow-sm">
+              <button class="px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-800 rounded-full hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-white transition-all duration-300 shrink-0 shadow-md">
                 Detail
               </button>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4 ml-[46px] transition-colors duration-500">{{ adminStore.finance.periodeAkhir }}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">{{ adminStore.finance.periodeAkhir }}</p>
             
             <!-- Sparkline Chart -->
-            <div class="mb-3 sm:mb-4 ml-1">
-              <svg class="w-full h-8 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <div class="mb-2 sm:mb-4 ml-1">
+              <svg class="w-full h-6 sm:h-10" viewBox="0 0 200 40" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="sparkCyan" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.3"/>
@@ -228,11 +228,11 @@
             </div>
             
             <div class="flex items-end gap-1 font-bold font-heading">
-              <span class="text-base sm:text-2xl text-cyan-600 dark:text-cyan-400">Rp</span>
-              <span class="text-2xl sm:text-4xl leading-none text-transparent bg-clip-text bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 drop-shadow-sm" ref="counter4">0</span>
+              <span class="text-sm sm:text-2xl text-cyan-600 dark:text-cyan-400">Rp</span>
+              <span class="text-xl sm:text-4xl leading-none text-transparent bg-clip-text bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 drop-shadow-md" ref="counter4">0</span>
               <span class="text-sm sm:text-xl pb-0.5 text-cyan-600 dark:text-cyan-400">jt</span>
             </div>
-            <div class="flex items-center gap-2 mt-3">
+            <div class="flex items-center gap-2 mt-2 sm:mt-3">
               <div class="flex-1 h-1 rounded-full bg-cyan-500/10 overflow-hidden">
                 <div ref="progressBar4" class="h-full bg-linear-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
@@ -243,14 +243,14 @@
       </div>
 
       <!-- Summary Stats Row -->
-      <div ref="summaryRef" class="mt-4 sm:mt-6 bg-white/60 dark:bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-gray-300 dark:border-white/20 shadow-sm overflow-hidden">
+      <div ref="summaryRef" class="mt-4 sm:mt-6 bg-white/60 dark:bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-gray-300 dark:border-white/20 shadow-md overflow-hidden">
         <div class="grid grid-cols-2 lg:grid-cols-4 divide-x divide-gray-100 dark:divide-white/10">
           <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-primary/5 dark:hover:bg-secondary/5 transition-colors duration-300">
             <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
               <CalendarDays class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary dark:text-secondary" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Periode</span>
             </div>
-            <p class="text-dark dark:text-white font-bold text-xs sm:text-base transition-colors duration-500">{{ adminStore.finance.periodeSingkat }}</p>
+            <p class="text-dark dark:text-white font-bold text-xs sm:text-sm sm:text-base transition-colors duration-500">{{ adminStore.finance.periodeSingkat }}</p>
           </div>
           <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-green-500/5 transition-colors duration-300">
             <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
@@ -308,7 +308,7 @@
             v-for="(report, index) in specialReports" 
             :key="report.id"
             @click="openSpecialReport(report)"
-            class="group cursor-pointer bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-primary/50 dark:hover:border-secondary/50 rounded-2xl p-4 sm:p-5 transition-all duration-300 shadow-sm hover:shadow-xl flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6"
+            class="group cursor-pointer bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 hover:border-primary/50 dark:hover:border-secondary/50 rounded-2xl p-4 sm:p-5 transition-all duration-300 shadow-md hover:shadow-xl flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6"
           >
             <!-- Title & Icon -->
             <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-[35%] lg:w-[30%] shrink-0">
@@ -322,16 +322,16 @@
             </div>
 
             <!-- Stats (Responsive) -->
-            <div class="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-2 sm:gap-4 text-xs items-center border-t sm:border-t-0 border-gray-100 dark:border-white/5 pt-3 sm:pt-0">
-              <div class="border-r border-gray-100 dark:border-white/5 pr-2 sm:pr-4 sm:border-l sm:border-gray-200 sm:dark:border-white/10 sm:pl-4">
+            <div class="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-2 sm:gap-4 text-xs items-center border-t sm:border-t-0 border-gray-300 dark:border-white/5 pt-3 sm:pt-0">
+              <div class="border-r border-gray-300 dark:border-white/5 pr-2 sm:pr-4 sm:border-l sm:border-gray-300 sm:dark:border-white/10 sm:pl-4">
                 <span class="block text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Total Masuk</span>
                 <span class="font-bold text-green-600 dark:text-green-400 text-[11px] sm:text-xs">Rp {{ formatRupiah(report.totalPemasukan) }}</span>
               </div>
-              <div class="pl-2 sm:pr-4 sm:border-r sm:border-gray-100 sm:dark:border-white/5">
+              <div class="pl-2 sm:pr-4 sm:border-r sm:border-gray-300 sm:dark:border-white/5">
                 <span class="block text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Total Keluar</span>
                 <span class="font-bold text-red-500 text-[11px] sm:text-xs">Rp {{ formatRupiah(report.totalPengeluaran) }}</span>
               </div>
-              <div class="col-span-2 sm:col-span-1 mt-1 sm:mt-0 pt-2 pb-2 px-3 sm:p-0 border border-gray-100 dark:border-white/5 sm:border-0 bg-gray-50 dark:bg-transparent rounded-lg sm:rounded-none flex sm:block justify-between items-center sm:items-start sm:pl-4">
+              <div class="col-span-2 sm:col-span-1 mt-1 sm:mt-0 pt-2 pb-2 px-3 sm:p-0 border border-gray-300 dark:border-white/5 sm:border-0 bg-gray-50 dark:bg-transparent rounded-lg sm:rounded-none flex sm:block justify-between items-center sm:items-start sm:pl-4">
                 <span class="block text-[10px] text-gray-500 dark:text-gray-400 uppercase font-semibold tracking-wider sm:mb-0.5">Selisih Bersih</span>
                 <span class="font-bold text-cyan-600 dark:text-cyan-400 text-sm">Rp {{ formatRupiah(report.sisaSaldo) }}</span>
               </div>
@@ -339,7 +339,7 @@
 
             <!-- Action -->
             <div class="hidden sm:flex items-center justify-end shrink-0 pl-2">
-              <div class="px-4 py-1.5 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-transparent group-hover:border-primary/30 dark:group-hover:border-secondary/30 group-hover:bg-primary/5 dark:group-hover:bg-secondary/5 transition-all flex items-center gap-1.5">
+              <div class="px-4 py-1.5 rounded-full border border-gray-300 dark:border-white/10 bg-white dark:bg-transparent group-hover:border-primary/30 dark:group-hover:border-secondary/30 group-hover:bg-primary/5 dark:group-hover:bg-secondary/5 transition-all flex items-center gap-1.5">
                 <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-secondary uppercase tracking-wider transition-colors">Detail</span>
                 <ArrowUpRight class="w-3 h-3 text-gray-400 group-hover:text-primary dark:group-hover:text-secondary transition-colors" />
               </div>

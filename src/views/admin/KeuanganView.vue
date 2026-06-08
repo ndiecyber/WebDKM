@@ -10,7 +10,7 @@
       <button 
         type="submit"
         :disabled="isSaving"
-        class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-6 py-2.5 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2 justify-center shrink-0 disabled:opacity-70 disabled:cursor-not-allowed"
+        class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-6 py-2.5 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2 justify-center shrink-0 disabled:opacity-70 disabled:cursor-not-allowed"
       >
         <span v-if="isSaving" class="w-4 h-4 border-2 border-white/30 dark:border-gray-950/30 border-t-white dark:border-t-gray-950 rounded-full animate-spin"></span>
         <Save v-else class="w-4 h-4" />
@@ -31,8 +31,8 @@
 
     <div class="max-w-5xl space-y-6">
       
-      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl shadow-sm">
-        <div class="p-6 sm:p-8 border-b border-gray-200 dark:border-white/5">
+      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md">
+        <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
             <Wallet class="w-5 h-5 text-gray-500" />
             Detail Angka Laporan
@@ -43,34 +43,34 @@
         <div class="p-6 sm:p-8 space-y-8">
           
           <!-- Periode Global -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-gray-200 dark:border-white/5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-gray-300 dark:border-white/5">
             <div class="space-y-1.5">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Periode Awal</label>
-              <input v-model="form.periodeAwal" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="Jumat, 29 Mei 2026" />
+              <input v-model="form.periodeAwal" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="Jumat, 29 Mei 2026" />
             </div>
             <div class="space-y-1.5">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Periode Akhir</label>
-              <input v-model="form.periodeAkhir" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="Selasa, 2 Juni 2026" />
+              <input v-model="form.periodeAkhir" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="Selasa, 2 Juni 2026" />
             </div>
             <div class="space-y-1.5 md:col-span-2">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rentang Periode Singkat (Bottom Bar)</label>
-              <input v-model="form.periodeSingkat" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="29 Mei - 2 Jun" />
+              <input v-model="form.periodeSingkat" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="29 Mei - 2 Jun" />
             </div>
           </div>
 
           <!-- Pemasukan & Pengeluaran -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-6 border-b border-gray-200 dark:border-white/5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-6 border-b border-gray-300 dark:border-white/5">
             <div class="space-y-4">
               <h4 class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
                 <TrendingUp class="w-4 h-4" /> Pemasukan
               </h4>
               <div class="space-y-1.5">
                 <label class="block text-xs font-medium text-gray-500">Angka Singkat (Juta)</label>
-                <input v-model="form.pemasukan" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 transition-all text-sm" placeholder="15" />
+                <input v-model="form.pemasukan" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 transition-all text-sm" placeholder="15" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-medium text-gray-500">Angka Penuh (Rp)</label>
-                <input v-model="form.pemasukanFull" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 transition-all text-sm" placeholder="15.000.000" />
+                <input v-model="form.pemasukanFull" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 transition-all text-sm" placeholder="15.000.000" />
               </div>
             </div>
 
@@ -80,26 +80,26 @@
               </h4>
               <div class="space-y-1.5">
                 <label class="block text-xs font-medium text-gray-500">Angka Singkat (Juta)</label>
-                <input v-model="form.pengeluaran" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-all text-sm" placeholder="8" />
+                <input v-model="form.pengeluaran" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-all text-sm" placeholder="8" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-medium text-gray-500">Angka Penuh (Rp)</label>
-                <input v-model="form.pengeluaranFull" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-all text-sm" placeholder="8.000.000" />
+                <input v-model="form.pengeluaranFull" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-rose-500 transition-all text-sm" placeholder="8.000.000" />
               </div>
             </div>
           </div>
 
           <!-- Saldo Awal & Akhir -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-6 border-b border-gray-200 dark:border-white/5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-6 border-b border-gray-300 dark:border-white/5">
             <div class="space-y-4">
               <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Saldo Awal</h4>
               <div class="space-y-1.5">
                 <label class="block text-xs font-medium text-gray-500">Angka Singkat (Juta)</label>
-                <input v-model="form.saldoAwal" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="84,74" />
+                <input v-model="form.saldoAwal" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="84,74" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-medium text-gray-500">Angka Penuh (Rp)</label>
-                <input v-model="form.saldoAwalFull" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="84.739.781" />
+                <input v-model="form.saldoAwalFull" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="84.739.781" />
               </div>
             </div>
 
@@ -119,7 +119,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-1.5">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Selisih Bersih (Bottom Bar)</label>
-              <input v-model="form.selisihBersih" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="7.000.000" />
+              <input v-model="form.selisihBersih" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="7.000.000" />
             </div>
           </div>
 

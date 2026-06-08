@@ -9,11 +9,11 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <button class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-200 dark:ring-white/10 shadow-sm text-sm flex items-center gap-2">
+        <button class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-300 dark:ring-white/10 shadow-md text-sm flex items-center gap-2">
           <ArrowLeftRight class="w-4 h-4" />
           <span>Mutasi Kas</span>
         </button>
-        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2">
+        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
           <Plus class="w-4 h-4" />
           <span>Tambah Rekening</span>
         </button>
@@ -77,14 +77,14 @@
     </div>
 
     <!-- Riwayat Mutasi Antar Kas -->
-    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl overflow-hidden shadow-sm">
-      <div class="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl overflow-hidden shadow-md">
+      <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Riwayat Mutasi Antar Kas</h3>
         <button class="text-sm font-medium text-secondary hover:text-yellow-600 transition-colors">Lihat Semua</button>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
-          <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-200 dark:border-white/5">
+          <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-300 dark:border-white/5">
             <tr>
               <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tanggal</th>
               <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Dari Rekening</th>

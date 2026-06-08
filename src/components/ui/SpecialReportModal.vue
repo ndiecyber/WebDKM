@@ -9,10 +9,10 @@
 
       <!-- Modal Container -->
       <div 
-        class="relative bg-white dark:bg-[#111827] w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 flex flex-col overflow-hidden"
+        class="relative bg-white dark:bg-[#111827] w-full max-w-4xl h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-300 dark:border-white/10 flex flex-col overflow-hidden"
       >
         <!-- Modal Header -->
-        <div class="px-6 py-5 border-b border-gray-100 dark:border-white/10 flex items-center justify-between bg-gray-50/50 dark:bg-white/[0.02]">
+        <div class="px-6 py-5 border-b border-gray-300 dark:border-white/10 flex items-center justify-between bg-gray-50/50 dark:bg-white/[0.02]">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-secondary/10 flex items-center justify-center text-primary dark:text-secondary">
               <FileText class="w-5 h-5" />
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Modal Body (Scrollable) -->
-        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar">
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar pb-8 sm:pb-8">
           <div v-if="report" class="max-w-3xl mx-auto space-y-8">
             
             <!-- Header Report (Print style) -->
@@ -60,7 +60,7 @@
 
             <!-- Bagian Pemasukan -->
             <div class="space-y-3">
-              <div class="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-800">
+              <div class="flex items-center gap-2 pb-2 border-b border-gray-300 dark:border-gray-800">
                 <span class="w-6 h-6 rounded bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-bold text-xs flex items-center justify-center">A</span>
                 <h3 class="font-bold text-dark dark:text-white uppercase text-sm sm:text-base tracking-wider">Pemasukan</h3>
               </div>
@@ -68,7 +68,7 @@
               <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left border-collapse">
                   <thead>
-                    <tr class="bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-300 font-semibold border-y border-gray-200 dark:border-gray-700">
+                    <tr class="bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-300 font-semibold border-y border-gray-300 dark:border-gray-700">
                       <th class="py-2.5 px-3 w-12 text-center">NO.</th>
                       <th class="py-2.5 px-3 w-28 text-center hidden sm:table-cell">TANGGAL</th>
                       <th class="py-2.5 px-3">JENIS PEMASUKAN</th>
@@ -79,7 +79,12 @@
                     <tr v-for="(item, index) in report.pemasukan" :key="index" class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02]">
                       <td class="py-2 px-3 text-center text-gray-500 dark:text-gray-400">{{ item.no }}</td>
                       <td class="py-2 px-3 text-center text-gray-500 dark:text-gray-400 hidden sm:table-cell">{{ item.tanggal || '-' }}</td>
-                      <td class="py-2 px-3 text-gray-700 dark:text-gray-300">{{ item.uraian }}</td>
+                      <td class="py-2 px-3 text-gray-700 dark:text-gray-300">
+                        <div class="font-medium sm:font-normal leading-snug">{{ item.uraian }}</div>
+                        <div class="text-[10px] text-gray-500 sm:hidden mt-0.5 flex items-center gap-1 opacity-80">
+                          <CalendarDays class="w-3 h-3" /> {{ item.tanggal || '-' }}
+                        </div>
+                      </td>
                       <td class="py-2 px-3 text-right font-medium text-dark dark:text-white">{{ formatRupiah(item.jumlah) }}</td>
                     </tr>
                   </tbody>
@@ -96,7 +101,7 @@
 
             <!-- Bagian Pengeluaran -->
             <div class="space-y-3">
-              <div class="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-800">
+              <div class="flex items-center gap-2 pb-2 border-b border-gray-300 dark:border-gray-800">
                 <span class="w-6 h-6 rounded bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold text-xs flex items-center justify-center">B</span>
                 <h3 class="font-bold text-dark dark:text-white uppercase text-sm sm:text-base tracking-wider">Pengeluaran</h3>
               </div>
@@ -104,7 +109,7 @@
               <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left border-collapse">
                   <thead>
-                    <tr class="bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-300 font-semibold border-y border-gray-200 dark:border-gray-700">
+                    <tr class="bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-300 font-semibold border-y border-gray-300 dark:border-gray-700">
                       <th class="py-2.5 px-3 w-12 text-center">NO.</th>
                       <th class="py-2.5 px-3 w-28 text-center hidden sm:table-cell">TANGGAL</th>
                       <th class="py-2.5 px-3">JENIS PENGELUARAN</th>
@@ -115,7 +120,12 @@
                     <tr v-for="(item, index) in report.pengeluaran" :key="index" class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02]">
                       <td class="py-2 px-3 text-center text-gray-500 dark:text-gray-400">{{ item.no }}</td>
                       <td class="py-2 px-3 text-center text-gray-500 dark:text-gray-400 hidden sm:table-cell">{{ item.tanggal || '-' }}</td>
-                      <td class="py-2 px-3 text-gray-700 dark:text-gray-300">{{ item.uraian }}</td>
+                      <td class="py-2 px-3 text-gray-700 dark:text-gray-300">
+                        <div class="font-medium sm:font-normal leading-snug">{{ item.uraian }}</div>
+                        <div class="text-[10px] text-gray-500 sm:hidden mt-0.5 flex items-center gap-1 opacity-80">
+                          <CalendarDays class="w-3 h-3" /> {{ item.tanggal || '-' }}
+                        </div>
+                      </td>
                       <td class="py-2 px-3 text-right font-medium text-dark dark:text-white">{{ formatRupiah(item.jumlah) }}</td>
                     </tr>
                   </tbody>
@@ -132,12 +142,12 @@
 
             <!-- Rekapitulasi & Saldo -->
             <div class="space-y-3 pt-4">
-              <div class="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-800">
+              <div class="flex items-center gap-2 pb-2 border-b border-gray-300 dark:border-gray-800">
                 <span class="w-6 h-6 rounded bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 font-bold text-xs flex items-center justify-center">C</span>
                 <h3 class="font-bold text-dark dark:text-white uppercase text-sm sm:text-base tracking-wider">Sisa Saldo</h3>
               </div>
               
-              <div class="bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10 p-4 sm:p-5">
+              <div class="bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-300 dark:border-white/10 p-4 sm:p-5">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
                     <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase">PEMASUKAN (A) - PENGELUARAN (B)</p>
@@ -147,7 +157,7 @@
                     Rp {{ formatRupiah(report.sisaSaldo) }}
                   </div>
                 </div>
-                <div v-if="report.keterangan" class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700/50">
+                <div v-if="report.keterangan" class="mt-3 pt-3 border-t border-gray-300 dark:border-gray-700/50">
                   <p class="text-xs text-gray-500 dark:text-gray-400"><span class="font-bold">NB:</span> {{ report.keterangan }}</p>
                 </div>
               </div>
@@ -184,7 +194,7 @@
 </template>
 
 <script setup>
-import { FileText, X, QrCode, Loader2 } from 'lucide-vue-next'
+import { FileText, X, QrCode, Loader2, CalendarDays } from 'lucide-vue-next'
 import logoLight from '@/assets/images/logo-kustom.png'
 import logoDark from '@/assets/images/logo-kustom2.png'
 

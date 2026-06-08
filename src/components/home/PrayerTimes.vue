@@ -190,7 +190,7 @@
       <div class="text-center mb-8" ref="headerRef">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/30 backdrop-blur-md border border-secondary/20 mb-6 shadow-lg shadow-black/20">
           <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-          <span class="text-secondary text-xs font-semibold tracking-wider uppercase drop-shadow-sm">Jadwal Sholat</span>
+          <span class="text-secondary text-xs font-semibold tracking-wider uppercase drop-shadow-md">Jadwal Sholat</span>
         </div>
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
           Waktu <span class="text-gradient-gold drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">Sholat</span> Hari Ini

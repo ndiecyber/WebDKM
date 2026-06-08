@@ -139,10 +139,10 @@
         <button 
           @click="toggleDark()" 
           class="w-full mt-2 flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 border"
-          :class="isDark ? 'bg-dark-light border-white/10' : 'bg-gray-100 border-gray-200'"
+          :class="isDark ? 'bg-dark-light border-white/10' : 'bg-gray-100 border-gray-300'"
         >
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" :class="isDark ? 'bg-white/10' : 'bg-white shadow-sm'">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" :class="isDark ? 'bg-white/10' : 'bg-white shadow-md'">
               <Moon v-if="isDark" class="w-4 h-4 text-white" />
               <Sun v-else class="w-4 h-4 text-gray-700" />
             </div>
@@ -157,7 +157,7 @@
             :class="isDark ? 'bg-secondary' : 'bg-gray-300'"
           >
             <div 
-              class="w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300"
+              class="w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300"
               :class="isDark ? 'translate-x-5' : 'translate-x-0'"
             ></div>
           </div>
@@ -210,7 +210,7 @@ const activeTextClass = computed(() => '') // Deprecated
 
 const buttonClass = computed(() => {
   if (!scrolled.value || isDark.value) return 'bg-white/10 text-white/90 hover:bg-white/20 border border-white/20'
-  return 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm hover:shadow-md'
+  return 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-md hover:shadow-md'
 })
 
 // Mini Prayer Logic synced from global store

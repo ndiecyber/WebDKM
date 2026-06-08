@@ -29,7 +29,7 @@
             <div
               v-for="stat in stats"
               :key="stat.label"
-              class="text-center p-4 rounded-2xl bg-light dark:bg-white/5 shadow-sm border border-primary/5 dark:border-white/10 hover:shadow-md hover:border-primary/10 transition-all duration-300"
+              class="text-center p-4 rounded-2xl bg-light dark:bg-white/5 shadow-md border border-primary/5 dark:border-white/10 hover:shadow-md hover:border-primary/10 transition-all duration-300"
             >
               <div class="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-primary dark:text-secondary mb-1">
                 {{ stat.prefix }}{{ stat.displayValue }}{{ stat.suffix }}

@@ -23,7 +23,7 @@
         <div
           v-for="(member, index) in committee"
           :key="member.name"
-          class="group relative bg-light dark:bg-[#1A2525] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-primary/5 dark:border-white/5 hover:border-primary/30 dark:hover:border-secondary/30"
+          class="group relative bg-light dark:bg-[#1A2525] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-primary/5 dark:border-white/5 hover:border-primary/30 dark:hover:border-secondary/30"
           :style="{ transform: `translateY(${index % 2 !== 0 ? '20px' : '0'})` }"
         >
           <!-- Image Container -->
@@ -38,7 +38,7 @@
           
           <!-- Content -->
           <div class="relative p-6 -mt-12 bg-linear-to-b from-transparent to-light dark:to-[#1A2525]">
-            <div class="bg-white dark:bg-dark-light rounded-xl p-4 shadow-lg border border-gray-100 dark:border-white/10 transform -translate-y-4 group-hover:-translate-y-6 transition-transform duration-500 relative z-10">
+            <div class="bg-white dark:bg-dark-light rounded-xl p-4 shadow-lg border border-gray-300 dark:border-white/10 transform -translate-y-4 group-hover:-translate-y-6 transition-transform duration-500 relative z-10">
               <h3 class="font-heading text-lg font-bold text-dark dark:text-white text-center mb-1 transition-colors">{{ member.name }}</h3>
               <p class="text-primary dark:text-secondary text-sm font-medium text-center uppercase tracking-wide">{{ member.role }}</p>
             </div>

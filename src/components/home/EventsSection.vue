@@ -53,7 +53,7 @@
           </div>
 
           <!-- Date Card (Positioned exactly on the boundary between image and content) -->
-          <div class="absolute top-56 left-6 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-2xl px-5 py-2.5 text-center shadow-xl border border-gray-100 dark:border-white/10 transition-colors duration-500 z-20">
+          <div class="absolute top-56 left-6 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-2xl px-5 py-2.5 text-center shadow-xl border border-gray-300 dark:border-white/10 transition-colors duration-500 z-20">
             <p class="font-heading text-2xl font-bold text-primary dark:text-secondary leading-none">{{ event.day }}</p>
             <p class="text-gray-500 dark:text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">{{ event.month }}</p>
           </div>

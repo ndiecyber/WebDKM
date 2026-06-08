@@ -25,7 +25,7 @@
               <img src="@/assets/images/logo-kustom2.png" alt="Logo" class="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500" />
             </div>
           </div>
-          <h1 class="font-heading text-3xl font-extrabold text-white tracking-tight drop-shadow-sm mb-2">Admin Portal</h1>
+          <h1 class="font-heading text-3xl font-extrabold text-white tracking-tight drop-shadow-md mb-2">Admin Portal</h1>
           <p class="text-gray-300 text-sm font-medium">Sistem Manajemen Masjid Jami Kassiti</p>
         </div>
 

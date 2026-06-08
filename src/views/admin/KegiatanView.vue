@@ -15,13 +15,13 @@
     </div>
 
     <!-- Table Container -->
-    <div class="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm dark:shadow-2xl">
+    <div class="bg-white dark:bg-white/5 border border-gray-300 dark:border-white/5 rounded-3xl overflow-hidden shadow-md dark:shadow-2xl">
       
       <!-- Table -->
       <div v-if="adminStore.kegiatan.length > 0" class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-gray-50 dark:bg-dark/50 border-b border-gray-200 dark:border-white/5 text-gray-500 dark:text-white/50 text-sm uppercase tracking-wider">
+            <tr class="bg-gray-50 dark:bg-dark/50 border-b border-gray-300 dark:border-white/5 text-gray-500 dark:text-white/50 text-sm uppercase tracking-wider">
               <th class="py-5 px-6 font-semibold w-16">No</th>
               <th class="py-5 px-6 font-semibold">Kegiatan</th>
               <th class="py-5 px-6 font-semibold">Waktu & Tempat</th>
@@ -35,14 +35,14 @@
               <td class="py-4 px-6">
                 <div class="flex items-center gap-4">
                   <!-- Thumbnail Image if available, otherwise just Date Box -->
-                  <div v-if="item.image" class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-gray-200 dark:border-white/10 relative">
+                  <div v-if="item.image" class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-gray-300 dark:border-white/10 relative">
                     <img :src="item.image" class="w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white">
                       <span class="text-[12px] font-bold leading-none">{{ item.day }}</span>
                       <span class="text-[8px] font-bold uppercase">{{ item.month }}</span>
                     </div>
                   </div>
-                  <div v-else class="w-14 h-14 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center shrink-0 border border-gray-200 dark:border-white/10 overflow-hidden text-center">
+                  <div v-else class="w-14 h-14 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center shrink-0 border border-gray-300 dark:border-white/10 overflow-hidden text-center">
                     <div>
                       <p class="text-[14px] font-bold text-primary dark:text-secondary leading-none">{{ item.day }}</p>
                       <p class="text-[8px] font-bold text-gray-500 uppercase">{{ item.month }}</p>
@@ -70,7 +70,7 @@
                 </div>
               </td>
               <td class="py-4 px-6 text-center">
-                <span class="inline-block px-3 py-1 rounded-full border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-white/70 text-[11px] font-bold tracking-wide">
+                <span class="inline-block px-3 py-1 rounded-full border border-gray-300 dark:border-white/20 bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white/90 text-[11px] font-bold tracking-wide shadow-md">
                   {{ item.category }}
                 </span>
               </td>
@@ -123,7 +123,7 @@
         </p>
         <button 
           @click="openAddModal"
-          class="bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 active:scale-95"
+          class="bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 active:scale-95"
         >
           <Plus class="w-5 h-5" />
           <span>Buat Kegiatan Baru</span>
@@ -136,8 +136,8 @@
     <div v-if="showModal" class="fixed inset-0 z-60 flex items-center justify-center px-4">
       <div class="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
       
-      <div class="bg-white dark:bg-[#112323] border border-gray-200 dark:border-white/10 rounded-3xl w-full max-w-xl relative z-10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-enter">
-        <div class="p-6 border-b border-gray-200 dark:border-white/10 flex items-center justify-between shrink-0 bg-gray-50 dark:bg-white/5">
+      <div class="bg-white dark:bg-[#112323] border border-gray-300 dark:border-white/10 rounded-3xl w-full max-w-xl relative z-10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-enter">
+        <div class="p-6 border-b border-gray-300 dark:border-white/10 flex items-center justify-between shrink-0 bg-gray-50 dark:bg-white/5">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
               <Edit v-if="isEditing" class="w-5 h-5" />
@@ -178,7 +178,7 @@
                     atau klik tombol di bawah
                   </p>
                   <input type="file" accept="image/*" class="hidden" ref="fileInput" @change="handleFileSelect" />
-                  <button type="button" @click="$refs.fileInput.click()" class="pointer-events-auto px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-xs transition-transform active:scale-95 shadow-sm hover:shadow-md">
+                  <button type="button" @click="$refs.fileInput.click()" class="pointer-events-auto px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-xs transition-transform active:scale-95 shadow-md hover:shadow-md">
                     Pilih File
                   </button>
                 </div>
@@ -186,7 +186,7 @@
                 <!-- Preview Overlay -->
                 <div v-if="form.image" class="absolute inset-0 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center group">
                   <img :src="form.image" class="h-full w-full object-cover opacity-90 dark:opacity-80" />
-                  <button @click.prevent="form.image = ''" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                  <button @click.prevent="form.image = ''" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
                     <X class="w-4 h-4" />
                   </button>
                 </div>
@@ -232,7 +232,7 @@
               ></textarea>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-200 dark:border-white/10 pt-5 mt-5">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-300 dark:border-white/10 pt-5 mt-5">
               <div>
                 <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Tanggal (Angka)</label>
                 <input 
@@ -290,7 +290,7 @@
           </form>
         </div>
         
-        <div class="p-6 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 flex items-center justify-end gap-3 shrink-0">
+        <div class="p-6 border-t border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-white/5 flex items-center justify-end gap-3 shrink-0">
           <button 
             type="button" 
             @click="closeModal"
@@ -313,7 +313,7 @@
     <div v-if="showDeleteModal" class="fixed inset-0 z-[70] flex items-center justify-center px-4">
       <div class="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity" @click="closeDeleteModal"></div>
       
-      <div class="bg-white dark:bg-[#112323] border border-gray-200 dark:border-red-500/20 rounded-3xl w-full max-w-sm relative z-10 shadow-2xl p-6 text-center animate-modal-enter">
+      <div class="bg-white dark:bg-[#112323] border border-gray-300 dark:border-red-500/20 rounded-3xl w-full max-w-sm relative z-10 shadow-2xl p-6 text-center animate-modal-enter">
         <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-4 text-red-500">
           <AlertTriangle class="w-8 h-8 text-red-600 dark:text-red-500" />
         </div>
@@ -324,7 +324,7 @@
         <div class="flex items-center gap-3 w-full">
           <button 
             @click="closeDeleteModal"
-            class="flex-1 py-3 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-white/70 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all active:scale-95 border border-gray-200 dark:border-transparent"
+            class="flex-1 py-3 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-white/70 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all active:scale-95 border border-gray-300 dark:border-transparent"
           >
             Batal
           </button>
