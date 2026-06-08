@@ -149,7 +149,7 @@
         </div>
 
         <!-- Group: Sistem -->
-        <div v-show="activeModule === 'web'">
+        <div>
           <div class="px-3 mb-2">
             <p class="text-xs font-semibold text-gray-500 tracking-wider uppercase">Sistem</p>
           </div>
