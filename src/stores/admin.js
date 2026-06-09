@@ -79,6 +79,25 @@ export const useAdminStore = defineStore('admin', {
         { id: 2, name: 'Sarana Pendidikan TPQ', progress: 60 }
       ]
     },
+    masterData: JSON.parse(localStorage.getItem('admin_master_data_v2')) || {
+      kategori: [
+        { id: 1, name: 'Kajian', description: 'Kegiatan belajar agama bersama ustadz', iconName: 'BookOpen' },
+        { id: 2, name: 'Pendidikan', description: 'Kegiatan edukasi dan pembelajaran', iconName: 'GraduationCap' },
+        { id: 3, name: 'Sosial', description: 'Kegiatan sosial kemasyarakatan', iconName: 'Users' },
+        { id: 4, name: 'Ibadah', description: 'Kegiatan peribadahan jamaah', iconName: 'Heart' },
+        { id: 5, name: 'Umum', description: 'Kegiatan umum lainnya', iconName: 'Info' }
+      ],
+      label: [
+        { id: 1, name: 'Segera', description: 'Akan segera dilaksanakan', color: 'red' },
+        { id: 2, name: 'Terbatas', description: 'Kuota terbatas', color: 'yellow' },
+        { id: 3, name: 'Tersedia', description: 'Fasilitas / Layanan tersedia', color: 'green' },
+        { id: 4, name: 'Baru', description: 'Informasi atau foto terbaru', color: 'blue' }
+      ],
+      status: [
+        { id: 1, name: 'Aktif', description: 'Ditampilkan secara publik', color: 'green' },
+        { id: 2, name: 'Nonaktif', description: 'Disembunyikan dari publik', color: 'gray' }
+      ],
+    }
   }),
   actions: {
     login(username, password) {
@@ -160,6 +179,9 @@ export const useAdminStore = defineStore('admin', {
     },
     saveCtaSettings() {
       localStorage.setItem('admin_cta_settings', JSON.stringify(this.ctaSettings))
+    },
+    saveMasterData() {
+      localStorage.setItem('admin_master_data_v2', JSON.stringify(this.masterData))
     }
   }
 })

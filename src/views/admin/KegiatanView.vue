@@ -222,7 +222,7 @@
             </div>
 
             <div>
-              <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Deskripsi Singkat</label>
+              <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Deskripsi</label>
               <textarea 
                 v-model="form.description"
                 required
@@ -233,24 +233,13 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-300 dark:border-white/10 pt-5 mt-5">
-              <div>
-                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Tanggal (Angka)</label>
+              <div class="col-span-2">
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Tanggal Berita</label>
                 <input 
-                  v-model="form.day"
-                  type="text" 
+                  v-model="form.date"
+                  type="date" 
                   required
-                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all text-center"
-                  placeholder="15"
-                />
-              </div>
-              <div>
-                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Bulan (Singkat)</label>
-                <input 
-                  v-model="form.month"
-                  type="text" 
-                  required
-                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all text-center uppercase"
-                  placeholder="Jun"
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
                 />
               </div>
               <div class="col-span-2">
@@ -278,12 +267,13 @@
               </div>
               <div>
                 <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Badge / Label (Opsional)</label>
-                <input 
+                <select 
                   v-model="form.badge"
-                  type="text" 
-                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
-                  placeholder="Misal: Segera, Terbatas"
-                />
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all appearance-none"
+                >
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="">Tanpa Label</option>
+                  <option v-for="label in adminStore.masterData.label" :key="label.id" :value="label.name" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">{{ label.name }}</option>
+                </select>
               </div>
             </div>
 
@@ -364,6 +354,7 @@ const getDefaultForm = () => ({
   title: '',
   category: 'Kajian',
   description: '',
+  date: '',
   day: '',
   month: '',
   time: '',
@@ -400,7 +391,21 @@ const openAddModal = () => {
 
 const openEditModal = (item) => {
   isEditing.value = true
-  form.value = { ...item }
+  
+  // Try to create a date string from day and month if it's missing (simulation purposes)
+  let itemDate = item.date
+  if (!itemDate && item.day && item.month) {
+    // This is just a mock logic to show a date since we changed from inputs
+    // In a real app the backend provides YYYY-MM-DD
+    const currYear = new Date().getFullYear()
+    const monthNames = ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'agu', 'sep', 'okt', 'nov', 'des']
+    const monthIndex = monthNames.findIndex(m => item.month.toLowerCase().startsWith(m))
+    if (monthIndex !== -1) {
+      itemDate = `${currYear}-${String(monthIndex + 1).padStart(2, '0')}-${String(item.day).padStart(2, '0')}`
+    }
+  }
+
+  form.value = { ...item, date: itemDate || '' }
   showModal.value = true
   document.body.style.overflow = 'hidden'
 }
@@ -413,6 +418,12 @@ const closeModal = () => {
 const saveKegiatan = () => {
   if (!form.value.title || !form.value.category || !form.value.description) return
   
+  if (form.value.date) {
+    const d = new Date(form.value.date)
+    form.value.day = d.getDate().toString().padStart(2, '0')
+    form.value.month = d.toLocaleString('id-ID', { month: 'short' }).replace('.', '')
+  }
+
   if (isEditing.value) {
     const index = adminStore.kegiatan.findIndex(k => k.id === form.value.id)
     if (index !== -1) {
