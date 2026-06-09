@@ -201,38 +201,38 @@
       </div>
 
       <!-- Location Info -->
-      <div class="flex flex-wrap items-center justify-center gap-3 mb-6" ref="locationRef">
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8" ref="locationRef">
         <div
           @click="requestLocation"
           :class="[
-            'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border backdrop-blur-md shadow-md transition-all duration-300',
+            'inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-sm border backdrop-blur-md shadow-md transition-all duration-300',
             locationError
               ? 'bg-red-500/20 border-red-500/30 text-red-200 cursor-pointer hover:bg-red-500/30'
               : 'bg-black/30 border-white/10 text-white/80 cursor-pointer hover:bg-black/50 hover:border-white/30',
           ]"
           title="Klik untuk memperbarui lokasi"
         >
-          <MapPin class="w-4 h-4 shrink-0" :class="locationError ? 'text-red-400' : 'text-secondary'" />
-          <span v-if="loading" class="flex items-center gap-2">
-            <span class="w-3 h-3 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin"></span>
+          <MapPin class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" :class="locationError ? 'text-red-400' : 'text-secondary'" />
+          <span v-if="loading" class="flex items-center gap-1.5 sm:gap-2">
+            <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin"></span>
             Mendeteksi lokasi...
           </span>
           <span v-else-if="locationError">{{ locationError }}</span>
-          <span v-else>{{ locationName }}</span>
+          <span v-else class="truncate max-w-[120px] sm:max-w-none">{{ locationName }}</span>
         </div>
         <!-- Method badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs bg-black/30 backdrop-blur-md shadow-md border border-white/10 text-white/70">
-          <Globe class="w-3.5 h-3.5 text-white/50" />
+        <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs bg-black/30 backdrop-blur-md shadow-md border border-white/10 text-white/70">
+          <Globe class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/50" />
           Kemenag RI
         </div>
         <!-- Qibla Compass -->
         <div 
           v-if="qiblaDirection > 0"
-          class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs bg-black/30 backdrop-blur-md shadow-md border border-white/10 text-white/80 group cursor-help"
+          class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs bg-black/30 backdrop-blur-md shadow-md border border-white/10 text-white/80 group cursor-help"
           title="Arah Kiblat dari lokasi Anda"
         >
           <Compass 
-            class="w-4 h-4 text-secondary transition-transform duration-1000"
+            class="w-3 h-3 sm:w-4 sm:h-4 text-secondary transition-transform duration-1000"
             :style="{ transform: `rotate(${qiblaDirection}deg)` }"
           />
           {{ qiblaDirection.toFixed(1) }}° Kiblat
@@ -240,44 +240,44 @@
         <!-- Live Weather -->
         <div 
           v-if="weather.temp !== null"
-          class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs bg-black/30 backdrop-blur-md shadow-md border border-white/10 text-white/80"
+          class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs bg-black/30 backdrop-blur-md shadow-md border border-white/10 text-white/80"
           :title="weather.desc"
         >
-          <component :is="weather.icon" class="w-4 h-4 text-secondary" />
+          <component :is="weather.icon" class="w-3 h-3 sm:w-4 sm:h-4 text-secondary" />
           {{ weather.temp }}°C
         </div>
       </div>
 
 
       <!-- Countdown to Next Prayer -->
-      <div v-if="nextPrayer && !loading" class="flex justify-center mb-12" ref="countdownRef">
+      <div v-if="nextPrayer && !loading" class="flex justify-center mb-10 px-4" ref="countdownRef">
         <div 
-          class="relative border rounded-2xl px-8 py-5 text-center transition-all duration-500 overflow-hidden backdrop-blur-xl"
+          class="relative border rounded-2xl px-4 py-4 sm:px-8 sm:py-5 text-center transition-all duration-500 overflow-hidden backdrop-blur-xl w-full max-w-sm sm:max-w-md"
           :class="isPrayerTimeNow ? 'bg-secondary/20 border-secondary/50 shadow-[0_0_50px_rgba(197,165,90,0.5)] animate-pulse' : 'bg-dark/40 dark:bg-dark-light/40 border-secondary/20 shadow-xl'"
         >
           <!-- Alert overlay when prayer time -->
           <div v-if="isPrayerTimeNow" class="absolute inset-0 bg-secondary/10 animate-ping" style="animation-duration: 2s;"></div>
           
           <div class="relative z-10">
-            <p v-if="isPrayerTimeNow" class="text-secondary font-bold text-sm tracking-wider uppercase mb-2 animate-bounce">
+            <p v-if="isPrayerTimeNow" class="text-secondary font-bold text-[10px] sm:text-sm tracking-wider uppercase mb-2 animate-bounce">
               Waktunya Sholat {{ nextPrayer.name }}
             </p>
-            <p v-else class="text-white/50 text-xs uppercase tracking-wider mb-2">Waktu menuju {{ nextPrayer.name }}</p>
+            <p v-else class="text-white/50 text-[10px] sm:text-xs uppercase tracking-wider mb-2">Waktu menuju {{ nextPrayer.name }}</p>
             
-            <div class="flex items-center justify-center gap-2 sm:gap-3">
-              <div class="text-center w-16 sm:w-20 shrink-0">
-                <p class="font-mono text-3xl sm:text-4xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.hours }}</p>
-                <p class="text-white/30 text-[10px] uppercase tracking-wider mt-1">Jam</p>
+            <div class="flex items-center justify-center gap-1 sm:gap-3">
+              <div class="text-center w-14 sm:w-20 shrink-0">
+                <p class="font-mono text-2xl sm:text-4xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.hours }}</p>
+                <p class="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mt-1">Jam</p>
               </div>
-            <span class="text-secondary/50 text-2xl font-bold pb-4">:</span>
-            <div class="text-center w-16 sm:w-20 shrink-0">
-              <p class="font-mono text-3xl sm:text-4xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.minutes }}</p>
-              <p class="text-white/30 text-[10px] uppercase tracking-wider mt-1">Menit</p>
+            <span class="text-secondary/50 text-xl sm:text-2xl font-bold pb-4 sm:pb-4">:</span>
+            <div class="text-center w-14 sm:w-20 shrink-0">
+              <p class="font-mono text-2xl sm:text-4xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.minutes }}</p>
+              <p class="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mt-1">Menit</p>
             </div>
-            <span class="text-secondary/50 text-2xl font-bold pb-4">:</span>
-            <div class="text-center w-16 sm:w-20 shrink-0">
-              <p class="font-mono text-3xl sm:text-4xl font-bold text-white">{{ countdown.seconds }}</p>
-              <p class="text-white/30 text-[10px] uppercase tracking-wider mt-1">Detik</p>
+            <span class="text-secondary/50 text-xl sm:text-2xl font-bold pb-4 sm:pb-4">:</span>
+            <div class="text-center w-14 sm:w-20 shrink-0">
+              <p class="font-mono text-2xl sm:text-4xl font-bold text-white">{{ countdown.seconds }}</p>
+              <p class="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-wider mt-1">Detik</p>
             </div>
           </div>
         </div>
@@ -285,7 +285,7 @@
       </div>
 
       <!-- Prayer Cards -->
-      <div class="flex flex-wrap justify-center gap-2 sm:gap-4 lg:gap-6 py-4 lg:py-0 pb-6 lg:pb-0" ref="cardsRef" style="perspective: 1000px;">
+      <div class="grid grid-cols-3 md:grid-cols-6 gap-2 sm:gap-4 lg:gap-6 py-2 lg:py-0 pb-6 lg:pb-0" ref="cardsRef" style="perspective: 1000px;">
         <div
           v-for="(prayer, index) in prayers"
           :key="prayer.name"
@@ -293,11 +293,11 @@
           @mouseleave="resetTilt(index)"
           :style="{ transform: cardTilts[index] || 'scale3d(1, 1, 1)' }"
           :class="[
-            'w-[calc(33.333%-0.4rem)] sm:w-[calc(33.333%-0.666rem)] md:w-[calc(25%-0.75rem)] lg:w-auto lg:flex-1 relative group rounded-xl sm:rounded-2xl p-2 sm:p-6 text-center transition-all duration-300 border cursor-default backdrop-blur-md transform-gpu',
+            'relative group rounded-xl sm:rounded-2xl py-3 px-1.5 sm:p-6 text-center transition-all duration-300 border cursor-default backdrop-blur-md transform-gpu',
             prayer.isNext
               ? (isPrayerTimeNow 
-                  ? 'bg-secondary/30 dark:bg-secondary/20 border-secondary shadow-[0_0_40px_rgba(200,160,80,0.6)] z-10 ring-2 sm:ring-4 ring-secondary animate-pulse' 
-                  : 'bg-secondary/20 dark:bg-secondary/15 border-secondary/40 shadow-[0_0_30px_rgba(197,165,90,0.2)] z-10 ring-1 sm:ring-2 ring-secondary/50')
+                  ? 'bg-secondary/30 dark:bg-secondary/20 border-secondary shadow-[0_0_40px_rgba(200,160,80,0.6)] z-10 ring-2 sm:ring-4 ring-secondary animate-pulse scale-105' 
+                  : 'bg-secondary/20 dark:bg-secondary/15 border-secondary/40 shadow-[0_0_30px_rgba(197,165,90,0.2)] z-10 ring-1 sm:ring-2 ring-secondary/50 scale-105')
               : prayer.isPassed
                 ? 'bg-dark/20 dark:bg-dark/40 border-white/[0.06] opacity-60'
                 : 'bg-dark/40 dark:bg-dark/60 border-white/10 hover:bg-dark/60 hover:border-white/20',
@@ -340,7 +340,7 @@
           <!-- Name -->
           <h3
             :class="[
-              'font-heading text-xs sm:text-lg font-semibold mb-0.5 sm:mb-2',
+              'font-heading text-xs sm:text-lg font-semibold mb-1 sm:mb-2',
               prayer.isNext ? 'text-secondary' : 'text-white',
             ]"
           >
@@ -350,16 +350,16 @@
           <!-- Time -->
           <p
             :class="[
-              'font-mono text-sm sm:text-3xl font-bold leading-tight sm:leading-normal',
+              'font-mono text-sm sm:text-3xl font-bold leading-tight',
               prayer.isNext ? 'text-white' : 'text-white/80',
             ]"
           >
-            <span v-if="loading" class="inline-block w-8 sm:w-16 h-3 sm:h-8 bg-white/10 rounded animate-pulse"></span>
+            <span v-if="loading" class="inline-block w-10 sm:w-16 h-4 sm:h-8 bg-white/10 rounded animate-pulse"></span>
             <span v-else>{{ prayer.time }}</span>
           </p>
 
           <!-- Arabic -->
-          <p class="text-white/30 text-[9px] sm:text-sm font-arabic mt-0.5 sm:mt-2 leading-tight sm:leading-normal">{{ prayer.arabic }}</p>
+          <p class="text-white/30 text-[9px] sm:text-sm font-arabic mt-1 sm:mt-2 leading-tight">{{ prayer.arabic }}</p>
         </div>
       </div>
 
