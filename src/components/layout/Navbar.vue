@@ -127,7 +127,7 @@
       leave-from-class="opacity-100 translate-y-0"
       leave-to-class="opacity-0 -translate-y-4"
     >
-      <div v-if="mobileOpen" class="lg:hidden glass-dark mt-2 mx-4 rounded-2xl p-4 border border-white/10">
+      <div v-if="mobileOpen" class="lg:hidden bg-dark shadow-2xl mt-2 mx-4 rounded-2xl p-4 border border-white/10">
         <a
           v-for="item in menuItems"
           :key="item.id"
