@@ -93,10 +93,10 @@
 
           <a
             href="#"
-            class="ml-3 px-6 py-2.5 bg-secondary text-dark font-semibold text-sm rounded-full hover:bg-secondary-light transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group shrink-0"
+            class="ml-3 px-6 py-2.5 bg-secondary text-white font-semibold text-sm rounded-full hover:bg-white hover:text-dark transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group shrink-0"
             @click.prevent="isDonationModalOpen = true"
           >
-            <HandCoins class="w-5 h-5 text-dark group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
+            <HandCoins class="w-5 h-5 text-current group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
             Donasi
           </a>
         </div>
@@ -139,10 +139,10 @@
         <button 
           @click="toggleDark()" 
           class="w-full mt-2 flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 border"
-          :class="isDark ? 'bg-dark-light border-white/10' : 'bg-gray-100 border-gray-200'"
+          :class="isDark ? 'bg-dark-light border-white/10' : 'bg-gray-100 border-gray-300'"
         >
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" :class="isDark ? 'bg-white/10' : 'bg-white shadow-sm'">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" :class="isDark ? 'bg-white/10' : 'bg-white shadow-md'">
               <Moon v-if="isDark" class="w-4 h-4 text-white" />
               <Sun v-else class="w-4 h-4 text-gray-700" />
             </div>
@@ -157,7 +157,7 @@
             :class="isDark ? 'bg-secondary' : 'bg-gray-300'"
           >
             <div 
-              class="w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300"
+              class="w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300"
               :class="isDark ? 'translate-x-5' : 'translate-x-0'"
             ></div>
           </div>
@@ -210,7 +210,7 @@ const activeTextClass = computed(() => '') // Deprecated
 
 const buttonClass = computed(() => {
   if (!scrolled.value || isDark.value) return 'bg-white/10 text-white/90 hover:bg-white/20 border border-white/20'
-  return 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm hover:shadow-md'
+  return 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-md hover:shadow-md'
 })
 
 // Mini Prayer Logic synced from global store
@@ -219,9 +219,9 @@ const nextPrayer = computed(() => prayerStore.nextPrayer)
 const menuItems = [
   { id: 'beranda', label: 'Beranda' },
   { id: 'tentang', label: 'Tentang' },
-  { id: 'jadwal', label: 'Jadwal Sholat' },
   { id: 'layanan', label: 'Layanan' },
-  { id: 'kegiatan', label: 'Kegiatan' },
+  { id: 'kegiatan', label: 'Berita' },
+  { id: 'keuangan', label: 'Keuangan' },
   { id: 'galeri', label: 'Galeri' },
   { id: 'kontak', label: 'Kontak' },
 ]

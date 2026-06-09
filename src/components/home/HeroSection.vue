@@ -34,11 +34,11 @@
 
     <!-- Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 w-full">
-      <div class="max-w-3xl">
+      <div class="max-w-3xl lg:pl-24 2xl:pl-0">
         <!-- Badge -->
         <div ref="badge" class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/15 border border-secondary/30 mb-6 sm:mb-8 opacity-0 max-w-full overflow-hidden">
           <MapPin class="w-3 h-3 sm:w-4 sm:h-4 text-secondary shrink-0" />
-          <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">Perumahan Arjamukti • Desa Arjasari</span>
+          <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">Perumahan Arjamukti Kencana Raya</span>
         </div>
 
         <!-- Heading -->
@@ -58,24 +58,74 @@
         </p>
 
         <!-- CTA Buttons -->
-        <div ref="ctas" class="flex flex-wrap items-center gap-3 sm:gap-4 opacity-0">
+        <div ref="ctas" class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-4 opacity-0">
+          <button
+            @click="scrollToSection('keuangan')"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-white/10 text-white text-xs sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-1.5 sm:gap-2 group"
+          >
+            <Wallet class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
+            <span>Keuangan</span>
+          </button>
+
           <button
             @click="scrollToSection('layanan')"
-            class="px-6 py-2.5 sm:px-8 sm:py-4 bg-secondary text-dark text-sm sm:text-base font-bold rounded-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-2 group shadow-lg shadow-secondary/20"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20"
           >
-            Jelajahi Layanan
-            <ArrowRight class="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+            <Gift class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
+            <span>Qurban</span>
           </button>
-          
+
           <button
-            @click="scrollToSection('jadwal')"
-            class="px-6 py-2.5 sm:px-8 sm:py-4 bg-white/10 text-white text-sm sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-2"
+            @click="scrollToSection('layanan')"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-white/10 text-white text-xs sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-1.5 sm:gap-2 group"
           >
-            <Clock class="w-4 h-4 sm:w-5 sm:h-5" />
-            Jadwal Sholat
+            <HeartHandshake class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
+            <span>Zakat</span>
+          </button>
+
+          <!-- Donasi Mobile Only -->
+          <button
+            @click="isDonationModalOpen = true"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20 lg:hidden"
+          >
+            <HandCoins class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
+            <span>Donasi</span>
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- Floating Left Sidebar (Jadwal & Sosmed) -->
+    <div class="hidden lg:flex absolute left-8 top-1/2 -translate-y-1/2 flex-col items-start gap-4 z-20">
+      <button @click="scrollToSection('jadwal')" class="flex items-center overflow-hidden h-12 w-12 hover:w-[155px] rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-secondary hover:text-white hover:border-secondary transition-all duration-500 group shadow-lg shadow-black/20">
+        <div class="flex items-center justify-center min-w-[48px] h-full shrink-0">
+          <Clock class="w-5 h-5 group-hover:scale-110 transition-transform" />
+        </div>
+        <span class="text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Jadwal Sholat</span>
+      </button>
+      
+      <div class="w-px h-10 bg-white/20 ml-6"></div>
+      
+      <a href="#" class="flex items-center overflow-hidden h-10 w-10 hover:w-[110px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+        <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
+          <Instagram class="w-4 h-4 group-hover:scale-110 transition-transform" />
+        </div>
+        <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Instagram</span>
+      </a>
+      
+      <a href="#" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+        <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
+          <Facebook class="w-4 h-4 group-hover:scale-110 transition-transform" />
+        </div>
+        <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Facebook</span>
+      </a>
+      
+      <a href="#" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+        <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
+          <Youtube class="w-4 h-4 group-hover:scale-110 transition-transform" />
+        </div>
+        <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">YouTube</span>
+      </a>
     </div>
 
     <!-- Scroll Indicator -->
@@ -90,7 +140,8 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { ArrowRight, Clock, MapPin } from 'lucide-vue-next'
+import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Youtube, Wallet, HandCoins } from 'lucide-vue-next'
+import { isDonationModalOpen } from '@/composables/useDonationModal'
 import { gsap } from 'gsap'
 import { useAdminStore } from '@/stores/admin'
 import heroImg1 from '@/assets/images/hero-mosque.png'

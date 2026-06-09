@@ -5,9 +5,9 @@
       <div class="absolute inset-0 bg-gray-950/80 backdrop-blur-sm" @click="$emit('close')"></div>
       
       <!-- Modal Content -->
-      <div class="relative bg-white dark:bg-gray-900 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-white/10 flex flex-col max-h-[90vh]">
+      <div class="relative bg-white dark:bg-gray-900 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-gray-300 dark:border-white/10 flex flex-col h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh]">
         <!-- Header -->
-        <div class="px-6 py-4 border-b border-gray-100 dark:border-white/10 flex items-center justify-between bg-gray-50 dark:bg-gray-800/50">
+        <div class="px-6 py-4 border-b border-gray-300 dark:border-white/10 flex items-center justify-between bg-gray-50 dark:bg-gray-800/50">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <Heart class="w-5 h-5 text-primary animate-pulse" />
@@ -25,13 +25,13 @@
           <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl mb-6">
             <button 
               @click="activeTab = 'bank'" 
-              :class="['flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300', activeTab === 'bank' ? 'bg-white dark:bg-gray-700 text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']"
+              :class="['flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300', activeTab === 'bank' ? 'bg-white dark:bg-gray-700 text-primary shadow-md' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']"
             >
               Transfer Bank
             </button>
             <button 
               @click="activeTab = 'qris'" 
-              :class="['flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300', activeTab === 'qris' ? 'bg-white dark:bg-gray-700 text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']"
+              :class="['flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300', activeTab === 'qris' ? 'bg-white dark:bg-gray-700 text-primary shadow-md' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']"
             >
               Scan QRIS
             </button>
@@ -40,10 +40,10 @@
           <!-- Tab Content: Bank -->
           <div v-if="activeTab === 'bank'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <!-- Bank 1 -->
-            <div class="p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 hover:border-primary/30 transition-colors group">
+            <div class="p-4 rounded-2xl border border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 hover:border-primary/30 transition-colors group">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-2 shrink-0">
+                  <div class="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-2 shrink-0">
                     <Building2 class="w-6 h-6 text-emerald-600" />
                   </div>
                   <div>
@@ -51,7 +51,7 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400">a.n. DKM Masjid Jami Kassiti</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-xl shadow-inner border border-gray-100 dark:border-white/5">
+                <div class="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-xl shadow-inner border border-gray-300 dark:border-white/5">
                   <span class="font-mono font-bold text-base sm:text-lg text-primary tracking-wider">7453 555 555</span>
                   <button @click="copyText('7453555555')" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Salin Nomor Rekening">
                     <Copy class="w-4 h-4" />
@@ -61,10 +61,10 @@
             </div>
 
             <!-- Bank 2 -->
-            <div class="p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 hover:border-primary/30 transition-colors group">
+            <div class="p-4 rounded-2xl border border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 hover:border-primary/30 transition-colors group">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-2 shrink-0">
+                  <div class="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-2 shrink-0">
                     <Building class="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
@@ -72,7 +72,7 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400">a.n. DKM Masjid Jami Kassiti</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-xl shadow-inner border border-gray-100 dark:border-white/5">
+                <div class="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-xl shadow-inner border border-gray-300 dark:border-white/5">
                   <span class="font-mono font-bold text-base sm:text-lg text-primary tracking-wider">133 00 1234567 8</span>
                   <button @click="copyText('1330012345678')" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Salin Nomor Rekening">
                     <Copy class="w-4 h-4" />
@@ -86,34 +86,18 @@
 
           <!-- Tab Content: QRIS -->
           <div v-else-if="activeTab === 'qris'" class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="flex justify-center">
               <!-- QRIS 1 -->
-              <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-200 dark:border-white/10 text-center hover:border-primary/30 transition-colors">
-                <p class="font-bold text-gray-900 dark:text-white mb-3 text-sm">QRIS Operasional Masjid</p>
-                <div class="bg-white p-2 rounded-xl shadow-sm inline-block cursor-pointer hover:scale-105 transition-transform duration-300" @click="expandedImage = qris1" title="Perbesar Gambar">
-                  <img :src="qris1" alt="QRIS DKMJ" class="w-full max-w-[200px] h-auto object-contain rounded-lg" />
+              <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-3xl border border-gray-300 dark:border-white/10 text-center hover:border-primary/30 transition-colors w-full max-w-[280px]">
+                <p class="font-bold text-gray-900 dark:text-white mb-3 text-sm">QRIS Zakat, Infaq & Sedekah</p>
+                <div class="bg-white p-1 rounded-2xl shadow-lg inline-block cursor-pointer hover:scale-105 transition-transform duration-300 w-full" @click="expandedImage = qris1" title="Perbesar Gambar">
+                  <img :src="qris1" alt="QRIS DKMJ" class="w-full h-auto object-contain rounded-xl" />
                 </div>
                 <div class="flex items-center justify-center gap-4 mt-4">
                   <button @click="expandedImage = qris1" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
                     <Maximize2 class="w-3 h-3" /> Perbesar
                   </button>
                   <a :href="qris1" download="QRIS_Operasional_DKMJ.jpg" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
-                    <Download class="w-3 h-3" /> Simpan
-                  </a>
-                </div>
-              </div>
-              
-              <!-- QRIS 2 -->
-              <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-200 dark:border-white/10 text-center hover:border-primary/30 transition-colors">
-                <p class="font-bold text-gray-900 dark:text-white mb-3 text-sm">QRIS Zakat & Sedekah</p>
-                <div class="bg-white p-2 rounded-xl shadow-sm inline-block cursor-pointer hover:scale-105 transition-transform duration-300" @click="expandedImage = qris2" title="Perbesar Gambar">
-                  <img :src="qris2" alt="QRIS DKMJ 2" class="w-full max-w-[200px] h-auto object-contain rounded-lg" />
-                </div>
-                <div class="flex items-center justify-center gap-4 mt-4">
-                  <button @click="expandedImage = qris2" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
-                    <Maximize2 class="w-3 h-3" /> Perbesar
-                  </button>
-                  <a :href="qris2" download="QRIS_Zakat_DKMJ.jpeg" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
                     <Download class="w-3 h-3" /> Simpan
                   </a>
                 </div>

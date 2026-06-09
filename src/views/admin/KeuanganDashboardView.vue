@@ -10,12 +10,12 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <button class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-200 dark:ring-white/10 shadow-sm text-sm flex items-center gap-2">
+        <button class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-300 dark:ring-white/10 shadow-md text-sm flex items-center gap-2">
           <Calendar class="w-4 h-4" />
           <span>Oktober 2023</span>
           <ChevronDown class="w-4 h-4 ml-1" />
         </button>
-        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2">
+        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
           <Download class="w-4 h-4" />
           <span class="hidden sm:inline">Unduh Laporan</span>
         </button>
@@ -45,7 +45,7 @@
       </div>
 
       <!-- Stat: Pemasukan -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-md transition-shadow">
         <div class="flex items-center justify-between mb-4">
           <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Pemasukan</p>
           <div class="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg">
@@ -62,7 +62,7 @@
       </div>
 
       <!-- Stat: Pengeluaran -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-md transition-shadow">
         <div class="flex items-center justify-between mb-4">
           <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Pengeluaran</p>
           <div class="p-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg">
@@ -79,7 +79,7 @@
       </div>
 
       <!-- Stat: Selisih -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-md transition-shadow">
         <div class="flex items-center justify-between mb-4">
           <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Surplus Bulan Ini</p>
           <div class="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-lg">
@@ -99,8 +99,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
       <!-- Chart Widget -->
-      <div class="lg:col-span-2 bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl shadow-sm flex flex-col">
-        <div class="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
+      <div class="lg:col-span-2 bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md flex flex-col">
+        <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
           <div>
             <h2 class="text-base font-semibold text-gray-900 dark:text-white">Arus Kas Bulanan</h2>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Pemasukan & Pengeluaran 6 bulan terakhir</p>
@@ -131,8 +131,8 @@
       </div>
 
       <!-- Recent Transactions Widget -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-2xl shadow-sm flex flex-col">
-        <div class="p-6 border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md flex flex-col">
+        <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
           <h2 class="text-base font-semibold text-gray-900 dark:text-white">Transaksi Terbaru</h2>
           <button class="text-xs font-medium text-secondary hover:text-yellow-600 transition-colors">Lihat Semua</button>
         </div>

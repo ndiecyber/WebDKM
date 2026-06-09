@@ -9,11 +9,11 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-lg flex p-1">
-          <button class="px-3 py-1.5 text-sm font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/5 transition-all">Tahun Ini</button>
+        <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg flex p-1">
+          <button class="px-3 py-1.5 text-sm font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white shadow-md ring-1 ring-black/5 dark:ring-white/5 transition-all">Tahun Ini</button>
           <button class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-all">Bulan Ini</button>
         </div>
-        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2">
+        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
           <Download class="w-4 h-4" />
           <span>Unduh PDF</span>
         </button>
@@ -23,7 +23,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
       <!-- Main Chart (Arus Kas) -->
-      <div class="lg:col-span-2 bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-6 shadow-sm">
+      <div class="lg:col-span-2 bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-6 shadow-md">
         <div class="flex items-center justify-between mb-6">
           <div>
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Arus Kas (Cash Flow)</h3>
@@ -35,7 +35,7 @@
         </div>
         <div class="h-80 w-full">
           <!-- Placeholder for ApexCharts. In a real app we'd use <apexchart /> here -->
-          <div class="w-full h-full rounded-lg bg-gray-50 dark:bg-gray-950/50 border border-dashed border-gray-200 dark:border-white/10 flex flex-col items-center justify-center text-gray-500">
+          <div class="w-full h-full rounded-lg bg-gray-50 dark:bg-gray-950/50 border border-dashed border-gray-300 dark:border-white/10 flex flex-col items-center justify-center text-gray-500">
             <BarChart3 class="w-10 h-10 mb-3 opacity-50" />
             <p class="font-medium text-gray-600 dark:text-gray-400">Grafik Arus Kas</p>
             <p class="text-xs mt-1">Data akan divisualisasikan oleh ApexCharts</p>
@@ -44,14 +44,14 @@
       </div>
 
       <!-- Donut Chart (Distribusi Pengeluaran) -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-6 shadow-sm flex flex-col">
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-6 shadow-md flex flex-col">
         <div class="mb-6">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Distribusi Pengeluaran</h3>
           <p class="text-sm text-gray-500 dark:text-gray-400">Berdasarkan kategori tahun ini</p>
         </div>
         <div class="flex-1 flex flex-col justify-center items-center relative">
           <!-- Donut Mockup -->
-          <div class="relative w-48 h-48 rounded-full border-[16px] border-gray-100 dark:border-gray-800 flex items-center justify-center mb-6">
+          <div class="relative w-48 h-48 rounded-full border-[16px] border-gray-300 dark:border-gray-800 flex items-center justify-center mb-6">
             <div class="absolute inset-0 rounded-full border-[16px] border-rose-500" style="clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0, 50% 0);"></div>
             <div class="absolute inset-0 rounded-full border-[16px] border-emerald-500" style="clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0, 50% 0); transform: rotate(120deg);"></div>
             <div class="absolute inset-0 rounded-full border-[16px] border-blue-500" style="clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0, 50% 0); transform: rotate(260deg);"></div>
@@ -124,7 +124,7 @@
         </div>
         <p class="text-2xl font-bold text-blue-900 dark:text-blue-300">Rp 101.150.000</p>
         <p class="text-sm text-blue-700 dark:text-blue-500 mt-2">
-          Saldo bersih tahun berjalan
+          Saldo akhir tahun berjalan
         </p>
       </div>
     </div>

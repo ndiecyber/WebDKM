@@ -13,7 +13,7 @@
       
       <!-- Left Column: Avatar & Summary -->
       <div class="space-y-6">
-        <div class="bg-gray-900 ring-1 ring-white/10 rounded-xl shadow-sm overflow-hidden relative">
+        <div class="bg-gray-900 ring-1 ring-white/10 rounded-xl shadow-md overflow-hidden relative">
           <div class="h-24 bg-linear-to-r from-gray-800 to-gray-700 w-full border-b border-white/5"></div>
           <div class="px-6 pb-6 relative">
             <div class="flex justify-between items-end -mt-10 mb-4">
@@ -48,7 +48,7 @@
       <div class="lg:col-span-2 space-y-6">
         
         <!-- Form: Informasi Pribadi -->
-        <form @submit.prevent="saveProfile" class="bg-gray-900 ring-1 ring-white/10 rounded-xl shadow-sm">
+        <form @submit.prevent="saveProfile" class="bg-gray-900 ring-1 ring-white/10 rounded-xl shadow-md">
           <div class="p-6 sm:p-8 border-b border-white/5">
             <h3 class="text-lg font-semibold text-white tracking-tight flex items-center gap-2">
               <UserCircle class="w-5 h-5 text-gray-400" />
@@ -65,7 +65,7 @@
                   v-model="profile.name"
                   type="text" 
                   required
-                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-sm"
+                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
                 />
               </div>
               <div class="space-y-1.5">
@@ -74,7 +74,7 @@
                   v-model="profile.email"
                   type="email" 
                   required
-                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-sm"
+                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
                 />
               </div>
             </div>
@@ -84,7 +84,7 @@
             <button 
               type="submit"
               :disabled="isSavingProfile"
-              class="bg-white/5 hover:bg-white/10 ring-1 ring-white/10 text-gray-200 font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              class="bg-white/5 hover:bg-white/10 ring-1 ring-white/10 text-gray-200 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <span v-if="isSavingProfile" class="w-4 h-4 border-2 border-gray-400 border-t-gray-100 rounded-full animate-spin"></span>
               <Save v-else class="w-4 h-4 text-gray-400" />
@@ -94,7 +94,7 @@
         </form>
 
         <!-- Form: Keamanan Akun -->
-        <form @submit.prevent="savePassword" class="bg-gray-900 ring-1 ring-white/10 rounded-xl shadow-sm">
+        <form @submit.prevent="savePassword" class="bg-gray-900 ring-1 ring-white/10 rounded-xl shadow-md">
           <div class="p-6 sm:p-8 border-b border-white/5">
             <h3 class="text-lg font-semibold text-white tracking-tight flex items-center gap-2">
               <Lock class="w-5 h-5 text-gray-400" />
@@ -110,7 +110,7 @@
                 v-model="passwordForm.current"
                 type="password" 
                 required
-                class="w-full sm:max-w-md bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-sm"
+                class="w-full sm:max-w-md bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
               />
             </div>
             
@@ -121,7 +121,7 @@
                   v-model="passwordForm.new"
                   type="password" 
                   required
-                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-sm"
+                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
                 />
               </div>
               <div class="space-y-1.5">
@@ -130,7 +130,7 @@
                   v-model="passwordForm.confirm"
                   type="password" 
                   required
-                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-sm"
+                  class="w-full bg-white/5 border-0 ring-1 ring-white/10 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
                 />
               </div>
             </div>
@@ -140,7 +140,7 @@
             <button 
               type="submit"
               :disabled="isSavingPassword"
-              class="bg-secondary hover:bg-yellow-500 text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              class="bg-secondary hover:bg-yellow-500 text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <span v-if="isSavingPassword" class="w-4 h-4 border-2 border-gray-950/30 border-t-gray-950 rounded-full animate-spin"></span>
               <Lock v-else class="w-4 h-4" />

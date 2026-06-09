@@ -52,7 +52,7 @@
           <div v-else class="py-14 text-center">
             <Search class="w-8 h-8 text-gray-600 mx-auto mb-3" />
             <h3 class="text-white font-medium">Pencarian tidak ditemukan</h3>
-            <p class="text-sm text-gray-500 mt-1">Coba gunakan kata kunci lain seperti 'Profil' atau 'Kegiatan'</p>
+            <p class="text-sm text-gray-500 mt-1">Coba gunakan kata kunci lain seperti 'Profil' atau 'Berita'</p>
           </div>
 
         </div>
@@ -103,7 +103,7 @@ const searchInput = ref(null)
 
 const commands = [
   { id: 'dashboard', title: 'Dashboard', description: 'Kembali ke ringkasan utama', icon: Home, route: 'admin-dashboard' },
-  { id: 'kegiatan', title: 'Kegiatan Masjid', description: 'Kelola jadwal dan agenda kegiatan', icon: Calendar, route: 'admin-kegiatan' },
+  { id: 'kegiatan', title: 'Berita Masjid', description: 'Kelola informasi dan berita masjid', icon: Calendar, route: 'admin-kegiatan' },
   { id: 'galeri', title: 'Galeri Foto', description: 'Unggah dan kelola album galeri', icon: Image, route: 'admin-galeri' },
   { id: 'layanan', title: 'Layanan & Fasilitas', description: 'Daftar layanan yang disediakan masjid', icon: Briefcase, route: 'admin-layanan' },
   { id: 'keuangan', title: 'Laporan Keuangan', description: 'Input data saldo akhir dan kas', icon: Wallet, route: 'admin-keuangan' },

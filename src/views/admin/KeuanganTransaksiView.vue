@@ -9,11 +9,11 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <button class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-200 dark:ring-white/10 shadow-sm text-sm flex items-center gap-2">
+        <button class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-300 dark:ring-white/10 shadow-md text-sm flex items-center gap-2">
           <Download class="w-4 h-4" />
           <span>Ekspor CSV</span>
         </button>
-        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2">
+        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
           <Plus class="w-4 h-4" />
           <span>Catat Transaksi</span>
         </button>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Filter & Search Bar -->
-    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
       <div class="relative w-full md:w-96">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <Search class="h-4 w-4 text-gray-400 dark:text-gray-500" />
@@ -29,11 +29,11 @@
         <input 
           type="text" 
           placeholder="Cari deskripsi atau nominal..." 
-          class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-200 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-sm"
+          class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
         />
       </div>
       <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
-        <button class="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white ring-1 ring-gray-200 dark:ring-white/5 whitespace-nowrap">
+        <button class="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-white/5 whitespace-nowrap">
           Semua
         </button>
         <button class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 whitespace-nowrap">
@@ -51,10 +51,10 @@
     </div>
 
     <!-- Table Section -->
-    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl overflow-hidden shadow-sm">
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl overflow-hidden shadow-md">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
-          <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-200 dark:border-white/5">
+          <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-300 dark:border-white/5">
             <tr>
               <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tanggal</th>
               <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Deskripsi</th>
@@ -85,7 +85,7 @@
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 ring-1 ring-gray-200 dark:ring-white/10">
+                <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 ring-1 ring-gray-300 dark:ring-white/10">
                   {{ tx.account }}
                 </span>
               </td>
@@ -108,7 +108,7 @@
       </div>
       
       <!-- Pagination Dummy -->
-      <div class="p-4 border-t border-gray-200 dark:border-white/5 flex items-center justify-between text-xs text-gray-500 bg-gray-50 dark:bg-gray-950/30">
+      <div class="p-4 border-t border-gray-300 dark:border-white/5 flex items-center justify-between text-xs text-gray-500 bg-gray-50 dark:bg-gray-950/30">
         <span>Menampilkan 1-10 dari 45 transaksi</span>
         <div class="flex items-center gap-1">
           <button class="p-1 rounded hover:bg-gray-200 dark:hover:bg-white/5 disabled:opacity-50" disabled>

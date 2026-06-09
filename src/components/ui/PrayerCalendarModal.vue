@@ -18,10 +18,10 @@
       ></div>
 
       <!-- Modal Content -->
-      <div class="relative w-full max-w-5xl max-h-[90vh] bg-white dark:bg-[#121220] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 dark:border-white/10">
+      <div class="relative w-full max-w-5xl h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] bg-white dark:bg-[#121220] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-300 dark:border-white/10">
         
         <!-- Header -->
-        <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-white/10">
+        <div class="flex items-center justify-between p-6 border-b border-gray-300 dark:border-white/10">
           <div>
             <h3 class="font-heading text-2xl font-bold text-dark dark:text-white">Kalender Jadwal Sholat</h3>
             <p class="text-sm text-gray-500 dark:text-white/60 mt-1">Berdasarkan lokasi Anda saat ini (Metode Kemenag RI)</p>
@@ -35,15 +35,15 @@
         </div>
 
         <!-- Controls (Month/Year) -->
-        <div class="p-4 sm:p-6 bg-gray-50 dark:bg-dark border-b border-gray-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
+        <div class="p-4 sm:p-6 bg-gray-50 dark:bg-dark border-b border-gray-300 dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-3">
-            <button @click="changeMonth(-1)" class="p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+            <button @click="changeMonth(-1)" class="p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
               <ChevronLeft class="w-5 h-5 text-dark dark:text-white" />
             </button>
             <h4 class="font-bold text-lg text-dark dark:text-white min-w-[150px] text-center">
               {{ monthName }} {{ currentYear }}
             </h4>
-            <button @click="changeMonth(1)" class="p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+            <button @click="changeMonth(1)" class="p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
               <ChevronRight class="w-5 h-5 text-dark dark:text-white" />
             </button>
           </div>
@@ -71,10 +71,10 @@
               <div 
                 v-for="(day, index) in calendarData" 
                 :key="'m-'+index"
-                class="bg-white dark:bg-[#1A1A2E] border border-gray-100 dark:border-white/10 rounded-xl p-4 shadow-sm transition-all"
+                class="bg-white dark:bg-[#1A1A2E] border border-gray-300 dark:border-white/10 rounded-xl p-4 shadow-md transition-all"
                 :class="isToday(day) ? 'ring-2 ring-secondary bg-secondary/5 dark:bg-secondary/10' : ''"
               >
-                <div class="flex items-center justify-between mb-3 border-b border-gray-100 dark:border-white/10 pb-2">
+                <div class="flex items-center justify-between mb-3 border-b border-gray-300 dark:border-white/10 pb-2">
                   <div class="font-bold text-dark dark:text-white flex items-center gap-2">
                     <span v-if="isToday(day)" class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
                     {{ formatDate(day.date.readable) }}
@@ -117,10 +117,10 @@
 
             <!-- Desktop View (Table) -->
             <div class="hidden lg:block overflow-x-auto custom-scrollbar pb-2">
-              <div class="min-w-[800px] bg-white dark:bg-[#1A1A2E] rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
+              <div class="min-w-[800px] bg-white dark:bg-[#1A1A2E] rounded-xl border border-gray-300 dark:border-white/10 shadow-md overflow-hidden">
                 <table class="w-full text-left border-collapse">
                   <thead>
-                    <tr class="bg-gray-100 dark:bg-white/5 border-b border-gray-200 dark:border-white/10">
+                    <tr class="bg-gray-100 dark:bg-white/5 border-b border-gray-300 dark:border-white/10">
                       <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap">Tanggal</th>
                       <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap">Imsak</th>
                       <th class="py-3 px-4 text-dark dark:text-white/90 font-bold text-sm uppercase tracking-wider whitespace-nowrap text-secondary">Subuh</th>

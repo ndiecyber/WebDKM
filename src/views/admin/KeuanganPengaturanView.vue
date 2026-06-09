@@ -10,8 +10,8 @@
 
     <div class="max-w-5xl space-y-6">
       <!-- Frontend Section -->
-      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl shadow-sm">
-        <div class="p-6 sm:p-8 border-b border-gray-100 dark:border-white/5">
+      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md">
+        <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
             <Layout class="w-5 h-5 text-secondary" />
             Frontend Repositories
@@ -22,9 +22,9 @@
         <div class="p-6 sm:p-8">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            <a href="https://github.com/ndiecyber/WebDKM" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-secondary/50 transition-all group">
+            <a href="https://github.com/ndiecyber/WebDKM" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-secondary/50 transition-all group">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Github class="w-6 h-6 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                 </div>
                 <div>
@@ -35,9 +35,9 @@
               </div>
             </a>
 
-            <a href="https://github.com/ndiecyber/KeuanganDKM" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-secondary/50 transition-all group">
+            <a href="https://github.com/ndiecyber/KeuanganDKM" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-secondary/50 transition-all group">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Github class="w-6 h-6 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                 </div>
                 <div>
@@ -48,9 +48,9 @@
               </div>
             </a>
 
-            <a href="https://github.com/ndiecyber/TabunganQurban" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-secondary/50 transition-all group">
+            <a href="https://github.com/ndiecyber/TabunganQurban" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-secondary/50 transition-all group">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Github class="w-6 h-6 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                 </div>
                 <div>
@@ -66,8 +66,8 @@
       </section>
 
       <!-- Backend Section -->
-      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl shadow-sm">
-        <div class="p-6 sm:p-8 border-b border-gray-100 dark:border-white/5">
+      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md">
+        <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
             <Server class="w-5 h-5 text-blue-500 dark:text-blue-400" />
             Backend Repositories
@@ -78,9 +78,9 @@
         <div class="p-6 sm:p-8">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            <a href="https://github.com/ndiecyber/BackendDKM" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-blue-500/50 transition-all group">
+            <a href="https://github.com/ndiecyber/BackendDKM" target="_blank" class="block bg-gray-50 dark:bg-gray-950 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-5 hover:bg-gray-100 dark:hover:bg-white/5 hover:ring-blue-500/50 transition-all group">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Github class="w-6 h-6 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                 </div>
                 <div>

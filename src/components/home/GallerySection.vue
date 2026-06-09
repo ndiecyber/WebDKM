@@ -1,11 +1,11 @@
 <template>
-  <section id="galeri" class="relative py-16 lg:py-24 bg-gray-50 dark:bg-dark overflow-hidden transition-colors duration-500">
+  <section id="galeri" class="relative py-8 lg:py-10 bg-gray-50 dark:bg-dark overflow-hidden transition-colors duration-500">
     <!-- Animated Islamic Pattern Background -->
     <IslamicPattern pattern-color="#5D2E2E" :show-sparkles="true" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
-      <div class="text-center mb-12 sm:mb-16" ref="headerRef">
+      <div class="text-center mb-6" ref="headerRef">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
           <span class="text-primary text-xs font-semibold tracking-wider uppercase">Galeri</span>
@@ -13,8 +13,8 @@
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-dark dark:text-white mb-4 transition-colors duration-500">
           Galeri <span class="text-primary dark:text-secondary">Masjid</span>
         </h2>
-        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-2xl mx-auto transition-colors duration-500">
-          Momen-momen indah dari kegiatan dan keindahan arsitektur Masjid Jami Kassiti
+        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-4xl mx-auto transition-colors duration-500">
+          Momen-momen berharga dalam berbagai kegiatan di Masjid Jami Kassiti
         </p>
       </div>
 

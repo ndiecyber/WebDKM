@@ -13,7 +13,7 @@
 
         <!-- Modal Content -->
         <div 
-          class="modal-content relative w-full max-w-2xl bg-white dark:bg-dark-light rounded-3xl shadow-2xl flex flex-col max-h-[90vh] border border-white/20 dark:border-white/10 overflow-hidden"
+          class="modal-content relative w-full max-w-2xl bg-white dark:bg-dark-light rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] border border-white/20 dark:border-white/10 overflow-hidden"
           role="dialog"
           aria-modal="true"
         >
