@@ -252,31 +252,31 @@
       <!-- Countdown to Next Prayer -->
       <div v-if="nextPrayer && !loading" class="flex justify-center mb-8 px-4" ref="countdownRef">
         <div 
-          class="relative border rounded-xl sm:rounded-2xl px-3 py-3 sm:px-6 sm:py-4 text-center transition-all duration-500 overflow-hidden backdrop-blur-xl w-[85%] sm:w-full max-w-xs sm:max-w-md shadow-lg"
+          class="relative inline-block border rounded-xl sm:rounded-2xl px-4 py-2 sm:px-6 sm:py-4 text-center transition-all duration-500 overflow-hidden backdrop-blur-xl shadow-lg"
           :class="isPrayerTimeNow ? 'bg-secondary/20 border-secondary/50 shadow-[0_0_50px_rgba(197,165,90,0.5)] animate-pulse' : 'bg-dark/40 dark:bg-dark-light/40 border-secondary/20'"
         >
           <!-- Alert overlay when prayer time -->
           <div v-if="isPrayerTimeNow" class="absolute inset-0 bg-secondary/10 animate-ping" style="animation-duration: 2s;"></div>
           
           <div class="relative z-10">
-            <p v-if="isPrayerTimeNow" class="text-secondary font-bold text-[9px] sm:text-sm tracking-wider uppercase mb-1.5 sm:mb-2 animate-bounce">
+            <p v-if="isPrayerTimeNow" class="text-secondary font-bold text-[9px] sm:text-sm tracking-wider uppercase mb-1 sm:mb-2 animate-bounce">
               Waktunya Sholat {{ nextPrayer.name }}
             </p>
-            <p v-else class="text-white/50 text-[9px] sm:text-xs uppercase tracking-wider mb-1.5 sm:mb-2 font-medium">Waktu menuju {{ nextPrayer.name }}</p>
+            <p v-else class="text-white/50 text-[9px] sm:text-xs uppercase tracking-wider mb-1 sm:mb-2 font-medium">Waktu menuju {{ nextPrayer.name }}</p>
             
             <div class="flex items-center justify-center gap-1 sm:gap-2">
-              <div class="text-center w-12 sm:w-16 shrink-0">
-                <p class="font-mono text-xl sm:text-3xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.hours }}</p>
+              <div class="text-center w-10 sm:w-16 shrink-0">
+                <p class="font-mono text-lg sm:text-3xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.hours }}</p>
                 <p class="text-white/30 text-[8px] sm:text-[9px] uppercase tracking-wider mt-0.5 font-semibold">Jam</p>
               </div>
-            <span class="text-secondary/50 text-lg sm:text-2xl font-bold pb-2 sm:pb-3">:</span>
-            <div class="text-center w-12 sm:w-16 shrink-0">
-              <p class="font-mono text-xl sm:text-3xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.minutes }}</p>
+            <span class="text-secondary/50 text-base sm:text-2xl font-bold pb-2 sm:pb-3">:</span>
+            <div class="text-center w-10 sm:w-16 shrink-0">
+              <p class="font-mono text-lg sm:text-3xl font-bold" :class="isPrayerTimeNow ? 'text-white' : 'text-secondary'">{{ countdown.minutes }}</p>
               <p class="text-white/30 text-[8px] sm:text-[9px] uppercase tracking-wider mt-0.5 font-semibold">Menit</p>
             </div>
-            <span class="text-secondary/50 text-lg sm:text-2xl font-bold pb-2 sm:pb-3">:</span>
-            <div class="text-center w-12 sm:w-16 shrink-0">
-              <p class="font-mono text-xl sm:text-3xl font-bold text-white">{{ countdown.seconds }}</p>
+            <span class="text-secondary/50 text-base sm:text-2xl font-bold pb-2 sm:pb-3">:</span>
+            <div class="text-center w-10 sm:w-16 shrink-0">
+              <p class="font-mono text-lg sm:text-3xl font-bold text-white">{{ countdown.seconds }}</p>
               <p class="text-white/30 text-[8px] sm:text-[9px] uppercase tracking-wider mt-0.5 font-semibold">Detik</p>
             </div>
           </div>
