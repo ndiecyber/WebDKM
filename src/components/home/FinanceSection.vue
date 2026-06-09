@@ -42,7 +42,7 @@
       </div>
 
       <!-- Cards Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 pb-6" ref="cardsRef">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6 pb-6" ref="cardsRef">
         
         <!-- Saldo Awal -->
         <div 
@@ -375,7 +375,7 @@
             v-for="(report, index) in filteredSpecialReports" 
             :key="report.id"
             @click="openSpecialReport(report)"
-            class="group cursor-pointer bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 hover:border-primary/50 dark:hover:border-secondary/50 rounded-xl sm:rounded-2xl p-2 sm:px-4 sm:py-2.5 transition-all duration-300 shadow-sm hover:shadow-lg flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
+            class="group cursor-pointer bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 hover:border-primary/50 dark:hover:border-secondary/50 rounded-xl sm:rounded-2xl p-3 sm:px-4 sm:py-2.5 transition-all duration-300 shadow-sm hover:shadow-lg flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
           >
             <!-- Title & Icon -->
             <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-[35%] lg:w-[30%] shrink-0">

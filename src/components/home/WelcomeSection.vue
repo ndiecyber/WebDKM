@@ -61,12 +61,12 @@
           </div>
 
           <!-- Floating Card -->
-          <div class="absolute -bottom-6 -left-6 bg-white dark:bg-dark-light rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-white/5 max-w-[280px] z-10">
-            <div class="flex items-center gap-4 mb-3">
-              <MosqueLogo variant="icon" :iconSize="48" class="text-primary dark:text-secondary drop-shadow-md" />
-              <h4 class="font-heading text-xl font-bold text-dark dark:text-white leading-tight">Masjid Kassiti</h4>
+          <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white dark:bg-dark-light rounded-xl p-3.5 shadow-lg border border-gray-100 dark:border-white/5 max-w-[240px] z-10">
+            <div class="flex items-center gap-2.5 mb-1.5">
+              <MosqueLogo variant="icon" :iconSize="32" class="text-primary dark:text-secondary drop-shadow-md" />
+              <h4 class="font-heading text-sm font-bold text-dark dark:text-white leading-tight">Masjid Kassiti</h4>
             </div>
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti</p>
+            <p class="text-gray-600 dark:text-gray-400 text-[11px] leading-relaxed">Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti</p>
           </div>
 
           <!-- Decorative Element -->

@@ -32,7 +32,7 @@
       <div class="flex items-center justify-between">
         <!-- Logo -->
         <a href="#beranda" class="flex items-center group" @click.prevent="scrollToSection('beranda')">
-          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300" />
+          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300 text-transparent" />
         </a>
 
         <!-- Desktop Menu -->
