@@ -823,6 +823,7 @@ async function fetchPrayerTimes(lat, lng) {
       if (hijri) {
         hijriDay.value = parseInt(hijri.day) || 15
         hijriDate.value = `${hijri.day} ${hijri.month.en} ${hijri.year} H`
+        prayerStore.setHijriDate(hijriDate.value)
       }
 
       updatePrayerStatus()
@@ -904,6 +905,17 @@ function setFallbackTimes() {
   prayers.value[6].time = '18:58' // Isya
   locationName.value = 'Arjasari, Jawa Barat (default)'
   qiblaDirection.value = 295.14
+
+  try {
+    const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
+    hijriDate.value = formatter.format(new Date()) + ' H';
+  } catch(e) {
+    hijriDate.value = "10 Dzulqa'dah 1445 H";
+  }
+  prayerStore.setHijriDate(hijriDate.value);
+
   updatePrayerStatus()
   updateCountdown()
   updateCelestialBody()

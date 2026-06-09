@@ -16,12 +16,13 @@
           <div class="flex items-center gap-2" v-if="nextPrayer">
             <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
             <span 
+              v-if="hijriDate"
               class="text-[10px] sm:text-[11px] font-medium tracking-wide uppercase transition-colors duration-500" 
               :class="(!scrolled || isDark) ? 'text-white/80' : 'text-gray-600'"
             >
-              Waktu Berikutnya:
+              {{ hijriDate }} <span class="mx-0.5 opacity-50">|</span>
             </span>
-            <span class="text-secondary font-bold text-[11px] sm:text-xs">{{ nextPrayer.name }} {{ nextPrayer.time }}</span>
+            <span class="text-secondary font-bold text-[11px] sm:text-xs tracking-wide uppercase">{{ nextPrayer.name }} {{ nextPrayer.time }}</span>
           </div>
         </div>
       </div>
@@ -215,6 +216,7 @@ const buttonClass = computed(() => {
 
 // Mini Prayer Logic synced from global store
 const nextPrayer = computed(() => prayerStore.nextPrayer)
+const hijriDate = computed(() => prayerStore.hijriDate)
 
 const menuItems = [
   { id: 'beranda', label: 'Beranda' },
