@@ -86,34 +86,18 @@
 
           <!-- Tab Content: QRIS -->
           <div v-else-if="activeTab === 'qris'" class="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="flex justify-center">
               <!-- QRIS 1 -->
-              <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-300 dark:border-white/10 text-center hover:border-primary/30 transition-colors">
-                <p class="font-bold text-gray-900 dark:text-white mb-3 text-sm">QRIS Operasional Masjid</p>
-                <div class="bg-white p-2 rounded-xl shadow-md inline-block cursor-pointer hover:scale-105 transition-transform duration-300" @click="expandedImage = qris1" title="Perbesar Gambar">
-                  <img :src="qris1" alt="QRIS DKMJ" class="w-full max-w-[200px] h-auto object-contain rounded-lg" />
+              <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-3xl border border-gray-300 dark:border-white/10 text-center hover:border-primary/30 transition-colors w-full max-w-[280px]">
+                <p class="font-bold text-gray-900 dark:text-white mb-3 text-sm">QRIS Zakat, Infaq & Sedekah</p>
+                <div class="bg-white p-1 rounded-2xl shadow-lg inline-block cursor-pointer hover:scale-105 transition-transform duration-300 w-full" @click="expandedImage = qris1" title="Perbesar Gambar">
+                  <img :src="qris1" alt="QRIS DKMJ" class="w-full h-auto object-contain rounded-xl" />
                 </div>
                 <div class="flex items-center justify-center gap-4 mt-4">
                   <button @click="expandedImage = qris1" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
                     <Maximize2 class="w-3 h-3" /> Perbesar
                   </button>
                   <a :href="qris1" download="QRIS_Operasional_DKMJ.jpg" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
-                    <Download class="w-3 h-3" /> Simpan
-                  </a>
-                </div>
-              </div>
-              
-              <!-- QRIS 2 -->
-              <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-300 dark:border-white/10 text-center hover:border-primary/30 transition-colors">
-                <p class="font-bold text-gray-900 dark:text-white mb-3 text-sm">QRIS Zakat & Sedekah</p>
-                <div class="bg-white p-2 rounded-xl shadow-md inline-block cursor-pointer hover:scale-105 transition-transform duration-300" @click="expandedImage = qris2" title="Perbesar Gambar">
-                  <img :src="qris2" alt="QRIS DKMJ 2" class="w-full max-w-[200px] h-auto object-contain rounded-lg" />
-                </div>
-                <div class="flex items-center justify-center gap-4 mt-4">
-                  <button @click="expandedImage = qris2" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
-                    <Maximize2 class="w-3 h-3" /> Perbesar
-                  </button>
-                  <a :href="qris2" download="QRIS_Zakat_DKMJ.jpeg" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
                     <Download class="w-3 h-3" /> Simpan
                   </a>
                 </div>

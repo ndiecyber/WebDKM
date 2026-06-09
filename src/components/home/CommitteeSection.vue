@@ -5,7 +5,7 @@
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
-      <div class="text-center mb-16" ref="headerRef">
+      <div class="text-center mb-6" ref="headerRef">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
           <span class="text-primary text-xs font-semibold tracking-wider uppercase">Struktur Organisasi</span>
@@ -13,8 +13,8 @@
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-dark dark:text-white mb-4 transition-colors duration-500">
           Pengurus <span class="text-primary dark:text-secondary">DKM</span>
         </h2>
-        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-2xl mx-auto transition-colors duration-500">
-          Susunan kepengurusan Dewan Kemakmuran Masjid Jami Kassiti periode 2024-2027
+        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-4xl mx-auto transition-colors duration-500">
+          Mengenal lebih dekat para pengurus yang berdedikasi melayani jamaah Masjid Jami Kassiti periode 2024-2027
         </p>
       </div>
 

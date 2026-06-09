@@ -1,5 +1,5 @@
 <template>
-  <section id="donasi" class="relative py-20 lg:py-32 bg-slate-50 dark:bg-[#0B1120] transition-colors duration-500 overflow-hidden">
+  <section id="donasi" class="relative py-8 lg:py-10 bg-slate-50 dark:bg-[#0B1120] transition-colors duration-500 overflow-hidden">
     
     <!-- Animated Islamic Pattern Background for the section -->
     <IslamicPattern pattern-color="#0D4F4F" pattern-opacity="opacity-[0.25] dark:opacity-20" class="absolute inset-0 w-full h-full" />

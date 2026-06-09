@@ -163,22 +163,12 @@
               </div>
             </div>
 
-            <!-- Tanda Tangan -->
-            <div class="flex justify-between items-start pt-10 pb-4">
-              <div class="text-center">
-                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-12 uppercase">{{ report.ttdKiriTitle || 'Ketua Panitia' }}</p>
-                <p class="text-sm font-bold text-dark dark:text-white underline underline-offset-4">{{ report.ketua }}</p>
-              </div>
-              
-              <!-- QR Code Placeholder -->
-              <div class="hidden sm:flex flex-col items-center justify-center opacity-50">
+
+            <!-- Barcode / QR Code Verified -->
+            <div class="flex justify-center pt-8 pb-4">
+              <div class="flex flex-col items-center justify-center opacity-50">
                 <QrCode class="w-16 h-16 text-gray-400" />
                 <span class="text-[8px] mt-1 text-gray-400 tracking-widest uppercase">Verified</span>
-              </div>
-
-              <div class="text-center">
-                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-12 uppercase">Bendahara</p>
-                <p class="text-sm font-bold text-dark dark:text-white underline underline-offset-4">{{ report.bendahara }}</p>
               </div>
             </div>
 

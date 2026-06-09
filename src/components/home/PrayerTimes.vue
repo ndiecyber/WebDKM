@@ -1,5 +1,5 @@
 <template>
-  <section id="jadwal" :class="['relative pt-32 pb-28 lg:pt-32 lg:pb-24 transition-all duration-1000 overflow-hidden', skyThemeClass]" @mousemove="handleSectionMouseMove">
+  <section id="jadwal" :class="['relative py-8 lg:py-10 transition-all duration-1000 overflow-hidden', skyThemeClass]" @mousemove="handleSectionMouseMove">
     <!-- Layer 0: Sky Gradient & Base Pattern -->
     <div class="absolute inset-0 z-0">
       <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-30 dark:opacity-50" />
@@ -195,8 +195,8 @@
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
           Waktu <span class="text-gradient-gold drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">Sholat</span> Hari Ini
         </h2>
-        <p class="text-white/80 text-base sm:text-lg max-w-2xl mx-auto font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-          {{ currentDate }}
+        <p class="text-white/80 text-base sm:text-lg max-w-4xl mx-auto font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+          Waktu sholat untuk wilayah Tasikmalaya dan sekitarnya
         </p>
       </div>
 

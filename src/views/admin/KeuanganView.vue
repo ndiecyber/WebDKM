@@ -118,7 +118,7 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-1.5">
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Selisih Bersih (Bottom Bar)</label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Saldo Akhir (Bottom Bar)</label>
               <input v-model="form.selisihBersih" type="text" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm" placeholder="7.000.000" />
             </div>
           </div>

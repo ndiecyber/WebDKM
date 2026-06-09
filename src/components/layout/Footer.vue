@@ -191,9 +191,9 @@ const socials = [
 const quickLinks = [
   { id: 'beranda', label: 'Beranda' },
   { id: 'tentang', label: 'Tentang Kami' },
-  { id: 'jadwal', label: 'Jadwal Sholat' },
   { id: 'layanan', label: 'Layanan' },
-  { id: 'kegiatan', label: 'Kegiatan' },
+  { id: 'kegiatan', label: 'Berita' },
+  { id: 'keuangan', label: 'Keuangan' },
   { id: 'galeri', label: 'Galeri' },
   { id: 'donasi', label: 'Donasi' },
 ]

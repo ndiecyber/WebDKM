@@ -1,5 +1,5 @@
 <template>
-  <section class="relative py-16 lg:py-24 bg-gray-50 dark:bg-[#0A0F16] overflow-hidden transition-colors duration-500 perspective-1000" ref="sectionRef" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
+  <section class="relative py-8 lg:py-10 bg-gray-50 dark:bg-[#0A0F16] overflow-hidden transition-colors duration-500 perspective-1000" ref="sectionRef" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
     <!-- Deep Space/Aurora Background Elements -->
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent opacity-80"></div>
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-secondary/5 via-transparent to-transparent opacity-80"></div>

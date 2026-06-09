@@ -1,10 +1,10 @@
 <template>
-  <section id="layanan" class="relative py-16 lg:py-20 bg-white dark:bg-dark overflow-hidden transition-colors duration-500">
+  <section id="layanan" class="relative py-8 lg:py-10 bg-white dark:bg-dark overflow-hidden transition-colors duration-500">
     <!-- Animated Islamic Pattern Background -->
     <IslamicPattern pattern-color="#C5A55A" :show-sparkles="false" />
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
-      <div class="text-center mb-16" ref="headerRef">
+      <div class="text-center mb-6" ref="headerRef">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
           <span class="text-primary text-xs font-semibold tracking-wider uppercase">Layanan Kami</span>
@@ -12,7 +12,7 @@
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-dark dark:text-white mb-4 transition-colors duration-500">
           Layanan <span class="text-primary dark:text-secondary">Masjid</span>
         </h2>
-        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-2xl mx-auto transition-colors duration-500">
+        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-4xl mx-auto transition-colors duration-500">
           Berbagai program dan layanan untuk memenuhi kebutuhan spiritual dan sosial umat
         </p>
       </div>
@@ -25,7 +25,7 @@
             :key="cat"
             @click="activeCategory = cat"
             :class="[
-              'px-3 py-2 sm:px-8 sm:py-3 text-xs sm:text-base font-semibold rounded-xl sm:rounded-full transition-all duration-300 shrink-0 flex-1 sm:flex-none text-center',
+              'px-3 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold rounded-xl sm:rounded-full transition-all duration-300 shrink-0 flex-1 sm:flex-none text-center',
               activeCategory === cat 
                 ? 'bg-primary text-white shadow-md' 
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-white/5'

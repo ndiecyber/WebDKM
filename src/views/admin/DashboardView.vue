@@ -38,7 +38,7 @@
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 dark:bg-emerald-900/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
-            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Kegiatan</p>
+            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Berita</p>
             <div class="p-2.5 bg-linear-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-800/20 text-emerald-600 dark:text-emerald-400 rounded-xl ring-1 ring-emerald-200 dark:ring-emerald-800/50">
               <Calendar class="w-5 h-5" />
             </div>
@@ -169,7 +169,7 @@
       <!-- Upcoming Activities Widget -->
       <div class="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border border-gray-300 dark:border-white/20 rounded-2xl shadow-md flex flex-col hover:shadow-xl transition-shadow duration-500">
         <div class="p-6 border-b border-gray-300 dark:border-white/20 flex items-center justify-between">
-          <h2 class="text-base font-semibold text-gray-900 dark:text-white">Kegiatan Mendatang</h2>
+          <h2 class="text-base font-semibold text-gray-900 dark:text-white">Berita Terkait</h2>
           <router-link :to="{ name: 'admin-kegiatan' }" class="text-sm font-medium text-secondary hover:text-yellow-600 transition-colors">
             Lihat Semua
           </router-link>

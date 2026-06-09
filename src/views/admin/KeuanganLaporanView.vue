@@ -124,7 +124,7 @@
         </div>
         <p class="text-2xl font-bold text-blue-900 dark:text-blue-300">Rp 101.150.000</p>
         <p class="text-sm text-blue-700 dark:text-blue-500 mt-2">
-          Saldo bersih tahun berjalan
+          Saldo akhir tahun berjalan
         </p>
       </div>
     </div>

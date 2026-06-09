@@ -2,15 +2,15 @@
   <div>
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-1">Daftar Kegiatan</h1>
-        <p class="text-gray-500 dark:text-white/50 text-sm">Kelola jadwal kajian dan kegiatan masjid</p>
+        <h1 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-1">Daftar Berita</h1>
+        <p class="text-gray-500 dark:text-white/50 text-sm">Kelola informasi dan berita masjid</p>
       </div>
       <button 
         @click="openAddModal"
         class="bg-secondary hover:bg-secondary-light text-white dark:text-dark font-bold px-5 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-secondary/20 flex items-center gap-2 w-full sm:w-auto justify-center active:scale-95"
       >
         <Plus class="w-5 h-5" />
-        <span>Tambah Kegiatan</span>
+        <span>Tambah Berita</span>
       </button>
     </div>
 
@@ -23,7 +23,7 @@
           <thead>
             <tr class="bg-gray-50 dark:bg-dark/50 border-b border-gray-300 dark:border-white/5 text-gray-500 dark:text-white/50 text-sm uppercase tracking-wider">
               <th class="py-5 px-6 font-semibold w-16">No</th>
-              <th class="py-5 px-6 font-semibold">Kegiatan</th>
+              <th class="py-5 px-6 font-semibold">Berita</th>
               <th class="py-5 px-6 font-semibold">Waktu & Tempat</th>
               <th class="py-5 px-6 font-semibold text-center">Kategori</th>
               <th class="py-5 px-6 font-semibold text-right">Aksi</th>
@@ -119,14 +119,14 @@
         </div>
         <h3 class="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">Jadwal Masih Kosong</h3>
         <p class="text-gray-500 dark:text-white/50 max-w-sm mx-auto mb-8">
-          Belum ada agenda atau kegiatan yang terdaftar bulan ini. Mari buat jadwal kegiatan pertama Anda.
+          Belum ada berita yang terdaftar bulan ini. Mari buat berita pertama Anda.
         </p>
         <button 
           @click="openAddModal"
           class="bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 active:scale-95"
         >
           <Plus class="w-5 h-5" />
-          <span>Buat Kegiatan Baru</span>
+          <span>Buat Berita Baru</span>
         </button>
       </div>
 
@@ -143,7 +143,7 @@
               <Edit v-if="isEditing" class="w-5 h-5" />
               <Plus v-else class="w-5 h-5" />
             </div>
-            <h2 class="text-xl font-heading font-bold text-gray-900 dark:text-white">{{ isEditing ? 'Edit Kegiatan' : 'Tambah Kegiatan Baru' }}</h2>
+            <h2 class="text-xl font-heading font-bold text-gray-900 dark:text-white">{{ isEditing ? 'Edit Berita' : 'Tambah Berita Baru' }}</h2>
           </div>
           <button @click="closeModal" class="p-2 text-gray-400 dark:text-white/50 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/10 rounded-xl transition-all active:scale-90">
             <X class="w-5 h-5" />
@@ -155,7 +155,7 @@
             
             <!-- Image Upload Area -->
             <div>
-              <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Banner / Foto Kegiatan</label>
+              <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Banner / Foto Berita</label>
               <div 
                 class="relative border-2 border-dashed rounded-xl p-6 transition-all text-center flex flex-col items-center justify-center min-h-[160px]"
                 :class="[
@@ -195,7 +195,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Judul Kegiatan</label>
+                <label class="block text-gray-700 dark:text-white/70 text-sm font-medium mb-2">Judul Berita</label>
                 <input 
                   v-model="form.title"
                   type="text" 
@@ -303,7 +303,7 @@
             class="px-6 py-2.5 rounded-xl bg-secondary hover:bg-secondary-light text-white dark:text-dark font-bold shadow-lg shadow-secondary/20 transition-all active:scale-95 flex items-center gap-2"
           >
             <Save class="w-5 h-5" />
-            <span>{{ isEditing ? 'Simpan Perubahan' : 'Tambah Kegiatan' }}</span>
+            <span>{{ isEditing ? 'Simpan Perubahan' : 'Tambah Berita' }}</span>
           </button>
         </div>
       </div>
@@ -317,9 +317,9 @@
         <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-4 text-red-500">
           <AlertTriangle class="w-8 h-8 text-red-600 dark:text-red-500" />
         </div>
-        <h3 class="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">Hapus Kegiatan?</h3>
+        <h3 class="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">Hapus Berita?</h3>
         <p class="text-gray-500 dark:text-white/60 text-sm mb-8">
-          Tindakan ini tidak dapat dibatalkan. Kegiatan <strong>"{{ itemToDelete?.title }}"</strong> akan dihapus secara permanen.
+          Tindakan ini tidak dapat dibatalkan. Berita <strong>"{{ itemToDelete?.title }}"</strong> akan dihapus secara permanen.
         </p>
         <div class="flex items-center gap-3 w-full">
           <button 
@@ -419,7 +419,7 @@ const saveKegiatan = () => {
       adminStore.kegiatan[index] = { ...form.value }
       adminStore.saveKegiatan()
     }
-    toastStore.addToast('Kegiatan berhasil diperbarui', 'success')
+    toastStore.addToast('Berita berhasil diperbarui', 'success')
   } else {
     const newId = adminStore.kegiatan.length > 0 ? Math.max(...adminStore.kegiatan.map(k => k.id)) + 1 : 1
     
@@ -435,7 +435,7 @@ const saveKegiatan = () => {
       image: defImg
     })
     adminStore.saveKegiatan()
-    toastStore.addToast('Kegiatan baru berhasil ditambahkan', 'success')
+    toastStore.addToast('Berita baru berhasil ditambahkan', 'success')
   }
   
   closeModal()
@@ -457,7 +457,7 @@ const confirmDelete = () => {
   if (itemToDelete.value) {
     adminStore.kegiatan = adminStore.kegiatan.filter(k => k.id !== itemToDelete.value.id)
     adminStore.saveKegiatan()
-    toastStore.addToast('Kegiatan berhasil dihapus', 'error')
+    toastStore.addToast('Berita berhasil dihapus', 'error')
   }
   closeDeleteModal()
 }

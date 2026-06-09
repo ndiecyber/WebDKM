@@ -93,10 +93,10 @@
 
           <a
             href="#"
-            class="ml-3 px-6 py-2.5 bg-secondary text-dark font-semibold text-sm rounded-full hover:bg-secondary-light transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group shrink-0"
+            class="ml-3 px-6 py-2.5 bg-secondary text-white font-semibold text-sm rounded-full hover:bg-white hover:text-dark transition-all duration-300 hover:shadow-lg hover:shadow-secondary/30 flex items-center gap-2 group shrink-0"
             @click.prevent="isDonationModalOpen = true"
           >
-            <HandCoins class="w-5 h-5 text-dark group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
+            <HandCoins class="w-5 h-5 text-current group-hover:-translate-y-1 group-hover:scale-110 transition-transform duration-300 animate-[pulse_2s_ease-in-out_infinite]" />
             Donasi
           </a>
         </div>
@@ -219,9 +219,9 @@ const nextPrayer = computed(() => prayerStore.nextPrayer)
 const menuItems = [
   { id: 'beranda', label: 'Beranda' },
   { id: 'tentang', label: 'Tentang' },
-  { id: 'jadwal', label: 'Jadwal Sholat' },
   { id: 'layanan', label: 'Layanan' },
-  { id: 'kegiatan', label: 'Kegiatan' },
+  { id: 'kegiatan', label: 'Berita' },
+  { id: 'keuangan', label: 'Keuangan' },
   { id: 'galeri', label: 'Galeri' },
   { id: 'kontak', label: 'Kontak' },
 ]
