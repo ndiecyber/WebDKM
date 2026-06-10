@@ -176,12 +176,13 @@
                       :class="member.isLeader ? 'border-primary/40 dark:border-secondary/40 bg-primary/[0.02] dark:bg-secondary/[0.02] ring-1 ring-primary/20 dark:ring-secondary/20 shadow-md col-span-2 sm:col-span-1' : 'bg-white/80 dark:bg-white/[0.03] border-gray-200/50 dark:border-white/10 shadow-sm'"
                       class="rounded-2xl p-5 flex flex-col items-center text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
                     >
-                      <!-- Leader has unique gold gradient avatar (Enlarged) -->
-                      <div 
-                        :class="member.isLeader ? 'from-amber-400 to-amber-600 ring-amber-500/10' : 'from-emerald-400 to-teal-600 ring-emerald-500/10'"
-                        class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-linear-to-br text-white flex items-center justify-center font-extrabold text-xl sm:text-2xl mb-4 shadow-lg ring-4 group-hover:scale-105 transition-all duration-300"
-                      >
-                        {{ getInitials(member.name) }}
+                      <!-- Officer Photo or elegant Gradient Avatar with Initials -->
+                      <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full mb-4 shadow-lg ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
+                           :class="member.isLeader ? 'ring-amber-500/10' : 'ring-emerald-500/10'">
+                        <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
+                        <div v-else :class="member.isLeader ? 'bg-linear-to-br from-amber-400 to-amber-600' : 'bg-linear-to-br from-emerald-400 to-teal-600'" class="w-full h-full flex items-center justify-center text-white font-extrabold text-xl sm:text-2xl">
+                          {{ getInitials(member.name) }}
+                        </div>
                       </div>
                       <h4 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</h4>
                       <span 
@@ -211,13 +212,13 @@
                         Seksi Pendidikan & Dakwah
                       </h5>
                       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="member in seksiDakwah" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                        <div v-for="(member, index) in seksiDakwah" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
                           <!-- Large Centered Avatar -->
                           <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-blue-500/10 group-hover:scale-105 group-hover:ring-blue-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
                           <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
-                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
+                          <p :class="index === 0 ? 'text-blue-600 dark:text-blue-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
                         </div>
                       </div>
                     </div>
@@ -229,13 +230,13 @@
                         Seksi Ekonomi & Wakaf
                       </h5>
                       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="member in seksiEkonomi" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                        <div v-for="(member, index) in seksiEkonomi" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
                           <!-- Large Centered Avatar -->
                           <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-emerald-500/10 group-hover:scale-105 group-hover:ring-emerald-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
                           <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
-                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
+                          <p :class="index === 0 ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
                         </div>
                       </div>
                     </div>
@@ -247,13 +248,13 @@
                         Seksi Peralatan & Logistik
                       </h5>
                       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="member in seksiLogistik" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                        <div v-for="(member, index) in seksiLogistik" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
                           <!-- Large Centered Avatar -->
                           <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-orange-500/10 group-hover:scale-105 group-hover:ring-orange-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
                           <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
-                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
+                          <p :class="index === 0 ? 'text-orange-600 dark:text-orange-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
                         </div>
                       </div>
                     </div>
@@ -265,13 +266,13 @@
                         Remaja Masjid
                       </h5>
                       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="member in remajaMasjid" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                        <div v-for="(member, index) in remajaMasjid" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
                           <!-- Large Centered Avatar -->
                           <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-pink-400 to-rose-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-pink-500/10 group-hover:scale-105 group-hover:ring-pink-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
                           <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
-                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
+                          <p :class="index === 0 ? 'text-pink-600 dark:text-pink-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
                         </div>
                       </div>
                     </div>
@@ -294,6 +295,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import interiorImage from '@/assets/images/mosque-interior.png'
+import dkmNasai from '@/assets/images/dkm-nasai.png'
+import dkmRandi from '@/assets/images/dkm-randi.png'
+import dkmRofik from '@/assets/images/dkm-rofik.png'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -341,9 +345,9 @@ const dewanPenasihat = [
 ]
 
 const pengurusHarian = [
-  { name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true },
-  { name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris' },
-  { name: 'Ust. Randi Rizal', role: 'Bendahara' }
+  { name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true, image: dkmNasai },
+  { name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris', image: dkmRofik },
+  { name: 'Ust. Randi Rizal', role: 'Bendahara', image: dkmRandi }
 ]
 
 const seksiDakwah = [
