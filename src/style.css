@@ -32,7 +32,7 @@ body {
   font-family: var(--font-family-body);
   color: #111827;
   background-color: #F9FAFB;
-  overflow-x: hidden;
+  /* overflow-x: hidden is removed because it breaks GSAP ScrollTrigger on iOS */
 }
 
 .dark body {

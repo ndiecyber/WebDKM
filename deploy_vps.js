@@ -23,12 +23,43 @@ conn.on('ready', () => {
       if (err) throw err;
       console.log('Upload successful. Executing setup commands...');
       
+      const nginxConf = `
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html;
+    server_name _;
+
+    # CRITICAL: Prevent Safari iOS from caching index.html
+    location = /index.html {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+
+    # Cache hashed assets forever (they have unique filenames)
+    location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    # SPA fallback
+    location / {
+        try_files \\$uri \\$uri/ /index.html;
+    }
+}
+`;
+
       const cmd = `
         echo '${password}' | sudo -S apt-get update &&
         echo '${password}' | sudo -S apt-get install -y nginx unzip &&
         echo '${password}' | sudo -S rm -rf /var/www/html/* &&
         echo '${password}' | sudo -S unzip -o /tmp/build_terbaru_masjid.zip -d /var/www/html/ &&
         echo '${password}' | sudo -S chown -R www-data:www-data /var/www/html/ &&
+        echo '${password}' | sudo -S bash -c 'cat > /etc/nginx/sites-available/default << NGINXEOF
+${nginxConf}
+NGINXEOF' &&
+        echo '${password}' | sudo -S nginx -t &&
         echo '${password}' | sudo -S systemctl restart nginx
       `;
       

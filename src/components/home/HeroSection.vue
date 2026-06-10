@@ -36,7 +36,7 @@
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 w-full">
       <div class="max-w-3xl lg:pl-24 2xl:pl-0">
         <!-- Badge -->
-        <div ref="badge" class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/15 border border-secondary/30 mb-6 sm:mb-8 opacity-0 max-w-full overflow-hidden">
+        <div ref="badge" class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/15 border border-secondary/30 mb-6 sm:mb-8 max-w-full overflow-hidden">
           <MapPin class="w-3 h-3 sm:w-4 sm:h-4 text-secondary shrink-0" />
           <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">Perumahan Arjamukti Kencana Raya</span>
         </div>
@@ -44,7 +44,7 @@
         <!-- Heading -->
         <h2
           ref="heading"
-          class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6 opacity-0"
+          class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6"
           v-html="settings.slogan"
         >
         </h2>
@@ -52,13 +52,13 @@
         <!-- Subtitle -->
         <p
           ref="subtitle"
-          class="text-white/70 text-sm sm:text-base md:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10 opacity-0"
+          class="text-white/70 text-sm sm:text-base md:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10"
         >
           {{ settings.description }}
         </p>
 
         <!-- CTA Buttons -->
-        <div ref="ctas" class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-4 opacity-0">
+        <div ref="ctas" class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-4">
           <button
             @click="scrollToSection('keuangan')"
             class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-white/10 text-white text-xs sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-1.5 sm:gap-2 group"
