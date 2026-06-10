@@ -44,32 +44,34 @@
         <div>
           <h4 class="text-secondary font-heading text-lg font-semibold mb-6">Layanan Utama</h4>
           <div class="flex flex-col gap-2">
-            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
-              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
-                <BookOpen class="w-4 h-4 text-secondary" />
+            <a 
+              v-for="service in layananUtama" 
+              :key="service.id" 
+              href="#layanan" 
+              class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
+            >
+              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20 overflow-hidden">
+                <div 
+                  v-if="service.iconName === 'Sholat' && processedSholatIcon" 
+                  class="w-5 h-5 bg-secondary group-hover:bg-white transition-colors duration-500"
+                  :style="{
+                    maskImage: `url(${processedSholatIcon})`,
+                    webkitMaskImage: `url(${processedSholatIcon})`,
+                    maskSize: 'contain',
+                    webkitMaskSize: 'contain',
+                    maskRepeat: 'no-repeat',
+                    webkitMaskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    webkitMaskPosition: 'center'
+                  }"
+                ></div>
+                <component 
+                  v-else 
+                  :is="iconMap[service.iconName] || Users" 
+                  class="w-4 h-4 text-secondary group-hover:text-white transition-colors duration-300" 
+                />
               </div>
-              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Taman Pendidikan Al-Quran</span>
-            </a>
-            
-            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
-              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
-                <Users class="w-4 h-4 text-secondary" />
-              </div>
-              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Majelis Taklim & Kajian</span>
-            </a>
-            
-            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
-              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
-                <HeartHandshake class="w-4 h-4 text-secondary" />
-              </div>
-              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Penerimaan ZISWAF</span>
-            </a>
-            
-            <a href="#layanan" class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
-              <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20">
-                <Car class="w-4 h-4 text-secondary" />
-              </div>
-              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">Layanan Ambulans Gratis</span>
+              <span class="text-white/70 group-hover:text-white text-sm font-medium transition-colors">{{ service.title }}</span>
             </a>
           </div>
         </div>
@@ -164,11 +166,30 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck } from 'lucide-vue-next'
+import { ref, computed, onMounted } from 'vue'
+import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck, GraduationCap, HandCoins } from 'lucide-vue-next'
 import logoImg from '@/assets/images/logo-kustom2.png'
+import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.png'
+import { createSilhouetteMask } from '@/utils/image'
+import { scrollToSection } from '@/utils/scroll'
+import { useAdminStore } from '@/stores/admin'
 
+const adminStore = useAdminStore()
 const currentYear = computed(() => new Date().getFullYear())
+
+const iconMap = {
+  Users, BookOpen, HeartHandshake, Car, GraduationCap, HandCoins
+}
+
+const layananUtama = computed(() => {
+  return adminStore.layanan
+})
+
+const processedSholatIcon = ref('')
+
+onMounted(async () => {
+  processedSholatIcon.value = await createSilhouetteMask(sholatSilhouetteImg)
+})
 
 // Copy Bank Account Logic
 const isCopied = ref(false)
@@ -198,8 +219,4 @@ const quickLinks = [
   { id: 'donasi', label: 'Donasi' },
 ]
 
-const scrollToSection = (id) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
-}
 </script>

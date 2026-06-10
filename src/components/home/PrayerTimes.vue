@@ -196,7 +196,7 @@
           Waktu <span class="text-gradient-gold drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">Sholat</span> Hari Ini
         </h2>
         <p class="text-white/80 text-base sm:text-lg max-w-4xl mx-auto font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-          Waktu sholat untuk wilayah Tasikmalaya dan sekitarnya
+          Waktu sholat untuk wilayah {{ locationCleanName }} dan sekitarnya
         </p>
       </div>
 
@@ -539,6 +539,15 @@ const currentDate = computed(() => {
     month: 'long',
     day: 'numeric',
   })
+})
+
+const locationCleanName = computed(() => {
+  if (loading.value) return 'Tasikmalaya'
+  if (locationError.value) return 'Tasikmalaya'
+  if (locationName.value) {
+    return locationName.value.replace(' (default)', '')
+  }
+  return 'Tasikmalaya'
 })
 
 const prayers = ref([
