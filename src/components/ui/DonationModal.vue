@@ -60,26 +60,7 @@
               </div>
             </div>
 
-            <!-- Bank 2 -->
-            <div class="p-4 rounded-2xl border border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 hover:border-primary/30 transition-colors group">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-2 shrink-0">
-                    <Building class="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white text-lg">Bank Mandiri</h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">a.n. DKM Masjid Jami Kassiti</p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-xl shadow-inner border border-gray-300 dark:border-white/5">
-                  <span class="font-mono font-bold text-base sm:text-lg text-primary tracking-wider">133 00 1234567 8</span>
-                  <button @click="copyText('1330012345678')" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Salin Nomor Rekening">
-                    <Copy class="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
+
 
             <p class="text-center text-xs text-gray-500 mt-4">Mohon sertakan kode unik <b class="text-primary">001</b> di akhir nominal (Contoh: Rp 50.001) untuk donasi operasional masjid.</p>
           </div>
@@ -129,7 +110,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { X, Heart, Building2, Building, Copy, Download, Info, Maximize2 } from 'lucide-vue-next'
+import { X, Heart, Building2, Copy, Download, Info, Maximize2 } from 'lucide-vue-next'
 import qris1 from '@/assets/images/QRIS DKMJ.jpg'
 import qris2 from '@/assets/images/QRIS DKMJ2.jpeg'
 
