@@ -130,8 +130,9 @@
         </div>
         
         <!-- Tengah (QR Code) -->
-        <div class="flex flex-col items-center justify-end opacity-50 pb-2">
-          <QrCode class="w-14 h-14 text-gray-400" />
+        <div class="flex flex-col items-center justify-end opacity-50 pb-2" :class="{ 'invisible': !showQR }">
+          <img v-if="customQR" :src="customQR" class="w-14 h-14 object-contain" alt="QR" />
+          <QrCode v-else class="w-14 h-14 text-gray-400" />
           <span class="text-[8px] mt-1 text-gray-400 tracking-widest uppercase text-center leading-tight">Verified<br>System</span>
         </div>
 
@@ -161,6 +162,14 @@ const props = defineProps({
   report: {
     type: Object,
     required: true
+  },
+  showQR: {
+    type: Boolean,
+    default: true
+  },
+  customQR: {
+    type: String,
+    default: null
   }
 })
 

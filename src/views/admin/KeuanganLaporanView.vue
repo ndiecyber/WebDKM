@@ -25,7 +25,7 @@
         <div class="flex-1 overflow-auto custom-scrollbar-y p-4 sm:p-8 bg-gray-100/50 dark:bg-[#0a0a0a]">
           <!-- Wrapper for Pages -->
           <div id="report-paper" class="flex flex-col items-center gap-8 pb-8 min-w-max">
-            <ReportKegiatanTemplate v-if="selectedReport" :report="selectedReport" />
+            <ReportKegiatanTemplate v-if="processedReport" :report="processedReport" :showQR="showQR" :customQR="customQRUrl" />
             
             <div v-else class="h-full w-full max-w-[794px] min-h-[800px] bg-white/50 dark:bg-gray-900/50 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-2xl flex flex-col items-center justify-center text-gray-400 opacity-80 space-y-4">
               <FileText class="w-16 h-16" />
@@ -70,12 +70,66 @@
               </select>
             </div>
             
-            <div v-if="selectedReport" class="p-3 bg-secondary/10 dark:bg-secondary/5 border border-secondary/20 rounded-lg mt-4">
-              <div class="flex items-start gap-2">
-                <Info class="w-4 h-4 text-secondary shrink-0 mt-0.5" />
-                <p class="text-xs text-gray-700 dark:text-gray-300">
-                  Laporan siap diekspor. Pastikan logo dan stempel sudah terlihat dengan baik pada preview sebelum mengunduh.
-                </p>
+            <div v-if="selectedReport" class="space-y-4 pt-4 border-t border-gray-200 dark:border-white/10 mt-4">
+              <h4 class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Kustomisasi Dokumen</h4>
+              
+              <!-- Override Tanggal -->
+              <div>
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Cetak</label>
+                <input v-model="overrideDate" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" placeholder="Contoh: 10 Januari 2026" />
+              </div>
+              
+              <!-- Override Ketua -->
+              <div>
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Ketua (Opsional)</label>
+                <input v-model="overrideKetua" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" />
+              </div>
+
+              <!-- Override Bendahara -->
+              <div>
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Bendahara (Opsional)</label>
+                <input v-model="overrideBendahara" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" />
+              </div>
+
+              <!-- Custom Notes -->
+              <div>
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan Tambahan</label>
+                <textarea v-model="customNote" rows="2" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all resize-none" placeholder="Isi catatan tambahan laporan..."></textarea>
+              </div>
+
+              <!-- QR Code Toggle -->
+              <div class="flex items-center justify-between pt-1">
+                <label class="text-xs font-medium text-gray-700 dark:text-gray-300 cursor-pointer" @click="showQR = !showQR">Stempel QR Code</label>
+                <button 
+                  @click="showQR = !showQR"
+                  :class="showQR ? 'bg-secondary' : 'bg-gray-300 dark:bg-gray-700'"
+                  class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
+                >
+                  <span 
+                    :class="showQR ? 'translate-x-4' : 'translate-x-0'"
+                    class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                  />
+                </button>
+              </div>
+
+              <!-- QR Code Upload (Hanya muncul jika QR aktif) -->
+              <div v-if="showQR" class="pt-2 border-t border-gray-100 dark:border-white/5">
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Upload QR Kustom (Opsional)</label>
+                <div v-if="!customQRUrl" class="flex items-center justify-center w-full">
+                  <label class="flex flex-col items-center justify-center w-full h-14 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-950 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors">
+                    <div class="flex flex-col items-center justify-center pt-2 pb-2">
+                      <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">Klik untuk upload gambar .png/.jpg</p>
+                    </div>
+                    <input type="file" class="hidden" accept="image/*" @change="handleQRUpload" />
+                  </label>
+                </div>
+                <div v-else class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg">
+                  <div class="flex items-center gap-2">
+                    <img :src="customQRUrl" class="w-8 h-8 object-contain rounded bg-white" />
+                    <span class="text-[10px] font-medium text-gray-600 dark:text-gray-400">QR Kustom Aktif</span>
+                  </div>
+                  <button @click="removeCustomQR" class="text-[10px] text-red-500 hover:text-red-600 font-bold px-2 py-1 bg-red-50 rounded">Hapus</button>
+                </div>
               </div>
             </div>
           </div>
@@ -171,6 +225,27 @@ const selectedYear = ref('2026')
 const selectedReportId = ref('')
 const isExporting = ref(false)
 
+// --- Export Override State ---
+const overrideKetua = ref('')
+const overrideBendahara = ref('')
+const customNote = ref('')
+const overrideDate = ref('')
+const showQR = ref(true)
+const customQRUrl = ref(null)
+
+const handleQRUpload = (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    if (customQRUrl.value) URL.revokeObjectURL(customQRUrl.value)
+    customQRUrl.value = URL.createObjectURL(file)
+  }
+}
+
+const removeCustomQR = () => {
+  if (customQRUrl.value) URL.revokeObjectURL(customQRUrl.value)
+  customQRUrl.value = null
+}
+
 // --- Computed ---
 const filteredReports = computed(() => {
   return mockReports.filter(r => r.year === selectedYear.value)
@@ -178,6 +253,33 @@ const filteredReports = computed(() => {
 
 const selectedReport = computed(() => {
   return mockReports.find(r => r.id === selectedReportId.value) || null
+})
+
+const processedReport = computed(() => {
+  if (!selectedReport.value) return null
+  return {
+    ...selectedReport.value,
+    ketua: overrideKetua.value || selectedReport.value.ketua,
+    bendahara: overrideBendahara.value || selectedReport.value.bendahara,
+    keterangan: customNote.value !== '' ? customNote.value : '',
+    date: overrideDate.value || selectedReport.value.date
+  }
+})
+
+// Auto-reset and sync overrides when report changes
+watch(selectedReport, (newVal) => {
+  if (newVal) {
+    overrideKetua.value = newVal.ketua || ''
+    overrideBendahara.value = newVal.bendahara || ''
+    customNote.value = newVal.keterangan || ''
+    overrideDate.value = newVal.date || ''
+    showQR.value = true
+  } else {
+    overrideKetua.value = ''
+    overrideBendahara.value = ''
+    customNote.value = ''
+    overrideDate.value = ''
+  }
 })
 
 // Auto-reset when year changes
