@@ -115,28 +115,28 @@
                   <Users class="w-6 h-6 sm:w-8 sm:h-8 text-secondary group-hover:scale-110 transition-transform" />
                 </div>
                 <h3 class="font-heading text-xl sm:text-3xl font-bold text-white mb-0.5 sm:mb-1 drop-shadow-md">Pengurus DKM</h3>
-                <p class="text-white/80 text-[10px] sm:text-sm text-center px-4 max-w-lg leading-tight">Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2024-2027.</p>
+                <p class="text-white/80 text-[10px] sm:text-sm text-center px-4 max-w-lg leading-tight">Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.</p>
               </div>
             </div>
 
             <!-- Content -->
             <div class="relative flex-1 overflow-y-auto pt-4 pb-10 px-4 sm:px-8 hide-scrollbar z-10">
-              <!-- Segmented Tab Switcher (Dewan Penasihat vs Dewan Pengurus) -->
+              <!-- Segmented Tab Switcher (Dewan Pengurus vs Dewan Penasihat) -->
               <div class="flex justify-center mb-6 relative z-10">
                 <div class="bg-gray-200/50 dark:bg-white/5 p-1 rounded-2xl flex shadow-inner border border-gray-300/30 dark:border-white/5 max-w-sm w-full">
-                  <button 
-                    @click="activeTab = 'penasihat'" 
-                    :class="activeTab === 'penasihat' ? 'bg-primary text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white'"
-                    class="flex-1 py-2 text-xs sm:text-sm rounded-xl transition-all duration-300 font-semibold"
-                  >
-                    Dewan Penasihat
-                  </button>
                   <button 
                     @click="activeTab = 'pengurus'" 
                     :class="activeTab === 'pengurus' ? 'bg-primary text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white'"
                     class="flex-1 py-2 text-xs sm:text-sm rounded-xl transition-all duration-300 font-semibold"
                   >
                     Dewan Pengurus
+                  </button>
+                  <button 
+                    @click="activeTab = 'penasihat'" 
+                    :class="activeTab === 'penasihat' ? 'bg-primary text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white'"
+                    class="flex-1 py-2 text-xs sm:text-sm rounded-xl transition-all duration-300 font-semibold"
+                  >
+                    Dewan Penasihat
                   </button>
                 </div>
               </div>
