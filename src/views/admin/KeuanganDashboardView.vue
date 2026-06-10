@@ -106,7 +106,7 @@
           <ArrowRight class="w-5 h-5 text-gray-400" />
         </div>
         <div class="flex items-center justify-between mb-4 relative z-10">
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Surplus Bulan Ini</p>
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Saldo Akhir Bulan Ini</p>
           <div class="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 transition-colors">
             <Scale class="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
@@ -114,7 +114,7 @@
         <div class="relative z-10">
           <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Rp 11.150.000</h3>
           <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center gap-1 font-medium">
-            Surplus Positif
+            Penambahan Saldo
           </p>
         </div>
       </RouterLink>

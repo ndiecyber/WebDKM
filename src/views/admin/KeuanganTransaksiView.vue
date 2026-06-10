@@ -73,7 +73,8 @@
       </div>
       <div class="bg-white dark:bg-gray-900 ring-1 ring-blue-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
         <div>
-          <p class="text-sm font-medium text-blue-600 dark:text-blue-400">Surplus / Defisit</p>
+          <p class="text-sm font-medium text-blue-600 dark:text-blue-400">Saldo Akhir</p>
+          <p class="text-xs text-blue-500/80 dark:text-blue-400/80 mt-0.5">Pemasukan - Pengeluaran</p>
           <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp 12.350.000</p>
         </div>
         <div class="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg"><Scale class="w-5 h-5 text-blue-600 dark:text-blue-400" /></div>
