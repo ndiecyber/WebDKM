@@ -72,8 +72,22 @@
 
           <div class="relative z-10">
             <!-- Icon -->
-            <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-500">
-              <component :is="iconMap[service.iconName] || iconMap.Users" class="w-7 h-7 text-primary group-hover:text-white transition-colors duration-500" />
+            <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-500 overflow-hidden">
+              <div 
+                v-if="service.iconName === 'Sholat' && processedSholatIcon" 
+                class="w-8 h-8 bg-primary group-hover:bg-white transition-colors duration-500"
+                :style="{
+                  maskImage: `url(${processedSholatIcon})`,
+                  webkitMaskImage: `url(${processedSholatIcon})`,
+                  maskSize: 'contain',
+                  webkitMaskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  webkitMaskRepeat: 'no-repeat',
+                  maskPosition: 'center',
+                  webkitMaskPosition: 'center'
+                }"
+              ></div>
+              <component v-else :is="iconMap[service.iconName] || iconMap.Users" class="w-7 h-7 text-primary group-hover:text-white transition-colors duration-500" />
             </div>
 
             <h3 class="font-heading text-xl font-bold text-dark dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300">
@@ -114,6 +128,8 @@ import quranImg from '@/assets/images/quran-study.png'
 import interiorImg from '@/assets/images/mosque-interior.png'
 import exteriorImg from '@/assets/images/mosque-exterior.png'
 import heroImg from '@/assets/images/hero-mosque.png'
+import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.png'
+import { createSilhouetteMask } from '@/utils/image'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -122,6 +138,12 @@ const adminStore = useAdminStore()
 const iconMap = {
   Users, BookOpen, GraduationCap, Heart, HandCoins, Gem
 }
+
+const processedSholatIcon = ref('')
+
+onMounted(async () => {
+  processedSholatIcon.value = await createSilhouetteMask(sholatSilhouetteImg)
+})
 
 const headerRef = ref(null)
 const filterRef = ref(null)
