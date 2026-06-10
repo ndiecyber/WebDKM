@@ -173,18 +173,24 @@ const resetTilt = (index) => {
 } 
 
 onMounted(() => {
-  gsap.fromTo(headerRef.value, { opacity: 0, y: 40 }, {
-    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-    scrollTrigger: { trigger: '#layanan', start: 'top 75%', once: true },
-  })
-  gsap.fromTo(filterRef.value.children, { opacity: 0, y: 20 }, {
-    opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.1,
-    scrollTrigger: { trigger: '#layanan', start: 'top 70%', once: true },
-  })
-  gsap.fromTo(gridRef.value.children, { opacity: 0, y: 50 }, {
-    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.15,
-    scrollTrigger: { trigger: '#layanan', start: 'top 65%', once: true },
-  })
+  if (headerRef.value) {
+    gsap.fromTo(headerRef.value, { opacity: 0, y: 40 }, {
+      opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: '#layanan', start: 'top 75%', once: true },
+    })
+  }
+  if (filterRef.value && filterRef.value.children) {
+    gsap.fromTo(filterRef.value.children, { opacity: 0, y: 20 }, {
+      opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.1,
+      scrollTrigger: { trigger: '#layanan', start: 'top 70%', once: true },
+    })
+  }
+  if (gridRef.value && gridRef.value.children) {
+    gsap.fromTo(gridRef.value.children, { opacity: 0, y: 50 }, {
+      opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.15,
+      scrollTrigger: { trigger: '#layanan', start: 'top 65%', once: true },
+    })
+  }
 })
 </script>
 

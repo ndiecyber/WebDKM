@@ -168,55 +168,58 @@ const scrollToSection = (id) => {
 }
 
 onMounted(() => {
-  // Sync with LoadingScreen fade out (2000ms timeout + 700ms fade = 2.7s)
-  // We start slightly before it completely disappears (2.2s) for a seamless handoff
-  const tl = gsap.timeline({ delay: 2.2 })
-
-  // Cinematic background zoom effect
-  gsap.fromTo(bgImage.value,
-    { scale: 1.1, filter: 'blur(8px)' },
-    { scale: 1, filter: 'blur(0px)', duration: 3, ease: 'power2.out', delay: 1.8 }
-  )
-
   // Setup Image Slider Interval
   sliderInterval = setInterval(() => {
     currentImageIndex.value = (currentImageIndex.value + 1) % sliderImages.length
   }, 6000)
 
-  tl.fromTo(badge.value,
-    { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-  )
-    .fromTo(
-      heading.value,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
-      '-=0.4'
-    )
-    .fromTo(
-      subtitle.value,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-      '-=0.5'
-    )
-    .fromTo(
-      ctas.value,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-      '-=0.4'
+  // Cinematic background zoom effect
+  if (bgImage.value) {
+    gsap.fromTo(bgImage.value,
+      { scale: 1.1, filter: 'blur(8px)' },
+      { scale: 1, filter: 'blur(0px)', duration: 3, ease: 'power2.out', delay: 1.8 }
     )
 
-  // Parallax on scroll
-  gsap.to(bgImage.value, {
-    yPercent: 20,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#beranda',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true,
-    },
-  })
+    // Parallax on scroll
+    gsap.to(bgImage.value, {
+      yPercent: 20,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#beranda',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    })
+  }
+
+  // Sync with LoadingScreen fade out (2000ms timeout + 700ms fade = 2.7s)
+  // We start slightly before it completely disappears (2.2s) for a seamless handoff
+  if (badge.value && heading.value && subtitle.value && ctas.value) {
+    const tl = gsap.timeline({ delay: 2.2 })
+    tl.fromTo(badge.value,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+    )
+      .fromTo(
+        heading.value,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
+        '-=0.4'
+      )
+      .fromTo(
+        subtitle.value,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+        '-=0.5'
+      )
+      .fromTo(
+        ctas.value,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+        '-=0.4'
+      )
+  }
 })
 
 onUnmounted(() => {

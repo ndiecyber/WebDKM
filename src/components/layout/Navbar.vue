@@ -263,10 +263,12 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   
   // Drop down animation synced with LoadingScreen
-  gsap.fromTo(navRef.value, 
-    { y: -100, opacity: 0 }, 
-    { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 2.2 }
-  )
+  if (navRef.value) {
+    gsap.fromTo(navRef.value, 
+      { y: -100, opacity: 0 }, 
+      { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 2.2 }
+    )
+  }
 })
 
 onUnmounted(() => {

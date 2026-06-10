@@ -26,7 +26,6 @@
 
           <!-- Stats -->
           <div class="grid grid-cols-3 gap-4 sm:gap-6">
-            <div
             <div 
               v-for="(stat, index) in stats"
               :key="stat.label"
@@ -223,15 +222,19 @@ const stats = reactive([
 ])
 
 onMounted(() => {
-  gsap.fromTo(textContent.value, { opacity: 0, x: -60 }, {
-    opacity: 1, x: 0, duration: 1, ease: 'power3.out',
-    scrollTrigger: { trigger: '#tentang', start: 'top 75%', once: true },
-  })
+  if (textContent.value) {
+    gsap.fromTo(textContent.value, { opacity: 0, x: -60 }, {
+      opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#tentang', start: 'top 75%', once: true },
+    })
+  }
 
-  gsap.fromTo(imageContent.value, { opacity: 0, x: 60 }, {
-    opacity: 1, x: 0, duration: 1, ease: 'power3.out',
-    scrollTrigger: { trigger: '#tentang', start: 'top 75%', once: true },
-  })
+  if (imageContent.value) {
+    gsap.fromTo(imageContent.value, { opacity: 0, x: 60 }, {
+      opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#tentang', start: 'top 75%', once: true },
+    })
+  }
 
   stats.forEach((stat) => {
     gsap.to(stat, {

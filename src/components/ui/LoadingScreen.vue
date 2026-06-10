@@ -108,62 +108,75 @@ const particles = Array.from({ length: 35 }).map(() => ({
 }))
 
 onMounted(() => {
-  const tl = gsap.timeline()
+  if (
+    logoRef.value &&
+    dividerRef.value &&
+    textRef.value &&
+    textRef.value.children &&
+    bismillahRef.value &&
+    barContainerRef.value &&
+    progressRef.value
+  ) {
+    const tl = gsap.timeline()
 
-  // 1. Elegantly fade in elements
-  tl.fromTo(logoRef.value, 
-    { opacity: 0, scale: 0.9, y: 15, filter: 'blur(8px)' },
-    { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out' }
-  )
-  .fromTo(dividerRef.value,
-    { opacity: 0, scaleX: 0 },
-    { opacity: 1, scaleX: 1, duration: 0.8, ease: 'power2.out' },
-    '-=0.6'
-  )
-  .fromTo(textRef.value.children,
-    { opacity: 0, y: 15, filter: 'blur(4px)' },
-    { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.0, stagger: 0.2, ease: 'power2.out' },
-    '-=0.6'
-  )
-  .fromTo(bismillahRef.value,
-    { opacity: 0, filter: 'blur(10px)' },
-    { opacity: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.inOut' },
-    '-=0.8'
-  )
-  .fromTo(barContainerRef.value,
-    { opacity: 0, y: 10 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-    '-=1.0'
-  )
+    // 1. Elegantly fade in elements
+    tl.fromTo(logoRef.value, 
+      { opacity: 0, scale: 0.9, y: 15, filter: 'blur(8px)' },
+      { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out' }
+    )
+    .fromTo(dividerRef.value,
+      { opacity: 0, scaleX: 0 },
+      { opacity: 1, scaleX: 1, duration: 0.8, ease: 'power2.out' },
+      '-=0.6'
+    )
+    .fromTo(textRef.value.children,
+      { opacity: 0, y: 15, filter: 'blur(4px)' },
+      { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.0, stagger: 0.2, ease: 'power2.out' },
+      '-=0.6'
+    )
+    .fromTo(bismillahRef.value,
+      { opacity: 0, filter: 'blur(10px)' },
+      { opacity: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power2.inOut' },
+      '-=0.8'
+    )
+    .fromTo(barContainerRef.value,
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+      '-=1.0'
+    )
 
-  // 2. Synchronous Progress Bar Fill
-  // Progress takes exactly 2 seconds to reach 100%
-  gsap.to(progressRef.value, {
-    width: '100%',
-    duration: 2.2,
-    ease: 'power2.inOut',
-    onComplete: () => {
-      // 3. Graceful Exit Sequence triggered exactly when loading completes
-      gsap.to([logoRef.value, dividerRef.value, textRef.value, barContainerRef.value, bismillahRef.value], {
-        opacity: 0,
-        scale: 1.02,
-        y: -10,
-        filter: 'blur(5px)',
-        duration: 0.7,
-        stagger: 0.05,
-        ease: 'power2.in'
-      })
-      
-      // Hide completely after fade out
-      setTimeout(() => {
-        // Force scroll to absolute top - CRITICAL for iOS Safari
-        window.scrollTo(0, 0)
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
-        show.value = false
-      }, 700)
-    }
-  })
+    // 2. Synchronous Progress Bar Fill
+    // Progress takes exactly 2 seconds to reach 100%
+    gsap.to(progressRef.value, {
+      width: '100%',
+      duration: 2.2,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        // 3. Graceful Exit Sequence triggered exactly when loading completes
+        gsap.to([logoRef.value, dividerRef.value, textRef.value, barContainerRef.value, bismillahRef.value], {
+          opacity: 0,
+          scale: 1.02,
+          y: -10,
+          filter: 'blur(5px)',
+          duration: 0.7,
+          stagger: 0.05,
+          ease: 'power2.in'
+        })
+        
+        // Hide completely after fade out
+        setTimeout(() => {
+          // Force scroll to absolute top - CRITICAL for iOS Safari
+          window.scrollTo(0, 0)
+          document.documentElement.scrollTop = 0
+          document.body.scrollTop = 0
+          show.value = false
+        }, 700)
+      }
+    })
+  } else {
+    // If refs are missing (e.g. server-side rendering or template mismatch), turn off loading screen immediately
+    show.value = false
+  }
 })
 </script>
 
