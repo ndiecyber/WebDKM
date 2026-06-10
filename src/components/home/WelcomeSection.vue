@@ -120,26 +120,163 @@
             </div>
 
             <!-- Content -->
-            <div class="relative flex-1 overflow-y-auto pt-6 pb-10 px-6 sm:px-8 hide-scrollbar z-10">
-              <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8 mt-2">
-                <div v-for="(member, index) in committee" :key="member.name" class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer">
-                  <!-- Image Container with Premium Overlay -->
-                  <div class="relative h-40 sm:h-80 overflow-hidden bg-gray-200 dark:bg-gray-800">
-                    <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover object-top filter grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" />
-                    <!-- Silhouette Placeholder -->
-                    <div v-else class="w-full h-full flex flex-col items-center justify-end pt-4 bg-[#E2E8F0] dark:bg-[#1E293B] group-hover:scale-105 transition-all duration-700 overflow-hidden">
-                      <div class="w-[45%] aspect-square rounded-t-full bg-[#CBD5E1] dark:bg-[#334155] translate-y-1/4"></div>
-                      <div class="w-[85%] h-[50%] bg-[#CBD5E1] dark:bg-[#334155] rounded-t-[40%] translate-y-2"></div>
+            <div class="relative flex-1 overflow-y-auto pt-4 pb-10 px-4 sm:px-8 hide-scrollbar z-10">
+              <!-- Segmented Tab Switcher (Dewan Penasihat vs Dewan Pengurus) -->
+              <div class="flex justify-center mb-6 relative z-10">
+                <div class="bg-gray-200/50 dark:bg-white/5 p-1 rounded-2xl flex shadow-inner border border-gray-300/30 dark:border-white/5 max-w-sm w-full">
+                  <button 
+                    @click="activeTab = 'penasihat'" 
+                    :class="activeTab === 'penasihat' ? 'bg-primary text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white'"
+                    class="flex-1 py-2 text-xs sm:text-sm rounded-xl transition-all duration-300 font-semibold"
+                  >
+                    Dewan Penasihat
+                  </button>
+                  <button 
+                    @click="activeTab = 'pengurus'" 
+                    :class="activeTab === 'pengurus' ? 'bg-primary text-white font-bold shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white'"
+                    class="flex-1 py-2 text-xs sm:text-sm rounded-xl transition-all duration-300 font-semibold"
+                  >
+                    Dewan Pengurus
+                  </button>
+                </div>
+              </div>
+
+              <!-- Dewan Penasihat View -->
+              <div v-if="activeTab === 'penasihat'" class="space-y-6 max-w-5xl mx-auto mt-2">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 justify-center">
+                  <div 
+                    v-for="member in dewanPenasihat" 
+                    :key="member.name" 
+                    class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-4 flex flex-col items-center text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                  >
+                    <!-- Elegant Gradient Avatar with Initials -->
+                    <div class="w-14 h-14 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm mb-3 shadow-md group-hover:scale-105 transition-transform duration-300">
+                      {{ getInitials(member.name) }}
                     </div>
+                    <h4 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-tight mb-1">{{ member.name }}</h4>
+                    <span class="text-[9px] font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{{ member.role }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dewan Pengurus View -->
+              <div v-if="activeTab === 'pengurus'" class="space-y-10 max-w-5xl mx-auto mt-2">
+                
+                <!-- Pengurus Harian Sub-section -->
+                <div class="space-y-4">
+                  <div class="text-center">
+                    <h4 class="text-[10px] font-extrabold uppercase tracking-widest text-primary dark:text-secondary mb-1">Pengurus Harian</h4>
+                    <div class="h-0.5 w-8 bg-primary dark:bg-secondary mx-auto rounded-full"></div>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div 
+                      v-for="member in pengurusHarian" 
+                      :key="member.name"
+                      :class="member.isLeader ? 'border-primary/40 dark:border-secondary/30 bg-primary/5 dark:bg-secondary/5 ring-1 ring-primary/20 dark:ring-secondary/20 shadow-lg' : 'bg-white/70 dark:bg-white/5 border-gray-200/50 dark:border-white/5 shadow-md'"
+                      class="rounded-2xl p-4 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                    >
+                      <!-- Leader has unique gold gradient avatar -->
+                      <div 
+                        :class="member.isLeader ? 'from-amber-400 to-amber-600 text-white' : 'from-emerald-400 to-teal-600 text-white'"
+                        class="w-14 h-14 rounded-full bg-linear-to-br flex items-center justify-center font-bold text-sm mb-3 shadow-md group-hover:scale-105 transition-transform duration-300"
+                      >
+                        {{ getInitials(member.name) }}
+                      </div>
+                      <h4 class="font-heading text-sm font-bold text-gray-900 dark:text-white mb-1">{{ member.name }}</h4>
+                      <span 
+                        :class="member.isLeader ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'"
+                        class="text-[10px] font-bold tracking-wider uppercase"
+                      >
+                        {{ member.role }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Divisi & Seksi Sub-section -->
+                <div class="space-y-6">
+                  <div class="text-center">
+                    <h4 class="text-[10px] font-extrabold uppercase tracking-widest text-primary dark:text-secondary mb-1">Divisi & Seksi Kerja</h4>
+                    <div class="h-0.5 w-8 bg-primary dark:bg-secondary mx-auto rounded-full"></div>
+                  </div>
+
+                  <!-- Sections Grid -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
-                    <div class="absolute inset-0 bg-linear-to-t from-dark/95 via-dark/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
-                    <div class="absolute inset-0 border-2 border-white/0 group-hover:border-white/10 rounded-2xl transition-colors duration-500 z-10 pointer-events-none"></div>
-                    
-                    <!-- Content inside the image overlay -->
-                    <div class="absolute inset-x-0 bottom-0 p-3 sm:p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 z-20">
-                      <h3 class="font-heading text-sm sm:text-xl font-bold text-white mb-0.5 sm:mb-1 drop-shadow-md leading-tight">{{ member.name }}</h3>
-                      <div class="h-0.5 w-6 sm:w-12 bg-secondary mb-1.5 sm:mb-3 rounded-full transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-100"></div>
-                      <p class="text-secondary font-semibold uppercase tracking-wider text-[9px] sm:text-xs drop-shadow-sm">{{ member.role }}</p>
+                    <!-- Seksi Pendidikan dan Dakwah -->
+                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        Seksi Pendidikan & Dakwah
+                      </h5>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div v-for="member in seksiDakwah" :key="member.name" class="flex items-center gap-2.5 p-2 bg-gray-50/50 dark:bg-white/[0.01] rounded-xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-colors">
+                          <div class="w-9 h-9 rounded-full bg-linear-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-[10px] shrink-0 shadow-sm">
+                            {{ getInitials(member.name) }}
+                          </div>
+                          <div class="min-w-0">
+                            <p class="text-[11px] sm:text-xs font-semibold text-gray-900 dark:text-white truncate leading-snug">{{ member.name }}</p>
+                            <p class="text-[9px] text-gray-500 dark:text-gray-400 leading-none mt-0.5">Anggota</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Seksi Ekonomi & Wakaf -->
+                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        Seksi Ekonomi & Wakaf
+                      </h5>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div v-for="member in seksiEkonomi" :key="member.name" class="flex items-center gap-2.5 p-2 bg-gray-50/50 dark:bg-white/[0.01] rounded-xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-colors">
+                          <div class="w-9 h-9 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-[10px] shrink-0 shadow-sm">
+                            {{ getInitials(member.name) }}
+                          </div>
+                          <div class="min-w-0">
+                            <p class="text-[11px] sm:text-xs font-semibold text-gray-900 dark:text-white truncate leading-snug">{{ member.name }}</p>
+                            <p class="text-[9px] text-gray-500 dark:text-gray-400 leading-none mt-0.5">Anggota</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Seksi Peralatan & Logistik -->
+                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                        Seksi Peralatan & Logistik
+                      </h5>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div v-for="member in seksiLogistik" :key="member.name" class="flex items-center gap-2.5 p-2 bg-gray-50/50 dark:bg-white/[0.01] rounded-xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-colors">
+                          <div class="w-9 h-9 rounded-full bg-linear-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-[10px] shrink-0 shadow-sm">
+                            {{ getInitials(member.name) }}
+                          </div>
+                          <div class="min-w-0">
+                            <p class="text-[11px] sm:text-xs font-semibold text-gray-900 dark:text-white truncate leading-snug">{{ member.name }}</p>
+                            <p class="text-[9px] text-gray-500 dark:text-gray-400 leading-none mt-0.5">Anggota</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Remaja Masjid -->
+                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                        Remaja Masjid
+                      </h5>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div v-for="member in remajaMasjid" :key="member.name" class="flex items-center gap-2.5 p-2 bg-gray-50/50 dark:bg-white/[0.01] rounded-xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-colors">
+                          <div class="w-9 h-9 rounded-full bg-linear-to-br from-pink-400 to-rose-500 flex items-center justify-center text-white font-bold text-[10px] shrink-0 shadow-sm">
+                            {{ getInitials(member.name) }}
+                          </div>
+                          <div class="min-w-0">
+                            <p class="text-[11px] sm:text-xs font-semibold text-gray-900 dark:text-white truncate leading-snug">{{ member.name }}</p>
+                            <p class="text-[9px] text-gray-500 dark:text-gray-400 leading-none mt-0.5">Anggota</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -171,52 +308,65 @@ const interiorImg = interiorImage
 const textContent = ref(null)
 const imageContent = ref(null)
 const isCommitteeModalOpen = ref(false)
+const activeTab = ref('pengurus')
 
-const committee = [
-  {
-    name: 'H. Ahmad Abdullah, Lc.',
-    role: 'Ketua DKM',
-    image: ''
-  },
-  {
-    name: 'Ust. Budi Santoso',
-    role: 'Wakil Ketua',
-    image: ''
-  },
-  {
-    name: 'M. Ikhsan Fauzi',
-    role: 'Sekretaris',
-    image: ''
-  },
-  {
-    name: 'Rhafi Decul',
-    role: 'Bendahara',
-    image: ''
-  },
-  {
-    name: 'Arief Rahman',
-    role: 'Seksi Dakwah',
-    image: ''
-  },
-  {
-    name: 'H. Suryana',
-    role: 'Seksi Pembangunan',
-    image: ''
-  },
-  {
-    name: 'M. Yusuf',
-    role: 'Seksi Sosial',
-    image: ''
-  },
-  {
-    name: 'Dimas Aditya',
-    role: 'Remaja Masjid',
-    image: ''
+const getInitials = (name) => {
+  if (!name) return ''
+  const cleanName = name
+    .replace(/^(Ust\.|Usth\.|Bpk\.|Bapak|H\.|Hj\.)\s+/i, '')
+    .trim()
+  const parts = cleanName.split(/\s+/)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase()
   }
+  return parts[0] ? parts[0][0].toUpperCase() : ''
+}
+
+const dewanPenasihat = [
+  { name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat' },
+  { name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat' },
+  { name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat' },
+  { name: 'Bpk. H. Usman', role: 'Dewan Penasihat' },
+  { name: 'Bpk. Ayi Sunarwan', role: 'Dewan Penasihat' }
+]
+
+const pengurusHarian = [
+  { name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true },
+  { name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris' },
+  { name: 'Ust. Randi Rizal', role: 'Bendahara' }
+]
+
+const seksiDakwah = [
+  { name: 'Ust. H. Irvan Ruchiat', role: 'Anggota Dakwah & Pendidikan' },
+  { name: 'Ust. H. Dani Ramdhani', role: 'Anggota Dakwah & Pendidikan' },
+  { name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan' },
+  { name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan' },
+  { name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan' },
+  { name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan' }
+]
+
+const seksiEkonomi = [
+  { name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf' },
+  { name: 'Bpk. Ujang Kurnia', role: 'Anggota Ekonomi & Wakaf' },
+  { name: 'Bpk. Erwin Darmawan', role: 'Anggota Ekonomi & Wakaf' },
+  { name: 'Bpk. Ade Ramdhani', role: 'Anggota Ekonomi & Wakaf' }
+]
+
+const seksiLogistik = [
+  { name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik' },
+  { name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik' },
+  { name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik' },
+  { name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik' }
+]
+
+const remajaMasjid = [
+  { name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid' },
+  { name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid' },
+  { name: 'Usth. Rayanthi', role: 'Remaja Masjid' }
 ]
 
 const stats = reactive([
-  { label: 'Pengurus DKM', value: 8, displayValue: 0, prefix: '', suffix: ' Orang', isClickable: true },
+  { label: 'Pengurus DKM', value: 25, displayValue: 0, prefix: '', suffix: ' Orang', isClickable: true },
   { label: 'Tahun Berdiri', value: 2015, displayValue: 0, prefix: '', suffix: '', isClickable: false },
   { label: 'Jamaah Aktif', value: 200, displayValue: 0, prefix: '', suffix: '+', isClickable: false },
 ])
