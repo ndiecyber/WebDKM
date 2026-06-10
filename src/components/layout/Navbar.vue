@@ -230,7 +230,12 @@ const menuItems = [
 
 const scrollToSection = (id) => {
   const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
+  if (!el) return
+  // iOS Safari: scrollIntoView unreliable with position:fixed navbar
+  // Use window.scrollTo with manual offset instead
+  const navHeight = navRef.value ? navRef.value.offsetHeight : 88
+  const elTop = el.getBoundingClientRect().top + window.pageYOffset - navHeight
+  window.scrollTo({ top: Math.max(0, elTop), behavior: 'smooth' })
 }
 
 const handleScroll = () => {
