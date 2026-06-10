@@ -24,7 +24,7 @@
         <!-- Preview Container (Overflow handles mobile scrolling) -->
         <div class="flex-1 overflow-auto custom-scrollbar-y p-4 sm:p-8 bg-gray-100/50 dark:bg-[#0a0a0a]">
           <!-- Wrapper for Pages -->
-          <div id="report-paper" class="flex flex-col items-center gap-8 pb-8">
+          <div id="report-paper" class="flex flex-col items-center gap-8 pb-8 min-w-max">
             <ReportKegiatanTemplate v-if="selectedReport" :report="selectedReport" />
             
             <div v-else class="h-full w-full max-w-[794px] min-h-[800px] bg-white/50 dark:bg-gray-900/50 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-2xl flex flex-col items-center justify-center text-gray-400 opacity-80 space-y-4">

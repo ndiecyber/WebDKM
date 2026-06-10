@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-8 flex flex-col items-center">
+  <div class="space-y-8 flex flex-col items-center min-w-max">
     <div 
       v-for="(page, pageIndex) in paginatedPages" 
       :key="pageIndex" 
