@@ -32,12 +32,43 @@ body {
   font-family: var(--font-family-body);
   color: #111827;
   background-color: #F9FAFB;
-  overflow-x: hidden;
+  /* overflow-x: hidden dihapus karena merusak scroll di iOS Safari */
 }
 
 .dark body {
   color: #F9FAFB;
   background-color: #111827;
+}
+
+#app-root {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ===== iOS Safari Fixes ===== */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Smooth scrolling di iOS */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area padding untuk iPhone X+ (notch & home bar) */
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Prevent iOS tap highlight */
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fix image alt text rendering on iOS Safari */
+img {
+  color: transparent;
+  font-size: 0;
 }
 
 /* ===== Scrollbar Styling ===== */

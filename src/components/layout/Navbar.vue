@@ -16,12 +16,13 @@
           <div class="flex items-center gap-2" v-if="nextPrayer">
             <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
             <span 
+              v-if="hijriDate"
               class="text-[10px] sm:text-[11px] font-medium tracking-wide uppercase transition-colors duration-500" 
               :class="(!scrolled || isDark) ? 'text-white/80' : 'text-gray-600'"
             >
-              Waktu Berikutnya:
+              {{ hijriDate }} <span class="mx-0.5 opacity-50">|</span>
             </span>
-            <span class="text-secondary font-bold text-[11px] sm:text-xs">{{ nextPrayer.name }} {{ nextPrayer.time }}</span>
+            <span class="text-secondary font-bold text-[11px] sm:text-xs tracking-wide uppercase">{{ nextPrayer.name }} {{ nextPrayer.time }}</span>
           </div>
         </div>
       </div>
@@ -31,7 +32,7 @@
       <div class="flex items-center justify-between">
         <!-- Logo -->
         <a href="#beranda" class="flex items-center group" @click.prevent="scrollToSection('beranda')">
-          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300" />
+          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300 text-transparent" />
         </a>
 
         <!-- Desktop Menu -->
@@ -126,7 +127,7 @@
       leave-from-class="opacity-100 translate-y-0"
       leave-to-class="opacity-0 -translate-y-4"
     >
-      <div v-if="mobileOpen" class="lg:hidden glass-dark mt-2 mx-4 rounded-2xl p-4 border border-white/10">
+      <div v-if="mobileOpen" class="lg:hidden bg-dark shadow-2xl mt-2 mx-4 rounded-2xl p-4 border border-white/10">
         <a
           v-for="item in menuItems"
           :key="item.id"
@@ -215,6 +216,7 @@ const buttonClass = computed(() => {
 
 // Mini Prayer Logic synced from global store
 const nextPrayer = computed(() => prayerStore.nextPrayer)
+const hijriDate = computed(() => prayerStore.hijriDate)
 
 const menuItems = [
   { id: 'beranda', label: 'Beranda' },

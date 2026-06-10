@@ -54,7 +54,7 @@
         </div>
 
         <!-- Table / Content -->
-        <div class="flex-1 overflow-auto p-4 sm:p-6 custom-scrollbar relative">
+        <div ref="scrollContainer" class="flex-1 overflow-auto p-4 sm:p-6 custom-scrollbar relative">
           <div v-if="loading" class="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-[#121220]/50 backdrop-blur-sm z-10">
             <div class="w-10 h-10 border-4 border-secondary/30 border-t-secondary rounded-full animate-spin mb-4"></div>
             <p class="text-dark dark:text-white font-medium">Memuat jadwal...</p>
@@ -71,6 +71,7 @@
               <div 
                 v-for="(day, index) in calendarData" 
                 :key="'m-'+index"
+                :ref="el => { if (isToday(day)) todayMobileRef = el }"
                 class="bg-white dark:bg-[#1A1A2E] border border-gray-300 dark:border-white/10 rounded-xl p-4 shadow-md transition-all"
                 :class="isToday(day) ? 'ring-2 ring-secondary bg-secondary/5 dark:bg-secondary/10' : ''"
               >
@@ -135,6 +136,7 @@
                     <tr 
                       v-for="(day, index) in calendarData" 
                       :key="'d-'+index"
+                      :ref="el => { if (isToday(day)) todayDesktopRef = el }"
                       :class="[
                         'hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors',
                         isToday(day) ? 'bg-secondary/10 dark:bg-secondary/20' : ''
@@ -165,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { X, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -179,6 +181,9 @@ const emit = defineEmits(['close'])
 const loading = ref(false)
 const error = ref('')
 const calendarData = ref([])
+const scrollContainer = ref(null)
+const todayMobileRef = ref(null)
+const todayDesktopRef = ref(null)
 
 const currentDateObj = new Date()
 const currentMonth = ref(currentDateObj.getMonth() + 1)
@@ -219,6 +224,9 @@ const fetchCalendar = async () => {
     
     if (data.code === 200) {
       calendarData.value = data.data
+      // Auto-scroll ke hari ini setelah data dimuat
+      await nextTick()
+      scrollToToday()
     } else {
       error.value = 'Gagal mengambil data jadwal.'
     }
@@ -245,6 +253,15 @@ const changeMonth = (offset) => {
   currentMonth.value = newMonth
   currentYear.value = newYear
   fetchCalendar()
+}
+
+const scrollToToday = () => {
+  setTimeout(() => {
+    const target = todayMobileRef.value || todayDesktopRef.value
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, 150)
 }
 
 const resetToToday = () => {

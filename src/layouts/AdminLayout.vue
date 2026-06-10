@@ -118,15 +118,6 @@
               <Briefcase class="w-5 h-5" />
               <span>Layanan & Fasilitas</span>
             </router-link>
-
-            <router-link 
-              :to="{ name: 'admin-laporan-publik' }"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="$route.name === 'admin-laporan-publik' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform'"
-            >
-              <Wallet class="w-5 h-5" />
-              <span>Laporan Publik</span>
-            </router-link>
           </div>
         </div>
 

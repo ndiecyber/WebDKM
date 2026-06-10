@@ -132,26 +132,24 @@
             <div class="grid grid-cols-2 gap-4">
               <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Label (Tag)</label>
-                <input 
-                  v-model="form.tag"
-                  required
-                  type="text"
-                  placeholder="Contoh: Eksterior"
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm"
-                />
-              </div>
-              <div class="space-y-1">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ikon Tema</label>
                 <select 
-                  v-model="form.iconName"
+                  v-model="form.tag"
                   required
                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
                 >
-                  <option class="bg-white dark:bg-slate-800" value="Camera">Kamera</option>
-                  <option class="bg-white dark:bg-slate-800" value="Building">Gedung / Arsitektur</option>
-                  <option class="bg-white dark:bg-slate-800" value="Users">Orang / Sosial</option>
-                  <option class="bg-white dark:bg-slate-800" value="BookOpen">Edukasi / Buku</option>
-                  <option class="bg-white dark:bg-slate-800" value="MapPin">Lokasi</option>
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="">Pilih Label</option>
+                  <option v-for="label in adminStore.masterData.label" :key="label.id" :value="label.name" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">{{ label.name }}</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kategori</label>
+                <select 
+                  v-model="form.category"
+                  required
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
+                >
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="">Pilih Kategori</option>
+                  <option v-for="cat in adminStore.masterData.kategori" :key="cat.id" :value="cat.name" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">{{ cat.name }}</option>
                 </select>
               </div>
             </div>
@@ -192,7 +190,7 @@ const adminStore = useAdminStore()
 const showModal = ref(false)
 const isEditing = ref(false)
 const isDragging = ref(false)
-const form = ref({ id: null, image: '', caption: '', subcaption: '', tag: '', iconName: 'Camera' })
+const form = ref({ id: null, image: '', caption: '', subcaption: '', tag: '', category: 'Umum' })
 
 function openModal(item = null) {
   if (item) {
@@ -200,7 +198,7 @@ function openModal(item = null) {
     form.value = { ...item }
   } else {
     isEditing.value = false
-    form.value = { id: null, image: '', caption: '', subcaption: '', tag: '', iconName: 'Camera' }
+    form.value = { id: null, image: '', caption: '', subcaption: '', tag: '', category: 'Umum' }
   }
   showModal.value = true
   document.body.style.overflow = 'hidden'

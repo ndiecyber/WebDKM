@@ -28,11 +28,12 @@
         >
           <!-- Image Container -->
           <div class="relative h-64 overflow-hidden bg-gray-200 dark:bg-gray-800">
-            <img 
-              :src="member.image" 
-              :alt="member.name" 
-              class="w-full h-full object-cover object-top filter grayscale-20 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-            />
+            <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover object-top filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+            <!-- Silhouette Placeholder -->
+            <div v-else class="w-full h-full flex flex-col items-center justify-end pt-4 bg-[#E2E8F0] dark:bg-[#1E293B] group-hover:scale-105 transition-all duration-700 overflow-hidden">
+              <div class="w-[45%] aspect-square rounded-t-full bg-[#CBD5E1] dark:bg-[#334155] translate-y-1/4"></div>
+              <div class="w-[85%] h-[50%] bg-[#CBD5E1] dark:bg-[#334155] rounded-t-[40%] translate-y-2"></div>
+            </div>
             <div class="absolute inset-0 bg-linear-to-t from-dark/80 via-dark/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
           </div>
           
@@ -73,22 +74,42 @@ const committee = [
   {
     name: 'H. Ahmad Abdullah, Lc.',
     role: 'Ketua DKM',
-    image: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: ''
   },
   {
     name: 'Ust. Budi Santoso',
     role: 'Wakil Ketua',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: ''
   },
   {
     name: 'M. Ikhsan Fauzi',
     role: 'Sekretaris',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: ''
   },
   {
     name: 'Rhafi Decul',
     role: 'Bendahara',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: ''
+  },
+  {
+    name: 'Arief Rahman',
+    role: 'Seksi Dakwah',
+    image: ''
+  },
+  {
+    name: 'H. Suryana',
+    role: 'Seksi Pembangunan',
+    image: ''
+  },
+  {
+    name: 'M. Yusuf',
+    role: 'Seksi Sosial',
+    image: ''
+  },
+  {
+    name: 'Dimas Aditya',
+    role: 'Remaja Masjid',
+    image: ''
   }
 ]
 

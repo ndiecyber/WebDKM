@@ -27,14 +27,28 @@
           <!-- Stats -->
           <div class="grid grid-cols-3 gap-4 sm:gap-6">
             <div
-              v-for="stat in stats"
+            <div 
+              v-for="(stat, index) in stats"
               :key="stat.label"
-              class="text-center p-4 rounded-2xl bg-light dark:bg-white/5 shadow-md border border-primary/5 dark:border-white/10 hover:shadow-md hover:border-primary/10 transition-all duration-300"
+              @click="stat.isClickable ? isCommitteeModalOpen = true : null"
+              :class="[
+                'text-center p-4 rounded-2xl bg-light dark:bg-white/5 shadow-md border transition-all duration-300 relative overflow-hidden',
+                stat.isClickable 
+                  ? 'cursor-pointer hover:shadow-xl hover:-translate-y-1 border-primary/20 dark:border-white/20 hover:border-primary/40 dark:hover:border-secondary/40 group' 
+                  : 'border-primary/5 dark:border-white/10 hover:shadow-lg hover:border-primary/10'
+              ]"
             >
-              <div class="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-primary dark:text-secondary mb-1">
-                {{ stat.prefix }}{{ stat.displayValue }}{{ stat.suffix }}
+              <!-- Animated background for clickable stat -->
+              <div v-if="stat.isClickable" class="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent dark:from-secondary/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div :class="['relative z-10 font-heading text-2xl sm:text-3xl lg:text-4xl font-bold mb-1 transition-colors flex items-baseline justify-center gap-1', stat.isClickable ? 'text-primary dark:text-secondary group-hover:scale-105' : 'text-primary dark:text-secondary']">
+                <span>{{ stat.prefix }}{{ stat.displayValue }}</span>
+                <span v-if="stat.suffix" :class="stat.suffix.trim().length > 1 ? 'text-sm sm:text-base font-semibold opacity-90' : ''">{{ stat.suffix.trim() }}</span>
               </div>
-              <p class="text-gray-600 dark:text-gray-400 text-xs sm:text-sm font-medium transition-colors">{{ stat.label }}</p>
+              <p :class="['relative z-10 text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-1', stat.isClickable ? 'text-dark dark:text-white group-hover:text-primary dark:group-hover:text-secondary' : 'text-gray-600 dark:text-gray-400']">
+                {{ stat.label }}
+                <ArrowRight v-if="stat.isClickable" class="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+              </p>
             </div>
           </div>
         </div>
@@ -46,27 +60,14 @@
             <div class="absolute inset-0 bg-linear-to-t from-primary/30 to-transparent"></div>
           </div>
 
-          <!-- Floating Card (Clickable) -->
-          <button @click="isCommitteeModalOpen = true" class="text-left absolute -bottom-4 left-4 sm:-bottom-6 sm:-left-6 bg-white/90 dark:bg-[#1A2525]/90 backdrop-blur-xl rounded-2xl p-4 sm:p-5 shadow-xl border border-primary/20 dark:border-white/10 w-[85%] sm:w-auto max-w-[280px] sm:max-w-[320px] z-10 hover:shadow-primary/30 dark:hover:shadow-secondary/20 hover:-translate-y-2 transition-all duration-500 group overflow-hidden">
-            <!-- Decorative gradient blob -->
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 dark:bg-secondary/10 rounded-full blur-2xl group-hover:bg-primary/20 dark:group-hover:bg-secondary/20 transition-colors duration-500"></div>
-            
-            <div class="relative flex items-center justify-between gap-3 mb-2">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 shrink-0 rounded-full bg-linear-to-br from-primary/20 to-primary/5 dark:from-secondary/20 dark:to-secondary/5 flex items-center justify-center text-primary dark:text-secondary group-hover:scale-110 group-hover:bg-primary group-hover:text-white dark:group-hover:bg-secondary dark:group-hover:text-dark transition-all duration-300">
-                  <Users class="w-5 h-5" />
-                </div>
-                <h4 class="font-heading text-lg sm:text-xl font-bold text-dark dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors whitespace-nowrap">Pengurus DKM</h4>
-              </div>
-              <div class="w-6 h-6 shrink-0 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-primary dark:group-hover:bg-secondary text-gray-400 group-hover:text-white dark:group-hover:text-dark transition-colors">
-                <ArrowRight class="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
-              </div>
+          <!-- Floating Card -->
+          <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white dark:bg-dark-light rounded-xl p-3.5 shadow-lg border border-gray-100 dark:border-white/5 max-w-[240px] z-10">
+            <div class="flex items-center gap-2.5 mb-1.5">
+              <MosqueLogo variant="icon" :iconSize="32" class="text-primary dark:text-secondary drop-shadow-md" />
+              <h4 class="font-heading text-sm font-bold text-dark dark:text-white leading-tight">Masjid Kassiti</h4>
             </div>
-            <p class="relative text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">Lihat struktur kepengurusan DKM Masjid Jami Kassiti</p>
-            
-            <!-- Click Clue -->
-            <div class="absolute bottom-0 left-0 h-1 bg-linear-to-r from-primary to-secondary w-0 group-hover:w-full transition-all duration-500"></div>
-          </button>
+            <p class="text-gray-600 dark:text-gray-400 text-[11px] leading-relaxed">Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti</p>
+          </div>
 
           <!-- Decorative Element -->
           <div class="absolute -top-4 -right-4 w-24 h-24 border-2 border-secondary/30 rounded-3xl -z-10"></div>
@@ -216,9 +217,9 @@ const committee = [
 ]
 
 const stats = reactive([
-  { label: 'Tahun Berdiri', value: 2015, displayValue: 0, prefix: '', suffix: '' },
-  { label: 'Jamaah Aktif', value: 200, displayValue: 0, prefix: '', suffix: '+' },
-  { label: 'Kegiatan/Bulan', value: 30, displayValue: 0, prefix: '', suffix: '+' },
+  { label: 'Pengurus DKM', value: 8, displayValue: 0, prefix: '', suffix: ' Orang', isClickable: true },
+  { label: 'Tahun Berdiri', value: 2015, displayValue: 0, prefix: '', suffix: '', isClickable: false },
+  { label: 'Jamaah Aktif', value: 200, displayValue: 0, prefix: '', suffix: '+', isClickable: false },
 ])
 
 onMounted(() => {

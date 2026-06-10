@@ -69,11 +69,7 @@ const routes = [
         name: 'admin-pengaturan',
         component: () => import('../views/admin/PengaturanView.vue'),
       },
-      {
-        path: 'laporan-publik',
-        name: 'admin-laporan-publik',
-        component: () => import('../views/admin/KeuanganView.vue'),
-      },
+
       {
         path: 'profil',
         name: 'admin-profil',

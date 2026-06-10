@@ -32,7 +32,7 @@
               <td class="py-4 px-4 sm:px-6">
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 ring-1 ring-gray-300 dark:ring-white/10 flex items-center justify-center shrink-0 text-gray-600 dark:text-gray-400">
-                    <component :is="iconMap[item.iconName] || iconMap.Briefcase" class="w-5 h-5" />
+                    <component :is="iconMap[getCategoryIcon(item.category)] || iconMap.Briefcase" class="w-5 h-5" />
                   </div>
                   <div>
                     <span class="text-sm font-medium text-gray-900 dark:text-white block">{{ item.title }}</span>
@@ -44,7 +44,7 @@
                 <span class="text-sm text-gray-700 dark:text-gray-300">{{ item.category }}</span>
               </td>
               <td class="py-4 px-4 sm:px-6 text-center">
-                <span :class="['inline-flex items-center justify-center px-2 py-0.5 rounded-md text-[11px] font-medium', item.badgeColor]">{{ item.badge }}</span>
+                <span :class="['inline-flex items-center justify-center px-2 py-0.5 rounded-md text-[11px] font-medium border', getLabelColorClass(item.badge)]">{{ item.badge }}</span>
               </td>
               <td class="py-4 px-4 sm:px-6">
                 <div class="flex items-center justify-end gap-1">
@@ -122,46 +122,16 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="space-y-1">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ikon Tema</label>
-                <select 
-                  v-model="form.iconName"
-                  required
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
-                >
-                  <option class="bg-white dark:bg-slate-800" value="Users">Orang / Sosial</option>
-                  <option class="bg-white dark:bg-slate-800" value="BookOpen">Buku / Ilmu</option>
-                  <option class="bg-white dark:bg-slate-800" value="GraduationCap">Topi Toga / Edukasi</option>
-                  <option class="bg-white dark:bg-slate-800" value="Heart">Hati / Kepedulian</option>
-                  <option class="bg-white dark:bg-slate-800" value="HandCoins">Tangan Koin / Zakat</option>
-                  <option class="bg-white dark:bg-slate-800" value="Gem">Permata / Spesial</option>
-                  <option class="bg-white dark:bg-slate-800" value="Briefcase">Tas Kerja / Umum</option>
-                </select>
-              </div>
+            <div class="grid grid-cols-1 gap-4">
               <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Label (Badge)</label>
-                <input 
-                  v-model="form.badge"
-                  type="text" 
-                  required
-                  placeholder="Misal: Tersedia"
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm"
-                />
-              </div>
-              <div class="space-y-1">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Warna Label</label>
                 <select 
-                  v-model="form.badgeColor"
+                  v-model="form.badge"
                   required
                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
                 >
-                  <option class="bg-white dark:bg-slate-800" value="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">Hijau</option>
-                  <option class="bg-white dark:bg-slate-800" value="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800">Biru</option>
-                  <option class="bg-white dark:bg-slate-800" value="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800">Oranye</option>
-                  <option class="bg-white dark:bg-slate-800" value="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">Zamrud</option>
-                  <option class="bg-white dark:bg-slate-800" value="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border border-purple-200 dark:border-purple-800">Ungu</option>
-                  <option class="bg-white dark:bg-slate-800" value="bg-primary/10 text-primary-dark dark:text-primary-light border border-primary/20">Emas (Primer)</option>
+                  <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="">Tanpa Label</option>
+                  <option v-for="label in adminStore.masterData.label" :key="label.id" :value="label.name" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">{{ label.name }}</option>
                 </select>
               </div>
             </div>
@@ -280,11 +250,9 @@ const getDefaultForm = () => ({
   id: null, 
   title: '', 
   category: 'Ibadah', 
-  bgImage: '',
+  bgImage: null,
   description: '', 
-  iconName: 'Users', 
-  badge: 'Tersedia', 
-  badgeColor: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800', 
+  badge: '', 
   details: {
     fullDescription: '',
     schedule: '',
@@ -355,5 +323,26 @@ function deleteItem(id) {
     adminStore.deleteLayanan(id)
     toastStore.addToast('Layanan berhasil dihapus', 'error')
   }
+}
+
+const getCategoryIcon = (categoryName) => {
+  const cat = adminStore.masterData.kategori.find(k => k.name === categoryName)
+  return cat ? cat.iconName : 'Briefcase'
+}
+
+const getLabelColorClass = (labelName) => {
+  const label = adminStore.masterData.label.find(l => l.name === labelName)
+  const color = label ? label.color : 'gray'
+  
+  const colorMap = {
+    red: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800',
+    yellow: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800',
+    green: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800',
+    blue: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800',
+    purple: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border-purple-200 dark:border-purple-800',
+    gray: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400 border-gray-200 dark:border-gray-800',
+  }
+  
+  return colorMap[color] || colorMap.gray
 }
 </script>
