@@ -15,10 +15,6 @@
           <span>Oktober 2023</span>
           <ChevronDown class="w-4 h-4 ml-1" />
         </button>
-        <button class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
-          <Download class="w-4 h-4" />
-          <span class="hidden sm:inline">Unduh Laporan</span>
-        </button>
       </div>
     </div>
 
@@ -105,9 +101,30 @@
             <h2 class="text-base font-semibold text-gray-900 dark:text-white">Arus Kas Bulanan</h2>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Pemasukan & Pengeluaran 6 bulan terakhir</p>
           </div>
-          <button class="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-            <MoreHorizontal class="w-5 h-5" />
-          </button>
+          <div class="relative">
+            <button @click="showChartMenu = !showChartMenu" class="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+              <MoreHorizontal class="w-5 h-5" />
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div v-if="showChartMenu" class="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-lg z-20 py-1 overflow-hidden">
+              <button @click="showChartMenu = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
+                <Image class="w-4 h-4 text-gray-400" />
+                Unduh PNG
+              </button>
+              <button @click="showChartMenu = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
+                <BarChart3 class="w-4 h-4 text-gray-400" />
+                Ubah ke Diagram Batang
+              </button>
+              <button @click="showChartMenu = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
+                <LineChart class="w-4 h-4 text-gray-400" />
+                Ubah ke Diagram Garis
+              </button>
+            </div>
+            
+            <!-- Backdrop (click outside) -->
+            <div v-if="showChartMenu" @click="showChartMenu = false" class="fixed inset-0 z-10"></div>
+          </div>
         </div>
         <div class="p-6 flex-1">
           <!-- Mockup Chart Area -->
@@ -170,11 +187,14 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { 
   Calendar, Wallet, TrendingUp, TrendingDown, Scale, 
   MoreHorizontal, Download, ChevronDown, Landmark, CheckCircle,
-  ArrowUpRight, ArrowDownRight, ArrowDownLeft
+  ArrowUpRight, ArrowDownRight, ArrowDownLeft, Image, BarChart3, LineChart
 } from 'lucide-vue-next'
+
+const showChartMenu = ref(false)
 
 const recentTransactions = [
   { id: 1, title: 'Infaq Jumat', category: 'Kotak Amal', date: '10 Okt', amount: '3.250.000', type: 'in' },
