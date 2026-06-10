@@ -43,8 +43,8 @@
             <div class="p-4 rounded-2xl border border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 hover:border-primary/30 transition-colors group">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-2 shrink-0">
-                    <Building2 class="w-6 h-6 text-emerald-600" />
+                  <div class="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
+                    <img :src="bsiLogo" alt="BSI Logo" class="w-full h-full object-contain" />
                   </div>
                   <div>
                     <h4 class="font-bold text-gray-900 dark:text-white text-lg">Bank Syariah Indonesia (BSI)</h4>
@@ -110,9 +110,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { X, Heart, Building2, Copy, Download, Info, Maximize2 } from 'lucide-vue-next'
+import { X, Heart, Copy, Download, Info, Maximize2 } from 'lucide-vue-next'
 import qris1 from '@/assets/images/QRIS DKMJ.jpg'
 import qris2 from '@/assets/images/QRIS DKMJ2.jpeg'
+import bsiLogo from '@/assets/images/bsi-logo.png'
 
 const props = defineProps({
   isOpen: Boolean
