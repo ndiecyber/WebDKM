@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 animate-fade-in h-full flex flex-col">
+  <div class="space-y-6 sm:space-y-8 animate-fade-in">
     <!-- Header -->
     <div>
       <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Cetak Laporan</h1>
@@ -9,10 +9,10 @@
     </div>
 
     <!-- Main Workspace -->
-    <div class="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
+    <div class="flex flex-col xl:flex-row gap-6 items-start">
       
       <!-- Left Panel: Live Preview -->
-      <div class="flex-1 bg-gray-100 dark:bg-gray-950 rounded-2xl ring-1 ring-gray-300 dark:ring-white/10 overflow-hidden flex flex-col relative shadow-inner">
+      <div class="w-full xl:flex-1 bg-gray-100 dark:bg-gray-950 rounded-2xl ring-1 ring-gray-300 dark:ring-white/10 overflow-hidden flex flex-col relative shadow-inner h-[800px]">
         <div class="px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-white/10 flex items-center justify-between z-10 shrink-0">
           <div class="flex items-center gap-2">
             <Monitor class="w-4 h-4 text-gray-500" />
@@ -21,23 +21,23 @@
           <span class="text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">Ukuran A4</span>
         </div>
         
-        <!-- Preview Container -->
-        <div class="flex-1 overflow-auto custom-scrollbar-y p-4 sm:p-8 flex justify-center bg-gray-100/50 dark:bg-[#0a0a0a]">
-          <!-- A4 Paper Sheet -->
-          <div class="w-full max-w-[794px] min-h-[1123px] bg-white dark:bg-[#111827] shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)] ring-1 ring-gray-200 dark:ring-white/5 rounded-sm p-8 sm:p-12 shrink-0 transition-all duration-300" id="report-paper">
+        <!-- Preview Container (Overflow handles mobile scrolling) -->
+        <div class="flex-1 overflow-auto custom-scrollbar-y p-4 sm:p-8 bg-gray-100/50 dark:bg-[#0a0a0a]">
+          <!-- Wrapper for Pages -->
+          <div id="report-paper" class="flex flex-col items-center gap-8 pb-8">
             <ReportKegiatanTemplate v-if="selectedReport" :report="selectedReport" />
             
-            <div v-else class="h-full w-full min-h-[500px] flex flex-col items-center justify-center text-gray-400 opacity-50 space-y-4">
+            <div v-else class="h-full w-full max-w-[794px] min-h-[800px] bg-white/50 dark:bg-gray-900/50 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-2xl flex flex-col items-center justify-center text-gray-400 opacity-80 space-y-4">
               <FileText class="w-16 h-16" />
-              <p class="font-medium">Pilih laporan di panel kanan untuk melihat preview</p>
+              <p class="font-medium text-sm">Pilih laporan di panel kanan untuk melihat preview</p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Right Panel: Parameters -->
-      <div class="w-full lg:w-80 shrink-0 flex flex-col gap-4">
-        <div class="bg-white dark:bg-gray-900 rounded-2xl ring-1 ring-gray-300 dark:ring-white/10 p-6 shadow-md flex flex-col h-full">
+      <div class="w-full xl:w-80 shrink-0 flex flex-col gap-4 relative z-10">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl ring-1 ring-gray-300 dark:ring-white/10 p-6 shadow-md flex flex-col">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-white/10 pb-3">Pengaturan Ekspor</h3>
           
           <div class="space-y-5 flex-1">
@@ -102,7 +102,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { Download, Monitor, FileText, Info, Loader2 } from 'lucide-vue-next'
-import html2pdf from 'html2pdf.js'
 import ReportKegiatanTemplate from '@/components/ui/ReportKegiatanTemplate.vue'
 
 // --- MOCK DATA (Copy dari FinanceSection) ---
@@ -186,32 +185,94 @@ watch(selectedYear, () => {
   selectedReportId.value = ''
 })
 
-// --- Export Logic ---
-const exportToPDF = async () => {
+// --- Export Logic (Using Native Print for 100% Fidelity & Tailwind v4 support) ---
+const exportToPDF = () => {
   if (!selectedReport.value) return
-  
   isExporting.value = true
   
-  try {
-    const element = document.getElementById('report-paper')
-    
-    // Konfigurasi html2pdf
-    const opt = {
-      margin:       [0.5, 0.5, 0.5, 0.5], // margin top, left, bottom, right in inches
-      filename:     `Laporan_${selectedReport.value.title.replace(/\s+/g, '_')}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+  setTimeout(() => {
+    try {
+      const paper = document.getElementById('report-paper')
+      
+      const printContainer = document.createElement('div')
+      printContainer.id = 'print-container'
+      printContainer.innerHTML = paper.innerHTML
+      
+      Object.assign(printContainer.style, {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '210mm',
+        minHeight: '297mm',
+        background: 'white',
+        color: 'black',
+        zIndex: '999999',
+        padding: '15mm'
+      })
+      
+      document.body.appendChild(printContainer)
+      
+      const style = document.createElement('style')
+      style.id = 'print-style'
+      style.innerHTML = `
+        @media print {
+          body > *:not(#print-container) { display: none !important; }
+          @page { size: A4 portrait; margin: 0; }
+          #print-container { 
+            padding: 0 !important; 
+            box-shadow: none !important; 
+            border: none !important; 
+            background: transparent !important;
+            width: 100%;
+          }
+          .a4-page {
+            box-shadow: none !important;
+            border: none !important;
+            margin: 0 !important;
+          }
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        }
+      `
+      document.head.appendChild(style)
+      
+      // Trigger native browser print (can Save as PDF)
+      window.print()
+      
+      // Cleanup
+      document.body.removeChild(printContainer)
+      document.head.removeChild(style)
+      
+    } catch (error) {
+      console.error('Error printing:', error)
+      alert('Terjadi kesalahan saat mencetak laporan.')
+    } finally {
+      isExporting.value = false
     }
-    
-    // Proses ekspor
-    await html2pdf().set(opt).from(element).save()
-    
-  } catch (error) {
-    console.error('Error generating PDF:', error)
-    alert('Terjadi kesalahan saat mengekspor PDF.')
-  } finally {
-    isExporting.value = false
-  }
+  }, 150)
 }
 </script>
+
+<style scoped>
+.custom-scrollbar-y::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar-y::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar-y::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.4);
+  border-radius: 20px;
+}
+.dark .custom-scrollbar-y::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.custom-scrollbar-y::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.6);
+}
+.dark .custom-scrollbar-y::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+</style>
