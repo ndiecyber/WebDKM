@@ -69,7 +69,10 @@
           <div class="w-full flex justify-center lg:justify-end perspective-1000 mt-8 lg:mt-0">
             <div 
               ref="cardRef"
-              class="w-full max-w-[20rem] sm:max-w-md bg-[#1E293B]/80 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden"
+              @mousemove="handleMouseMove"
+              @mouseleave="handleMouseLeave"
+              :style="{ transform: cardTilt, transition: isMouseOver ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out' }"
+              class="w-full max-w-[20rem] sm:max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden will-change-transform"
             >
               <!-- Decorative element -->
               <div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/30 rounded-full blur-3xl pointer-events-none"></div>
@@ -153,7 +156,33 @@ const bgImageRef = ref(null)
 const cardRef = ref(null)
 const donationCount = ref(null)
 
-// 3D Tilt dihapus untuk performa
+// 3D Tilt Effect Logic
+const cardTilt = ref('perspective(1000px) rotateX(0deg) rotateY(0deg)')
+const isMouseOver = ref(false)
+
+const handleMouseMove = (e) => {
+  const card = cardRef.value
+  if (!card) return
+  isMouseOver.value = true
+  
+  const rect = card.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+  
+  const centerX = rect.width / 2
+  const centerY = rect.height / 2
+  
+  // Calculate tilt (max 8 degrees)
+  const tiltX = ((y - centerY) / centerY) * -8
+  const tiltY = ((x - centerX) / centerX) * 8
+  
+  cardTilt.value = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`
+}
+
+const handleMouseLeave = () => {
+  isMouseOver.value = false
+  cardTilt.value = 'perspective(1000px) rotateX(0deg) rotateY(0deg)'
+}
 
 onMounted(() => {
   sliderInterval = setInterval(() => {
@@ -173,7 +202,17 @@ onMounted(() => {
     { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: 'power3.out', scrollTrigger: triggerConfig }
   )
 
-  // Subtle parallax dihapus untuk performa
+  // Subtle parallax effect on the background image wrapper
+  gsap.to(bgImageRef.value, {
+    y: '-10%',
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#donasi',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true
+    }
+  })
 
   // Animate progress bars
   gsap.utils.toArray('.progress-bar').forEach((el, index) => {

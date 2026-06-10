@@ -156,10 +156,6 @@ onMounted(() => {
       
       // Hide completely after fade out
       setTimeout(() => {
-        // Force scroll to absolute top - CRITICAL for iOS Safari
-        window.scrollTo(0, 0)
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
         show.value = false
       }, 700)
     }
