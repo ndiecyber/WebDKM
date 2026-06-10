@@ -149,7 +149,6 @@ import heroImg1 from '@/assets/images/hero-mosque.png'
 import heroImg2 from '@/assets/images/mosque-exterior.png'
 import heroImg3 from '@/assets/images/community-prayer.png'
 import heroImg4 from '@/assets/images/mosque-interior.png'
-import logoImg from '@/assets/images/logo-kustom.png'
 
 const adminStore = useAdminStore()
 const settings = adminStore.generalSettings

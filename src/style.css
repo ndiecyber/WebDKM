@@ -54,8 +54,8 @@ a, button {
 /* Fix image alt text rendering on iOS Safari */
 img {
   color: transparent;
-  font-size: 0;
 }
+
 
 /* ===== Scrollbar Styling ===== */
 ::-webkit-scrollbar {

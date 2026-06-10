@@ -230,7 +230,11 @@ const menuItems = [
 
 const scrollToSection = (id) => {
   const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
+  if (!el) return
+  // Offset navbar height (navbar ~56px + announcement bar ~32px = ~88px)
+  const navHeight = (navRef.value?.offsetHeight || 88)
+  const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
 }
 
 const handleScroll = () => {

@@ -200,6 +200,9 @@ const quickLinks = [
 
 const scrollToSection = (id) => {
   const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
+  if (!el) return
+  const navHeight = 88
+  const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
 }
 </script>
