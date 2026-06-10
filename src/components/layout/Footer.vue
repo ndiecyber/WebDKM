@@ -14,7 +14,7 @@
             <img
               :src="logoImg"
               alt="Logo Masjid Jami Kassiti"
-              class="h-16 sm:h-20 w-auto object-contain text-transparent"
+              class="h-16 sm:h-20 w-auto object-contain"
             />
           </div>
           <p class="text-white/60 text-sm leading-relaxed mb-4">
@@ -200,9 +200,6 @@ const quickLinks = [
 
 const scrollToSection = (id) => {
   const el = document.getElementById(id)
-  if (!el) return
-  const navHeight = 88
-  const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
 </script>

@@ -32,7 +32,7 @@
       <div class="flex items-center justify-between">
         <!-- Logo -->
         <a href="#beranda" class="flex items-center group" @click.prevent="scrollToSection('beranda')">
-          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300 text-transparent" />
+          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300" />
         </a>
 
         <!-- Desktop Menu -->
@@ -127,7 +127,7 @@
       leave-from-class="opacity-100 translate-y-0"
       leave-to-class="opacity-0 -translate-y-4"
     >
-      <div v-if="mobileOpen" class="lg:hidden bg-dark shadow-2xl mt-2 mx-4 rounded-2xl p-4 border border-white/10">
+      <div v-if="mobileOpen" class="lg:hidden glass-dark mt-2 mx-4 rounded-2xl p-4 border border-white/10">
         <a
           v-for="item in menuItems"
           :key="item.id"
@@ -230,11 +230,7 @@ const menuItems = [
 
 const scrollToSection = (id) => {
   const el = document.getElementById(id)
-  if (!el) return
-  // Offset navbar height (navbar ~56px + announcement bar ~32px = ~88px)
-  const navHeight = (navRef.value?.offsetHeight || 88)
-  const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
 
 const handleScroll = () => {

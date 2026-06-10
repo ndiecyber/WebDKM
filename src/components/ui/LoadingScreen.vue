@@ -42,7 +42,7 @@
           <img
             :src="logoImg"
             alt="Logo Masjid Jami Kassiti"
-            class="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] text-transparent"
+            class="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]"
           />
         </div>
 

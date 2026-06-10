@@ -32,30 +32,13 @@ body {
   font-family: var(--font-family-body);
   color: #111827;
   background-color: #F9FAFB;
-  /* overflow-x: hidden dihapus karena merusak scroll di iOS Safari */
+  overflow-x: hidden;
 }
 
 .dark body {
   color: #F9FAFB;
   background-color: #111827;
 }
-
-
-/* ===== iOS Safari Fixes ===== */
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-/* Prevent iOS tap highlight */
-a, button {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Fix image alt text rendering on iOS Safari */
-img {
-  color: transparent;
-}
-
 
 /* ===== Scrollbar Styling ===== */
 ::-webkit-scrollbar {
