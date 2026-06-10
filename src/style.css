@@ -50,16 +50,6 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Smooth scrolling di iOS */
-* {
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Safe area padding untuk iPhone X+ (notch & home bar) */
-body {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-}
-
 /* Prevent iOS tap highlight */
 a, button {
   -webkit-tap-highlight-color: transparent;
