@@ -15,7 +15,7 @@
           <button @click="viewMode = 'terpisah'" :class="['px-3 py-1.5 rounded-md transition-all', viewMode === 'terpisah' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300']">Terpisah</button>
         </div>
         
-        <button @click="showCatatModal = true" class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
+        <button @click="openCatatModal" class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
           <Plus class="w-4 h-4" />
           <span class="hidden sm:inline">Catat Transaksi</span>
         </button>
@@ -35,16 +35,19 @@
         />
       </div>
       <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
-        <button v-if="viewMode === 'gabung'" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-white/5 whitespace-nowrap">
-          Semua
-        </button>
-        <button v-if="viewMode === 'gabung'" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 whitespace-nowrap">
-          Pemasukan
-        </button>
-        <button v-if="viewMode === 'gabung'" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 whitespace-nowrap">
-          Pengeluaran
-        </button>
-        <div v-if="viewMode === 'gabung'" class="w-px h-6 bg-gray-200 dark:bg-white/10 mx-2 hidden md:block"></div>
+        <template v-if="viewMode === 'gabung'">
+          <button @click="setFilter('semua')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'semua' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-white/5' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400']">
+            Semua
+          </button>
+          <button @click="setFilter('in')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'in' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-500/20' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400']">
+            Pemasukan
+          </button>
+          <button @click="setFilter('out')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'out' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 ring-1 ring-rose-500/20' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400']">
+            Pengeluaran
+          </button>
+          <div class="w-px h-6 bg-gray-200 dark:bg-white/10 mx-2 hidden md:block"></div>
+        </template>
+        
         <button @click="showFilterModal = true" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300 whitespace-nowrap flex items-center gap-2 ring-1 ring-gray-300 dark:ring-white/10 bg-white dark:bg-gray-800 shadow-sm">
           <Filter class="w-4 h-4" />
           Filter Lanjutan
@@ -52,26 +55,52 @@
       </div>
     </div>
 
+    <!-- Summary Cards (Visible in both views) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-emerald-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+        <div>
+          <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Total Pemasukan</p>
+          <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp 16.950.000</p>
+        </div>
+        <div class="p-2.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg"><ArrowDownLeft class="w-5 h-5 text-emerald-600 dark:text-emerald-400" /></div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-rose-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+        <div>
+          <p class="text-sm font-medium text-rose-600 dark:text-rose-400">Total Pengeluaran</p>
+          <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp 4.600.000</p>
+        </div>
+        <div class="p-2.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg"><ArrowUpRight class="w-5 h-5 text-rose-600 dark:text-rose-400" /></div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-blue-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+        <div>
+          <p class="text-sm font-medium text-blue-600 dark:text-blue-400">Surplus / Defisit</p>
+          <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp 12.350.000</p>
+        </div>
+        <div class="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg"><Scale class="w-5 h-5 text-blue-600 dark:text-blue-400" /></div>
+      </div>
+    </div>
+
     <!-- View: Gabung -->
     <div v-if="viewMode === 'gabung'" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl overflow-hidden shadow-md">
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
+        <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[800px]">
           <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-300 dark:border-white/5">
             <tr>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tanggal</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Deskripsi</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Kas/Rekening</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider text-right">Nominal</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider text-right">Aksi</th>
+              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Tanggal</th>
+              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Deskripsi</th>
+              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kategori</th>
+              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kas/Rekening</th>
+              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Status</th>
+              <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Nominal</th>
+              <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-            <tr v-for="tx in transactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
-              <td class="px-6 py-4 whitespace-nowrap">
+            <tr v-for="tx in paginatedFilteredTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
+              <td class="px-6 py-2.5 whitespace-nowrap">
                 <div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div>
-                <div class="text-xs text-gray-500">{{ tx.time }}</div>
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-2.5">
                 <div class="flex items-center gap-3">
                   <div :class="[
                     'w-8 h-8 rounded-full flex items-center justify-center shrink-0',
@@ -80,43 +109,59 @@
                     <ArrowDownLeft v-if="tx.type === 'in'" class="w-4 h-4" />
                     <ArrowUpRight v-else class="w-4 h-4" />
                   </div>
-                  <div>
-                    <p class="text-gray-900 dark:text-gray-200 font-medium">{{ tx.description }}</p>
-                    <p class="text-xs text-gray-500">{{ tx.category }}</p>
-                  </div>
+                  <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.description">{{ tx.description }}</p>
                 </div>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
+              <td class="px-6 py-2.5 whitespace-nowrap">
+                <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
+              </td>
+              <td class="px-6 py-2.5 whitespace-nowrap">
                 <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 ring-1 ring-gray-300 dark:ring-white/10">
                   {{ tx.account }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right">
+              <td class="px-6 py-2.5 whitespace-nowrap">
+                <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                  Approved
+                </span>
+                <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">
+                  Pending
+                </span>
+              </td>
+              <td class="px-6 py-2.5 whitespace-nowrap text-right">
                 <span :class="[
                   'font-semibold',
-                  tx.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+                  tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : (tx.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400')
                 ]">
                   {{ tx.type === 'in' ? '+' : '-' }} Rp {{ tx.amount }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right">
-                <button class="text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-white p-1 rounded transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
-                  <MoreHorizontal class="w-5 h-5" />
-                </button>
+              <td class="px-6 py-2.5 whitespace-nowrap text-right">
+                <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                  <button @click="openEditModal(tx)" class="p-1.5 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors" title="Edit">
+                    <Pencil class="w-4 h-4" />
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="p-4 border-t border-gray-300 dark:border-white/5 flex items-center justify-between text-xs text-gray-500 bg-gray-50 dark:bg-gray-950/30">
-        <span>Menampilkan 1-5 dari 45 transaksi</span>
+        <span>Menampilkan {{ filteredTransactions.length === 0 ? 0 : (currentPage - 1) * 10 + 1 }}-{{ Math.min(currentPage * 10, filteredTransactions.length) }} dari {{ filteredTransactions.length }} transaksi</span>
         <div class="flex items-center gap-1">
-          <button class="p-1 rounded hover:bg-gray-200 dark:hover:bg-white/5 disabled:opacity-50" disabled>
+          <button @click="currentPage--" :disabled="currentPage === 1" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-white/5 disabled:opacity-50 transition-colors">
             <ChevronLeft class="w-4 h-4" />
           </button>
-          <button class="w-6 h-6 rounded bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-medium flex items-center justify-center">1</button>
-          <button class="w-6 h-6 rounded hover:bg-gray-200 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 flex items-center justify-center">2</button>
-          <button class="p-1 rounded hover:bg-gray-200 dark:hover:bg-white/5">
+          <button 
+            v-for="page in totalPages" 
+            :key="page"
+            @click="currentPage = page"
+            :class="['w-6 h-6 rounded text-sm flex items-center justify-center transition-colors', currentPage === page ? 'bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-medium' : 'hover:bg-gray-200 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400']"
+          >
+            {{ page }}
+          </button>
+          <button @click="currentPage++" :disabled="currentPage === totalPages || totalPages === 0" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-white/5 disabled:opacity-50 transition-colors">
             <ChevronRight class="w-4 h-4" />
           </button>
         </div>
@@ -125,6 +170,7 @@
 
     <!-- View: Terpisah -->
     <div v-else class="space-y-6">
+
       <!-- Pemasukan -->
       <div class="bg-white dark:bg-gray-900 ring-1 ring-emerald-500/30 rounded-xl overflow-hidden shadow-md relative">
         <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
@@ -135,33 +181,72 @@
           <h2 class="font-semibold text-emerald-900 dark:text-emerald-100">Pemasukan</h2>
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
+          <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[700px]">
             <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/30 border-b border-gray-200 dark:border-white/5">
               <tr>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Tanggal</th>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Deskripsi</th>
+                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kategori</th>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kas/Rekening</th>
+                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Status</th>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Nominal</th>
+                <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-              <tr v-for="tx in pemasukanTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                <td class="px-6 py-3 whitespace-nowrap">
+              <tr v-for="tx in paginatedPemasukanTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
+                <td class="px-6 py-2.5 whitespace-nowrap">
                   <div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div>
                 </td>
-                <td class="px-6 py-3">
-                  <p class="text-gray-900 dark:text-gray-200 font-medium">{{ tx.description }}</p>
-                  <p class="text-xs text-gray-500">{{ tx.category }}</p>
+                <td class="px-6 py-2.5">
+                  <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.description">{{ tx.description }}</p>
                 </td>
-                <td class="px-6 py-3 whitespace-nowrap">
+                <td class="px-6 py-2.5 whitespace-nowrap">
+                  <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
+                </td>
+                <td class="px-6 py-2.5 whitespace-nowrap">
                   <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span>
                 </td>
-                <td class="px-6 py-3 whitespace-nowrap text-right font-semibold text-emerald-600 dark:text-emerald-400">
+                <td class="px-6 py-2.5 whitespace-nowrap">
+                  <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                    Approved
+                  </span>
+                  <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">
+                    Pending
+                  </span>
+                </td>
+                <td :class="['px-6 py-2.5 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-emerald-600 dark:text-emerald-400']">
                   + Rp {{ tx.amount }}
+                </td>
+                <td class="px-6 py-2.5 whitespace-nowrap text-right">
+                  <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                    <button @click="openEditModal(tx)" class="p-1 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors" title="Edit">
+                      <Pencil class="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="p-4 border-t border-gray-200 dark:border-white/5 flex items-center justify-between text-xs text-gray-500 bg-emerald-50/50 dark:bg-emerald-500/5">
+          <span>Menampilkan {{ pemasukanTransactions.length === 0 ? 0 : (currentPagePemasukan - 1) * 5 + 1 }}-{{ Math.min(currentPagePemasukan * 5, pemasukanTransactions.length) }} dari {{ pemasukanTransactions.length }} transaksi</span>
+          <div class="flex items-center gap-1">
+            <button @click="currentPagePemasukan--" :disabled="currentPagePemasukan === 1" class="p-1 rounded hover:bg-emerald-100 dark:hover:bg-emerald-500/20 disabled:opacity-50 transition-colors">
+              <ChevronLeft class="w-4 h-4" />
+            </button>
+            <button 
+              v-for="page in totalPagesPemasukan" 
+              :key="page"
+              @click="currentPagePemasukan = page"
+              :class="['w-6 h-6 rounded text-sm flex items-center justify-center transition-colors', currentPagePemasukan === page ? 'bg-emerald-200 dark:bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 font-medium' : 'hover:bg-emerald-100 dark:hover:bg-emerald-500/10 text-gray-600 dark:text-gray-400']"
+            >
+              {{ page }}
+            </button>
+            <button @click="currentPagePemasukan++" :disabled="currentPagePemasukan === totalPagesPemasukan || totalPagesPemasukan === 0" class="p-1 rounded hover:bg-emerald-100 dark:hover:bg-emerald-500/20 disabled:opacity-50 transition-colors">
+              <ChevronRight class="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -175,45 +260,84 @@
           <h2 class="font-semibold text-rose-900 dark:text-rose-100">Pengeluaran</h2>
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400">
+          <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[700px]">
             <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/30 border-b border-gray-200 dark:border-white/5">
               <tr>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Tanggal</th>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Deskripsi</th>
+                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kategori</th>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kas/Rekening</th>
+                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Status</th>
                 <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Nominal</th>
+                <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-              <tr v-for="tx in pengeluaranTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                <td class="px-6 py-3 whitespace-nowrap">
+              <tr v-for="tx in paginatedPengeluaranTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
+                <td class="px-6 py-2.5 whitespace-nowrap">
                   <div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div>
                 </td>
-                <td class="px-6 py-3">
-                  <p class="text-gray-900 dark:text-gray-200 font-medium">{{ tx.description }}</p>
-                  <p class="text-xs text-gray-500">{{ tx.category }}</p>
+                <td class="px-6 py-2.5">
+                  <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.description">{{ tx.description }}</p>
                 </td>
-                <td class="px-6 py-3 whitespace-nowrap">
+                <td class="px-6 py-2.5 whitespace-nowrap">
+                  <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
+                </td>
+                <td class="px-6 py-2.5 whitespace-nowrap">
                   <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span>
                 </td>
-                <td class="px-6 py-3 whitespace-nowrap text-right font-semibold text-rose-600 dark:text-rose-400">
+                <td class="px-6 py-2.5 whitespace-nowrap">
+                  <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                    Approved
+                  </span>
+                  <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">
+                    Pending
+                  </span>
+                </td>
+                <td :class="['px-6 py-2.5 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-rose-600 dark:text-rose-400']">
                   - Rp {{ tx.amount }}
+                </td>
+                <td class="px-6 py-2.5 whitespace-nowrap text-right">
+                  <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                    <button @click="openEditModal(tx)" class="p-1 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors" title="Edit">
+                      <Pencil class="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+        <div class="p-4 border-t border-gray-200 dark:border-white/5 flex items-center justify-between text-xs text-gray-500 bg-rose-50/50 dark:bg-rose-500/5">
+          <span>Menampilkan {{ pengeluaranTransactions.length === 0 ? 0 : (currentPagePengeluaran - 1) * 5 + 1 }}-{{ Math.min(currentPagePengeluaran * 5, pengeluaranTransactions.length) }} dari {{ pengeluaranTransactions.length }} transaksi</span>
+          <div class="flex items-center gap-1">
+            <button @click="currentPagePengeluaran--" :disabled="currentPagePengeluaran === 1" class="p-1 rounded hover:bg-rose-100 dark:hover:bg-rose-500/20 disabled:opacity-50 transition-colors">
+              <ChevronLeft class="w-4 h-4" />
+            </button>
+            <button 
+              v-for="page in totalPagesPengeluaran" 
+              :key="page"
+              @click="currentPagePengeluaran = page"
+              :class="['w-6 h-6 rounded text-sm flex items-center justify-center transition-colors', currentPagePengeluaran === page ? 'bg-rose-200 dark:bg-rose-500/20 text-rose-900 dark:text-rose-300 font-medium' : 'hover:bg-rose-100 dark:hover:bg-rose-500/10 text-gray-600 dark:text-gray-400']"
+            >
+              {{ page }}
+            </button>
+            <button @click="currentPagePengeluaran++" :disabled="currentPagePengeluaran === totalPagesPengeluaran || totalPagesPengeluaran === 0" class="p-1 rounded hover:bg-rose-100 dark:hover:bg-rose-500/20 disabled:opacity-50 transition-colors">
+              <ChevronRight class="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Modals -->
-    <!-- Modal Catat Transaksi -->
+    <!-- Modal Catat / Edit Transaksi -->
     <div v-if="showCatatModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="showCatatModal = false"></div>
       
       <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Catat Transaksi Baru</h3>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ isEditMode ? 'Edit Transaksi' : 'Catat Transaksi Baru' }}</h3>
           <button @click="showCatatModal = false" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
             <X class="w-5 h-5" />
           </button>
@@ -237,11 +361,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nominal (Rp)</label>
-              <input type="number" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="0">
+              <input type="number" v-model="catatForm.amount" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="0">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal</label>
-              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
+              <input type="date" v-model="catatForm.date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
             </div>
           </div>
 
@@ -249,7 +373,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kas / Rekening</label>
-              <select class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <select v-model="catatForm.account" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
                 <option>Kotak Amal Utama</option>
                 <option>BSI Masjid Jami Kassiti</option>
                 <option>Kas Kecil Operasional</option>
@@ -257,7 +381,7 @@
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kategori</label>
-              <select class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <select v-model="catatForm.category" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
                 <option v-if="catatForm.tipe === 'in'">Infaq Mingguan</option>
                 <option v-if="catatForm.tipe === 'in'">Donasi Umum</option>
                 <option v-if="catatForm.tipe === 'out'">Operasional</option>
@@ -270,13 +394,28 @@
           <!-- Deskripsi -->
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi / Keterangan</label>
-            <textarea rows="3" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="Tulis rincian transaksi..."></textarea>
+            <textarea v-model="catatForm.description" rows="3" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="Tulis rincian transaksi..."></textarea>
+          </div>
+
+          <!-- Status -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status Transaksi</label>
+            <div class="flex gap-4">
+              <label class="flex items-center gap-2 cursor-pointer group">
+                <input type="radio" v-model="catatForm.status" value="approved" class="text-secondary focus:ring-secondary w-4 h-4 bg-white dark:bg-gray-950 border-gray-300 dark:border-gray-700">
+                <span class="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">Approved</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer group">
+                <input type="radio" v-model="catatForm.status" value="pending" class="text-secondary focus:ring-secondary w-4 h-4 bg-white dark:bg-gray-950 border-gray-300 dark:border-gray-700">
+                <span class="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">Pending</span>
+              </label>
+            </div>
           </div>
         </div>
         
         <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
           <button @click="showCatatModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
-          <button @click="showCatatModal = false" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors">Simpan Transaksi</button>
+          <button @click="showCatatModal = false" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors">{{ isEditMode ? 'Simpan Perubahan' : 'Simpan Transaksi' }}</button>
         </div>
       </div>
     </div>
@@ -306,13 +445,23 @@
             </div>
           </div>
 
-          <!-- Rentang Tanggal -->
+          <!-- Rentang Tanggal / Bulan -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rentang Tanggal</label>
-            <div class="flex items-center gap-2">
-              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white">
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Waktu</label>
+              <div class="flex bg-gray-100 dark:bg-gray-800 p-0.5 rounded-md">
+                <button @click="filterDateMode = 'bulan'" :class="['px-2.5 py-1 text-xs font-medium rounded transition-colors', filterDateMode === 'bulan' ? 'bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']">Pilih Bulan</button>
+                <button @click="filterDateMode = 'rentang'" :class="['px-2.5 py-1 text-xs font-medium rounded transition-colors', filterDateMode === 'rentang' ? 'bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']">Rentang Custom</button>
+              </div>
+            </div>
+            
+            <div v-if="filterDateMode === 'bulan'">
+              <input type="month" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+            </div>
+            <div v-else class="flex items-center gap-2">
+              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
               <span class="text-gray-500">-</span>
-              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white">
+              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
             </div>
           </div>
 
@@ -349,23 +498,113 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, MoreHorizontal, ChevronLeft, ChevronRight, X } from 'lucide-vue-next'
+import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale } from 'lucide-vue-next'
 
-const viewMode = ref('gabung') // 'gabung' | 'terpisah'
+const viewMode = ref('terpisah') // Default terpisah sesuai permintaan
 const showCatatModal = ref(false)
 const showFilterModal = ref(false)
-const catatForm = ref({ tipe: 'in' })
+const filterDateMode = ref('bulan') // 'bulan' | 'rentang'
+const activeFilter = ref('semua') // 'semua' | 'in' | 'out'
+const isEditMode = ref(false)
+const currentPage = ref(1)
+const currentPagePemasukan = ref(1)
+const currentPagePengeluaran = ref(1)
+
+const setFilter = (filter) => {
+  activeFilter.value = filter
+  currentPage.value = 1
+}
+
+const catatForm = ref({ 
+  tipe: 'in',
+  status: 'approved',
+  amount: '',
+  date: '',
+  account: '',
+  category: '',
+  description: ''
+})
 
 const transactions = [
-  { id: 1, date: '12 Okt 2023', time: '13:45', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', amount: '3.450.000' },
-  { id: 2, date: '10 Okt 2023', time: '09:00', description: 'Pembayaran Listrik & Air PLN/PDAM', category: 'Operasional', account: 'BSI Masjid', type: 'out', amount: '1.250.000' },
-  { id: 3, date: '08 Okt 2023', time: '16:30', description: 'Donasi Hamba Allah (Transfer)', category: 'Infaq Umum', account: 'BSI Masjid', type: 'in', amount: '5.000.000' },
-  { id: 4, date: '05 Okt 2023', time: '10:00', description: 'Honor Penceramah Kajian', category: 'Dakwah & Kajian', account: 'Kas Tunai', type: 'out', amount: '500.000' },
-  { id: 5, date: '01 Okt 2023', time: '08:15', description: 'Pembelian Alat Kebersihan', category: 'Pemeliharaan', account: 'Kas Tunai', type: 'out', amount: '350.000' },
+  { id: 1, date: '12 Okt 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '3.450.000' },
+  { id: 2, date: '10 Okt 2023', description: 'Pembayaran Listrik & Air PLN/PDAM', category: 'Operasional', account: 'BSI Masjid', type: 'out', status: 'approved', amount: '1.250.000' },
+  { id: 3, date: '08 Okt 2023', description: 'Donasi Hamba Allah (Transfer)', category: 'Donasi Umum', account: 'BSI Masjid', type: 'in', status: 'pending', amount: '5.000.000' },
+  { id: 4, date: '05 Okt 2023', description: 'Honor Penceramah Kajian', category: 'Dakwah & Kajian', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '500.000' },
+  { id: 5, date: '01 Okt 2023', description: 'Pembelian Alat Kebersihan', category: 'Pemeliharaan', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '350.000' },
+  { id: 6, date: '28 Sep 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.200.000' },
+  { id: 7, date: '25 Sep 2023', description: 'Pembelian Sound System Baru', category: 'Inventaris', account: 'BSI Masjid', type: 'out', status: 'pending', amount: '2.500.000' },
+  { id: 8, date: '21 Sep 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.300.000' },
+  { id: 9, date: '15 Sep 2023', description: 'Santunan Anak Yatim', category: 'Sosial', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '1.000.000' },
+  { id: 10, date: '12 Sep 2023', description: 'Sumbangan Hamba Allah (Tunai)', category: 'Donasi Umum', account: 'Kas Tunai', type: 'in', status: 'approved', amount: '1.500.000' },
+  { id: 11, date: '10 Sep 2023', description: 'Konsumsi Rapat Pengurus', category: 'Operasional', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '250.000' },
+  { id: 12, date: '08 Sep 2023', description: 'Pemasangan Spanduk Kajian', category: 'Publikasi', account: 'Kas Tunai', type: 'out', status: 'pending', amount: '150.000' },
+  { id: 13, date: '05 Sep 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '3.800.000' },
+  { id: 14, date: '01 Sep 2023', description: 'Sumbangan untuk Marbot', category: 'Insentif', account: 'BSI Masjid', type: 'out', status: 'approved', amount: '1.200.000' },
+  { id: 15, date: '28 Agu 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.100.000' },
+  { id: 16, date: '25 Agu 2023', description: 'Pengecatan Ulang Dinding Masjid', category: 'Pemeliharaan', account: 'BSI Masjid', type: 'out', status: 'pending', amount: '3.500.000' },
+  { id: 17, date: '21 Agu 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '3.900.000' },
+  { id: 18, date: '18 Agu 2023', description: 'Pembayaran Wi-Fi Masjid', category: 'Operasional', account: 'BSI Masjid', type: 'out', status: 'approved', amount: '350.000' },
+  { id: 19, date: '15 Agu 2023', description: 'Bantuan Fakir Miskin', category: 'Sosial', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '2.000.000' },
+  { id: 20, date: '14 Agu 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.000.000' },
 ]
+
+const filteredTransactions = computed(() => {
+  if (activeFilter.value === 'semua') return transactions;
+  return transactions.filter(t => t.type === activeFilter.value);
+})
 
 const pemasukanTransactions = computed(() => transactions.filter(t => t.type === 'in'))
 const pengeluaranTransactions = computed(() => transactions.filter(t => t.type === 'out'))
+
+const totalPages = computed(() => Math.ceil(filteredTransactions.value.length / 10))
+const totalPagesPemasukan = computed(() => Math.ceil(pemasukanTransactions.value.length / 5))
+const totalPagesPengeluaran = computed(() => Math.ceil(pengeluaranTransactions.value.length / 5))
+
+// Untuk keperluan mockup, batasi tampilan per tabel agar tidak perlu scroll panjang.
+// Nantinya ini akan di-handle oleh Pagination Backend (misal: tx.data dari response API)
+const paginatedFilteredTransactions = computed(() => {
+  const start = (currentPage.value - 1) * 10
+  const end = start + 10
+  return filteredTransactions.value.slice(start, end)
+})
+const paginatedPemasukanTransactions = computed(() => {
+  const start = (currentPagePemasukan.value - 1) * 5
+  const end = start + 5
+  return pemasukanTransactions.value.slice(start, end)
+})
+const paginatedPengeluaranTransactions = computed(() => {
+  const start = (currentPagePengeluaran.value - 1) * 5
+  const end = start + 5
+  return pengeluaranTransactions.value.slice(start, end)
+})
+
+const openCatatModal = () => {
+  isEditMode.value = false;
+  catatForm.value = {
+    tipe: 'in',
+    status: 'approved',
+    amount: '',
+    date: '',
+    account: '',
+    category: '',
+    description: ''
+  };
+  showCatatModal.value = true;
+}
+
+const openEditModal = (tx) => {
+  isEditMode.value = true;
+  catatForm.value = {
+    tipe: tx.type,
+    status: tx.status || 'approved',
+    amount: tx.amount.replace(/\./g, ''), // Strip dots for input
+    date: tx.date, // In a real app, parse this properly to YYYY-MM-DD
+    account: tx.account,
+    category: tx.category,
+    description: tx.description
+  };
+  showCatatModal.value = true;
+}
 </script>
 
 <style scoped>
