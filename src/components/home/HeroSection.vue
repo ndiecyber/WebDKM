@@ -1,5 +1,5 @@
 <template>
-  <section id="beranda" class="relative min-h-screen flex items-center overflow-hidden" style="min-height: 100dvh;">
+  <section id="beranda" class="relative min-h-screen flex items-center overflow-hidden">
     <!-- Background Image Slider -->
     <div class="absolute inset-0 bg-dark overflow-hidden">
       <div ref="bgImage" class="absolute -inset-[5%] w-[110%] h-[110%]">
@@ -33,10 +33,10 @@
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 sm:pb-16 w-full">
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 w-full">
       <div class="max-w-3xl lg:pl-24 2xl:pl-0">
         <!-- Badge -->
-        <div ref="badge" class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/15 border border-secondary/30 mb-6 sm:mb-8 opacity-0 max-w-full overflow-hidden">
+        <div ref="badge" class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/15 border border-secondary/30 mb-6 sm:mb-8 max-w-full overflow-hidden">
           <MapPin class="w-3 h-3 sm:w-4 sm:h-4 text-secondary shrink-0" />
           <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">Perumahan Arjamukti Kencana Raya</span>
         </div>
@@ -44,7 +44,7 @@
         <!-- Heading -->
         <h2
           ref="heading"
-          class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6 opacity-0"
+          class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6"
           v-html="settings.slogan"
         >
         </h2>
@@ -52,17 +52,16 @@
         <!-- Subtitle -->
         <p
           ref="subtitle"
-          class="text-white/70 text-sm sm:text-base md:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10 opacity-0"
+          class="text-white/70 text-sm sm:text-base md:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10"
         >
           {{ settings.description }}
         </p>
 
         <!-- CTA Buttons -->
-        <!-- CTA Buttons -->
-        <div ref="ctas" class="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-4 opacity-0 max-w-sm sm:max-w-none">
+        <div ref="ctas" class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-4">
           <button
             @click="scrollToSection('keuangan')"
-            class="w-full sm:w-auto px-4 py-2.5 sm:px-8 sm:py-4 bg-white/10 text-white text-xs sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 active:bg-white/30 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-1.5 sm:gap-2 group"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-white/10 text-white text-xs sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-1.5 sm:gap-2 group"
           >
             <Wallet class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
             <span>Keuangan</span>
@@ -70,7 +69,7 @@
 
           <button
             @click="scrollToSection('layanan')"
-            class="w-full sm:w-auto px-4 py-2.5 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white active:opacity-80 transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20"
           >
             <Gift class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
             <span>Qurban</span>
@@ -78,7 +77,7 @@
 
           <button
             @click="scrollToSection('layanan')"
-            class="w-full sm:w-auto px-4 py-2.5 sm:px-8 sm:py-4 bg-white/10 text-white text-xs sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 active:bg-white/30 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-1.5 sm:gap-2 group"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-white/10 text-white text-xs sm:text-base font-bold rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-300 backdrop-blur-md flex items-center justify-center gap-1.5 sm:gap-2 group"
           >
             <HeartHandshake class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
             <span>Zakat</span>
@@ -87,7 +86,7 @@
           <!-- Donasi Mobile Only -->
           <button
             @click="isDonationModalOpen = true"
-            class="w-full sm:w-auto px-4 py-2.5 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white active:opacity-80 transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20 lg:hidden"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20 lg:hidden"
           >
             <HandCoins class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
             <span>Donasi</span>
@@ -130,10 +129,10 @@
     </div>
 
     <!-- Scroll Indicator -->
-    <div class="absolute bottom-10 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 sm:gap-2" style="padding-bottom: env(safe-area-inset-bottom, 0px);">
-      <span class="text-white/40 text-[9px] sm:text-xs tracking-widest uppercase">Scroll</span>
-      <div class="w-5 h-7 sm:w-6 sm:h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1 sm:p-1.5">
-        <div class="w-1 h-2 sm:w-1.5 sm:h-3 rounded-full bg-secondary scroll-indicator"></div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+      <span class="text-white/40 text-xs tracking-widest uppercase">Scroll</span>
+      <div class="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1.5">
+        <div class="w-1.5 h-3 rounded-full bg-secondary scroll-indicator"></div>
       </div>
     </div>
   </section>

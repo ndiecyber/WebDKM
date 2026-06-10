@@ -42,7 +42,7 @@
           <img
             :src="logoImg"
             alt="Logo Masjid Jami Kassiti"
-            class="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] text-transparent"
+            class="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]"
           />
         </div>
 
@@ -156,6 +156,10 @@ onMounted(() => {
       
       // Hide completely after fade out
       setTimeout(() => {
+        // Force scroll to absolute top - CRITICAL for iOS Safari
+        window.scrollTo(0, 0)
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
         show.value = false
       }, 700)
     }

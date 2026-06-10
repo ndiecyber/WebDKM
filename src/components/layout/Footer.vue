@@ -14,7 +14,7 @@
             <img
               :src="logoImg"
               alt="Logo Masjid Jami Kassiti"
-              class="h-16 sm:h-20 w-auto object-contain text-transparent"
+              class="h-16 sm:h-20 w-auto object-contain"
             />
           </div>
           <p class="text-white/60 text-sm leading-relaxed mb-4">

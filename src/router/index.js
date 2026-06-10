@@ -76,6 +76,10 @@ const routes = [
         component: () => import('../views/admin/ProfilView.vue'),
       }
     ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
   }
 ]
 
