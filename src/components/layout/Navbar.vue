@@ -183,6 +183,7 @@ import logoLight from '@/assets/images/logo-kustom.png'
 import logoDark from '@/assets/images/logo-kustom2.png'
 import { usePrayerStore } from '@/stores/prayer'
 import { isDonationModalOpen } from '@/composables/useDonationModal'
+import { scrollToSection } from '@/utils/scroll'
 
 const isDark = useDark({
   selector: 'html',
@@ -228,15 +229,6 @@ const menuItems = [
   { id: 'kontak', label: 'Kontak' },
 ]
 
-const scrollToSection = (id) => {
-  const el = document.getElementById(id)
-  if (!el) return
-  // iOS Safari: scrollIntoView unreliable with position:fixed navbar
-  // Use window.scrollTo with manual offset instead
-  const navHeight = navRef.value ? navRef.value.offsetHeight : 88
-  const elTop = el.getBoundingClientRect().top + window.pageYOffset - navHeight
-  window.scrollTo({ top: Math.max(0, elTop), behavior: 'smooth' })
-}
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 50

@@ -167,6 +167,7 @@
 import { ref, computed } from 'vue'
 import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck } from 'lucide-vue-next'
 import logoImg from '@/assets/images/logo-kustom2.png'
+import { scrollToSection } from '@/utils/scroll'
 
 const currentYear = computed(() => new Date().getFullYear())
 
@@ -198,8 +199,4 @@ const quickLinks = [
   { id: 'donasi', label: 'Donasi' },
 ]
 
-const scrollToSection = (id) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
-}
 </script>

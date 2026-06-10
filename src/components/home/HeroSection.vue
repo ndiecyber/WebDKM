@@ -149,6 +149,7 @@ import heroImg2 from '@/assets/images/mosque-exterior.png'
 import heroImg3 from '@/assets/images/community-prayer.png'
 import heroImg4 from '@/assets/images/mosque-interior.png'
 import logoImg from '@/assets/images/logo-kustom.png'
+import { scrollToSection } from '@/utils/scroll'
 
 const adminStore = useAdminStore()
 const settings = adminStore.generalSettings
@@ -162,10 +163,6 @@ const subtitle = ref(null)
 const ctas = ref(null)
 const bgImage = ref(null)
 
-const scrollToSection = (id) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
-}
 
 onMounted(() => {
   // Setup Image Slider Interval
