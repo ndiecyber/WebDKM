@@ -268,6 +268,7 @@ import {
 } from 'lucide-vue-next'
 import logoLight from '@/assets/images/logo-kustom.png'
 import logoDark from '@/assets/images/logo-kustom2.png'
+import { getStorage, setStorage } from '@/utils/storage'
 
 const route = useRoute()
 const router = useRouter()
@@ -283,11 +284,11 @@ const toggleTheme = () => {
   } else {
     document.documentElement.classList.remove('dark')
   }
-  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
+  setStorage('theme', isDarkMode.value ? 'dark' : 'light')
 }
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
+  const savedTheme = getStorage('theme')
   if (savedTheme) {
     isDarkMode.value = savedTheme === 'dark'
   } else {

@@ -196,23 +196,27 @@ onMounted(() => {
   }
 
   // Fade in and scale up the container
-  gsap.fromTo(
-    containerRef.value,
-    { opacity: 0, y: 50, scale: 0.95 },
-    { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: 'power3.out', scrollTrigger: triggerConfig }
-  )
+  if (containerRef.value) {
+    gsap.fromTo(
+      containerRef.value,
+      { opacity: 0, y: 50, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: 'power3.out', scrollTrigger: triggerConfig }
+    )
+  }
 
   // Subtle parallax effect on the background image wrapper
-  gsap.to(bgImageRef.value, {
-    y: '-10%',
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#donasi',
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: true
-    }
-  })
+  if (bgImageRef.value) {
+    gsap.to(bgImageRef.value, {
+      y: '-10%',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#donasi',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true
+      }
+    })
+  }
 
   // Animate progress bars
   gsap.utils.toArray('.progress-bar').forEach((el, index) => {

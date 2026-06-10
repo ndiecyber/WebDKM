@@ -27,25 +27,35 @@ conn.on('ready', () => {
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
+    server_name masjidkassiti.id www.masjidkassiti.id;
+
+    # Redirect all HTTP requests to HTTPS
+    return 301 https://\\$host\\$request_uri;
+}
+
+server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name masjidkassiti.id www.masjidkassiti.id;
+
     root /var/www/html;
     index index.html;
-    server_name _;
 
-    # CRITICAL: Prevent Safari iOS from caching index.html
-    location = /index.html {
-        add_header Cache-Control "no-cache, no-store, must-revalidate";
-        add_header Pragma "no-cache";
-        add_header Expires "0";
-    }
+    # SSL Configuration
+    ssl_certificate /etc/letsencrypt/live/masjidkassiti.id/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/masjidkassiti.id/privkey.pem;
 
     # Cache hashed assets forever (they have unique filenames)
     location /assets/ {
         add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
-    # SPA fallback
+    # SPA fallback - force index.html / root to not be cached by browsers
     location / {
         try_files \\$uri \\$uri/ /index.html;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
     }
 }
 `;
@@ -54,7 +64,7 @@ server {
         echo '${password}' | sudo -S apt-get update &&
         echo '${password}' | sudo -S apt-get install -y nginx unzip &&
         echo '${password}' | sudo -S rm -rf /var/www/html/* &&
-        echo '${password}' | sudo -S unzip -o /tmp/build_terbaru_masjid.zip -d /var/www/html/ &&
+        (echo '${password}' | sudo -S unzip -o /tmp/build_terbaru_masjid.zip -d /var/www/html/ || true) &&
         echo '${password}' | sudo -S chown -R www-data:www-data /var/www/html/ &&
         echo '${password}' | sudo -S bash -c 'cat > /etc/nginx/sites-available/default << NGINXEOF
 ${nginxConf}

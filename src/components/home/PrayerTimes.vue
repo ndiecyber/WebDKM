@@ -971,24 +971,28 @@ onMounted(() => {
   }, 1000)
 
   // GSAP Animations
-  gsap.fromTo(
-    headerRef.value,
-    { opacity: 0, y: 40 },
-    {
-      opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: { trigger: '#jadwal', start: 'top 75%', once: true },
-    }
-  )
+  if (headerRef.value) {
+    gsap.fromTo(
+      headerRef.value,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '#jadwal', start: 'top 75%', once: true },
+      }
+    )
+  }
 
-  gsap.fromTo(
-    cardsRef.value.children,
-    { opacity: 0, y: 40, scale: 0.9 },
-    {
-      opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.5)',
-      stagger: 0.1,
-      scrollTrigger: { trigger: '#jadwal', start: 'top 65%', once: true },
-    }
-  )
+  if (cardsRef.value && cardsRef.value.children) {
+    gsap.fromTo(
+      cardsRef.value.children,
+      { opacity: 0, y: 40, scale: 0.9 },
+      {
+        opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.5)',
+        stagger: 0.1,
+        scrollTrigger: { trigger: '#jadwal', start: 'top 65%', once: true },
+      }
+    )
+  }
 })
 
 onUnmounted(() => {

@@ -79,6 +79,7 @@ import { Quote, Sparkles } from 'lucide-vue-next'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+import { getStorage, setStorage } from '@/utils/storage'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -133,8 +134,8 @@ const fetchDailyAyah = async () => {
     const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24))
     const ayahToFetch = curatedAyahs[dayOfYear % curatedAyahs.length]
 
-    const cachedDate = localStorage.getItem('daily_ayah_date')
-    const cachedAyah = localStorage.getItem('daily_ayah_data')
+    const cachedDate = getStorage('daily_ayah_date')
+    const cachedAyah = getStorage('daily_ayah_data')
     
     if (cachedDate === now.toDateString() && cachedAyah) {
       quoteData.value = JSON.parse(cachedAyah)
@@ -153,8 +154,8 @@ const fetchDailyAyah = async () => {
       }
       
       quoteData.value = newQuote
-      localStorage.setItem('daily_ayah_date', now.toDateString())
-      localStorage.setItem('daily_ayah_data', JSON.stringify(newQuote))
+      setStorage('daily_ayah_date', now.toDateString())
+      setStorage('daily_ayah_data', JSON.stringify(newQuote))
     }
   } catch (error) {
     console.error('Gagal memuat ayat harian:', error)
@@ -186,53 +187,68 @@ onMounted(() => {
   })
 
   // Stunning Entrance Animation Timeline
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: sectionRef.value,
-      start: 'top 75%',
-      once: true,
-    }
-  })
+  if (
+    sectionRef.value &&
+    cardRef.value &&
+    quoteIconLeft.value &&
+    quoteIconRight.value &&
+    linesRef.value &&
+    linesRef.value.children &&
+    arabicRef.value &&
+    translationRef.value &&
+    badgeRef.value
+  ) {
+    const leftIcon = quoteIconLeft.value.$el || quoteIconLeft.value
+    const rightIcon = quoteIconRight.value.$el || quoteIconRight.value
 
-  // 1. Reveal the card with a slight scale up
-  tl.fromTo(cardRef.value,
-    { opacity: 0, y: 30, scale: 0.98 },
-    { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out' }
-  )
-  
-  // 2. Animate the decorative quote marks fading and rotating in
-  .fromTo([quoteIconLeft.value.$el || quoteIconLeft.value, quoteIconRight.value.$el || quoteIconRight.value],
-    { opacity: 0, scale: 0.8, rotate: 0 },
-    { opacity: 1, scale: 1, rotate: (i) => i === 0 ? -12 : 168, duration: 0.8, ease: 'back.out(1.2)', stagger: 0.1 },
-    '-=0.6'
-  )
-  
-  // 3. Expand the decorative lines
-  .fromTo(linesRef.value.children,
-    { width: 0, opacity: 0 },
-    { width: (i) => i === 1 ? '0.75rem' : '4rem', opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.1 },
-    '-=0.6'
-  )
-  
-  // 4. Reveal Arabic text beautifully from bottom up with rotation
-  .fromTo(arabicRef.value,
-    { opacity: 0, y: 40, rotateX: -15 },
-    { opacity: 1, y: 0, rotateX: 0, duration: 0.8, ease: 'power3.out', transformPerspective: 1000 },
-    '-=0.5'
-  )
-  
-  // 5. Reveal translation text
-  .fromTo(translationRef.value,
-    { opacity: 0, y: 20 },
-    { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
-    '-=0.6'
-  )
-  
-  // 6. Pop in the reference badge
-  .fromTo(badgeRef.value,
-    { opacity: 0, scale: 0.9, y: 15 },
-    { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)' },
-    '-=0.5'
-  )
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: 'top 75%',
+        once: true,
+      }
+    })
+
+    // 1. Reveal the card with a slight scale up
+    tl.fromTo(cardRef.value,
+      { opacity: 0, y: 30, scale: 0.98 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out' }
+    )
+    
+    // 2. Animate the decorative quote marks fading and rotating in
+    .fromTo([leftIcon, rightIcon],
+      { opacity: 0, scale: 0.8, rotate: 0 },
+      { opacity: 1, scale: 1, rotate: (i) => i === 0 ? -12 : 168, duration: 0.8, ease: 'back.out(1.2)', stagger: 0.1 },
+      '-=0.6'
+    )
+    
+    // 3. Expand the decorative lines
+    .fromTo(linesRef.value.children,
+      { width: 0, opacity: 0 },
+      { width: (i) => i === 1 ? '0.75rem' : '4rem', opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.1 },
+      '-=0.6'
+    )
+    
+    // 4. Reveal Arabic text beautifully from bottom up with rotation
+    .fromTo(arabicRef.value,
+      { opacity: 0, y: 40, rotateX: -15 },
+      { opacity: 1, y: 0, rotateX: 0, duration: 0.8, ease: 'power3.out', transformPerspective: 1000 },
+      '-=0.5'
+    )
+    
+    // 5. Reveal translation text
+    .fromTo(translationRef.value,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
+      '-=0.6'
+    )
+    
+    // 6. Pop in the reference badge
+    .fromTo(badgeRef.value,
+      { opacity: 0, scale: 0.9, y: 15 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)' },
+      '-=0.5'
+    )
+  }
 })
 </script>
