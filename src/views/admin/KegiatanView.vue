@@ -239,7 +239,7 @@
                   v-model="form.date"
                   type="date" 
                   required
-                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all"
+                  class="w-full bg-white dark:bg-dark/50 border border-gray-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all [color-scheme:light] dark:[color-scheme:dark]"
                 />
               </div>
               <div class="col-span-2">
@@ -332,7 +332,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { Plus, Edit, Trash2, X, Calendar, Clock, MapPin, UploadCloud, AlertTriangle, Save } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
@@ -345,6 +345,21 @@ const showModal = ref(false)
 const isEditing = ref(false)
 const showDeleteModal = ref(false)
 const itemToDelete = ref(null)
+
+const handleKeydown = (e) => {
+  if (e.key === 'Escape') {
+    if (showModal.value) closeModal()
+    if (showDeleteModal.value) closeDeleteModal()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
 
 const isDragging = ref(false)
 const fileInput = ref(null)

@@ -365,7 +365,7 @@
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal</label>
-              <input type="date" v-model="catatForm.date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
+              <input type="date" v-model="catatForm.date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all [color-scheme:light] dark:[color-scheme:dark]">
             </div>
           </div>
 
@@ -456,12 +456,12 @@
             </div>
             
             <div v-if="filterDateMode === 'bulan'">
-              <input type="month" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <input type="month" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all [color-scheme:light] dark:[color-scheme:dark]">
             </div>
             <div v-else class="flex items-center gap-2">
-              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all [color-scheme:light] dark:[color-scheme:dark]">
               <span class="text-gray-500">-</span>
-              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <input type="date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all [color-scheme:light] dark:[color-scheme:dark]">
             </div>
           </div>
 
@@ -497,7 +497,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale } from 'lucide-vue-next'
 
 const viewMode = ref('terpisah') // Default terpisah sesuai permintaan
@@ -509,6 +509,25 @@ const isEditMode = ref(false)
 const currentPage = ref(1)
 const currentPagePemasukan = ref(1)
 const currentPagePengeluaran = ref(1)
+
+const closeAllModals = () => {
+  showCatatModal.value = false
+  showFilterModal.value = false
+}
+
+const handleKeydown = (e) => {
+  if (e.key === 'Escape') {
+    closeAllModals()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
 
 const setFilter = (filter) => {
   activeFilter.value = filter
