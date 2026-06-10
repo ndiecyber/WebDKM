@@ -3,7 +3,7 @@
     <div 
       v-for="(page, pageIndex) in paginatedPages" 
       :key="pageIndex" 
-      class="a4-page text-gray-900 w-[794px] min-h-[1123px] mx-auto bg-white shadow-[0_10px_40px_rgba(0,0,0,0.1)] ring-1 ring-gray-200 rounded-sm px-12 py-14 shrink-0 relative"
+      class="a4-page text-gray-900 w-[794px] min-h-[1123px] mx-auto bg-white shadow-[0_10px_40px_rgba(0,0,0,0.1)] ring-1 ring-gray-200 rounded-sm p-12 shrink-0 relative"
       style="page-break-after: always; break-after: page;"
     >
       <!-- Header Report -->
