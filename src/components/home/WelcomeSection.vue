@@ -80,7 +80,7 @@
         <div v-if="isCommitteeModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           <div class="absolute inset-0 bg-dark/80 backdrop-blur-md" @click="isCommitteeModalOpen = false"></div>
           
-          <div class="modal-content relative w-full max-w-5xl bg-white dark:bg-dark-light rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] border border-white/20 dark:border-white/10 overflow-hidden" role="dialog" aria-modal="true">
+          <div class="modal-content relative w-full max-w-5xl bg-white dark:bg-dark-light rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-3rem)] sm:h-[85vh] sm:max-h-[800px] border border-white/20 dark:border-white/10 overflow-hidden" role="dialog" aria-modal="true">
             <!-- Modal Background Pattern (Unique & Animated) -->
             <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
               <!-- Background Image -->
@@ -100,7 +100,7 @@
             </div>
 
             <!-- Header -->
-            <div class="relative shrink-0 h-32 sm:h-48 z-10">
+            <div class="relative shrink-0 h-32 sm:h-44 z-10">
               <div class="absolute inset-0 bg-linear-to-br from-primary via-primary-dark to-dark dark:from-[#112222] dark:via-[#1A3333] dark:to-dark"></div>
               <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-30 mix-blend-overlay animate-[pulse_4s_ease-in-out_infinite]" />
               <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark-light via-transparent to-transparent"></div>
@@ -111,16 +111,16 @@
               
               <!-- Content Header -->
               <div class="absolute inset-0 flex flex-col items-center justify-center z-10 pt-4">
-                <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl mb-2 sm:mb-3 group">
-                  <Users class="w-6 h-6 sm:w-8 sm:h-8 text-secondary group-hover:scale-110 transition-transform" />
+                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl mb-1.5 sm:mb-2 group">
+                  <Users class="w-5.5 h-5.5 sm:w-7 sm:h-7 text-secondary group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 class="font-heading text-xl sm:text-3xl font-bold text-white mb-0.5 sm:mb-1 drop-shadow-md">Pengurus DKM</h3>
-                <p class="text-white/80 text-[10px] sm:text-sm text-center px-4 max-w-lg leading-tight">Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.</p>
+                <h3 class="font-heading text-lg sm:text-2xl font-bold text-white mb-0.5 drop-shadow-md">Pengurus DKM</h3>
+                <p class="text-white/85 text-[10px] sm:text-xs text-center px-4 max-w-lg leading-tight">Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.</p>
               </div>
             </div>
 
             <!-- Sticky Tab Switcher -->
-            <div class="relative shrink-0 z-20 flex justify-center py-4 bg-white/90 dark:bg-[#151d2c]/95 border-b border-gray-200/50 dark:border-white/5 px-4 backdrop-blur-md">
+            <div class="relative shrink-0 z-20 flex justify-center py-3.5 bg-white/95 dark:bg-[#151d2c]/95 border-b border-gray-200/50 dark:border-white/5 px-4 backdrop-blur-md">
               <div class="bg-gray-200/50 dark:bg-white/5 p-1 rounded-2xl flex shadow-inner border border-gray-300/30 dark:border-white/5 max-w-sm w-full">
                 <button 
                   @click="activeTab = 'pengurus'" 
@@ -140,22 +140,22 @@
             </div>
 
             <!-- Content -->
-            <div class="relative flex-1 overflow-y-auto pt-6 pb-10 px-4 sm:px-8 hide-scrollbar z-10">
+            <div class="relative flex-1 overflow-y-auto pt-6 pb-12 px-4 sm:px-8 hide-scrollbar z-10 -webkit-overflow-scrolling-touch">
 
               <!-- Dewan Penasihat View -->
               <div v-if="activeTab === 'penasihat'" class="space-y-6 max-w-5xl mx-auto mt-2">
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 justify-center">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 justify-center">
                   <div 
                     v-for="member in dewanPenasihat" 
                     :key="member.name" 
-                    class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-4 flex flex-col items-center text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                    class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
                   >
-                    <!-- Elegant Gradient Avatar with Initials -->
-                    <div class="w-20 h-20 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg mb-4 shadow-md group-hover:scale-105 transition-transform duration-300">
+                    <!-- Elegant Gradient Avatar with Initials (Enlarged) -->
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-xl sm:text-2xl mb-4 shadow-lg ring-4 ring-indigo-500/10 group-hover:scale-105 group-hover:ring-indigo-500/20 transition-all duration-300">
                       {{ getInitials(member.name) }}
                     </div>
-                    <h4 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-tight mb-1">{{ member.name }}</h4>
-                    <span class="text-[9px] font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{{ member.role }}</span>
+                    <h4 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</h4>
+                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{{ member.role }}</span>
                   </div>
                 </div>
               </div>
@@ -164,26 +164,26 @@
               <div v-if="activeTab === 'pengurus'" class="space-y-10 max-w-5xl mx-auto mt-2">
                 
                 <!-- Pengurus Harian Sub-section -->
-                <div class="space-y-4">
+                <div class="space-y-6">
                   <div class="text-center">
                     <h4 class="text-[10px] font-extrabold uppercase tracking-widest text-primary dark:text-secondary mb-1">Pengurus Harian</h4>
                     <div class="h-0.5 w-8 bg-primary dark:bg-secondary mx-auto rounded-full"></div>
                   </div>
-                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 justify-center">
                     <div 
                       v-for="member in pengurusHarian" 
                       :key="member.name"
-                      :class="member.isLeader ? 'border-primary/40 dark:border-secondary/30 bg-primary/5 dark:bg-secondary/5 ring-1 ring-primary/20 dark:ring-secondary/20 shadow-lg' : 'bg-white/70 dark:bg-white/5 border-gray-200/50 dark:border-white/5 shadow-md'"
-                      class="rounded-2xl p-4 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                      :class="member.isLeader ? 'border-primary/40 dark:border-secondary/40 bg-primary/[0.02] dark:bg-secondary/[0.02] ring-1 ring-primary/20 dark:ring-secondary/20 shadow-md col-span-2 sm:col-span-1' : 'bg-white/80 dark:bg-white/[0.03] border-gray-200/50 dark:border-white/10 shadow-sm'"
+                      class="rounded-2xl p-5 flex flex-col items-center text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
                     >
-                      <!-- Leader has unique gold gradient avatar -->
+                      <!-- Leader has unique gold gradient avatar (Enlarged) -->
                       <div 
-                        :class="member.isLeader ? 'from-amber-400 to-amber-600 text-white' : 'from-emerald-400 to-teal-600 text-white'"
-                        class="w-20 h-20 rounded-full bg-linear-to-br flex items-center justify-center font-bold text-lg mb-4 shadow-md group-hover:scale-105 transition-transform duration-300"
+                        :class="member.isLeader ? 'from-amber-400 to-amber-600 ring-amber-500/10' : 'from-emerald-400 to-teal-600 ring-emerald-500/10'"
+                        class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-linear-to-br text-white flex items-center justify-center font-extrabold text-xl sm:text-2xl mb-4 shadow-lg ring-4 group-hover:scale-105 transition-all duration-300"
                       >
                         {{ getInitials(member.name) }}
                       </div>
-                      <h4 class="font-heading text-sm font-bold text-gray-900 dark:text-white mb-1">{{ member.name }}</h4>
+                      <h4 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</h4>
                       <span 
                         :class="member.isLeader ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'"
                         class="text-[10px] font-bold tracking-wider uppercase"
@@ -195,87 +195,83 @@
                 </div>
 
                 <!-- Divisi & Seksi Sub-section -->
-                <div class="space-y-6">
+                <div class="space-y-8">
                   <div class="text-center">
                     <h4 class="text-[10px] font-extrabold uppercase tracking-widest text-primary dark:text-secondary mb-1">Divisi & Seksi Kerja</h4>
                     <div class="h-0.5 w-8 bg-primary dark:bg-secondary mx-auto rounded-full"></div>
                   </div>
 
-                  <!-- Sections Grid -->
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Sections Grid (Full width per section with a clean 2x2 grid style) -->
+                  <div class="space-y-8">
                     
                     <!-- Seksi Pendidikan dan Dakwah -->
-                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
-                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-md"></span>
                         Seksi Pendidikan & Dakwah
                       </h5>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div v-for="member in seksiDakwah" :key="member.name" class="flex items-center gap-3.5 p-3.5 bg-gray-50/50 dark:bg-white/[0.01] rounded-2xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-all duration-300 border border-transparent hover:border-primary/10">
-                          <div class="w-14 h-14 rounded-full bg-linear-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md">
+                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                        <div v-for="member in seksiDakwah" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                          <!-- Large Centered Avatar -->
+                          <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-blue-500/10 group-hover:scale-105 group-hover:ring-blue-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
-                          <div class="min-w-0">
-                            <p class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate leading-snug mb-1">{{ member.name }}</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 leading-none">Anggota</p>
-                          </div>
+                          <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
+                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
                         </div>
                       </div>
                     </div>
 
                     <!-- Seksi Ekonomi & Wakaf -->
-                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
-                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-md"></span>
                         Seksi Ekonomi & Wakaf
                       </h5>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div v-for="member in seksiEkonomi" :key="member.name" class="flex items-center gap-3.5 p-3.5 bg-gray-50/50 dark:bg-white/[0.01] rounded-2xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-all duration-300 border border-transparent hover:border-primary/10">
-                          <div class="w-14 h-14 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md">
+                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                        <div v-for="member in seksiEkonomi" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                          <!-- Large Centered Avatar -->
+                          <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-emerald-500/10 group-hover:scale-105 group-hover:ring-emerald-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
-                          <div class="min-w-0">
-                            <p class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate leading-snug mb-1">{{ member.name }}</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 leading-none">Anggota</p>
-                          </div>
+                          <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
+                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
                         </div>
                       </div>
                     </div>
 
                     <!-- Seksi Peralatan & Logistik -->
-                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
-                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-md"></span>
                         Seksi Peralatan & Logistik
                       </h5>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div v-for="member in seksiLogistik" :key="member.name" class="flex items-center gap-3.5 p-3.5 bg-gray-50/50 dark:bg-white/[0.01] rounded-2xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-all duration-300 border border-transparent hover:border-primary/10">
-                          <div class="w-14 h-14 rounded-full bg-linear-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md">
+                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                        <div v-for="member in seksiLogistik" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                          <!-- Large Centered Avatar -->
+                          <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-orange-500/10 group-hover:scale-105 group-hover:ring-orange-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
-                          <div class="min-w-0">
-                            <p class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate leading-snug mb-1">{{ member.name }}</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 leading-none">Anggota</p>
-                          </div>
+                          <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
+                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
                         </div>
                       </div>
                     </div>
 
                     <!-- Remaja Masjid -->
-                    <div class="bg-white/70 dark:bg-[#151d2c]/40 border border-gray-200/50 dark:border-white/5 rounded-2xl p-5 shadow-md">
-                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
+                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-md"></span>
                         Remaja Masjid
                       </h5>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div v-for="member in remajaMasjid" :key="member.name" class="flex items-center gap-3.5 p-3.5 bg-gray-50/50 dark:bg-white/[0.01] rounded-2xl hover:bg-primary/5 dark:hover:bg-secondary/5 transition-all duration-300 border border-transparent hover:border-primary/10">
-                          <div class="w-14 h-14 rounded-full bg-linear-to-br from-pink-400 to-rose-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md">
+                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                        <div v-for="member in remajaMasjid" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                          <!-- Large Centered Avatar -->
+                          <div class="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-linear-to-br from-pink-400 to-rose-500 flex items-center justify-center text-white font-extrabold text-lg sm:text-xl mb-4 shadow-md ring-4 ring-pink-500/10 group-hover:scale-105 group-hover:ring-pink-500/20 transition-all duration-300">
                             {{ getInitials(member.name) }}
                           </div>
-                          <div class="min-w-0">
-                            <p class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white truncate leading-snug mb-1">{{ member.name }}</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 leading-none">Anggota</p>
-                          </div>
+                          <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</p>
+                          <p class="text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Anggota</p>
                         </div>
                       </div>
                     </div>
@@ -291,7 +287,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch, onUnmounted } from 'vue'
 import { Users, User, X, ArrowRight } from 'lucide-vue-next'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -310,6 +306,19 @@ const textContent = ref(null)
 const imageContent = ref(null)
 const isCommitteeModalOpen = ref(false)
 const activeTab = ref('pengurus')
+
+// Watch modal state to toggle body scroll lock
+watch(isCommitteeModalOpen, (isOpen) => {
+  if (isOpen) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+})
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 
 const getInitials = (name) => {
   if (!name) return ''
