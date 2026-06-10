@@ -40,10 +40,6 @@ body {
   background-color: #111827;
 }
 
-#app-root {
-  overflow-x: hidden;
-  width: 100%;
-}
 
 /* ===== iOS Safari Fixes ===== */
 html {

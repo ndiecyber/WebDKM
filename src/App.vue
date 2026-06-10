@@ -1,5 +1,5 @@
 <template>
-  <div id="app-root" class="min-h-screen bg-light dark:bg-dark flex flex-col transition-colors duration-500">
+  <div class="min-h-screen bg-light dark:bg-dark flex flex-col transition-colors duration-500">
     <LoadingScreen v-if="!isAdminRoute" />
     <Navbar v-if="!isAdminRoute" />
     <RouterView class="flex-1" />
