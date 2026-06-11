@@ -122,26 +122,12 @@
       </div>
 
       <!-- Signatures & Verified -->
-      <div v-if="page.showSignatures" class="grid grid-cols-3 gap-4 pt-6 pb-2 break-inside-avoid text-sm items-end mt-8 border-t border-gray-200 dark:border-white/10">
-        <div class="text-center space-y-14">
-          <p class="font-medium text-gray-700 dark:text-gray-300 text-xs">{{ report.ttdKiriTitle || 'Mengetahui' }}</p>
-          <div>
-            <p class="font-bold underline text-gray-900 dark:text-white text-sm">{{ report.ketua || '_______________________' }}</p>
-          </div>
-        </div>
-        
+      <div v-if="page.showSignatures" class="flex flex-col items-center pt-6 pb-2 break-inside-avoid text-sm mt-8 border-t border-gray-200 dark:border-white/10">
         <!-- Tengah (QR Code) -->
-        <div class="flex flex-col items-center justify-end opacity-50 pb-2" :class="{ 'invisible': !showQR }">
+        <div class="flex flex-col items-center opacity-50 pb-2" :class="{ 'invisible': !showQR }">
           <img v-if="customQR" :src="customQR" class="w-14 h-14 object-contain" alt="QR" />
           <QrCode v-else class="w-14 h-14 text-gray-400 dark:text-gray-500" />
           <span class="text-[8px] mt-1 text-gray-400 dark:text-gray-500 tracking-widest uppercase text-center leading-tight">Verified<br>System</span>
-        </div>
-
-        <div class="text-center space-y-14">
-          <p class="font-medium text-gray-700 dark:text-gray-300 text-xs">Bendahara</p>
-          <div>
-            <p class="font-bold underline text-gray-900 dark:text-white text-sm">{{ report.bendahara || '_______________________' }}</p>
-          </div>
         </div>
       </div>
       
