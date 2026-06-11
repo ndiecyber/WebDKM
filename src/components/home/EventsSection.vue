@@ -23,13 +23,14 @@
         <div
           v-for="(event, index) in visibleEvents"
           :key="event.title"
+          @click="openEventModal(event)"
           @mousemove="handleMouseMove($event, event.title)"
           @mouseleave="handleMouseLeave(event.title)"
           :style="{ 
             transform: cardTilts[event.title] || 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', 
             transition: isHovered[event.title] ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out' 
           }"
-          class="group relative bg-white/70 dark:bg-dark/40 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/50 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 transition-colors duration-500 will-change-transform shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex flex-col"
+          class="group relative cursor-pointer bg-white/70 dark:bg-dark/40 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/50 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 transition-colors duration-500 will-change-transform shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex flex-col"
         >
           <!-- Glassmorphism Glow Background -->
           <div class="absolute inset-0 bg-linear-to-br from-primary/0 via-transparent to-secondary/0 group-hover:from-primary/10 group-hover:to-secondary/10 transition-colors duration-700 pointer-events-none z-0"></div>
@@ -79,13 +80,12 @@
             </p>
 
             <div class="mt-auto">
-              <button
-                @click.prevent="openEventModal(event)"
+              <div
                 class="inline-flex items-center gap-2 text-primary dark:text-secondary text-sm font-bold uppercase tracking-wider group-hover:gap-3 transition-all duration-300"
               >
-                Detail Acara
+                Detail Berita
                 <ArrowRight class="w-4 h-4" />
-              </button>
+              </div>
             </div>
           </div>
         </div>
