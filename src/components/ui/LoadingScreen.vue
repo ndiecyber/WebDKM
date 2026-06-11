@@ -108,6 +108,12 @@ const particles = Array.from({ length: 35 }).map(() => ({
 }))
 
 onMounted(() => {
+  if (sessionStorage.getItem('hasSeenSplash')) {
+    show.value = false
+    return
+  }
+  sessionStorage.setItem('hasSeenSplash', 'true')
+
   if (
     logoRef.value &&
     dividerRef.value &&

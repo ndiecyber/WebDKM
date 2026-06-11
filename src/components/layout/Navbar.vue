@@ -255,10 +255,14 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   
   // Drop down animation synced with LoadingScreen
+  const hasAnimated = sessionStorage.getItem('navAnimated')
+  const initialDelay = hasAnimated ? 0 : 2.2
+  if (!hasAnimated) sessionStorage.setItem('navAnimated', 'true')
+
   if (navRef.value) {
     gsap.fromTo(navRef.value, 
       { y: -100, opacity: 0 }, 
-      { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 2.2 }
+      { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: initialDelay }
     )
   }
 })
