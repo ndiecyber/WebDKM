@@ -101,7 +101,7 @@
 
             <!-- Header -->
             <div class="relative shrink-0 h-32 sm:h-44 z-10">
-              <div class="absolute inset-0 bg-linear-to-br from-primary via-primary-dark to-dark dark:from-[#112222] dark:via-[#1A3333] dark:to-dark"></div>
+              <div class="absolute inset-0 bg-linear-to-br from-emerald-600 to-primary dark:from-[#112222] dark:via-[#1A3333] dark:to-dark"></div>
               <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-30 mix-blend-overlay animate-[pulse_4s_ease-in-out_infinite]" />
               <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark-light via-transparent to-transparent"></div>
               
