@@ -43,12 +43,12 @@
         <!-- Column 2: Layanan Masjid -->
         <div>
           <h4 class="text-secondary font-heading text-lg font-semibold mb-6">Layanan Utama</h4>
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-0.5">
             <a 
               v-for="service in layananUtama" 
               :key="service.id" 
               href="#layanan" 
-              class="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
+              class="group flex items-center gap-3 py-1 px-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
             >
               <div class="w-9 h-9 rounded-md bg-secondary/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:bg-secondary/20 overflow-hidden">
                 <div 
@@ -138,7 +138,7 @@
             </li>
             <li class="flex items-center gap-3">
               <Mail class="w-5 h-5 text-secondary shrink-0" />
-              <span class="text-white/60 text-sm">info@masjidjamikassiti.id</span>
+              <a href="mailto:info@masjidkassiti.id" class="text-white/60 hover:text-white transition-colors text-sm">info@masjidkassiti.id</a>
             </li>
             <li class="flex items-center gap-3">
               <Clock class="w-5 h-5 text-secondary shrink-0" />
