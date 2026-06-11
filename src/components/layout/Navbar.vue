@@ -32,7 +32,7 @@
       <div class="flex items-center justify-between">
         <!-- Logo -->
         <a href="#beranda" class="flex items-center group" @click.prevent="scrollToSection('beranda')">
-          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300 text-transparent" />
+          <img :src="(isDark || !scrolled) ? logoDark : logoLight" alt="Logo Masjid Jami Kassiti" class="h-14 sm:h-16 w-auto object-contain transition-all duration-300" />
         </a>
 
         <!-- Desktop Menu -->
@@ -127,7 +127,7 @@
       leave-from-class="opacity-100 translate-y-0"
       leave-to-class="opacity-0 -translate-y-4"
     >
-      <div v-if="mobileOpen" class="lg:hidden bg-dark shadow-2xl mt-2 mx-4 rounded-2xl p-4 border border-white/10">
+      <div v-if="mobileOpen" class="lg:hidden glass-dark mt-2 mx-4 rounded-2xl p-4 border border-white/10">
         <a
           v-for="item in menuItems"
           :key="item.id"
@@ -183,6 +183,7 @@ import logoLight from '@/assets/images/logo-kustom.png'
 import logoDark from '@/assets/images/logo-kustom2.png'
 import { usePrayerStore } from '@/stores/prayer'
 import { isDonationModalOpen } from '@/composables/useDonationModal'
+import { scrollToSection } from '@/utils/scroll'
 
 const isDark = useDark({
   selector: 'html',
@@ -228,10 +229,6 @@ const menuItems = [
   { id: 'kontak', label: 'Kontak' },
 ]
 
-const scrollToSection = (id) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
-}
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 50
@@ -258,10 +255,12 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   
   // Drop down animation synced with LoadingScreen
-  gsap.fromTo(navRef.value, 
-    { y: -100, opacity: 0 }, 
-    { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 2.2 }
-  )
+  if (navRef.value) {
+    gsap.fromTo(navRef.value, 
+      { y: -100, opacity: 0 }, 
+      { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 2.2 }
+    )
+  }
 })
 
 onUnmounted(() => {

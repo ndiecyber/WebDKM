@@ -126,34 +126,38 @@ const news = [
 ]
 
 onMounted(() => {
-  gsap.fromTo(headerRef.value.children, 
-    { y: 30, opacity: 0 },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: headerRef.value,
-        start: 'top 80%',
+  if (headerRef.value && headerRef.value.children) {
+    gsap.fromTo(headerRef.value.children, 
+      { y: 30, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: headerRef.value,
+          start: 'top 80%',
+        }
       }
-    }
-  )
+    )
+  }
 
-  gsap.fromTo(gridRef.value.children,
-    { y: 50, opacity: 0 },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      stagger: 0.15,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: gridRef.value,
-        start: 'top 75%',
+  if (gridRef.value && gridRef.value.children) {
+    gsap.fromTo(gridRef.value.children,
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: gridRef.value,
+          start: 'top 75%',
+        }
       }
-    }
-  )
+    )
+  }
 })
 </script>
