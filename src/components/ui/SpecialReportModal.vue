@@ -1,6 +1,6 @@
 <template>
   <Transition name="fade">
-    <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6 py-6 sm:py-10">
+    <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center px-2 sm:px-6 py-4 sm:py-10">
       <!-- Backdrop -->
       <div 
         class="absolute inset-0 bg-dark/60 dark:bg-dark/80 backdrop-blur-md transition-opacity" 
@@ -9,7 +9,7 @@
 
       <!-- Modal Container -->
       <div 
-        class="relative bg-white dark:bg-[#111827] w-full max-w-4xl h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-300 dark:border-white/10 flex flex-col overflow-hidden"
+        class="relative bg-white dark:bg-[#111827] w-full max-w-4xl h-[calc(100vh-2rem)] sm:h-auto sm:max-h-[90vh] rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-300 dark:border-white/10 flex flex-col overflow-hidden"
       >
         <!-- Modal Header -->
         <div class="px-6 py-5 border-b border-gray-300 dark:border-white/10 flex items-center justify-between bg-gray-50/50 dark:bg-white/[0.02]">
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Modal Body (Scrollable) -->
-        <div class="flex-1 overflow-y-auto overflow-x-auto p-4 sm:p-6 lg:p-8 custom-scrollbar pb-8 sm:pb-8">
+        <div class="flex-1 overflow-y-auto overflow-x-auto p-2 sm:p-6 lg:p-8 custom-scrollbar pb-8 sm:pb-8">
           <ReportKegiatanTemplate v-if="report" :report="report" />
           <div v-else class="flex flex-col items-center justify-center h-64 text-gray-400">
             <Loader2 class="w-8 h-8 animate-spin mb-4" />
