@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Deployment and server artifacts
+deploy_vps*.js
+*.zip
+
+# Environment Variables
+.env
+.env.*
+!.env.example
