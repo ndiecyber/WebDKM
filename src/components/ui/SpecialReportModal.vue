@@ -33,7 +33,7 @@
         </div>
 
         <!-- Modal Body (Scrollable) -->
-        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar pb-8 sm:pb-8">
+        <div class="flex-1 overflow-y-auto overflow-x-auto p-4 sm:p-6 lg:p-8 custom-scrollbar pb-8 sm:pb-8">
           <ReportKegiatanTemplate v-if="report" :report="report" />
           <div v-else class="flex flex-col items-center justify-center h-64 text-gray-400">
             <Loader2 class="w-8 h-8 animate-spin mb-4" />
