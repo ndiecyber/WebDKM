@@ -305,9 +305,17 @@ import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import interiorImage from '@/assets/images/mosque-interior.png'
 import dkmNasai from '@/assets/images/dkm-nasai.png'
 import dkmRandi from '@/assets/images/dkm-randi.png'
-import dkmRofik from '@/assets/images/dkm-rofik.png'
-import dkmIrvan from '@/assets/images/dkm-irvan.png'
-import dkmDani from '@/assets/images/dkm-dani.png'
+import dkmRofik from '@/assets/images/M Ainur Rofiq.jpeg'
+import dkmIrvan from '@/assets/images/Ivan Ruchiat.jpeg'
+import dkmDani from '@/assets/images/Dani Ramdhani.jpeg'
+import bpkAli from '@/assets/images/Ali M Abduh.jpeg'
+import bpkGojali from '@/assets/images/Gojali Abdul S.jpeg'
+import bpkRedi from '@/assets/images/H Redi Sasriandi.jpeg'
+import bpkNanang from '@/assets/images/Nanang Barkah.jpeg'
+import bpkSukardi from '@/assets/images/Sukardi.jpeg'
+import usthAi from '@/assets/images/Usth. Ai Jamaliah.jpeg'
+import usthNeneng from '@/assets/images/Usth. Neneng Aam.jpeg'
+import usthRani from '@/assets/images/Usth. Rani Rahmayati.jpeg'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -363,29 +371,29 @@ const pengurusHarian = [
 const seksiDakwah = [
   { name: 'Ust. H. Irvan Ruchiat', role: 'Anggota Dakwah & Pendidikan', image: dkmIrvan },
   { name: 'Ust. H. Dani Ramdhani', role: 'Anggota Dakwah & Pendidikan', image: dkmDani },
-  { name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan' },
-  { name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan' },
+  { name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan', image: usthNeneng },
+  { name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan', image: usthAi },
   { name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan' },
   { name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan' }
 ]
 
 const seksiEkonomi = [
-  { name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf' },
+  { name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf', image: bpkAli },
   { name: 'Bpk. Ujang Kurnia', role: 'Anggota Ekonomi & Wakaf' },
   { name: 'Bpk. Erwin Darmawan', role: 'Anggota Ekonomi & Wakaf' },
   { name: 'Bpk. Ade Ramdhani', role: 'Anggota Ekonomi & Wakaf' }
 ]
 
 const seksiLogistik = [
-  { name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik' },
+  { name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik', image: bpkRedi },
   { name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik' },
-  { name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik' },
-  { name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik' }
+  { name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik', image: bpkSukardi },
+  { name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik', image: bpkNanang }
 ]
 
 const remajaMasjid = [
-  { name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid' },
-  { name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid' },
+  { name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid', image: bpkGojali },
+  { name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid', image: usthRani },
   { name: 'Usth. Rayanthi', role: 'Remaja Masjid' }
 ]
 
