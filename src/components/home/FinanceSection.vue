@@ -250,41 +250,80 @@
               <CalendarDays class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary dark:text-secondary" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Periode</span>
             </div>
-            <div class="relative inline-block mt-0.5" ref="dropdownRef">
-              <!-- Dropdown Button -->
-              <button 
-                @click="isDropdownOpen = !isDropdownOpen"
-                class="flex items-center justify-between gap-3 px-3.5 py-1.5 min-w-[130px] mx-auto rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
-              >
-                <span class="font-bold text-xs sm:text-sm text-dark dark:text-white">{{ selectedMonth }} 2026</span>
-                <ChevronDown class="w-4 h-4 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
-              </button>
+            <div class="relative flex items-center justify-center gap-1.5 mt-0.5">
+              <!-- Dropdown Bulan -->
+              <div class="relative inline-block" ref="dropdownRef">
+                <button 
+                  @click="isDropdownOpen = !isDropdownOpen"
+                  class="flex items-center justify-between gap-2 px-3 py-1.5 min-w-[90px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
+                >
+                  <span class="font-bold text-xs sm:text-sm text-dark dark:text-white">{{ selectedMonth }}</span>
+                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
+                </button>
 
-              <!-- Dropdown Menu -->
-              <Transition
-                enter-active-class="transition duration-200 ease-out"
-                enter-from-class="transform scale-95 opacity-0"
-                enter-to-class="transform scale-100 opacity-100"
-                leave-active-class="transition duration-75 ease-in"
-                leave-from-class="transform scale-100 opacity-100"
-                leave-to-class="transform scale-95 opacity-0"
-              >
-                <div v-if="isDropdownOpen" class="absolute left-1/2 -translate-x-1/2 mt-2 w-40 sm:w-48 bg-white dark:bg-[#1a1f2e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden z-50 py-1">
-                  <button
-                    v-for="month in months"
-                    :key="month"
-                    @click="selectMonth(month)"
-                    class="w-full text-left px-4 py-2 text-xs sm:text-sm transition-colors duration-200"
-                    :class="[
-                      selectedMonth === month 
-                        ? 'bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary font-bold' 
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'
-                    ]"
-                  >
-                    {{ month }} 2026
-                  </button>
-                </div>
-              </Transition>
+                <Transition
+                  enter-active-class="transition duration-200 ease-out"
+                  enter-from-class="transform scale-95 opacity-0"
+                  enter-to-class="transform scale-100 opacity-100"
+                  leave-active-class="transition duration-75 ease-in"
+                  leave-from-class="transform scale-100 opacity-100"
+                  leave-to-class="transform scale-95 opacity-0"
+                >
+                  <div v-if="isDropdownOpen" class="absolute left-1/2 -translate-x-1/2 mt-2 w-32 bg-white dark:bg-[#1a1f2e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden z-[60] py-1">
+                    <div class="max-h-48 overflow-y-auto custom-scrollbar">
+                      <button
+                        v-for="month in months"
+                        :key="month"
+                        @click="selectMonth(month)"
+                        class="w-full text-left px-3 py-2 text-xs sm:text-sm transition-colors duration-200"
+                        :class="[
+                          selectedMonth === month 
+                            ? 'bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary font-bold' 
+                            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'
+                        ]"
+                      >
+                        {{ month }}
+                      </button>
+                    </div>
+                  </div>
+                </Transition>
+              </div>
+
+              <!-- Dropdown Tahun -->
+              <div class="relative inline-block" ref="summaryYearDropdownRef">
+                <button 
+                  @click="isSummaryYearDropdownOpen = !isSummaryYearDropdownOpen"
+                  class="flex items-center justify-between gap-2 px-3 py-1.5 min-w-[75px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
+                >
+                  <span class="font-bold text-xs sm:text-sm text-dark dark:text-white">{{ summarySelectedYear }}</span>
+                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isSummaryYearDropdownOpen }" />
+                </button>
+
+                <Transition
+                  enter-active-class="transition duration-200 ease-out"
+                  enter-from-class="transform scale-95 opacity-0"
+                  enter-to-class="transform scale-100 opacity-100"
+                  leave-active-class="transition duration-75 ease-in"
+                  leave-from-class="transform scale-100 opacity-100"
+                  leave-to-class="transform scale-95 opacity-0"
+                >
+                  <div v-if="isSummaryYearDropdownOpen" class="absolute left-1/2 -translate-x-1/2 mt-2 w-24 bg-white dark:bg-[#1a1f2e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden z-[60] py-1">
+                    <button
+                      v-for="year in summaryYears"
+                      :key="year"
+                      @click="selectSummaryYear(year)"
+                      class="w-full text-left px-3 py-2 text-xs sm:text-sm transition-colors duration-200"
+                      :class="[
+                        summarySelectedYear === year 
+                          ? 'bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary font-bold' 
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'
+                      ]"
+                    >
+                      {{ year }}
+                    </button>
+                  </div>
+                </Transition>
+              </div>
             </div>
           </div>
           <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-green-500/5 transition-colors duration-300">
@@ -482,11 +521,25 @@ onMounted(() => {
     if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
       isDropdownOpen.value = false;
     }
+    if (summaryYearDropdownRef.value && !summaryYearDropdownRef.value.contains(e.target)) {
+      isSummaryYearDropdownOpen.value = false;
+    }
     if (yearDropdownRef.value && !yearDropdownRef.value.contains(e.target)) {
       isYearDropdownOpen.value = false;
     }
   });
 });
+
+// Dropdown state untuk summary tahun
+const isSummaryYearDropdownOpen = ref(false);
+const summaryYearDropdownRef = ref(null);
+const summarySelectedYear = ref('2026');
+const summaryYears = ['2026', '2025', '2024'];
+
+const selectSummaryYear = (year) => {
+  summarySelectedYear.value = year;
+  isSummaryYearDropdownOpen.value = false;
+};
 
 // Dropdown state untuk tahun
 const isYearDropdownOpen = ref(false);

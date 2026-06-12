@@ -67,13 +67,13 @@
             <span>Keuangan</span>
           </button>
 
-          <button
-            @click="scrollToSection('layanan')"
+          <a
+            href="https://qurban.masjidkassiti.id"
             class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20"
           >
             <Gift class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
             <span>Qurban</span>
-          </button>
+          </a>
 
           <button
             @click="scrollToSection('layanan')"
@@ -192,8 +192,12 @@ onMounted(() => {
 
   // Sync with LoadingScreen fade out (2000ms timeout + 700ms fade = 2.7s)
   // We start slightly before it completely disappears (2.2s) for a seamless handoff
+  const hasAnimated = sessionStorage.getItem('heroAnimated')
+  const initialDelay = hasAnimated ? 0 : 2.2
+  if (!hasAnimated) sessionStorage.setItem('heroAnimated', 'true')
+
   if (badge.value && heading.value && subtitle.value && ctas.value) {
-    const tl = gsap.timeline({ delay: 2.2 })
+    const tl = gsap.timeline({ delay: initialDelay })
     tl.fromTo(badge.value,
       { opacity: 0, y: 30 },
       { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }

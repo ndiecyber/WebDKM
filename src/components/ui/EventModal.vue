@@ -23,9 +23,9 @@
               v-if="event.image"
               :src="event.image" 
               :alt="event.title" 
-              class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-overlay"
+              class="absolute inset-0 w-full h-full object-cover"
             />
-            <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark-light via-black/20 to-black/60"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark-light via-transparent to-black/50"></div>
             
             <!-- Date Badge -->
             <div class="absolute top-4 left-6 bg-white dark:bg-slate-800 rounded-2xl px-4 py-2 text-center shadow-lg border border-white/10 z-10">
