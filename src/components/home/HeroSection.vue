@@ -5,7 +5,7 @@
       <div ref="bgImage" class="absolute -inset-[5%] w-[110%] h-[110%]">
         <TransitionGroup name="slider">
           <img
-            v-for="(img, index) in sliderImages"
+            v-for="(img, index) in settings.heroImages"
             :key="img"
             v-show="currentImageIndex === index"
             :src="img"
@@ -38,14 +38,14 @@
         <!-- Badge -->
         <div ref="badge" class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/15 border border-secondary/30 mb-6 sm:mb-8 max-w-full overflow-hidden">
           <MapPin class="w-3 h-3 sm:w-4 sm:h-4 text-secondary shrink-0" />
-          <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">Perumahan Arjamukti Kencana Raya</span>
+          <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">{{ adminStore.generalSettings.name }}</span>
         </div>
 
         <!-- Heading -->
         <h2
           ref="heading"
           class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6"
-          v-html="settings.slogan"
+          v-html="parsedSlogan"
         >
         </h2>
 
@@ -54,7 +54,7 @@
           ref="subtitle"
           class="text-white/70 text-sm sm:text-base md:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10"
         >
-          {{ settings.description }}
+          {{ adminStore.generalSettings.description }}
         </p>
 
         <!-- CTA Buttons -->
@@ -139,7 +139,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Youtube, Wallet, HandCoins } from 'lucide-vue-next'
 import { isDonationModalOpen } from '@/composables/useDonationModal'
 import { gsap } from 'gsap'
@@ -152,9 +152,17 @@ import logoImg from '@/assets/images/logo-kustom.png'
 import { scrollToSection } from '@/utils/scroll'
 
 const adminStore = useAdminStore()
-const settings = adminStore.generalSettings
+const settings = computed(() => adminStore.generalSettings)
 
-const sliderImages = [heroImg1, heroImg2, heroImg3, heroImg4]
+const parsedSlogan = computed(() => {
+  const slogan = settings.value.slogan
+  if (!slogan) return ''
+  // Convert *word* to gold span and \n to <br>
+  return slogan
+    .replace(/\*(.*?)\*/g, '<strong class="text-gradient-gold font-black drop-shadow-md">$1</strong>')
+    .replace(/\n/g, '<br />')
+})
+
 const currentImageIndex = ref(0)
 let sliderInterval = null
 const badge = ref(null)
@@ -167,7 +175,9 @@ const bgImage = ref(null)
 onMounted(() => {
   // Setup Image Slider Interval
   sliderInterval = setInterval(() => {
-    currentImageIndex.value = (currentImageIndex.value + 1) % sliderImages.length
+    if (settings.value.heroImages && settings.value.heroImages.length > 0) {
+      currentImageIndex.value = (currentImageIndex.value + 1) % settings.value.heroImages.length
+    }
   }, 6000)
 
   // Cinematic background zoom effect

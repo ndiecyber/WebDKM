@@ -20,9 +20,7 @@
 
           <div class="section-divider mb-8"></div>
 
-          <p class="text-dark/60 dark:text-white/60 text-base sm:text-lg leading-relaxed mb-6 transition-colors duration-500 whitespace-pre-line">
-            {{ settings.history }}
-          </p>
+          <p class="text-dark/60 dark:text-white/60 text-base sm:text-lg leading-relaxed mb-6 transition-colors duration-500 whitespace-pre-line text-justify">{{ settings.history }}</p>
 
           <!-- Stats -->
           <div class="grid grid-cols-3 gap-4 sm:gap-6">
@@ -55,7 +53,7 @@
         <!-- Right: Image -->
         <div ref="imageContent" class="relative">
           <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-            <img :src="interiorImg" alt="Interior Masjid Jami Kassiti" class="w-full h-[400px] lg:h-[550px] object-cover" />
+            <img :src="settings.historyImage || interiorImg" alt="Interior Masjid Jami Kassiti" class="w-full h-[400px] lg:h-[550px] object-cover" />
             <div class="absolute inset-0 bg-linear-to-t from-primary/30 to-transparent"></div>
           </div>
 
@@ -63,9 +61,9 @@
           <div class="absolute -bottom-6 -left-6 bg-white dark:bg-dark-light rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-white/5 max-w-[280px] z-10">
             <div class="flex items-center gap-4 mb-3">
               <MosqueLogo variant="icon" :iconSize="48" class="text-primary dark:text-secondary drop-shadow-md" />
-              <h4 class="font-heading text-xl font-bold text-dark dark:text-white leading-tight">Masjid Kassiti</h4>
+              <h4 class="font-heading text-xl font-bold text-dark dark:text-white leading-tight">{{ settings.floatingCardTitle }}</h4>
             </div>
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti</p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{{ settings.floatingCardDesc }}</p>
           </div>
 
           <!-- Decorative Element -->
@@ -314,7 +312,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, watch, onUnmounted, computed } from 'vue'
 import { Users, User, X, ArrowRight } from 'lucide-vue-next'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -349,7 +347,7 @@ import { useAdminStore } from '@/stores/admin'
 gsap.registerPlugin(ScrollTrigger)
 
 const adminStore = useAdminStore()
-const settings = adminStore.generalSettings
+const settings = computed(() => adminStore.generalSettings)
 
 const interiorImg = interiorImage
 const kaligrafiImg = kaligrafiImage
@@ -427,9 +425,9 @@ const remajaMasjid = [
 ]
 
 const stats = reactive([
-  { label: 'Pengurus DKM', value: 25, displayValue: 0, prefix: '', suffix: ' Orang', isClickable: true },
-  { label: 'Tahun Berdiri', value: 2015, displayValue: 0, prefix: '', suffix: '', isClickable: false },
-  { label: 'Jamaah Aktif', value: 200, displayValue: 0, prefix: '', suffix: '+', isClickable: false },
+  { label: 'Pengurus DKM', get value() { return adminStore.committee ? Object.values(adminStore.committee).flat().length : 0 }, displayValue: 0, prefix: '', suffix: ' Orang', isClickable: true },
+  { label: 'Tahun Berdiri', get value() { return settings.value.tahunBerdiri || 2015 }, displayValue: 0, prefix: '', suffix: '', isClickable: false },
+  { label: 'Jamaah Aktif', get value() { return settings.value.jamaahAktif || 200 }, displayValue: 0, prefix: '', suffix: '+', isClickable: false },
 ])
 
 onMounted(() => {

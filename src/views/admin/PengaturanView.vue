@@ -66,11 +66,13 @@
               </div>
               <div class="space-y-1.5">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Slogan Utama (Hero)</label>
-                <input 
+                <textarea 
                   v-model="settings.slogan"
-                  type="text" 
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
-                />
+                  rows="2"
+                  placeholder="Gunakan tanda bintang *kata* untuk efek teks emas"
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all resize-none text-sm shadow-md"
+                ></textarea>
+                <p class="text-xs text-gray-500">Tekan Enter untuk baris baru. Apit kata dengan bintang (*Iman*) untuk efek warna emas.</p>
               </div>
             </div>
             
@@ -83,27 +85,85 @@
               ></textarea>
               <p class="text-xs text-gray-500">Teks ini akan muncul tepat di bawah slogan utama di halaman pertama.</p>
             </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 pt-6 border-t border-gray-300 dark:border-white/5">
+              <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Floating Card (Sejarah)</label>
+                <input 
+                  v-model="settings.floatingCardTitle"
+                  type="text" 
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                />
+              </div>
+              <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi Floating Card</label>
+                <input 
+                  v-model="settings.floatingCardDesc"
+                  type="text" 
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                />
+              </div>
+              <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tahun Berdiri (Statistik)</label>
+                <input 
+                  v-model="settings.tahunBerdiri"
+                  type="number" 
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                />
+              </div>
+              <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estimasi Jamaah Aktif (Statistik)</label>
+                <input 
+                  v-model="settings.jamaahAktif"
+                  type="number" 
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                />
+              </div>
+            </div>
 
+            <div class="space-y-4 mt-6 pt-6 border-t border-gray-300 dark:border-white/5">
+              <h4 class="text-sm font-bold text-gray-900 dark:text-white">Pengaturan Gambar Landing Page</h4>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Gambar Hero Slider (Bisa pilih lebih dari satu)</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-60 overflow-y-auto p-2 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg">
+                  <label v-for="item in adminStore.gallery" :key="'hero-'+item.id" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 transition-all" :class="settings.heroImages.includes(item.image) ? 'border-secondary' : 'border-transparent'">
+                    <input type="checkbox" :value="item.image" v-model="settings.heroImages" class="hidden" />
+                    <img :src="item.image" class="w-full h-20 object-cover" />
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="text-white text-xs font-bold text-center px-1">{{ item.caption }}</span>
+                    </div>
+                    <div v-if="settings.heroImages.includes(item.image)" class="absolute top-1 right-1 bg-secondary text-white rounded-full p-0.5 shadow-md">
+                      <Check class="w-3 h-3" />
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Gambar Pendamping Sejarah Singkat (Pilih satu)</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-60 overflow-y-auto p-2 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg">
+                  <label v-for="item in adminStore.gallery" :key="'hist-'+item.id" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 transition-all" :class="settings.historyImage === item.image ? 'border-secondary' : 'border-transparent'">
+                    <input type="radio" :value="item.image" v-model="settings.historyImage" class="hidden" />
+                    <img :src="item.image" class="w-full h-20 object-cover" />
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="text-white text-xs font-bold text-center px-1">{{ item.caption }}</span>
+                    </div>
+                    <div v-if="settings.historyImage === item.image" class="absolute top-1 right-1 bg-secondary text-white rounded-full p-0.5 shadow-md">
+                      <Check class="w-3 h-3" />
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
             <div class="space-y-1.5 border-t border-gray-300 dark:border-white/5 pt-6 mt-6">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sejarah Singkat (Tentang Kami)</label>
-              <div class="border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-secondary transition-all bg-gray-50 dark:bg-white/5">
-                <div class="flex items-center gap-1 p-2 border-b border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900/50 flex-wrap">
-                  <button type="button" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 dark:hover:text-white transition-colors"><Bold class="w-4 h-4" /></button>
-                  <button type="button" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 dark:hover:text-white transition-colors"><Italic class="w-4 h-4" /></button>
-                  <button type="button" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 dark:hover:text-white transition-colors"><Underline class="w-4 h-4" /></button>
-                  <div class="w-px h-4 bg-gray-300 dark:bg-white/10 mx-1"></div>
-                  <button type="button" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 dark:hover:text-white transition-colors"><Heading1 class="w-4 h-4" /></button>
-                  <button type="button" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 dark:hover:text-white transition-colors"><Heading2 class="w-4 h-4" /></button>
-                  <div class="w-px h-4 bg-gray-300 dark:bg-white/10 mx-1"></div>
-                  <button type="button" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 dark:hover:text-white transition-colors"><List class="w-4 h-4" /></button>
-                  <button type="button" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 dark:hover:text-white transition-colors"><ListOrdered class="w-4 h-4" /></button>
-                </div>
-                <textarea 
-                  v-model="settings.history"
-                  rows="8"
-                  class="w-full bg-transparent border-0 px-4 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-0 resize-none text-sm outline-none"
-                ></textarea>
-              </div>
+              <textarea 
+                v-model="settings.history"
+                rows="6"
+                placeholder="Tuliskan sejarah singkat masjid di sini..."
+                class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all resize-y text-sm shadow-md"
+              ></textarea>
             </div>
           </div>
         </section>
@@ -506,13 +566,19 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users } from 'lucide-vue-next'
+import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check } from 'lucide-vue-next'
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
 const isSaving = ref(false)
+
+const settings = ref(JSON.parse(JSON.stringify(adminStore.generalSettings)))
+const ctaSettings = ref(JSON.parse(JSON.stringify(adminStore.ctaSettings)))
+const masterData = ref(JSON.parse(JSON.stringify(adminStore.masterData)))
+
+
 
 // Tabs Configuration
 const activeSettingTab = ref('profil')
@@ -544,11 +610,6 @@ const availableIcons = [
   { value: 'Shield', label: 'Keamanan' }
 ]
 
-// Use settings from store
-const settings = ref({ ...adminStore.generalSettings })
-const ctaSettings = ref({ ...JSON.parse(JSON.stringify(adminStore.ctaSettings || {})) })
-const masterData = ref({ ...JSON.parse(JSON.stringify(adminStore.masterData || {})) })
-
 const cData = adminStore.committee || {}
 const committee = ref({
   dewanPenasihat: cData.dewanPenasihat ? [...cData.dewanPenasihat] : [],
@@ -579,6 +640,7 @@ onMounted(() => {
   if (topButtonRef.value) {
     observer.observe(topButtonRef.value)
   }
+
 })
 
 onUnmounted(() => {

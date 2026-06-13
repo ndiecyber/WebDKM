@@ -121,10 +121,16 @@ export const useAdminStore = defineStore('admin', {
       { id: 4, title: 'Remaja Masjid', category: 'Sosial', bgImage: sosialImg, description: 'Wadah kegiatan dan kreativitas pemuda-pemudi muslim Masjid Jami Kassiti.', iconName: 'Users', badge: 'Aktif', badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800', details: { fullDescription: 'Remaja Masjid Jami Kassiti (IRMAS) merupakan wadah pembinaan, kreativitas, dan kolaborasi pemuda-pemudi muslim dalam memakmurkan masjid. Kegiatan meliputi kajian kepemudaan, pelatihan skill, olahraga, bakti sosial, dan pengembangan seni budaya Islami.', schedule: 'Setiap Akhir Pekan (Sabtu & Ahad)', location: 'Masjid Jami Kassiti & Lingkungan Sekitar', contact: 'Koordinator IRMAS (Sdr. Gojali)', requirements: ['Pemuda/pemudi usia 13 - 25 tahun', 'Memiliki semangat belajar dan berorganisasi', 'Mengisi form keanggotaan'] } }
     ],
     generalSettings: parseSafe('admin_general_settings') || {
-      name: 'Masjid Jami Kassiti',
-      slogan: 'Membangun <span class="text-gradient-gold">Iman</span>,<br class="hidden sm:block" /> Ilmu, dan <span class="text-gradient-gold">Ukhuwah</span>',
+      name: 'Perumahan Arjamukti Kencana Raya',
+      slogan: 'Membangun *Iman*,\nIlmu, dan *Ukhuwah*',
       description: 'Selamat datang di Masjid Jami Kassiti Perum Arjamukti Kencana Raya Arjasari, Leuwisari, Kab. Tasikmalaya. Bergabunglah bersama kami dalam ibadah, pembelajaran, dakwah, dan pelayanan umat.',
       history: 'Masjid Jami Kassiti yang berlokasi di Perum Arjamukti Kencana Raya, Arjasari, Leuwisari, Kab. Tasikmalaya, adalah pusat ibadah dan kegiatan keislaman yang melayani umat dengan penuh dedikasi. Kami berkomitmen untuk menjadi rumah Allah yang menyejukkan, tempat berkumpulnya jamaah dalam menuntut ilmu, beribadah, dan mempererat ukhuwah islamiah.\n\nDengan berbagai program kegiatan rutin seperti kajian, TPA/TPQ, dan kegiatan sosial, kami berusaha membangun generasi muslim yang beriman, berilmu, dan bermanfaat bagi masyarakat sekitar.',
+      floatingCardTitle: 'Masjid Kassiti',
+      floatingCardDesc: 'Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti',
+      tahunBerdiri: 2015,
+      jamaahAktif: 200,
+      heroImages: [heroImg, exteriorImg, communityImg, interiorImg],
+      historyImage: interiorImg,
       instagram: 'https://instagram.com/masjidjamikassiti',
       facebook: 'https://facebook.com/masjidjamikassiti',
       youtube: 'https://youtube.com/@masjidjamikassiti',
