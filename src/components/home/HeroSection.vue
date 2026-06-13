@@ -89,7 +89,7 @@
               <path d="M10.5 17c.5.5 1 .8 1.5.8s1-.3 1.5-.8" />
             </svg>
             <span 
-              class="font-heading italic font-black text-xs sm:text-base tracking-wide text-slate-100 group-hover:text-white transition-colors pt-0.5 leading-none"
+              class="font-heading italic font-black text-xs sm:text-base tracking-wide text-slate-100 group-hover:text-white transition-colors"
               style="text-shadow: 0 1px 0 #d97706, 0 2px 0 #b45309, 0 3px 0 #92400e, 0 4px 6px rgba(0,0,0,0.6)"
             >
               Qurban
