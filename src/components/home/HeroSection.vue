@@ -71,14 +71,15 @@
             href="https://qurban.masjidkassiti.id"
             class="w-full sm:w-auto px-5 py-2.5 sm:px-9 sm:py-4 bg-linear-to-br from-[#083526] via-[#0b4d37] to-[#041f16] text-white rounded-full border border-amber-400/40 hover:border-amber-400/85 transition-all duration-500 flex items-center justify-center gap-2.5 group shadow-[0_0_25px_rgba(217,119,6,0.15)] hover:shadow-[0_0_35px_rgba(217,119,6,0.45)] hover:-translate-y-0.5"
           >
-            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-amber-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 10c0-1.5 1.2-2.5 2.5-2.5h6c1.5 0 2.5 1 2.5 2.5v4c0 .5-.2 1-.5 1.2L12 18H5l-1.5-2.8c-.3-.2-.5-.7-.5-1.2v-4z" />
-              <path d="M5 15v5M7.5 15v5M10.5 15v5M12.5 15v5" />
-              <path d="M14 10l3-4 1 .5L19 9l-3 3" />
-              <path d="M16.5 6.5C15.8 5.2 14.5 4.5 13 4.5" />
-              <path d="M17.5 6C16.8 4.2 15.2 3.5 13.5 3.5" />
-              <path d="M17 7.5s.5 1.5 0 2" />
-              <path d="M3 10c-.5-.8-1-1-1.5-.5" />
+            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-amber-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21l-3-6.5C8.3 13 8 11.5 8 10V8h8v2c0 1.5-.3 3-1 4.5L12 21z" />
+              <path d="M10 8c-.8-2.5-2.2-4.5-4-5.5" />
+              <path d="M14 8c.8-2.5 2.2-4.5 4-5.5" />
+              <path d="M8 9.5c-1.5.5-2.5 1.5-2.5 3s.5 2.5 1.5 2" />
+              <path d="M16 9.5c1.5.5 2.5 1.5 2.5 3s-.5 2.5-1.5 2" />
+              <circle cx="10.5" cy="11.5" r="0.75" fill="currentColor" />
+              <circle cx="13.5" cy="11.5" r="0.75" fill="currentColor" />
+              <path d="M11 21.2l.5 1.8h1l.5-1.8" />
             </svg>
             <span 
               class="font-heading italic font-black text-sm sm:text-[17px] tracking-wide text-slate-100 group-hover:text-white transition-colors pt-0.5 leading-none"
