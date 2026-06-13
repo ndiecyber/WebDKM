@@ -122,6 +122,7 @@ const news = [
     `,
     date: '15 Maret 2026',
     author: 'Tim DKM',
+    hits: 142,
     image: 'https://images.unsplash.com/photo-1593113589914-072120038478?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
   },
   {
@@ -141,6 +142,7 @@ const news = [
     `,
     date: '10 Mei 2026',
     author: 'Seksi Dakwah',
+    hits: 95,
     image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
   },
   {
@@ -160,6 +162,7 @@ const news = [
     `,
     date: '1 Juni 2026',
     author: 'Pengurus TPQ',
+    hits: 218,
     image: 'https://images.unsplash.com/photo-1511499557008-0136696b92cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
   }
 ]
