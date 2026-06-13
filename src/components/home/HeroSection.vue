@@ -69,9 +69,9 @@
 
           <a
             href="https://qurban.masjidkassiti.id"
-            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-linear-to-br from-[#083526] via-[#0b4d37] to-[#041f16] text-white rounded-full border border-amber-400/40 hover:border-amber-400/85 transition-all duration-500 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-[0_0_25px_rgba(217,119,6,0.15)] hover:shadow-[0_0_35px_rgba(217,119,6,0.45)] hover:-translate-y-0.5"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20"
           >
-            <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 text-amber-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 transition-transform group-hover:scale-110 group-hover:rotate-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <!-- Horns -->
               <path d="M9.5 7.5C9 5 8 3.5 6 3" />
               <path d="M14.5 7.5C15 5 16 3.5 18 3" />
@@ -88,12 +88,7 @@
               <path d="M10.5 13.5L12 14l1.5-.5" />
               <path d="M10.5 17c.5.5 1 .8 1.5.8s1-.3 1.5-.8" />
             </svg>
-            <span 
-              class="font-heading italic font-black text-xs sm:text-base tracking-wide text-slate-100 group-hover:text-white transition-colors"
-              style="text-shadow: 0 1px 0 #d97706, 0 2px 0 #b45309, 0 3px 0 #92400e, 0 4px 6px rgba(0,0,0,0.6)"
-            >
-              Qurban
-            </span>
+            <span>Qurban</span>
           </a>
 
           <button
