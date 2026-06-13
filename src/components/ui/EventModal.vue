@@ -84,8 +84,8 @@
               />
             </div>
 
-            <!-- Info Grid (Waktu & Lokasi) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <!-- Info Grid (Waktu & Lokasi) — only for berita, not artikel -->
+            <div v-if="event.type !== 'artikel'" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <!-- Schedule -->
               <div class="p-4 rounded-xl bg-[#072F2F]/5 dark:bg-[#C5A55A]/5 border border-[#072F2F]/10 dark:border-[#C5A55A]/10">
                 <div class="flex items-center gap-2 text-[#072F2F] dark:text-[#C5A55A] mb-2">

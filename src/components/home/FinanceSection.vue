@@ -252,10 +252,10 @@
               <div class="relative inline-block" ref="dropdownRef">
                 <button 
                   @click="isDropdownOpen = !isDropdownOpen"
-                  class="flex items-center justify-between gap-2 px-3 py-1.5 min-w-[90px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
+                  class="flex items-center justify-between gap-1 px-2 py-1 sm:px-3 sm:py-1.5 min-w-[60px] sm:min-w-[90px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
                 >
-                  <span class="font-bold text-xs sm:text-sm text-dark dark:text-white">{{ selectedMonth }}</span>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
+                  <span class="font-bold text-[10px] sm:text-sm text-dark dark:text-white">{{ selectedMonth }}</span>
+                  <ChevronDown class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
                 </button>
 
                 <Transition
@@ -290,10 +290,10 @@
               <div class="relative inline-block" ref="summaryYearDropdownRef">
                 <button 
                   @click="isSummaryYearDropdownOpen = !isSummaryYearDropdownOpen"
-                  class="flex items-center justify-between gap-2 px-3 py-1.5 min-w-[75px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
+                  class="flex items-center justify-between gap-1 px-2 py-1 sm:px-3 sm:py-1.5 min-w-[52px] sm:min-w-[75px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
                 >
-                  <span class="font-bold text-xs sm:text-sm text-dark dark:text-white">{{ summarySelectedYear }}</span>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isSummaryYearDropdownOpen }" />
+                  <span class="font-bold text-[10px] sm:text-sm text-dark dark:text-white">{{ summarySelectedYear }}</span>
+                  <ChevronDown class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isSummaryYearDropdownOpen }" />
                 </button>
 
                 <Transition
