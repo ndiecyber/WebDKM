@@ -321,6 +321,21 @@
           </div>
           
           <div class="p-6 sm:p-8 space-y-12">
+            <!-- PENGATURAN UMUM PENGURUS -->
+            <div class="space-y-4">
+              <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Teks Pendahuluan</h4>
+              <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-white/10 p-4">
+                <div>
+                  <textarea 
+                    v-model="settings.committeeDescription" 
+                    rows="2" 
+                    class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm resize-none"
+                    placeholder="Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
             <!-- DEWAN PENASIHAT -->
             <div class="space-y-4">
               <div class="flex items-center justify-between">

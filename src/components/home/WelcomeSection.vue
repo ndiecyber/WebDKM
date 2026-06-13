@@ -125,7 +125,7 @@
                 </div>
                 <!-- Premium High-contrast Typography -->
                 <h3 class="font-heading text-lg sm:text-2xl font-extrabold text-white uppercase tracking-wider mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Pengurus DKM</h3>
-                <p class="text-amber-100/90 text-[10px] sm:text-xs text-center max-w-lg leading-tight font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.</p>
+                <p class="text-amber-100/90 text-[10px] sm:text-xs text-center max-w-lg leading-tight font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">{{ settings.committeeDescription || 'Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.' }}</p>
               </div>
             </div>
 

@@ -171,6 +171,7 @@ export const useAdminStore = defineStore('admin', {
       jamaahAktif: 200,
       heroImages: [heroImg, exteriorImg, communityImg, interiorImg],
       historyImage: interiorImg,
+      committeeDescription: 'Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.',
       instagram: 'https://instagram.com/masjidjamikassiti',
       facebook: 'https://facebook.com/masjidjamikassiti',
       youtube: 'https://youtube.com/@masjidjamikassiti',
