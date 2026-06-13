@@ -135,7 +135,7 @@
             </li>
             <li class="flex items-center gap-3">
               <Mail class="w-5 h-5 text-secondary shrink-0" />
-              <a href="mailto:info@masjidkassiti.id" class="text-white/60 hover:text-white transition-colors text-sm">info@masjidkassiti.id</a>
+              <a :href="'mailto:' + (adminStore.generalSettings.email || 'dkmjami.kassiti@gmail.com')" class="text-white/60 hover:text-white transition-colors text-sm">{{ adminStore.generalSettings.email || 'dkmjami.kassiti@gmail.com' }}</a>
             </li>
             <li class="flex items-center gap-3">
               <Clock class="w-5 h-5 text-secondary shrink-0" />
