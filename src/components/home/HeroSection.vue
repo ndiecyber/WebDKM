@@ -69,10 +69,16 @@
 
           <a
             href="https://qurban.masjidkassiti.id"
-            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-lg shadow-secondary/20"
+            class="w-full sm:w-auto px-4 py-2 sm:px-8 sm:py-4 bg-secondary text-white hover:text-dark text-xs sm:text-base font-bold rounded-full hover:bg-white transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg shadow-secondary/35 hover:shadow-secondary/50 hover:-translate-y-0.5"
           >
-            <Gift class="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform shrink-0" />
-            <span>Qurban</span>
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:scale-110 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 14c1.66 0 3-1.34 3-3V7c0-1.66-1.34-3-3-3S9 5.34 9 7v4c0 1.66 1.34 3 3 3z" />
+              <path d="M9 5.5c-1.5-1.5-3.5-1.5-5 0s-1.5 3.5 0 5l1 1" />
+              <path d="M15 5.5c1.5-1.5 3.5-1.5 5 0s1.5 3.5 0 5l-1 1" />
+              <path d="M8.5 8L6 9" />
+              <path d="M15.5 8l2.5 1" />
+            </svg>
+            <span class="font-heading font-black tracking-wider text-[11px] sm:text-sm uppercase pt-0.5 leading-none">Qurban</span>
           </a>
 
           <button
