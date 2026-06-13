@@ -63,7 +63,7 @@
               </div>
               <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Saldo Awal</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Bulan {{ selectedMonth }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -88,7 +88,7 @@
               <div class="flex-1 h-1 rounded-full bg-primary/10 dark:bg-secondary/10 overflow-hidden">
                 <div ref="progressBar1" class="h-full bg-linear-to-r from-primary to-primary-light dark:from-secondary dark:to-secondary-light rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.saldoAwalFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.saldoAwalFull }}</span>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
               </div>
               <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Pemasukan</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Bulan {{ selectedMonth }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -135,7 +135,7 @@
               <div class="flex-1 h-1 rounded-full bg-green-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-green-500 to-emerald-400 rounded-full" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.pemasukanFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.pemasukanFull }}</span>
             </div>
           </div>
         </div>
@@ -158,7 +158,7 @@
               </div>
               <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Pengeluaran</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Bulan {{ selectedMonth }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -182,7 +182,7 @@
               <div class="flex-1 h-1 rounded-full bg-red-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-red-500 to-orange-400 rounded-full" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.pengeluaranFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.pengeluaranFull }}</span>
             </div>
           </div>
         </div>
@@ -209,7 +209,7 @@
                 Detail
               </button>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Bulan {{ selectedMonth }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -236,7 +236,7 @@
               <div class="flex-1 h-1 rounded-full bg-cyan-500/10 overflow-hidden">
                 <div ref="progressBar4" class="h-full bg-linear-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.saldoAkhirFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.saldoAkhirFull }}</span>
             </div>
           </div>
         </div>
@@ -355,6 +355,95 @@
               <span class="text-xs sm:text-sm">Rp</span>
               <span class="text-xs sm:text-base leading-none" ref="sumDiff">0</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rincian Kas Bulanan Table -->
+      <div class="mt-8 bg-white/60 dark:bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-gray-300 dark:border-white/20 shadow-md p-4 sm:p-6 transition-all duration-500">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div class="text-left">
+            <h3 class="text-base sm:text-lg font-bold text-dark dark:text-white">Rincian Transaksi Bulanan</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Daftar arus kas pemasukan dan pengeluaran pada bulan {{ selectedMonth }} {{ summarySelectedYear }}</p>
+          </div>
+          
+          <!-- Filter Tabs -->
+          <div class="flex items-center bg-gray-150 dark:bg-white/5 p-1 rounded-xl border border-gray-200 dark:border-white/10 shrink-0 overflow-x-auto">
+            <button 
+              v-for="tab in ['Semua', 'Pemasukan', 'Pengeluaran']" 
+              :key="tab"
+              @click="activeTab = tab"
+              class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-300"
+              :class="[
+                activeTab === tab 
+                  ? 'bg-primary dark:bg-secondary text-white dark:text-dark shadow-md' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-dark dark:hover:text-white'
+              ]"
+            >
+              {{ tab }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Transactions Table (Desktop) -->
+        <div class="overflow-x-auto hidden md:block">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="border-b border-gray-250 dark:border-white/10 text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px] font-bold">
+                <th class="py-3 px-4">Tanggal</th>
+                <th class="py-3 px-4">Deskripsi / Uraian</th>
+                <th class="py-3 px-4">Kategori</th>
+                <th class="py-3 px-4 text-right">Jumlah</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-150 dark:divide-white/5 text-dark dark:text-white/90">
+              <tr 
+                v-for="(tx, idx) in filteredTransactions" 
+                :key="idx" 
+                class="hover:bg-primary/5 dark:hover:bg-white/5 transition-colors duration-300"
+              >
+                <td class="py-3.5 px-4 font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">{{ tx.date }}</td>
+                <td class="py-3.5 px-4 font-semibold text-left">{{ tx.description }}</td>
+                <td class="py-3.5 px-4 text-left">
+                  <span class="px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wide uppercase bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300">
+                    {{ tx.category }}
+                  </span>
+                </td>
+                <td class="py-3.5 px-4 text-right font-bold font-heading whitespace-nowrap" :class="tx.type === 'in' ? 'text-green-600 dark:text-green-400' : 'text-red-500'">
+                  {{ tx.type === 'in' ? '+' : '-' }} Rp {{ formatRupiah(tx.amount) }}
+                </td>
+              </tr>
+              <tr v-if="filteredTransactions.length === 0">
+                <td colspan="4" class="py-8 text-center text-gray-500 dark:text-gray-400 font-medium">Tidak ada transaksi ditemukan</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Transactions Cards (Mobile) -->
+        <div class="md:hidden flex flex-col gap-3">
+          <div 
+            v-for="(tx, idx) in filteredTransactions" 
+            :key="idx"
+            class="bg-white/40 dark:bg-white/5 border border-gray-200 dark:border-white/5 rounded-xl p-3.5 flex items-start justify-between gap-3 shadow-sm hover:shadow-md transition-all duration-300"
+          >
+            <div class="flex-1 min-w-0 text-left">
+              <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium block mb-1">{{ tx.date }}</span>
+              <h4 class="font-bold text-xs text-dark dark:text-white leading-snug line-clamp-2">{{ tx.description }}</h4>
+              <div class="flex items-center gap-1.5 mt-2">
+                <span class="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wide uppercase bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-400">
+                  {{ tx.category }}
+                </span>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="text-xs font-black font-heading" :class="tx.type === 'in' ? 'text-green-600 dark:text-green-400' : 'text-red-500'">
+                {{ tx.type === 'in' ? '+' : '-' }} Rp {{ formatRupiah(tx.amount) }}
+              </span>
+            </div>
+          </div>
+          <div v-if="filteredTransactions.length === 0" class="py-6 text-center text-gray-500 dark:text-gray-400 font-medium">
+            Tidak ada transaksi ditemukan
           </div>
         </div>
       </div>
@@ -504,11 +593,111 @@ const formatRupiah = (angka) => {
   return new Intl.NumberFormat('id-ID').format(angka)
 }
 
-// Tambahkan ref untuk filter bulan
+// Tambahkan ref untuk filter bulan dan rincian data bulanan
 const selectedMonth = ref('Mei');
 const isDropdownOpen = ref(false);
 const dropdownRef = ref(null);
-const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const months = ['April', 'Mei', 'Juni'];
+const activeTab = ref('Semua');
+
+const monthlyFinanceData = {
+  'April': {
+    saldoAwal: '80,50',
+    saldoAwalFull: '80.500.000',
+    pemasukan: '12,24',
+    pemasukanFull: '12.240.000',
+    pengeluaran: '8,00',
+    pengeluaranFull: '8.000.000',
+    saldoAkhir: '84,74',
+    saldoAkhirFull: '84.740.000',
+    selisihBersih: '4.240.000',
+    transactions: [
+      { date: '02 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 2450000 },
+      { date: '05 Apr 2026', description: 'Biaya Kebersihan & Pemeliharaan Masjid', category: 'Operasional', type: 'out', amount: 750000 },
+      { date: '09 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 2680000 },
+      { date: '12 Apr 2026', description: 'Pembayaran Listrik & Internet Bulanan', category: 'Operasional', type: 'out', amount: 1250000 },
+      { date: '15 Apr 2026', description: 'Sumbangan Donatur Pembangunan Aula', category: 'Donasi', type: 'in', amount: 3500000 },
+      { date: '16 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 2110000 },
+      { date: '20 Apr 2026', description: 'Honorarium Imam & Muadzin Bulanan', category: 'Operasional', type: 'out', amount: 4500000 },
+      { date: '23 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 1500000 },
+      { date: '26 Apr 2026', description: 'Pembelian Sabun & Alat Kebersihan', category: 'Operasional', type: 'out', amount: 500000 },
+      { date: '29 Apr 2026', description: 'Infaq Shodaqoh Hamba Allah', category: 'Donasi', type: 'in', amount: 1000000 }
+    ],
+    trend: {
+      saldo: [80.5, 82.2, 81.45, 82.88, 86.38, 83.88, 84.74],
+      income: [2.45, 0, 2.68, 0, 3.5, 2.11, 1.5],
+      expense: [0, 0.75, 0, 1.25, 0, 4.5, 0.5]
+    }
+  },
+  'Mei': {
+    saldoAwal: '84,74',
+    saldoAwalFull: '84.739.781',
+    pemasukan: '15,00',
+    pemasukanFull: '15.000.000',
+    pengeluaran: '8,00',
+    pengeluaranFull: '8.000.000',
+    saldoAkhir: '91,74',
+    saldoAkhirFull: '91.739.781',
+    selisihBersih: '7.000.000',
+    transactions: [
+      { date: '01 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 3250000 },
+      { date: '04 Mei 2026', description: 'Pemeliharaan AC Ruang Sholat Utama', category: 'Operasional', type: 'out', amount: 1200000 },
+      { date: '08 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 2950000 },
+      { date: '10 Mei 2026', description: 'Pembelian Perlengkapan Sound System', category: 'Fasilitas', type: 'out', amount: 1800000 },
+      { date: '15 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 3100000 },
+      { date: '19 Mei 2026', description: 'Pembayaran Rekening Listrik & Air', category: 'Operasional', type: 'out', amount: 1500000 },
+      { date: '22 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 3700000 },
+      { date: '25 Mei 2026', description: 'Honorarium Imam, Khotib & Muadzin', category: 'Operasional', type: 'out', amount: 3500000 },
+      { date: '29 Mei 2026', description: 'Sumbangan Donatur Pengembangan TPQ', category: 'Donasi', type: 'in', amount: 2000000 }
+    ],
+    trend: {
+      saldo: [84.74, 87.99, 86.79, 89.74, 91.04, 87.54, 91.74],
+      income: [3.25, 0, 2.95, 0, 3.1, 3.7, 2.0],
+      expense: [0, 1.2, 0, 1.8, 0, 3.5, 0]
+    }
+  },
+  'Juni': {
+    saldoAwal: '91,74',
+    saldoAwalFull: '91.739.781',
+    pemasukan: '18,50',
+    pemasukanFull: '18.500.000',
+    pengeluaran: '10,25',
+    pengeluaranFull: '10.250.000',
+    saldoAkhir: '99,99',
+    saldoAkhirFull: '99.989.781',
+    selisihBersih: '8.250.000',
+    transactions: [
+      { date: '02 Jun 2026', description: 'Sumbangan Pembangunan Kanopi Masjid', category: 'Donasi', type: 'in', amount: 5000000 },
+      { date: '05 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 2850000 },
+      { date: '08 Jun 2026', description: 'Bantuan Sosial Paket Sembako Yatim', category: 'Sosial', type: 'out', amount: 2500000 },
+      { date: '12 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 3120000 },
+      { date: '15 Jun 2026', description: 'Pembayaran Listrik, Air & Wifi Bulanan', category: 'Operasional', type: 'out', amount: 1750000 },
+      { date: '19 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 3430000 },
+      { date: '22 Jun 2026', description: 'Pembelian Cat Tembok dan Alat Kerja Bakti', category: 'Operasional', type: 'out', amount: 1500000 },
+      { date: '26 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 4100000 },
+      { date: '28 Jun 2026', description: 'Honorarium Bulanan Marbot & Pengajar', category: 'Operasional', type: 'out', amount: 4500000 }
+    ],
+    trend: {
+      saldo: [91.74, 96.74, 99.59, 97.09, 100.21, 98.71, 99.99],
+      income: [5.0, 2.85, 0, 3.12, 3.43, 4.1, 0],
+      expense: [0, 0, 2.5, 0, 1.75, 1.5, 4.5]
+    }
+  }
+};
+
+const currentMonthData = computed(() => {
+  return monthlyFinanceData[selectedMonth.value] || monthlyFinanceData['Mei'];
+});
+
+const filteredTransactions = computed(() => {
+  const txs = currentMonthData.value.transactions || []
+  if (activeTab.value === 'Pemasukan') {
+    return txs.filter(t => t.type === 'in')
+  } else if (activeTab.value === 'Pengeluaran') {
+    return txs.filter(t => t.type === 'out')
+  }
+  return txs
+});
 
 const selectMonth = (month) => {
   selectedMonth.value = month;
@@ -744,10 +933,10 @@ const sparklineLength3 = ref(500)
 const sparklineLength4 = ref(500)
 
 // Sparkline data — simulated weekly saldo trend
-const saldoData = [78, 80, 79, 82, 81, 83, 84.74]
-const incomeData = [5, 8, 3, 6, 4, 7, 0]
-const expenseData = [3, 5, 2, 4, 6, 3, 0]
-const balanceData = [78, 80, 79, 82, 81, 83, 84.74]
+const saldoData = computed(() => currentMonthData.value.trend.saldo)
+const incomeData = computed(() => currentMonthData.value.trend.income)
+const expenseData = computed(() => currentMonthData.value.trend.expense)
+const balanceData = computed(() => currentMonthData.value.trend.saldo)
 
 function generateSparklinePath(data) {
   const maxVal = Math.max(...data)
@@ -780,20 +969,20 @@ function generateSparklineArea(data) {
   return path + ` L 200,40 L 0,40 Z`
 }
 
-const spark1 = computed(() => generateSparklinePath(saldoData))
-const spark2 = computed(() => generateSparklinePath(incomeData))
-const spark3 = computed(() => generateSparklinePath(expenseData))
-const spark4 = computed(() => generateSparklinePath(balanceData))
+const spark1 = computed(() => generateSparklinePath(saldoData.value))
+const spark2 = computed(() => generateSparklinePath(incomeData.value))
+const spark3 = computed(() => generateSparklinePath(expenseData.value))
+const spark4 = computed(() => generateSparklinePath(balanceData.value))
 
 const sparklinePath1 = computed(() => spark1.value.path)
 const sparklinePath2 = computed(() => spark2.value.path)
 const sparklinePath3 = computed(() => spark3.value.path)
 const sparklinePath4 = computed(() => spark4.value.path)
 
-const sparklineArea1 = computed(() => generateSparklineArea(saldoData))
-const sparklineArea2 = computed(() => generateSparklineArea(incomeData))
-const sparklineArea3 = computed(() => generateSparklineArea(expenseData))
-const sparklineArea4 = computed(() => generateSparklineArea(balanceData))
+const sparklineArea1 = computed(() => generateSparklineArea(saldoData.value))
+const sparklineArea2 = computed(() => generateSparklineArea(incomeData.value))
+const sparklineArea3 = computed(() => generateSparklineArea(expenseData.value))
+const sparklineArea4 = computed(() => generateSparklineArea(balanceData.value))
 
 const sparklineEndY4 = computed(() => spark4.value.lastY)
 
@@ -828,6 +1017,95 @@ const resetTilt = (index) => {
   cardTilts.value[index] = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
 }
 
+import { watch } from 'vue'
+
+const animateCounter = (element, targetValue, duration = 1.0, isDecimal = false, useScrollTrigger = false) => {
+  if (!element) return
+  const options = {
+    innerHTML: targetValue,
+    duration: duration,
+    ease: 'power3.out',
+    snap: { innerHTML: isDecimal ? 0.01 : 1 },
+    onUpdate: function() {
+      if (isDecimal) {
+        element.innerHTML = Number(this.targets()[0].innerHTML).toFixed(2).replace('.', ',')
+      } else {
+        element.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString('id-ID')
+      }
+    }
+  }
+  
+  if (useScrollTrigger) {
+    options.scrollTrigger = { trigger: '#keuangan', start: 'top 75%', once: true }
+  }
+  
+  gsap.killTweensOf(element)
+  gsap.to(element, options)
+}
+
+const animateAllCounters = (useScrollTrigger = false) => {
+  const parseNumber = (val) => parseFloat(val.toString().replace(/\./g, '').replace(',', '.')) || 0
+  const data = currentMonthData.value
+
+  animateCounter(counter1.value, parseNumber(data.saldoAwal), 1.0, true, useScrollTrigger)
+  animateCounter(counter2.value, parseNumber(data.pemasukan), 1.0, false, useScrollTrigger)
+  animateCounter(counter3.value, parseNumber(data.pengeluaran), 1.0, false, useScrollTrigger)
+  animateCounter(counter4.value, parseNumber(data.saldoAkhir), 1.0, true, useScrollTrigger)
+  
+  animateCounter(sumIn.value, parseNumber(data.pemasukanFull), 1.0, false, useScrollTrigger)
+  animateCounter(sumOut.value, parseNumber(data.pengeluaranFull), 1.0, false, useScrollTrigger)
+  animateCounter(sumDiff.value, parseNumber(data.selisihBersih), 1.0, false, useScrollTrigger)
+}
+
+const animateSparklines = (useScrollTrigger = false) => {
+  const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }
+  
+  const drawSparkline = (sparkEl, lengthRef, offsetRef, delay) => {
+    if (sparkEl) {
+      const len = sparkEl.getTotalLength()
+      lengthRef.value = len
+      offsetRef.value = len
+      
+      const animOpts = { value: 0, duration: 1.5, ease: 'power3.out', delay }
+      if (useScrollTrigger) {
+        animOpts.scrollTrigger = stConfig
+      }
+      gsap.killTweensOf(offsetRef)
+      gsap.to(offsetRef, animOpts)
+    }
+  }
+
+  setTimeout(() => {
+    drawSparkline(sparkline1.value, sparklineLength1, sparklineOffset1, 0.2)
+    drawSparkline(sparkline2.value, sparklineLength2, sparklineOffset2, 0.3)
+    drawSparkline(sparkline3.value, sparklineLength3, sparklineOffset3, 0.4)
+    drawSparkline(sparkline4.value, sparklineLength4, sparklineOffset4, 0.5)
+  }, 100)
+}
+
+const animateProgressBars = (useScrollTrigger = false) => {
+  const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }
+  
+  const animateBar = (barEl, delay) => {
+    if (barEl) {
+      const animOpts = { width: '100%', duration: 1.2, ease: 'power3.out', delay }
+      if (useScrollTrigger) {
+        animOpts.scrollTrigger = stConfig
+      }
+      gsap.fromTo(barEl, { width: '0%' }, animOpts)
+    }
+  }
+  
+  animateBar(progressBar1.value, 0.3)
+  animateBar(progressBar4.value, 0.6)
+}
+
+watch(selectedMonth, () => {
+  animateAllCounters(false)
+  animateSparklines(false)
+  animateProgressBars(false)
+})
+
 onMounted(() => {
   // Header animation
   gsap.fromTo(headerRef.value.children, { opacity: 0, y: 40 }, {
@@ -849,45 +1127,6 @@ onMounted(() => {
     })
   }
 
-  // Sparkline draw animations
-  const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }
-  
-  // Calculate actual path lengths after mount
-  setTimeout(() => {
-    if (sparkline1.value) {
-      const len = sparkline1.value.getTotalLength()
-      sparklineLength1.value = len
-      sparklineOffset1.value = len
-      gsap.to(sparklineOffset1, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.2, scrollTrigger: stConfig })
-    }
-    if (sparkline2.value) {
-      const len = sparkline2.value.getTotalLength()
-      sparklineLength2.value = len
-      sparklineOffset2.value = len
-      gsap.to(sparklineOffset2, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.3, scrollTrigger: stConfig })
-    }
-    if (sparkline3.value) {
-      const len = sparkline3.value.getTotalLength()
-      sparklineLength3.value = len
-      sparklineOffset3.value = len
-      gsap.to(sparklineOffset3, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.4, scrollTrigger: stConfig })
-    }
-    if (sparkline4.value) {
-      const len = sparkline4.value.getTotalLength()
-      sparklineLength4.value = len
-      sparklineOffset4.value = len
-      gsap.to(sparklineOffset4, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.5, scrollTrigger: stConfig })
-    }
-  }, 100)
-
-  // Progress bars
-  if (progressBar1.value) {
-    gsap.to(progressBar1.value, { width: '100%', duration: 1.2, ease: 'power3.out', delay: 0.3, scrollTrigger: stConfig })
-  }
-  if (progressBar4.value) {
-    gsap.to(progressBar4.value, { width: '100%', duration: 1.2, ease: 'power3.out', delay: 0.6, scrollTrigger: stConfig })
-  }
-
   // Summary row
   if (summaryRef.value) {
     gsap.fromTo(summaryRef.value, { opacity: 0, y: 20 }, {
@@ -904,35 +1143,10 @@ onMounted(() => {
     })
   }
 
-  // Counter animations
-  const animateCounter = (element, targetValue, duration = 1.5, isDecimal = false) => {
-    gsap.to(element, {
-      innerHTML: targetValue,
-      duration: duration,
-      ease: 'power3.out',
-      snap: { innerHTML: isDecimal ? 0.01 : 1 },
-      onUpdate: function() {
-        if (isDecimal) {
-          element.innerHTML = Number(this.targets()[0].innerHTML).toFixed(2).replace('.', ',')
-        } else {
-          element.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString('id-ID')
-        }
-      },
-      scrollTrigger: stConfig
-    })
-  }
-
-  const parseNumber = (val) => parseFloat(val.toString().replace(/\./g, '').replace(',', '.')) || 0
-
-  if (counter1.value) animateCounter(counter1.value, parseNumber(adminStore.finance.saldoAwal), 1.5, true)
-  if (counter2.value) animateCounter(counter2.value, parseNumber(adminStore.finance.pemasukan), 1.2, false)
-  if (counter3.value) animateCounter(counter3.value, parseNumber(adminStore.finance.pengeluaran), 1.2, false)
-  if (counter4.value) animateCounter(counter4.value, parseNumber(adminStore.finance.saldoAkhir), 1.5, true)
-  
-  // Summary counters
-  if (sumIn.value) animateCounter(sumIn.value, parseNumber(adminStore.finance.pemasukanFull), 1.2, false)
-  if (sumOut.value) animateCounter(sumOut.value, parseNumber(adminStore.finance.pengeluaranFull), 1.2, false)
-  if (sumDiff.value) animateCounter(sumDiff.value, parseNumber(adminStore.finance.selisihBersih), 1.2, false)
+  // Initial trigger
+  animateAllCounters(true)
+  animateSparklines(true)
+  animateProgressBars(true)
 })
 </script>
 

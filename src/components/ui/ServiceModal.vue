@@ -99,6 +99,28 @@
               </div>
             </div>
 
+            <!-- Staff Section -->
+            <div v-if="service.details?.staff && service.details.staff.length > 0" class="mb-8 animate-slide-up" style="animation-delay: 0.45s; animation-fill-mode: both;">
+              <div class="flex items-center gap-2 text-primary mb-4">
+                <Users class="w-4.5 h-4.5" />
+                <span class="font-bold text-sm uppercase tracking-wider text-dark dark:text-white">Tim Pengelola & Pengajar</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div 
+                  v-for="member in service.details.staff" 
+                  :key="member.name" 
+                  class="flex flex-col items-center p-3 rounded-2xl bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 text-center hover:shadow-md transition-shadow duration-300"
+                >
+                  <div class="w-16 h-16 rounded-full overflow-hidden mb-2 shadow-inner border-2 border-primary/20 dark:border-secondary/20 flex items-center justify-center bg-linear-to-br from-primary/10 to-primary/20">
+                    <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
+                    <span v-else class="text-sm font-extrabold text-primary">{{ getInitials(member.name) }}</span>
+                  </div>
+                  <h5 class="text-xs font-bold text-gray-950 dark:text-white line-clamp-1 leading-snug">{{ member.name }}</h5>
+                  <span class="text-[9px] font-bold text-primary dark:text-secondary uppercase tracking-wider mt-1">{{ member.role }}</span>
+                </div>
+              </div>
+            </div>
+
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-dark/10 dark:border-white/10 animate-slide-up" style="animation-delay: 0.5s; animation-fill-mode: both;">
               <a 
@@ -127,6 +149,18 @@
 import { onMounted, onUnmounted, watch } from 'vue'
 import { X, Calendar, MapPin, User, FileText, MessageCircle, Users, BookOpen, GraduationCap, Heart, HandCoins, Gem } from 'lucide-vue-next'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+
+const getInitials = (name) => {
+  if (!name) return ''
+  const cleanName = name
+    .replace(/^(Ust\.|Usth\.|Bpk\.|Bapak|H\.|Hj\.)\s+/i, '')
+    .trim()
+  const parts = cleanName.split(/\s+/)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase()
+  }
+  return parts[0] ? parts[0][0].toUpperCase() : ''
+}
 
 const iconMap = {
   Users, BookOpen, GraduationCap, Heart, HandCoins, Gem

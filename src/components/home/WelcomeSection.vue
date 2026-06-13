@@ -164,7 +164,7 @@
                     class="backdrop-blur-md border flex flex-col items-center text-center rounded-2xl transition-all duration-300 group"
                   >
                     <!-- Elegant Avatar with Photo or Gradient Avatar with Initials (Enlarged) -->
-                    <div class="relative rounded-full mb-4 shadow-lg ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
+                    <div class="relative rounded-full mb-2 shadow-lg ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
                          :class="[
                            member.role === 'Ketua RW 07' ? 'w-24 h-24 sm:w-28 sm:h-28 ring-indigo-500/20' : 'w-20 h-20 sm:w-24 sm:h-24 ring-indigo-500/10',
                            member.image ? '' : 'bg-linear-to-br from-indigo-500 to-purple-600 text-white font-extrabold text-xl sm:text-2xl'
@@ -172,7 +172,7 @@
                       <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
                       <span v-else>{{ getInitials(member.name) }}</span>
                     </div>
-                    <h4 :class="member.role === 'Ketua RW 07' ? 'text-sm sm:text-base mb-2 font-black' : 'text-xs sm:text-sm mb-1.5 min-h-[2.5rem] flex items-center justify-center'" class="font-heading font-bold text-gray-950 dark:text-white leading-snug">{{ member.name }}</h4>
+                    <h4 :class="member.role === 'Ketua RW 07' ? 'text-sm sm:text-base mb-1.5 font-black' : 'text-xs sm:text-sm mb-1 font-bold'" class="font-heading text-gray-950 dark:text-white leading-snug">{{ member.name }}</h4>
                     <span :class="member.role === 'Ketua RW 07' ? 'text-[11px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 px-3.5 py-1.5 rounded-full font-extrabold shadow-sm' : 'text-[10px] text-indigo-600 dark:text-indigo-400 font-bold'" class="tracking-wider uppercase">{{ member.role }}</span>
                   </div>
                 </div>

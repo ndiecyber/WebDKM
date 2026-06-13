@@ -131,9 +131,6 @@
                 <span class="text-secondary group-hover/phone:text-white underline decoration-secondary/50 group-hover/phone:decoration-white underline-offset-4 transition-all text-sm font-medium">
                   0853-2013-2014
                 </span>
-                <span class="text-white/60 group-hover/phone:text-white/80 text-xs mt-1 transition-colors">
-                  Ustadz Randi Rizal
-                </span>
               </a>
             </li>
             <li class="flex items-center gap-3">
