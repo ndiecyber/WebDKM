@@ -18,7 +18,7 @@
       </button>
     </div>
 
-    <div class="max-w-5xl space-y-6">
+    <div class="space-y-6">
       
       <!-- Profil Masjid Section -->
       <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md">
@@ -257,6 +257,78 @@
         </div>
       </section>
 
+      <!-- Manajemen Pengurus DKM Section -->
+      <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md">
+        <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Users class="w-5 h-5 text-gray-400" />
+            Susunan Pengurus DKM
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola daftar pengurus yang akan ditampilkan pada Halaman Utama.</p>
+        </div>
+        
+        <div class="p-6 sm:p-8 space-y-8">
+          
+          <div v-for="(members, key) in committee" :key="key" class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">{{ formatCommitteeKey(key) }}</h4>
+              <button 
+                type="button" 
+                @click="addCommitteeMember(key)"
+                class="text-xs font-medium bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-md"
+              >
+                <Plus class="w-3.5 h-3.5" />
+                Tambah Anggota
+              </button>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden p-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div v-for="(member, index) in members" :key="member.id" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-lg p-3 relative group shadow-sm">
+                  <button 
+                    type="button" 
+                    @click="removeCommitteeMember(key, index)"
+                    class="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 dark:bg-gray-800 dark:hover:bg-red-500/10 rounded-md transition-colors opacity-0 group-hover:opacity-100"
+                    title="Hapus"
+                  >
+                    <X class="w-3 h-3" />
+                  </button>
+                  <div class="space-y-2 pr-6">
+                    <div>
+                      <label class="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Nama</label>
+                      <input 
+                        v-model="member.name" 
+                        type="text" 
+                        class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-sm"
+                        placeholder="Nama Lengkap"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Jabatan / Peran</label>
+                      <input 
+                        v-model="member.role" 
+                        type="text" 
+                        class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-sm"
+                        placeholder="Jabatan"
+                      />
+                    </div>
+                    <div v-if="key === 'pengurusHarian'" class="flex items-center gap-2 pt-1">
+                      <input 
+                        v-model="member.isLeader" 
+                        type="checkbox" 
+                        class="rounded text-secondary focus:ring-secondary dark:bg-gray-800 dark:border-gray-600"
+                      />
+                      <label class="text-xs text-gray-700 dark:text-gray-300">Tandai sebagai Pimpinan (Ketua)</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <!-- Manajemen Master Data Section -->
       <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md">
         <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
@@ -445,7 +517,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X } from 'lucide-vue-next'
+import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users } from 'lucide-vue-next'
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
 
@@ -475,8 +547,18 @@ const availableIcons = [
 
 // Use settings from store
 const settings = ref({ ...adminStore.generalSettings })
-const ctaSettings = ref({ ...JSON.parse(JSON.stringify(adminStore.ctaSettings)) })
-const masterData = ref({ ...JSON.parse(JSON.stringify(adminStore.masterData)) })
+const ctaSettings = ref({ ...JSON.parse(JSON.stringify(adminStore.ctaSettings || {})) })
+const masterData = ref({ ...JSON.parse(JSON.stringify(adminStore.masterData || {})) })
+
+const cData = adminStore.committee || {}
+const committee = ref({
+  dewanPenasihat: cData.dewanPenasihat ? [...cData.dewanPenasihat] : [],
+  pengurusHarian: cData.pengurusHarian ? [...cData.pengurusHarian] : [],
+  seksiDakwah: cData.seksiDakwah ? [...cData.seksiDakwah] : [],
+  seksiEkonomi: cData.seksiEkonomi ? [...cData.seksiEkonomi] : [],
+  seksiLogistik: cData.seksiLogistik ? [...cData.seksiLogistik] : [],
+  remajaMasjid: cData.remajaMasjid ? [...cData.remajaMasjid] : []
+})
 
 const topButtonRef = ref(null)
 const isTopButtonVisible = ref(true)
@@ -486,7 +568,8 @@ const hasChanges = computed(() => {
   const isSettingsChanged = JSON.stringify(settings.value) !== JSON.stringify(adminStore.generalSettings)
   const isCtaChanged = JSON.stringify(ctaSettings.value) !== JSON.stringify(adminStore.ctaSettings)
   const isMasterDataChanged = JSON.stringify(masterData.value) !== JSON.stringify(adminStore.masterData)
-  return isSettingsChanged || isCtaChanged || isMasterDataChanged
+  const isCommitteeChanged = JSON.stringify(committee.value) !== JSON.stringify(adminStore.committee)
+  return isSettingsChanged || isCtaChanged || isMasterDataChanged || isCommitteeChanged
 })
 
 onMounted(() => {
@@ -524,6 +607,36 @@ function removeMasterDataItem(key, index) {
   masterData.value[key].splice(index, 1)
 }
 
+function formatCommitteeKey(key) {
+  const labels = {
+    dewanPenasihat: 'Dewan Penasihat',
+    pengurusHarian: 'Pengurus Harian',
+    seksiDakwah: 'Seksi Pendidikan & Dakwah',
+    seksiEkonomi: 'Seksi Ekonomi & Wakaf',
+    seksiLogistik: 'Seksi Peralatan & Logistik',
+    remajaMasjid: 'Remaja Masjid'
+  }
+  return labels[key] || key
+}
+
+function addCommitteeMember(key) {
+  const newId = committee.value[key].length > 0 ? Math.max(...committee.value[key].map(i => i.id)) + 1 : 1
+  const newMember = {
+    id: newId,
+    name: '',
+    role: '',
+    image: null
+  }
+  if (key === 'pengurusHarian') {
+    newMember.isLeader = false
+  }
+  committee.value[key].push(newMember)
+}
+
+function removeCommitteeMember(key, index) {
+  committee.value[key].splice(index, 1)
+}
+
 function saveSettings() {
   isSaving.value = true
   
@@ -532,10 +645,12 @@ function saveSettings() {
     adminStore.generalSettings = { ...settings.value }
     adminStore.ctaSettings = JSON.parse(JSON.stringify(ctaSettings.value))
     adminStore.masterData = JSON.parse(JSON.stringify(masterData.value))
+    adminStore.committee = JSON.parse(JSON.stringify(committee.value))
     
     adminStore.saveGeneralSettings()
     adminStore.saveCtaSettings()
     adminStore.saveMasterData()
+    adminStore.saveCommittee()
     
     isSaving.value = false
     toastStore.addToast('Pengaturan umum berhasil disimpan')

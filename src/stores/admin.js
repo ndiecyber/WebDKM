@@ -25,6 +25,52 @@ const parseSafe = (key) => {
 export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: getStorage('admin_auth') === 'true',
+    currentUser: parseSafe('admin_current_user') || { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin' },
+    users: parseSafe('admin_users') || [
+      { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin', password: 'admin123' },
+      { id: 2, username: 'bendahara', name: 'Bendahara DKM', role: 'bendahara', password: 'password123' },
+      { id: 3, username: 'humas', name: 'Seksi Humas & Acara', role: 'humas', password: 'password123' }
+    ],
+    auditLogs: parseSafe('admin_audit_logs') || [],
+    committee: parseSafe('admin_committee') || {
+      dewanPenasihat: [
+        { id: 1, name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat' },
+        { id: 2, name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat' },
+        { id: 3, name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat' },
+        { id: 4, name: 'Bpk. H. Usman', role: 'Dewan Penasihat' },
+        { id: 5, name: 'Bpk. Ayi Sunarwan', role: 'Dewan Penasihat' }
+      ],
+      pengurusHarian: [
+        { id: 1, name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true, image: null },
+        { id: 2, name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris', isLeader: false, image: null },
+        { id: 3, name: 'Ust. Randi Rizal', role: 'Bendahara', isLeader: false, image: null }
+      ],
+      seksiDakwah: [
+        { id: 1, name: 'Ust. H. Irvan Ruchiat', role: 'Anggota Dakwah & Pendidikan', image: null },
+        { id: 2, name: 'Ust. H. Dani Ramdhani', role: 'Anggota Dakwah & Pendidikan', image: null },
+        { id: 3, name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan', image: null },
+        { id: 4, name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan', image: null },
+        { id: 5, name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan', image: null },
+        { id: 6, name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan', image: null }
+      ],
+      seksiEkonomi: [
+        { id: 1, name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf', image: null },
+        { id: 2, name: 'Bpk. Ujang Kurnia', role: 'Anggota Ekonomi & Wakaf', image: null },
+        { id: 3, name: 'Bpk. Erwin Darmawan', role: 'Anggota Ekonomi & Wakaf', image: null },
+        { id: 4, name: 'Bpk. Ade Ramdhani', role: 'Anggota Ekonomi & Wakaf', image: null }
+      ],
+      seksiLogistik: [
+        { id: 1, name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik', image: null },
+        { id: 2, name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik', image: null },
+        { id: 3, name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik', image: null },
+        { id: 4, name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik', image: null }
+      ],
+      remajaMasjid: [
+        { id: 1, name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid', image: null },
+        { id: 2, name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid', image: null },
+        { id: 3, name: 'Usth. Rayanthi', role: 'Remaja Masjid', image: null }
+      ]
+    },
     kegiatan: parseSafe('admin_kegiatan_v3') || [
       { id: 1, title: 'Kajian Akbar Bulanan', category: 'Kajian', description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah dan muamalah kontemporer.', image: communityImg, day: '15', month: 'Jun', time: '09:00 - 12:00', location: 'Aula Utama', badge: 'Segera' },
       { id: 2, title: 'Wisuda Santri TPA/TPQ', category: 'Pendidikan', description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz dan tilawah.', image: quranImg, day: '22', month: 'Jun', time: '08:00 - 11:00', location: 'Masjid Utama', badge: null },
@@ -110,17 +156,47 @@ export const useAdminStore = defineStore('admin', {
     }
   }),
   actions: {
-    login(username, password) {
-      if (username === 'admin' && password === 'admin123') {
-        this.isAuthenticated = true
-        setStorage('admin_auth', 'true')
-        return true
+    logActivity(actionName, details) {
+      if (!this.currentUser) return;
+      const newLog = {
+        id: Date.now(),
+        userId: this.currentUser.id,
+        userName: this.currentUser.name,
+        userRole: this.currentUser.role,
+        action: actionName,
+        details: details,
+        timestamp: new Date().toISOString()
+      };
+      this.auditLogs.unshift(newLog); // Add to beginning
+      if (this.auditLogs.length > 500) {
+        this.auditLogs = this.auditLogs.slice(0, 500); // Keep max 500 logs
       }
-      return false
+      setStorage('admin_audit_logs', JSON.stringify(this.auditLogs));
+    },
+    login(username, password) {
+      // For backwards compatibility and new users array
+      const user = this.users.find(u => u.username === username && u.password === password);
+      if (user) {
+        this.isAuthenticated = true;
+        this.currentUser = { ...user };
+        // Don't store password in currentUser state/localStorage
+        delete this.currentUser.password;
+        
+        setStorage('admin_auth', 'true');
+        setStorage('admin_current_user', JSON.stringify(this.currentUser));
+        this.logActivity('Login', 'Berhasil login ke sistem');
+        return true;
+      }
+      return false;
     },
     logout() {
-      this.isAuthenticated = false
-      removeStorage('admin_auth')
+      if (this.isAuthenticated) {
+        this.logActivity('Logout', 'Keluar dari sistem');
+      }
+      this.isAuthenticated = false;
+      this.currentUser = null;
+      removeStorage('admin_auth');
+      removeStorage('admin_current_user');
     },
     addKegiatan(data) {
       const newId = this.kegiatan.length > 0 ? Math.max(...this.kegiatan.map((k) => k.id)) + 1 : 1
@@ -140,10 +216,12 @@ export const useAdminStore = defineStore('admin', {
     },
     saveKegiatan() {
       setStorage('admin_kegiatan_v3', JSON.stringify(this.kegiatan))
+      this.logActivity('Ubah Kegiatan', 'Memperbarui data kegiatan/acara');
     },
     updateFinance(data) {
       this.finance = { ...this.finance, ...data }
       setStorage('admin_finance', JSON.stringify(this.finance))
+      this.logActivity('Ubah Keuangan', 'Memperbarui data laporan keuangan');
     },
     addGallery(data) {
       const newId = this.gallery.length > 0 ? Math.max(...this.gallery.map((g) => g.id)) + 1 : 1
@@ -163,6 +241,7 @@ export const useAdminStore = defineStore('admin', {
     },
     saveGallery() {
       setStorage('admin_gallery', JSON.stringify(this.gallery))
+      this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto');
     },
     addLayanan(data) {
       const newId = this.layanan.length > 0 ? Math.max(...this.layanan.map((l) => l.id)) + 1 : 1
@@ -182,15 +261,48 @@ export const useAdminStore = defineStore('admin', {
     },
     saveLayanan() {
       setStorage('admin_layanan_v6', JSON.stringify(this.layanan))
+      this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid');
     },
     saveGeneralSettings() {
       setStorage('admin_general_settings', JSON.stringify(this.generalSettings))
+      this.logActivity('Ubah Pengaturan', 'Memperbarui pengaturan umum (teks sambutan, dsb)');
     },
     saveCtaSettings() {
       setStorage('admin_cta_settings', JSON.stringify(this.ctaSettings))
+      this.logActivity('Ubah Donasi', 'Memperbarui pengaturan CTA Donasi');
     },
     saveMasterData() {
       setStorage('admin_master_data_v2', JSON.stringify(this.masterData))
+      this.logActivity('Ubah Master Data', 'Memperbarui master data (kategori/label)');
+    },
+    saveCommittee() {
+      setStorage('admin_committee', JSON.stringify(this.committee))
+      this.logActivity('Ubah Pengurus', 'Memperbarui struktur pengurus DKM');
+    },
+    addUser(userData) {
+      const newId = this.users.length > 0 ? Math.max(...this.users.map(u => u.id)) + 1 : 1;
+      this.users.push({ ...userData, id: newId });
+      this.saveUsers();
+      this.logActivity('Tambah Pengguna', `Menambahkan admin baru: ${userData.username}`);
+    },
+    updateUser(id, userData) {
+      const index = this.users.findIndex(u => u.id === id);
+      if (index !== -1) {
+        this.users[index] = { ...this.users[index], ...userData };
+        this.saveUsers();
+        this.logActivity('Ubah Pengguna', `Memperbarui data admin: ${this.users[index].username}`);
+      }
+    },
+    deleteUser(id) {
+      const user = this.users.find(u => u.id === id);
+      if (user) {
+        this.users = this.users.filter(u => u.id !== id);
+        this.saveUsers();
+        this.logActivity('Hapus Pengguna', `Menghapus admin: ${user.username}`);
+      }
+    },
+    saveUsers() {
+      setStorage('admin_users', JSON.stringify(this.users));
     }
   }
 })

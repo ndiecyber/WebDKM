@@ -74,6 +74,16 @@ const routes = [
         path: 'profil',
         name: 'admin-profil',
         component: () => import('../views/admin/ProfilView.vue'),
+      },
+      {
+        path: 'pengguna',
+        name: 'admin-pengguna',
+        component: () => import('../views/admin/PenggunaView.vue'),
+      },
+      {
+        path: 'log-aktivitas',
+        name: 'admin-log-aktivitas',
+        component: () => import('../views/admin/LogAktivitasView.vue'),
       }
     ]
   },

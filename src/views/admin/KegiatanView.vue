@@ -1,27 +1,27 @@
 <template>
-  <div>
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+  <div class="space-y-6 sm:space-y-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-1">Daftar Berita</h1>
-        <p class="text-gray-500 dark:text-white/50 text-sm">Kelola informasi dan berita masjid</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Daftar Berita</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola informasi dan berita masjid</p>
       </div>
       <button 
         @click="openAddModal"
-        class="bg-secondary hover:bg-secondary-light text-white dark:text-dark font-bold px-5 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-secondary/20 flex items-center gap-2 w-full sm:w-auto justify-center active:scale-95"
+        class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2 justify-center shrink-0 w-full sm:w-auto"
       >
-        <Plus class="w-5 h-5" />
+        <Plus class="w-4 h-4" />
         <span>Tambah Berita</span>
       </button>
     </div>
 
     <!-- Table Container -->
-    <div class="bg-white dark:bg-white/5 border border-gray-300 dark:border-white/5 rounded-3xl overflow-hidden shadow-md dark:shadow-2xl">
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md overflow-hidden">
       
       <!-- Table -->
       <div v-if="adminStore.kegiatan.length > 0" class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-gray-50 dark:bg-dark/50 border-b border-gray-300 dark:border-white/5 text-gray-500 dark:text-white/50 text-sm uppercase tracking-wider">
+            <tr class="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-white/5 text-sm">
               <th class="py-5 px-6 font-semibold w-16">No</th>
               <th class="py-5 px-6 font-semibold">Berita</th>
               <th class="py-5 px-6 font-semibold">Waktu & Tempat</th>
@@ -30,7 +30,7 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-white/5 text-gray-900 dark:text-white text-sm">
-            <tr v-for="(item, index) in adminStore.kegiatan" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors group">
+            <tr v-for="(item, index) in adminStore.kegiatan" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
               <td class="py-4 px-6 text-gray-500 dark:text-white/50 font-medium">{{ index + 1 }}</td>
               <td class="py-4 px-6">
                 <div class="flex items-center gap-4">
@@ -133,19 +133,13 @@
     </div>
 
     <!-- Form Modal (Tambah/Edit) -->
-    <div v-if="showModal" class="fixed inset-0 z-60 flex items-center justify-center px-4">
-      <div class="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
+    <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+      <div class="absolute inset-0 bg-gray-900/50 dark:bg-gray-950/80 backdrop-blur-sm" @click="closeModal"></div>
       
-      <div class="bg-white dark:bg-[#112323] border border-gray-300 dark:border-white/10 rounded-3xl w-full max-w-xl relative z-10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-enter">
-        <div class="p-6 border-b border-gray-300 dark:border-white/10 flex items-center justify-between shrink-0 bg-gray-50 dark:bg-white/5">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
-              <Edit v-if="isEditing" class="w-5 h-5" />
-              <Plus v-else class="w-5 h-5" />
-            </div>
-            <h2 class="text-xl font-heading font-bold text-gray-900 dark:text-white">{{ isEditing ? 'Edit Berita' : 'Tambah Berita Baru' }}</h2>
-          </div>
-          <button @click="closeModal" class="p-2 text-gray-400 dark:text-white/50 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/10 rounded-xl transition-all active:scale-90">
+      <div class="relative bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+        <div class="px-6 py-4 border-b border-gray-300 dark:border-white/5 flex items-center justify-between shrink-0 bg-white dark:bg-gray-900">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">{{ isEditing ? 'Edit Berita' : 'Tambah Berita Baru' }}</h3>
+          <button @click="closeModal" class="p-2 -mr-2 text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-white/5">
             <X class="w-5 h-5" />
           </button>
         </div>
@@ -280,19 +274,19 @@
           </form>
         </div>
         
-        <div class="p-6 border-t border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-white/5 flex items-center justify-end gap-3 shrink-0">
+        <div class="px-6 py-4 border-t border-gray-300 dark:border-white/5 bg-gray-50 dark:bg-gray-900/50 shrink-0 flex items-center justify-end gap-3">
           <button 
             type="button" 
             @click="closeModal"
-            class="px-5 py-2.5 rounded-xl text-gray-600 dark:text-white/70 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all active:scale-95"
+            class="px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 transition-colors text-sm"
           >
             Batal
           </button>
           <button 
             @click="saveKegiatan"
-            class="px-6 py-2.5 rounded-xl bg-secondary hover:bg-secondary-light text-white dark:text-dark font-bold shadow-lg shadow-secondary/20 transition-all active:scale-95 flex items-center gap-2"
+            class="px-4 py-2 rounded-lg font-medium bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 transition-colors flex items-center gap-2 shadow-md text-sm"
           >
-            <Save class="w-5 h-5" />
+            <Save class="w-4 h-4" />
             <span>{{ isEditing ? 'Simpan Perubahan' : 'Tambah Berita' }}</span>
           </button>
         </div>
@@ -300,27 +294,27 @@
     </div>
 
     <!-- Confirmation Modal (Hapus) -->
-    <div v-if="showDeleteModal" class="fixed inset-0 z-[70] flex items-center justify-center px-4">
-      <div class="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity" @click="closeDeleteModal"></div>
+    <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+      <div class="absolute inset-0 bg-gray-900/50 dark:bg-gray-950/80 backdrop-blur-sm" @click="closeDeleteModal"></div>
       
-      <div class="bg-white dark:bg-[#112323] border border-gray-300 dark:border-red-500/20 rounded-3xl w-full max-w-sm relative z-10 shadow-2xl p-6 text-center animate-modal-enter">
+      <div class="relative bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl w-full max-w-sm shadow-2xl p-6 text-center animate-in fade-in zoom-in-95 duration-200">
         <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-4 text-red-500">
           <AlertTriangle class="w-8 h-8 text-red-600 dark:text-red-500" />
         </div>
-        <h3 class="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">Hapus Berita?</h3>
-        <p class="text-gray-500 dark:text-white/60 text-sm mb-8">
-          Tindakan ini tidak dapat dibatalkan. Berita <strong>"{{ itemToDelete?.title }}"</strong> akan dihapus secara permanen.
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Hapus Berita?</h3>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mb-8">
+          Tindakan ini tidak dapat dibatalkan. Berita <strong class="text-gray-700 dark:text-gray-300">"{{ itemToDelete?.title }}"</strong> akan dihapus secara permanen.
         </p>
         <div class="flex items-center gap-3 w-full">
           <button 
             @click="closeDeleteModal"
-            class="flex-1 py-3 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-white/70 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-all active:scale-95 border border-gray-300 dark:border-transparent"
+            class="flex-1 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 transition-colors text-sm"
           >
             Batal
           </button>
           <button 
             @click="confirmDelete"
-            class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg shadow-red-500/20 transition-all active:scale-95"
+            class="flex-1 px-4 py-2 rounded-lg font-medium bg-red-500 hover:bg-red-600 text-white transition-colors shadow-md text-sm"
           >
             Ya, Hapus
           </button>
@@ -490,14 +484,7 @@ const confirmDelete = () => {
 </script>
 
 <style scoped>
-@keyframes modalEnter {
-  0% { opacity: 0; transform: scale(0.95) translateY(10px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
 
-.animate-modal-enter {
-  animation: modalEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
