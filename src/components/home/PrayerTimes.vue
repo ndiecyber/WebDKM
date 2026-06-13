@@ -804,6 +804,34 @@ function updateCelestialBody() {
   weatherOverlay.value = { type: wType, opacity: wOpacity }
 }
 
+// Translate English Hijri months to Indonesian
+function getIndonesianHijriMonth(monthEn) {
+  const months = {
+    'muharram': 'Muharram',
+    'safar': 'Safar',
+    'rabi\' al-awwal': 'Rabiul Awwal',
+    'rabi\'ul awwal': 'Rabiul Awwal',
+    'rabi\' al-thani': 'Rabiul Akhir',
+    'rabi\'ul akhir': 'Rabiul Akhir',
+    'rabi\' ut-thani': 'Rabiul Akhir',
+    'jumada al-ula': 'Jumadil Awwal',
+    'jumada I': 'Jumadil Awwal',
+    'jumada al-akhirah': 'Jumadil Akhir',
+    'jumada al-thani': 'Jumadil Akhir',
+    'jumada II': 'Jumadil Akhir',
+    'rajab': 'Rajab',
+    'sha\'ban': 'Sya\'ban',
+    'ramadan': 'Ramadan',
+    'shawwal': 'Syawal',
+    'dhu al-qadah': 'Dzulqa\'dah',
+    'dhu al-qi\'dah': 'Dzulqa\'dah',
+    'dhu al-hijjah': 'Zulhijah',
+    'dhul-hijjah': 'Zulhijah'
+  }
+  const clean = monthEn.toLowerCase().trim()
+  return months[clean] || monthEn
+}
+
 // Fetch prayer times from Aladhan API
 async function fetchPrayerTimes(lat, lng) {
   try {
@@ -831,7 +859,8 @@ async function fetchPrayerTimes(lat, lng) {
       const hijri = data.data.date.hijri
       if (hijri) {
         hijriDay.value = parseInt(hijri.day) || 15
-        hijriDate.value = `${hijri.day} ${hijri.month.en} ${hijri.year} H`
+        const monthIndo = getIndonesianHijriMonth(hijri.month.en)
+        hijriDate.value = `${hijri.day} ${monthIndo} ${hijri.year} H`
         prayerStore.setHijriDate(hijriDate.value)
       }
 
@@ -919,7 +948,10 @@ function setFallbackTimes() {
     const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', {
       day: 'numeric', month: 'long', year: 'numeric'
     });
-    hijriDate.value = formatter.format(new Date()) + ' H';
+    let formatted = formatter.format(new Date());
+    // Strip trailing H / Hijriah / AH if any to prevent double "H H"
+    formatted = formatted.replace(/\s*(H|Hijriah|AH)\s*$/gi, '');
+    hijriDate.value = formatted + ' H';
   } catch(e) {
     hijriDate.value = "10 Dzulqa'dah 1445 H";
   }
