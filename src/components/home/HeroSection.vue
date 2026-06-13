@@ -69,9 +69,9 @@
 
           <a
             href="https://qurban.masjidkassiti.id"
-            class="w-full sm:w-auto px-5 py-2.5 sm:px-9 sm:py-4 bg-linear-to-br from-[#083526] via-[#0b4d37] to-[#041f16] text-white rounded-full border border-amber-400/40 hover:border-amber-400/85 transition-all duration-500 flex items-center justify-center gap-2.5 group shadow-[0_0_25px_rgba(217,119,6,0.15)] hover:shadow-[0_0_35px_rgba(217,119,6,0.45)] hover:-translate-y-0.5"
+            class="w-full sm:w-auto px-3 py-2 sm:px-8 sm:py-4 bg-linear-to-br from-[#083526] via-[#0b4d37] to-[#041f16] text-white rounded-full border border-amber-400/40 hover:border-amber-400/85 transition-all duration-500 flex items-center justify-center gap-1.5 sm:gap-2 group shadow-[0_0_25px_rgba(217,119,6,0.15)] hover:shadow-[0_0_35px_rgba(217,119,6,0.45)] hover:-translate-y-0.5"
           >
-            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-amber-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 text-amber-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <!-- Muzzle/Face Outline -->
               <path d="M9 10c0-1.5 1.5-2.5 3-2.5s3 1 3 2.5v4c0 1.2-.5 2.2-1.2 2.8L12 21.5l-1.8-3.2C9.5 17.7 9 16.7 9 15.5v-4.5z" />
               <!-- Snout detail -->
@@ -98,7 +98,7 @@
               <path d="M11 21.5l1 2.5 1-2.5" />
             </svg>
             <span 
-              class="font-heading italic font-black text-sm sm:text-[17px] tracking-wide text-slate-100 group-hover:text-white transition-colors pt-0.5 leading-none"
+              class="font-heading italic font-black text-xs sm:text-base tracking-wide text-slate-100 group-hover:text-white transition-colors pt-0.5 leading-none"
               style="text-shadow: 0 1px 0 #d97706, 0 2px 0 #b45309, 0 3px 0 #92400e, 0 4px 6px rgba(0,0,0,0.6)"
             >
               Qurban
