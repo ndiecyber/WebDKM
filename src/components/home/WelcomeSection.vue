@@ -104,8 +104,13 @@
               <!-- Rich Gradient Background -->
               <div class="absolute inset-0 bg-linear-to-r from-emerald-950 via-emerald-850 to-emerald-900"></div>
               
+              <!-- Calligraphy / Mosaic Background Image (Clear and Elegant) -->
+              <div class="absolute inset-0 opacity-15 dark:opacity-20 mix-blend-overlay">
+                <img :src="kaligrafiImg" class="w-full h-full object-cover scale-105 pointer-events-none select-none" alt="" />
+              </div>
+              
               <!-- Subtle Islamic Pattern Overlay -->
-              <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-25 mix-blend-overlay scale-110 transform-gpu animate-[pulse_5s_ease-in-out_infinite]" />
+              <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-20 mix-blend-overlay scale-110 transform-gpu animate-[pulse_5s_ease-in-out_infinite]" />
               
               <!-- Dark gradient overlay to ensure text readability -->
               <div class="absolute inset-0 bg-linear-to-t from-black/45 via-black/10 to-transparent"></div>
@@ -338,6 +343,7 @@ import usthDede from '@/assets/images/Usth. Dede Asiah.jpeg'
 import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.jpeg'
 import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.jpeg'
 import usthRayanthi from '@/assets/images/Usth.Rayanthi.jpeg'
+import kaligrafiImage from '@/assets/images/kaligrafi_masjid.png'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -346,6 +352,7 @@ const adminStore = useAdminStore()
 const settings = adminStore.generalSettings
 
 const interiorImg = interiorImage
+const kaligrafiImg = kaligrafiImage
 const textContent = ref(null)
 const imageContent = ref(null)
 const isCommitteeModalOpen = ref(false)
