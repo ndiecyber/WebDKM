@@ -166,12 +166,12 @@
           </div>
         </section>
 
-        <!-- Tab: Donasi (CTA) -->
+        <!-- Tab: Ajakan Bertindak (Donasi) -->
         <section v-show="activeSettingTab === 'donasi'" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
           <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
               <Heart class="w-5 h-5 text-gray-400" />
-              Donasi & Amal Jariyah
+              Ajakan Bertindak
             </h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Atur teks ajakan berdonasi beserta grafik progress bar yang ditampilkan di halaman beranda.</p>
           </div>
@@ -518,9 +518,9 @@ const isSaving = ref(false)
 const activeSettingTab = ref('profil')
 const settingTabs = [
   { id: 'profil', name: 'Profil & Sejarah', icon: Globe },
-  { id: 'kontak', name: 'Kontak & Lokasi', icon: LinkIcon },
-  { id: 'donasi', name: 'Donasi & Amal Jariyah', icon: Heart },
   { id: 'pengurus', name: 'Susunan Pengurus', icon: Users },
+  { id: 'kontak', name: 'Kontak & Lokasi', icon: LinkIcon },
+  { id: 'donasi', name: 'Ajakan Bertindak', icon: Heart },
   { id: 'master', name: 'Master Data', icon: List }
 ]
 
