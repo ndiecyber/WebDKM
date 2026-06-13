@@ -317,66 +317,134 @@
               <Users class="w-5 h-5 text-gray-400" />
               Susunan Pengurus DKM
             </h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola daftar pengurus yang akan ditampilkan pada Halaman Utama.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola daftar pengurus dan struktur divisi yang akan ditampilkan pada Halaman Utama.</p>
           </div>
           
-          <div class="p-6 sm:p-8 space-y-8">
-            <div v-for="(members, key) in committee" :key="key" class="space-y-4">
+          <div class="p-6 sm:p-8 space-y-12">
+            <!-- DEWAN PENASIHAT -->
+            <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">{{ formatCommitteeKey(key) }}</h4>
-                <button 
-                  type="button" 
-                  @click="addCommitteeMember(key)"
-                  class="text-xs font-medium bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-md"
-                >
-                  <Plus class="w-3.5 h-3.5" />
-                  Tambah Anggota
+                <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Dewan Penasihat</h4>
+                <button type="button" @click="addCommitteeMember('dewanPenasihat')" class="text-xs font-medium bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-md">
+                  <Plus class="w-3.5 h-3.5" /> Tambah Anggota
                 </button>
               </div>
-              
-              <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden p-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div v-for="(member, index) in members" :key="member.id" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-lg p-3 relative group shadow-sm">
-                    <button 
-                      type="button" 
-                      @click="removeCommitteeMember(key, index)"
-                      class="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 dark:bg-gray-800 dark:hover:bg-red-500/10 rounded-md transition-colors opacity-0 group-hover:opacity-100"
-                      title="Hapus"
-                    >
+              <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-white/10 p-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div v-for="(member, index) in committee.dewanPenasihat" :key="'penasihat-'+index" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-lg p-3 relative group shadow-sm flex flex-col gap-3">
+                    <button type="button" @click="removeCommitteeMember('dewanPenasihat', index)" class="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 dark:bg-gray-800 dark:hover:bg-red-500/10 rounded-md transition-colors opacity-0 group-hover:opacity-100 z-10" title="Hapus">
                       <X class="w-3 h-3" />
                     </button>
-                    <div class="space-y-2 pr-6">
-                      <div>
-                        <label class="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Nama</label>
-                        <input 
-                          v-model="member.name" 
-                          type="text" 
-                          class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-sm"
-                          placeholder="Nama Lengkap"
-                        />
+                    <!-- Photo Upload -->
+                    <div class="flex items-center gap-3">
+                      <div class="w-12 h-12 rounded-full border border-gray-300 dark:border-gray-600 overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0 relative group/photo">
+                        <img v-if="member.image" :src="member.image" class="w-full h-full object-cover" />
+                        <div v-else class="w-full h-full flex items-center justify-center text-xs text-gray-400">Foto</div>
+                        <input type="file" accept="image/*" @change="handlePhotoUpload($event, member)" class="absolute inset-0 opacity-0 cursor-pointer" title="Upload Foto" />
                       </div>
-                      <div>
-                        <label class="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">Jabatan / Peran</label>
-                        <input 
-                          v-model="member.role" 
-                          type="text" 
-                          class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-sm"
-                          placeholder="Jabatan"
-                        />
+                      <div class="flex-1 space-y-2">
+                        <input v-model="member.name" type="text" class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-sm font-semibold" placeholder="Nama Lengkap" />
+                        <input v-model="member.role" type="text" class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-xs" placeholder="Jabatan" />
                       </div>
-                      <div v-if="key === 'pengurusHarian'" class="flex items-center gap-2 pt-1">
-                        <input 
-                          v-model="member.isLeader" 
-                          type="checkbox" 
-                          class="rounded text-secondary focus:ring-secondary dark:bg-gray-800 dark:border-gray-600"
-                        />
-                        <label class="text-xs text-gray-700 dark:text-gray-300">Tandai sebagai Pimpinan (Ketua)</label>
-                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1 border-t border-gray-100 dark:border-gray-800 mt-1">
+                      <input type="radio" :name="'leader-penasihat'" :checked="member.isLeader" @change="setLeader('dewanPenasihat', index)" class="rounded-full text-secondary focus:ring-secondary dark:bg-gray-800 dark:border-gray-600" />
+                      <label class="text-xs text-gray-700 dark:text-gray-300">Pimpinan (Ketua)</label>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- PENGURUS HARIAN -->
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Pengurus Harian</h4>
+                <button type="button" @click="addCommitteeMember('pengurusHarian')" class="text-xs font-medium bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-md">
+                  <Plus class="w-3.5 h-3.5" /> Tambah Anggota
+                </button>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-white/10 p-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div v-for="(member, index) in committee.pengurusHarian" :key="'harian-'+index" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-lg p-3 relative group shadow-sm flex flex-col gap-3">
+                    <button type="button" @click="removeCommitteeMember('pengurusHarian', index)" class="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 dark:bg-gray-800 dark:hover:bg-red-500/10 rounded-md transition-colors opacity-0 group-hover:opacity-100 z-10" title="Hapus">
+                      <X class="w-3 h-3" />
+                    </button>
+                    <!-- Photo Upload -->
+                    <div class="flex items-center gap-3">
+                      <div class="w-12 h-12 rounded-full border border-gray-300 dark:border-gray-600 overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0 relative group/photo">
+                        <img v-if="member.image" :src="member.image" class="w-full h-full object-cover" />
+                        <div v-else class="w-full h-full flex items-center justify-center text-xs text-gray-400">Foto</div>
+                        <input type="file" accept="image/*" @change="handlePhotoUpload($event, member)" class="absolute inset-0 opacity-0 cursor-pointer" title="Upload Foto" />
+                      </div>
+                      <div class="flex-1 space-y-2 pr-6">
+                        <input v-model="member.name" type="text" class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-sm font-semibold" placeholder="Nama Lengkap" />
+                        <input v-model="member.role" type="text" class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-1 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-xs" placeholder="Jabatan" />
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1 border-t border-gray-100 dark:border-gray-800 mt-1">
+                      <input type="radio" :name="'leader-harian'" :checked="member.isLeader" @change="setLeader('pengurusHarian', index)" class="rounded-full text-secondary focus:ring-secondary dark:bg-gray-800 dark:border-gray-600" />
+                      <label class="text-xs text-gray-700 dark:text-gray-300">Pimpinan (Ketua)</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DIVISI & SEKSI KERJA -->
+            <div class="space-y-6 pt-4 border-t border-gray-200 dark:border-white/10">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Divisi & Seksi Kerja</h4>
+                  <p class="text-xs text-gray-500 mt-1">Struktur fleksibel dengan warna dinamis otomatis.</p>
+                </div>
+                <button type="button" @click="addDivisi" class="text-xs font-medium bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 shadow-md">
+                  <Plus class="w-3.5 h-3.5" /> Tambah Divisi Baru
+                </button>
+              </div>
+
+              <div v-for="(divisi, divIndex) in committee.divisi" :key="divisi.id" class="bg-gray-50/80 dark:bg-gray-800/30 rounded-xl border border-gray-200 dark:border-white/10 p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-4 border-b border-gray-200 dark:border-white/10 pb-3">
+                  <input v-model="divisi.name" type="text" class="bg-transparent border-none focus:ring-0 px-0 py-0 text-base font-bold text-gray-900 dark:text-white w-full max-w-sm" placeholder="Nama Divisi..." />
+                  <div class="flex items-center gap-2">
+                    <button type="button" @click="addCommitteeMember('divisi', divIndex)" class="text-[10px] font-semibold bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-white border border-gray-200 dark:border-gray-600 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                      <Plus class="w-3 h-3" /> Anggota
+                    </button>
+                    <button type="button" @click="removeDivisi(divIndex)" class="text-[10px] font-semibold bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                      <X class="w-3 h-3" /> Hapus Divisi
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="divisi.members && divisi.members.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div v-for="(member, index) in divisi.members" :key="'div-'+divIndex+'-'+index" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-lg p-3 relative group shadow-sm flex flex-col gap-3">
+                    <button type="button" @click="removeCommitteeMember('divisi', index, divIndex)" class="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 bg-gray-50 hover:bg-red-50 dark:bg-gray-800 dark:hover:bg-red-500/10 rounded-md transition-colors opacity-0 group-hover:opacity-100 z-10" title="Hapus">
+                      <X class="w-3 h-3" />
+                    </button>
+                    <!-- Photo Upload -->
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0 relative group/photo">
+                        <img v-if="member.image" :src="member.image" class="w-full h-full object-cover" />
+                        <div v-else class="w-full h-full flex items-center justify-center text-[10px] text-gray-400">Foto</div>
+                        <input type="file" accept="image/*" @change="handlePhotoUpload($event, member)" class="absolute inset-0 opacity-0 cursor-pointer" title="Upload Foto" />
+                      </div>
+                      <div class="flex-1 space-y-1.5 pr-6">
+                        <input v-model="member.name" type="text" class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-0.5 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-xs font-semibold" placeholder="Nama Lengkap" />
+                        <input v-model="member.role" type="text" class="w-full bg-transparent border-b border-gray-300 dark:border-white/10 focus:border-secondary rounded-none px-0 py-0.5 text-gray-900 dark:text-white focus:ring-0 outline-none transition-all text-[10px]" placeholder="Jabatan/Peran" />
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1 border-t border-gray-100 dark:border-gray-800 mt-1">
+                      <input type="radio" :name="'leader-divisi-'+divIndex" :checked="member.isLeader" @change="setLeader('divisi', index, divIndex)" class="rounded-full text-secondary focus:ring-secondary dark:bg-gray-800 dark:border-gray-600" />
+                      <label class="text-xs text-gray-700 dark:text-gray-300">Koordinator Divisi</label>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="text-center py-6 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Belum ada anggota di divisi ini. Klik "Anggota" untuk menambahkan.</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -612,12 +680,9 @@ const availableIcons = [
 
 const cData = adminStore.committee || {}
 const committee = ref({
-  dewanPenasihat: cData.dewanPenasihat ? [...cData.dewanPenasihat] : [],
-  pengurusHarian: cData.pengurusHarian ? [...cData.pengurusHarian] : [],
-  seksiDakwah: cData.seksiDakwah ? [...cData.seksiDakwah] : [],
-  seksiEkonomi: cData.seksiEkonomi ? [...cData.seksiEkonomi] : [],
-  seksiLogistik: cData.seksiLogistik ? [...cData.seksiLogistik] : [],
-  remajaMasjid: cData.remajaMasjid ? [...cData.remajaMasjid] : []
+  dewanPenasihat: cData.dewanPenasihat ? JSON.parse(JSON.stringify(cData.dewanPenasihat)) : [],
+  pengurusHarian: cData.pengurusHarian ? JSON.parse(JSON.stringify(cData.pengurusHarian)) : [],
+  divisi: cData.divisi ? JSON.parse(JSON.stringify(cData.divisi)) : []
 })
 
 const topButtonRef = ref(null)
@@ -680,22 +745,71 @@ function formatCommitteeKey(key) {
   return labels[key] || key
 }
 
-function addCommitteeMember(key) {
-  const newId = committee.value[key].length > 0 ? Math.max(...committee.value[key].map(i => i.id)) + 1 : 1
-  const newMember = {
-    id: newId,
-    name: '',
-    role: '',
-    image: null
+function addCommitteeMember(key, divisiIndex = null) {
+  if (key === 'divisi' && divisiIndex !== null) {
+    const members = committee.value.divisi[divisiIndex].members
+    const newId = members.length > 0 ? Math.max(...members.map(i => i.id || 0)) + 1 : 1
+    members.push({ id: newId, name: '', role: '', image: null })
+  } else {
+    const newId = committee.value[key].length > 0 ? Math.max(...committee.value[key].map(i => i.id || 0)) + 1 : 1
+    const newMember = {
+      id: newId,
+      name: '',
+      role: '',
+      image: null
+    }
+    if (key === 'pengurusHarian') {
+      newMember.isLeader = false
+    }
+    committee.value[key].push(newMember)
   }
-  if (key === 'pengurusHarian') {
-    newMember.isLeader = false
-  }
-  committee.value[key].push(newMember)
 }
 
-function removeCommitteeMember(key, index) {
-  committee.value[key].splice(index, 1)
+function removeCommitteeMember(key, index, divisiIndex = null) {
+  if (key === 'divisi' && divisiIndex !== null) {
+    committee.value.divisi[divisiIndex].members.splice(index, 1)
+  } else {
+    committee.value[key].splice(index, 1)
+  }
+}
+
+function setLeader(group, memberIndex, divIndex = null) {
+  if (group === 'divisi' && divIndex !== null) {
+    committee.value.divisi[divIndex].members.forEach((m, idx) => {
+      m.isLeader = (idx === memberIndex)
+    })
+  } else {
+    committee.value[group].forEach((m, idx) => {
+      m.isLeader = (idx === memberIndex)
+    })
+  }
+}
+
+function addDivisi() {
+  const name = prompt('Masukkan Nama Divisi/Seksi Baru:')
+  if (name) {
+    committee.value.divisi.push({
+      id: name.toLowerCase().replace(/\s+/g, '-'),
+      name: name,
+      members: []
+    })
+  }
+}
+
+function removeDivisi(index) {
+  if (confirm('Yakin ingin menghapus divisi ini beserta seluruh anggotanya?')) {
+    committee.value.divisi.splice(index, 1)
+  }
+}
+
+function handlePhotoUpload(event, member) {
+  const file = event.target.files[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    member.image = e.target.result
+  }
+  reader.readAsDataURL(file)
 }
 
 function saveSettings() {

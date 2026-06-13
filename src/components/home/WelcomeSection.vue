@@ -156,15 +156,15 @@
               <div v-if="activeTab === 'penasihat'" class="space-y-6 max-w-5xl mx-auto mt-2">
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 justify-center">
                   <div 
-                    v-for="member in dewanPenasihat" 
+                    v-for="member in sortedDewanPenasihat" 
                     :key="member.name" 
-                    :class="member.role === 'Ketua RW 07' ? 'col-span-2 sm:col-span-3 lg:col-span-4 border-indigo-500/40 dark:border-indigo-400/40 bg-indigo-500/5 dark:bg-indigo-400/5 ring-1 ring-indigo-500/30 dark:ring-indigo-400/30 shadow-md p-6 sm:p-8' : 'bg-white/80 dark:bg-white/[0.03] border-gray-200/50 dark:border-white/10 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-1'"
+                    :class="member.isLeader ? 'col-span-2 sm:col-span-3 lg:col-span-4 border-indigo-500/40 dark:border-indigo-400/40 bg-indigo-500/5 dark:bg-indigo-400/5 ring-1 ring-indigo-500/30 dark:ring-indigo-400/30 shadow-md p-6 sm:p-8' : 'bg-white/80 dark:bg-white/[0.03] border-gray-200/50 dark:border-white/10 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-1'"
                     class="backdrop-blur-md border flex flex-col items-center text-center rounded-2xl transition-all duration-300 group"
                   >
                     <!-- Elegant Avatar with Photo or Gradient Avatar with Initials (Enlarged) -->
                     <div class="relative rounded-full mb-4 shadow-lg ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
                          :class="[
-                           member.role === 'Ketua RW 07' ? 'w-24 h-24 sm:w-28 sm:h-28 ring-indigo-500/20' : 'w-20 h-20 sm:w-24 sm:h-24 ring-indigo-500/10',
+                           member.isLeader ? 'w-24 h-24 sm:w-28 sm:h-28 ring-indigo-500/20' : 'w-20 h-20 sm:w-24 sm:h-24 ring-indigo-500/10',
                            member.image ? '' : 'bg-linear-to-br from-indigo-500 to-purple-600 text-white font-extrabold text-xl sm:text-2xl'
                          ]">
                       <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
@@ -187,7 +187,7 @@
                   </div>
                   <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 justify-center">
                     <div 
-                      v-for="member in pengurusHarian" 
+                      v-for="member in sortedPengurusHarian" 
                       :key="member.name"
                       :class="member.isLeader ? 'border-primary/40 dark:border-secondary/40 bg-primary/[0.02] dark:bg-secondary/[0.02] ring-1 ring-primary/20 dark:ring-secondary/20 shadow-md col-span-2 sm:col-span-1' : 'bg-white/80 dark:bg-white/[0.03] border-gray-200/50 dark:border-white/10 shadow-sm'"
                       class="rounded-2xl p-5 flex flex-col items-center text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
@@ -221,82 +221,22 @@
                   <!-- Sections Grid (Full width per section with a clean 2x2 grid style) -->
                   <div class="space-y-8">
                     
-                    <!-- Seksi Pendidikan dan Dakwah -->
-                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
+                    <!-- Dynamic Sections Loop -->
+                    <div v-for="(divisi, divIndex) in adminStore.committee.divisi" :key="divisi.id" class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
                       <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-md"></span>
-                        Seksi Pendidikan & Dakwah
+                        <span class="w-2.5 h-2.5 rounded-full shadow-md" :class="getPalette(divIndex).bgClass"></span>
+                        {{ divisi.name }}
                       </h5>
                       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="(member, index) in seksiDakwah" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                        <div v-for="(member, index) in getSortedMembers(divisi.members)" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
                           <!-- Large Centered Avatar or Image -->
                           <div class="relative w-18 h-18 sm:w-22 sm:h-22 rounded-full mb-2 shadow-md ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
-                               :class="member.image ? 'ring-blue-500/10' : 'ring-blue-500/10 bg-linear-to-br from-blue-400 to-indigo-500 text-white font-extrabold text-lg sm:text-xl'">
+                               :class="member.image ? getPalette(divIndex).ringClass : getPalette(divIndex).ringClass + ' bg-linear-to-br text-white font-extrabold text-lg sm:text-xl ' + getPalette(divIndex).gradientClass">
                             <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
                             <span v-else>{{ getInitials(member.name) }}</span>
                           </div>
                           <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-0.5 min-h-[2.2rem] flex items-end justify-center">{{ member.name }}</p>
-                          <p :class="index === 0 ? 'text-blue-600 dark:text-blue-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Seksi Ekonomi & Wakaf -->
-                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
-                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-md"></span>
-                        Seksi Ekonomi & Wakaf
-                      </h5>
-                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="(member, index) in seksiEkonomi" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-                          <!-- Large Centered Avatar or Image -->
-                          <div class="relative w-18 h-18 sm:w-22 sm:h-22 rounded-full mb-2 shadow-md ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
-                               :class="member.image ? 'ring-emerald-500/10' : 'ring-emerald-500/10 bg-linear-to-br from-emerald-400 to-teal-500 text-white font-extrabold text-lg sm:text-xl'">
-                            <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
-                            <span v-else>{{ getInitials(member.name) }}</span>
-                          </div>
-                          <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-0.5 min-h-[2.2rem] flex items-end justify-center">{{ member.name }}</p>
-                          <p :class="index === 0 ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Seksi Peralatan & Logistik -->
-                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
-                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-md"></span>
-                        Seksi Peralatan & Logistik
-                      </h5>
-                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="(member, index) in seksiLogistik" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-                          <!-- Large Centered Avatar or Image -->
-                          <div class="relative w-18 h-18 sm:w-22 sm:h-22 rounded-full mb-2 shadow-md ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
-                               :class="member.image ? 'ring-orange-500/10' : 'ring-orange-500/10 bg-linear-to-br from-orange-400 to-amber-500 text-white font-extrabold text-lg sm:text-xl'">
-                            <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
-                            <span v-else>{{ getInitials(member.name) }}</span>
-                          </div>
-                          <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-0.5 min-h-[2.2rem] flex items-end justify-center">{{ member.name }}</p>
-                          <p :class="index === 0 ? 'text-orange-600 dark:text-orange-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Remaja Masjid -->
-                    <div class="bg-white/40 dark:bg-white/[0.01] border border-gray-200/50 dark:border-white/5 rounded-3xl p-5 sm:p-6 shadow-sm">
-                      <h5 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200/50 dark:border-white/5 pb-3">
-                        <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-md"></span>
-                        Remaja Masjid
-                      </h5>
-                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div v-for="(member, index) in remajaMasjid" :key="member.name" class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-                          <!-- Large Centered Avatar or Image -->
-                          <div class="relative w-18 h-18 sm:w-22 sm:h-22 rounded-full mb-2 shadow-md ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
-                               :class="member.image ? 'ring-pink-500/10' : 'ring-pink-500/10 bg-linear-to-br from-pink-400 to-rose-500 text-white font-extrabold text-lg sm:text-xl'">
-                            <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
-                            <span v-else>{{ getInitials(member.name) }}</span>
-                          </div>
-                          <p class="text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-0.5 min-h-[2.2rem] flex items-end justify-center">{{ member.name }}</p>
-                          <p :class="index === 0 ? 'text-pink-600 dark:text-pink-400 font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ index === 0 ? 'Koordinator' : 'Anggota' }}</p>
+                          <p :class="member.isLeader ? getPalette(divIndex).textClass + ' font-extrabold' : 'text-gray-500 dark:text-gray-400 font-bold'" class="text-[9px] uppercase tracking-wider">{{ member.role }}</p>
                         </div>
                       </div>
                     </div>
@@ -319,28 +259,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import interiorImage from '@/assets/images/mosque-interior.png'
-import dkmNasai from '@/assets/images/dkm-nasai.png'
-import dkmRandi from '@/assets/images/dkm-randi.png'
-import dkmRofik from '@/assets/images/M Ainur Rofiq.jpeg'
-import dkmIrvan from '@/assets/images/Ivan Ruchiat.jpeg'
-import dkmDani from '@/assets/images/Dani Ramdhani.jpeg'
-import bpkAli from '@/assets/images/Ali M Abduh.jpeg'
-import bpkGojali from '@/assets/images/Gojali Abdul S.jpeg'
-import bpkRedi from '@/assets/images/H Redi Sasriandi.jpeg'
-import bpkNanang from '@/assets/images/Nanang Barkah.jpeg'
-import bpkSukardi from '@/assets/images/Sukardi.jpeg'
-import usthAi from '@/assets/images/Usth. Ai Jamaliah.jpeg'
-import usthNeneng from '@/assets/images/Usth. Neneng Aam.jpeg'
-import usthRani from '@/assets/images/Usth. Rani Rahmayati.jpeg'
-import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.jpeg'
-import penasihatAde from '@/assets/images/Ust. H Ade Karom.jpeg'
-import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.jpeg'
-import penasihatUsman from '@/assets/images/H Usman penasihat.jpeg'
-import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.jpeg'
-import usthDede from '@/assets/images/Usth. Dede Asiah.jpeg'
-import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.jpeg'
-import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.jpeg'
-import usthRayanthi from '@/assets/images/Usth.Rayanthi.jpeg'
 import kaligrafiImage from '@/assets/images/kaligrafi_masjid.png'
 import { useAdminStore } from '@/stores/admin'
 
@@ -355,6 +273,21 @@ const textContent = ref(null)
 const imageContent = ref(null)
 const isCommitteeModalOpen = ref(false)
 const activeTab = ref('pengurus')
+
+const sortedDewanPenasihat = computed(() => {
+  const members = adminStore.committee?.dewanPenasihat || []
+  return [...members].sort((a, b) => (b.isLeader ? 1 : 0) - (a.isLeader ? 1 : 0))
+})
+
+const sortedPengurusHarian = computed(() => {
+  const members = adminStore.committee?.pengurusHarian || []
+  return [...members].sort((a, b) => (b.isLeader ? 1 : 0) - (a.isLeader ? 1 : 0))
+})
+
+const getSortedMembers = (members) => {
+  if (!members) return []
+  return [...members].sort((a, b) => (b.isLeader ? 1 : 0) - (a.isLeader ? 1 : 0))
+}
 
 // Watch modal state to toggle body scroll lock
 watch(isCommitteeModalOpen, (isOpen) => {
@@ -381,51 +314,33 @@ const getInitials = (name) => {
   return parts[0] ? parts[0][0].toUpperCase() : ''
 }
 
-const dewanPenasihat = [
-  { name: 'Bpk. Ayi Sunarwan', role: 'Ketua RW 07', image: penasihatAyi },
-  { name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat', image: penasihatIwa },
-  { name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat', image: penasihatAde },
-  { name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat', image: penasihatSudiana },
-  { name: 'Bpk. H. Usman', role: 'Dewan Penasihat', image: penasihatUsman }
+const palette = [
+  { bgClass: 'bg-blue-500', textClass: 'text-blue-600 dark:text-blue-400', ringClass: 'ring-blue-500/10', gradientClass: 'from-blue-400 to-indigo-500' },
+  { bgClass: 'bg-emerald-500', textClass: 'text-emerald-600 dark:text-emerald-400', ringClass: 'ring-emerald-500/10', gradientClass: 'from-emerald-400 to-teal-500' },
+  { bgClass: 'bg-orange-500', textClass: 'text-orange-600 dark:text-orange-400', ringClass: 'ring-orange-500/10', gradientClass: 'from-orange-400 to-amber-500' },
+  { bgClass: 'bg-pink-500', textClass: 'text-pink-600 dark:text-pink-400', ringClass: 'ring-pink-500/10', gradientClass: 'from-pink-400 to-rose-500' },
+  { bgClass: 'bg-purple-500', textClass: 'text-purple-600 dark:text-purple-400', ringClass: 'ring-purple-500/10', gradientClass: 'from-purple-400 to-fuchsia-500' },
+  { bgClass: 'bg-cyan-500', textClass: 'text-cyan-600 dark:text-cyan-400', ringClass: 'ring-cyan-500/10', gradientClass: 'from-cyan-400 to-sky-500' },
+  { bgClass: 'bg-rose-500', textClass: 'text-rose-600 dark:text-rose-400', ringClass: 'ring-rose-500/10', gradientClass: 'from-rose-400 to-red-500' },
+  { bgClass: 'bg-indigo-500', textClass: 'text-indigo-600 dark:text-indigo-400', ringClass: 'ring-indigo-500/10', gradientClass: 'from-indigo-400 to-violet-500' }
 ]
 
-const pengurusHarian = [
-  { name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true, image: dkmNasai },
-  { name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris', image: dkmRofik },
-  { name: 'Ust. Randi Rizal', role: 'Bendahara', image: dkmRandi }
-]
-
-const seksiDakwah = [
-  { name: 'Ust. H. Irvan Ruchiat', role: 'Anggota Dakwah & Pendidikan', image: dkmIrvan },
-  { name: 'Ust. H. Dani Ramdhani', role: 'Anggota Dakwah & Pendidikan', image: dkmDani },
-  { name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan', image: usthNeneng },
-  { name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan', image: usthAi },
-  { name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan', image: usthRini },
-  { name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan', image: usthDede }
-]
-
-const seksiEkonomi = [
-  { name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf', image: bpkAli },
-  { name: 'Bpk. Ujang Kurnia', role: 'Anggota Ekonomi & Wakaf' },
-  { name: 'Bpk. Erwin Darmawan', role: 'Anggota Ekonomi & Wakaf' },
-  { name: 'Bpk. Ade Ramdhani', role: 'Anggota Ekonomi & Wakaf' }
-]
-
-const seksiLogistik = [
-  { name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik', image: bpkRedi },
-  { name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik', image: bpkAditya },
-  { name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik', image: bpkSukardi },
-  { name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik', image: bpkNanang }
-]
-
-const remajaMasjid = [
-  { name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid', image: bpkGojali },
-  { name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid', image: usthRani },
-  { name: 'Usth. Rayanthi', role: 'Remaja Masjid', image: usthRayanthi }
-]
+const getPalette = (index) => {
+  return palette[index % palette.length]
+}
 
 const stats = reactive([
-  { label: 'Pengurus DKM', get value() { return adminStore.committee ? Object.values(adminStore.committee).flat().length : 0 }, displayValue: 0, prefix: '', suffix: ' Orang', isClickable: true },
+  { 
+    label: 'Pengurus DKM', 
+    get value() { 
+      if (!adminStore.committee) return 0;
+      const penasihatCount = adminStore.committee.dewanPenasihat?.length || 0;
+      const harianCount = adminStore.committee.pengurusHarian?.length || 0;
+      const divisiCount = adminStore.committee.divisi?.reduce((acc, div) => acc + (div.members?.length || 0), 0) || 0;
+      return penasihatCount + harianCount + divisiCount;
+    }, 
+    displayValue: 0, prefix: '', suffix: ' Orang', isClickable: true 
+  },
   { label: 'Tahun Berdiri', get value() { return settings.value.tahunBerdiri || 2015 }, displayValue: 0, prefix: '', suffix: '', isClickable: false },
   { label: 'Jamaah Aktif', get value() { return settings.value.jamaahAktif || 200 }, displayValue: 0, prefix: '', suffix: '+', isClickable: false },
 ])

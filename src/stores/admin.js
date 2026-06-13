@@ -12,6 +12,28 @@ import sholatImg from '@/assets/images/sholat_jumat.png'
 import sosialImg from '@/assets/images/kegiatan_sosial.png'
 import malamImg from '@/assets/images/arsitektur_malam.png'
 import kaligrafiImg from '@/assets/images/kaligrafi_masjid.png'
+import dkmNasai from '@/assets/images/dkm-nasai.png'
+import dkmRandi from '@/assets/images/dkm-randi.png'
+import dkmRofik from '@/assets/images/M Ainur Rofiq.jpeg'
+import dkmIrvan from '@/assets/images/Ivan Ruchiat.jpeg'
+import dkmDani from '@/assets/images/Dani Ramdhani.jpeg'
+import bpkAli from '@/assets/images/Ali M Abduh.jpeg'
+import bpkGojali from '@/assets/images/Gojali Abdul S.jpeg'
+import bpkRedi from '@/assets/images/H Redi Sasriandi.jpeg'
+import bpkNanang from '@/assets/images/Nanang Barkah.jpeg'
+import bpkSukardi from '@/assets/images/Sukardi.jpeg'
+import usthAi from '@/assets/images/Usth. Ai Jamaliah.jpeg'
+import usthNeneng from '@/assets/images/Usth. Neneng Aam.jpeg'
+import usthRani from '@/assets/images/Usth. Rani Rahmayati.jpeg'
+import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.jpeg'
+import penasihatAde from '@/assets/images/Ust. H Ade Karom.jpeg'
+import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.jpeg'
+import penasihatUsman from '@/assets/images/H Usman penasihat.jpeg'
+import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.jpeg'
+import usthDede from '@/assets/images/Usth. Dede Asiah.jpeg'
+import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.jpeg'
+import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.jpeg'
+import usthRayanthi from '@/assets/images/Usth.Rayanthi.jpeg'
 
 const parseSafe = (key) => {
   try {
@@ -37,43 +59,61 @@ export const useAdminStore = defineStore('admin', {
       { id: 3, username: 'sekretaris', name: 'Sekretaris', role: 'sekretaris', password: 'password123' }
     ],
     auditLogs: parseSafe('admin_audit_logs') || [],
-    committee: parseSafe('admin_committee') || {
+    committee: parseSafe('admin_committee_v3') || {
       dewanPenasihat: [
-        { id: 1, name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat' },
-        { id: 2, name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat' },
-        { id: 3, name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat' },
-        { id: 4, name: 'Bpk. H. Usman', role: 'Dewan Penasihat' },
-        { id: 5, name: 'Bpk. Ayi Sunarwan', role: 'Dewan Penasihat' }
+        { id: 1, name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat', image: penasihatIwa, isLeader: false },
+        { id: 2, name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat', image: penasihatAde, isLeader: false },
+        { id: 3, name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat', image: penasihatSudiana, isLeader: false },
+        { id: 4, name: 'Bpk. H. Usman', role: 'Dewan Penasihat', image: penasihatUsman, isLeader: false },
+        { id: 5, name: 'Bpk. Ayi Sunarwan', role: 'Ketua RW 07', image: penasihatAyi, isLeader: true }
       ],
       pengurusHarian: [
-        { id: 1, name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true, image: null },
-        { id: 2, name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris', isLeader: false, image: null },
-        { id: 3, name: 'Ust. Randi Rizal', role: 'Bendahara', isLeader: false, image: null }
+        { id: 1, name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true, image: dkmNasai },
+        { id: 2, name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris', isLeader: false, image: dkmRofik },
+        { id: 3, name: 'Ust. Randi Rizal', role: 'Bendahara', isLeader: false, image: dkmRandi }
       ],
-      seksiDakwah: [
-        { id: 1, name: 'Ust. H. Irvan Ruchiat', role: 'Anggota Dakwah & Pendidikan', image: null },
-        { id: 2, name: 'Ust. H. Dani Ramdhani', role: 'Anggota Dakwah & Pendidikan', image: null },
-        { id: 3, name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan', image: null },
-        { id: 4, name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan', image: null },
-        { id: 5, name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan', image: null },
-        { id: 6, name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan', image: null }
-      ],
-      seksiEkonomi: [
-        { id: 1, name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf', image: null },
-        { id: 2, name: 'Bpk. Ujang Kurnia', role: 'Anggota Ekonomi & Wakaf', image: null },
-        { id: 3, name: 'Bpk. Erwin Darmawan', role: 'Anggota Ekonomi & Wakaf', image: null },
-        { id: 4, name: 'Bpk. Ade Ramdhani', role: 'Anggota Ekonomi & Wakaf', image: null }
-      ],
-      seksiLogistik: [
-        { id: 1, name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik', image: null },
-        { id: 2, name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik', image: null },
-        { id: 3, name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik', image: null },
-        { id: 4, name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik', image: null }
-      ],
-      remajaMasjid: [
-        { id: 1, name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid', image: null },
-        { id: 2, name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid', image: null },
-        { id: 3, name: 'Usth. Rayanthi', role: 'Remaja Masjid', image: null }
+      divisi: [
+        {
+          id: 'dakwah',
+          name: 'Seksi Pendidikan & Dakwah',
+          members: [
+            { id: 1, name: 'Ust. H. Irvan Ruchiat', role: 'Koordinator', isLeader: true, image: dkmIrvan },
+            { id: 2, name: 'Ust. H. Dani Ramdhani', role: 'Anggota', isLeader: false, image: dkmDani },
+            { id: 3, name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota', isLeader: false, image: usthNeneng },
+            { id: 4, name: 'Usth. Ai Jamaliah', role: 'Anggota', isLeader: false, image: usthAi },
+            { id: 5, name: 'Usth. Rini Dewi Anggiani', role: 'Anggota', isLeader: false, image: usthRini },
+            { id: 6, name: 'Usth. Dede Asiah', role: 'Anggota', isLeader: false, image: usthDede }
+          ]
+        },
+        {
+          id: 'ekonomi',
+          name: 'Seksi Ekonomi & Wakaf',
+          members: [
+            { id: 1, name: 'Bpk. Ali M. Abduh', role: 'Koordinator', isLeader: true, image: bpkAli },
+            { id: 2, name: 'Bpk. Ujang Kurnia', role: 'Anggota', isLeader: false, image: null },
+            { id: 3, name: 'Bpk. Erwin Darmawan', role: 'Anggota', isLeader: false, image: null },
+            { id: 4, name: 'Bpk. Ade Ramdhani', role: 'Anggota', isLeader: false, image: null }
+          ]
+        },
+        {
+          id: 'logistik',
+          name: 'Seksi Peralatan & Logistik',
+          members: [
+            { id: 1, name: 'Bpk. H. Redi Sasriandi', role: 'Koordinator', isLeader: true, image: bpkRedi },
+            { id: 2, name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota', isLeader: false, image: bpkAditya },
+            { id: 3, name: 'Bpk. Sukardi', role: 'Anggota', isLeader: false, image: bpkSukardi },
+            { id: 4, name: 'Bpk. Nanang Barkah', role: 'Anggota', isLeader: false, image: bpkNanang }
+          ]
+        },
+        {
+          id: 'remaja',
+          name: 'Remaja Masjid',
+          members: [
+            { id: 1, name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Koordinator', isLeader: true, image: bpkGojali },
+            { id: 2, name: 'Usth. Rani Rahmayati', role: 'Anggota', isLeader: false, image: usthRani },
+            { id: 3, name: 'Usth. Rayanthi', role: 'Anggota', isLeader: false, image: usthRayanthi }
+          ]
+        }
       ]
     },
     kegiatan: parseSafe('admin_kegiatan_v3') || [
@@ -307,7 +347,7 @@ export const useAdminStore = defineStore('admin', {
       this.logActivity('Ubah Master Data', 'Memperbarui master data (kategori/label)');
     },
     saveCommittee() {
-      setStorage('admin_committee', JSON.stringify(this.committee))
+      setStorage('admin_committee_v3', JSON.stringify(this.committee))
       this.logActivity('Ubah Pengurus', 'Memperbarui struktur pengurus DKM');
     },
     addUser(userData) {
