@@ -125,7 +125,9 @@ export const useAdminStore = defineStore('admin', {
       slogan: 'Membangun <span class="text-gradient-gold">Iman</span>,<br class="hidden sm:block" /> Ilmu, dan <span class="text-gradient-gold">Ukhuwah</span>',
       description: 'Selamat datang di Masjid Jami Kassiti Perum Arjamukti Kencana Raya Arjasari, Leuwisari, Kab. Tasikmalaya. Bergabunglah bersama kami dalam ibadah, pembelajaran, dakwah, dan pelayanan umat.',
       history: 'Masjid Jami Kassiti yang berlokasi di Perum Arjamukti Kencana Raya, Arjasari, Leuwisari, Kab. Tasikmalaya, adalah pusat ibadah dan kegiatan keislaman yang melayani umat dengan penuh dedikasi. Kami berkomitmen untuk menjadi rumah Allah yang menyejukkan, tempat berkumpulnya jamaah dalam menuntut ilmu, beribadah, dan mempererat ukhuwah islamiah.\n\nDengan berbagai program kegiatan rutin seperti kajian, TPA/TPQ, dan kegiatan sosial, kami berusaha membangun generasi muslim yang beriman, berilmu, dan bermanfaat bagi masyarakat sekitar.',
-      instagram: 'https://instagram.com/masjidkassiti',
+      instagram: 'https://instagram.com/masjidjamikassiti',
+      facebook: 'https://facebook.com/masjidjamikassiti',
+      youtube: 'https://youtube.com/@masjidjamikassiti',
       whatsapp: '6281234567890',
       maps: 'https://maps.google.com'
     },

@@ -100,22 +100,34 @@
             </div>
 
             <!-- Header -->
-            <div class="relative shrink-0 h-32 sm:h-44 z-10">
-              <div class="absolute inset-0 bg-linear-to-br from-emerald-600 to-primary dark:from-[#112222] dark:via-[#1A3333] dark:to-dark"></div>
-              <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-30 mix-blend-overlay animate-[pulse_4s_ease-in-out_infinite]" />
-              <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark-light via-transparent to-transparent"></div>
+            <div class="relative shrink-0 h-36 sm:h-48 z-10 overflow-hidden">
+              <!-- Rich Gradient Background -->
+              <div class="absolute inset-0 bg-linear-to-r from-emerald-950 via-emerald-850 to-emerald-900"></div>
               
-              <button @click="isCommitteeModalOpen = false" class="absolute top-4 right-4 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-colors z-20" aria-label="Tutup">
+              <!-- Calligraphy / Mosaic Background Image (Clear and Elegant) -->
+              <div class="absolute inset-0 opacity-15 dark:opacity-20 mix-blend-overlay">
+                <img :src="kaligrafiImg" class="w-full h-full object-cover scale-105 pointer-events-none select-none" alt="" />
+              </div>
+              
+              <!-- Subtle Islamic Pattern Overlay -->
+              <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-20 mix-blend-overlay scale-110 transform-gpu animate-[pulse_5s_ease-in-out_infinite]" />
+              
+              <!-- Dark gradient overlay to ensure text readability -->
+              <div class="absolute inset-0 bg-linear-to-t from-black/45 via-black/10 to-transparent"></div>
+              
+              <button @click="isCommitteeModalOpen = false" class="absolute top-4 right-4 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white border border-white/10 backdrop-blur-md transition-all duration-300 z-20" aria-label="Tutup">
                 <X class="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               
               <!-- Content Header -->
-              <div class="absolute inset-0 flex flex-col items-center justify-center z-10 pt-4">
-                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl mb-1.5 sm:mb-2 group">
-                  <Users class="w-5.5 h-5.5 sm:w-7 sm:h-7 text-secondary group-hover:scale-110 transition-transform" />
+              <div class="absolute inset-0 flex flex-col items-center justify-center z-10 pt-4 px-4">
+                <!-- Gold Badge Icon -->
+                <div class="w-11 h-11 sm:w-16 sm:h-16 rounded-2xl bg-linear-to-br from-amber-400 to-amber-600 border border-amber-300/30 flex items-center justify-center shadow-lg mb-2 group">
+                  <Users class="w-6 h-6 sm:w-8 sm:h-8 text-white group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 class="font-heading text-lg sm:text-2xl font-bold text-white mb-0.5 drop-shadow-md">Pengurus DKM</h3>
-                <p class="text-white/85 text-[10px] sm:text-xs text-center px-4 max-w-lg leading-tight">Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.</p>
+                <!-- Premium High-contrast Typography -->
+                <h3 class="font-heading text-lg sm:text-2xl font-extrabold text-white uppercase tracking-wider mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Pengurus DKM</h3>
+                <p class="text-amber-100/90 text-[10px] sm:text-xs text-center max-w-lg leading-tight font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.</p>
               </div>
             </div>
 
@@ -148,14 +160,20 @@
                   <div 
                     v-for="member in dewanPenasihat" 
                     :key="member.name" 
-                    class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
+                    :class="member.role === 'Ketua RW 07' ? 'col-span-2 sm:col-span-3 lg:col-span-4 border-indigo-500/40 dark:border-indigo-400/40 bg-indigo-500/5 dark:bg-indigo-400/5 ring-1 ring-indigo-500/30 dark:ring-indigo-400/30 shadow-md p-6 sm:p-8' : 'bg-white/80 dark:bg-white/[0.03] border-gray-200/50 dark:border-white/10 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-1'"
+                    class="backdrop-blur-md border flex flex-col items-center text-center rounded-2xl transition-all duration-300 group"
                   >
-                    <!-- Elegant Gradient Avatar with Initials (Enlarged) -->
-                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-xl sm:text-2xl mb-4 shadow-lg ring-4 ring-indigo-500/10 group-hover:scale-105 group-hover:ring-indigo-500/20 transition-all duration-300">
-                      {{ getInitials(member.name) }}
+                    <!-- Elegant Avatar with Photo or Gradient Avatar with Initials (Enlarged) -->
+                    <div class="relative rounded-full mb-4 shadow-lg ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
+                         :class="[
+                           member.role === 'Ketua RW 07' ? 'w-24 h-24 sm:w-28 sm:h-28 ring-indigo-500/20' : 'w-20 h-20 sm:w-24 sm:h-24 ring-indigo-500/10',
+                           member.image ? '' : 'bg-linear-to-br from-indigo-500 to-purple-600 text-white font-extrabold text-xl sm:text-2xl'
+                         ]">
+                      <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
+                      <span v-else>{{ getInitials(member.name) }}</span>
                     </div>
-                    <h4 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</h4>
-                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{{ member.role }}</span>
+                    <h4 :class="member.role === 'Ketua RW 07' ? 'text-sm sm:text-base mb-2 font-black' : 'text-xs sm:text-sm mb-1.5 min-h-[2.5rem] flex items-center justify-center'" class="font-heading font-bold text-gray-950 dark:text-white leading-snug">{{ member.name }}</h4>
+                    <span :class="member.role === 'Ketua RW 07' ? 'text-[11px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 px-3.5 py-1.5 rounded-full font-extrabold shadow-sm' : 'text-[10px] text-indigo-600 dark:text-indigo-400 font-bold'" class="tracking-wider uppercase">{{ member.role }}</span>
                   </div>
                 </div>
               </div>
@@ -305,9 +323,27 @@ import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import interiorImage from '@/assets/images/mosque-interior.png'
 import dkmNasai from '@/assets/images/dkm-nasai.png'
 import dkmRandi from '@/assets/images/dkm-randi.png'
-import dkmRofik from '@/assets/images/dkm-rofik.png'
-import dkmIrvan from '@/assets/images/dkm-irvan.png'
-import dkmDani from '@/assets/images/dkm-dani.png'
+import dkmRofik from '@/assets/images/M Ainur Rofiq.jpeg'
+import dkmIrvan from '@/assets/images/Ivan Ruchiat.jpeg'
+import dkmDani from '@/assets/images/Dani Ramdhani.jpeg'
+import bpkAli from '@/assets/images/Ali M Abduh.jpeg'
+import bpkGojali from '@/assets/images/Gojali Abdul S.jpeg'
+import bpkRedi from '@/assets/images/H Redi Sasriandi.jpeg'
+import bpkNanang from '@/assets/images/Nanang Barkah.jpeg'
+import bpkSukardi from '@/assets/images/Sukardi.jpeg'
+import usthAi from '@/assets/images/Usth. Ai Jamaliah.jpeg'
+import usthNeneng from '@/assets/images/Usth. Neneng Aam.jpeg'
+import usthRani from '@/assets/images/Usth. Rani Rahmayati.jpeg'
+import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.jpeg'
+import penasihatAde from '@/assets/images/Ust. H Ade Karom.jpeg'
+import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.jpeg'
+import penasihatUsman from '@/assets/images/H Usman penasihat.jpeg'
+import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.jpeg'
+import usthDede from '@/assets/images/Usth. Dede Asiah.jpeg'
+import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.jpeg'
+import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.jpeg'
+import usthRayanthi from '@/assets/images/Usth.Rayanthi.jpeg'
+import kaligrafiImage from '@/assets/images/kaligrafi_masjid.png'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -316,6 +352,7 @@ const adminStore = useAdminStore()
 const settings = adminStore.generalSettings
 
 const interiorImg = interiorImage
+const kaligrafiImg = kaligrafiImage
 const textContent = ref(null)
 const imageContent = ref(null)
 const isCommitteeModalOpen = ref(false)
@@ -347,11 +384,11 @@ const getInitials = (name) => {
 }
 
 const dewanPenasihat = [
-  { name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat' },
-  { name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat' },
-  { name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat' },
-  { name: 'Bpk. H. Usman', role: 'Dewan Penasihat' },
-  { name: 'Bpk. Ayi Sunarwan', role: 'Dewan Penasihat' }
+  { name: 'Bpk. Ayi Sunarwan', role: 'Ketua RW 07', image: penasihatAyi },
+  { name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat', image: penasihatIwa },
+  { name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat', image: penasihatAde },
+  { name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat', image: penasihatSudiana },
+  { name: 'Bpk. H. Usman', role: 'Dewan Penasihat', image: penasihatUsman }
 ]
 
 const pengurusHarian = [
@@ -363,30 +400,30 @@ const pengurusHarian = [
 const seksiDakwah = [
   { name: 'Ust. H. Irvan Ruchiat', role: 'Anggota Dakwah & Pendidikan', image: dkmIrvan },
   { name: 'Ust. H. Dani Ramdhani', role: 'Anggota Dakwah & Pendidikan', image: dkmDani },
-  { name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan' },
-  { name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan' },
-  { name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan' },
-  { name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan' }
+  { name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan', image: usthNeneng },
+  { name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan', image: usthAi },
+  { name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan', image: usthRini },
+  { name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan', image: usthDede }
 ]
 
 const seksiEkonomi = [
-  { name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf' },
+  { name: 'Bpk. Ali M. Abduh', role: 'Anggota Ekonomi & Wakaf', image: bpkAli },
   { name: 'Bpk. Ujang Kurnia', role: 'Anggota Ekonomi & Wakaf' },
   { name: 'Bpk. Erwin Darmawan', role: 'Anggota Ekonomi & Wakaf' },
   { name: 'Bpk. Ade Ramdhani', role: 'Anggota Ekonomi & Wakaf' }
 ]
 
 const seksiLogistik = [
-  { name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik' },
-  { name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik' },
-  { name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik' },
-  { name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik' }
+  { name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik', image: bpkRedi },
+  { name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik', image: bpkAditya },
+  { name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik', image: bpkSukardi },
+  { name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik', image: bpkNanang }
 ]
 
 const remajaMasjid = [
-  { name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid' },
-  { name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid' },
-  { name: 'Usth. Rayanthi', role: 'Remaja Masjid' }
+  { name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid', image: bpkGojali },
+  { name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid', image: usthRani },
+  { name: 'Usth. Rayanthi', role: 'Remaja Masjid', image: usthRayanthi }
 ]
 
 const stats = reactive([

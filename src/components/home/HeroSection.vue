@@ -106,21 +106,21 @@
       
       <div class="w-px h-10 bg-white/20 ml-6"></div>
       
-      <a href="#" class="flex items-center overflow-hidden h-10 w-10 hover:w-[110px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a :href="settings.instagram || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[110px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Instagram class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Instagram</span>
       </a>
       
-      <a href="#" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a :href="settings.facebook || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Facebook class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Facebook</span>
       </a>
       
-      <a href="#" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a :href="settings.youtube || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Youtube class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>

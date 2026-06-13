@@ -203,11 +203,11 @@ const copyAccount = () => {
   }, 2500)
 }
 
-const socials = [
-  { name: 'Facebook', url: '#', icon: Facebook },
-  { name: 'Instagram', url: '#', icon: Instagram },
-  { name: 'YouTube', url: '#', icon: Youtube },
-]
+const socials = computed(() => [
+  { name: 'Facebook', url: adminStore.generalSettings.facebook || '#', icon: Facebook },
+  { name: 'Instagram', url: adminStore.generalSettings.instagram || '#', icon: Instagram },
+  { name: 'YouTube', url: adminStore.generalSettings.youtube || '#', icon: Youtube },
+])
 
 const quickLinks = [
   { id: 'beranda', label: 'Beranda' },
