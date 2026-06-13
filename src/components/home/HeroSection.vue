@@ -72,14 +72,30 @@
             class="w-full sm:w-auto px-5 py-2.5 sm:px-9 sm:py-4 bg-linear-to-br from-[#083526] via-[#0b4d37] to-[#041f16] text-white rounded-full border border-amber-400/40 hover:border-amber-400/85 transition-all duration-500 flex items-center justify-center gap-2.5 group shadow-[0_0_25px_rgba(217,119,6,0.15)] hover:shadow-[0_0_35px_rgba(217,119,6,0.45)] hover:-translate-y-0.5"
           >
             <svg class="w-6 h-6 sm:w-8 sm:h-8 text-amber-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 21l-3-6.5C8.3 13 8 11.5 8 10V8h8v2c0 1.5-.3 3-1 4.5L12 21z" />
-              <path d="M10 8c-.8-2.5-2.2-4.5-4-5.5" />
-              <path d="M14 8c.8-2.5 2.2-4.5 4-5.5" />
-              <path d="M8 9.5c-1.5.5-2.5 1.5-2.5 3s.5 2.5 1.5 2" />
-              <path d="M16 9.5c1.5.5 2.5 1.5 2.5 3s-.5 2.5-1.5 2" />
-              <circle cx="10.5" cy="11.5" r="0.75" fill="currentColor" />
-              <circle cx="13.5" cy="11.5" r="0.75" fill="currentColor" />
-              <path d="M11 21.2l.5 1.8h1l.5-1.8" />
+              <!-- Muzzle/Face Outline -->
+              <path d="M9 10c0-1.5 1.5-2.5 3-2.5s3 1 3 2.5v4c0 1.2-.5 2.2-1.2 2.8L12 21.5l-1.8-3.2C9.5 17.7 9 16.7 9 15.5v-4.5z" />
+              <!-- Snout detail -->
+              <path d="M11.2 18h1.6" />
+              <path d="M12 18v2" />
+              <!-- Eyes -->
+              <circle cx="10" cy="11.5" r="0.75" fill="currentColor" />
+              <circle cx="14" cy="11.5" r="0.75" fill="currentColor" />
+              <!-- Horns -->
+              <path d="M10.8 7.5C10.5 5 9.5 3.5 8 3c-1.5-.5-2 1-2 2.5s1 4 2 4.5" />
+              <path d="M13.2 7.5C13.5 5 14.5 3.5 16 3c1.5-.5 2 1 2 2.5s-1 4-2 4.5" />
+              <!-- Horn ridges -->
+              <path d="M7.2 4.2c.5.2 1 .5 1.2 1" />
+              <path d="M6.8 5.8c.6.2 1.1.6 1.2 1.2" />
+              <path d="M16.8 4.2c-.5.2-1 .5-1.2 1" />
+              <path d="M17.2 5.8c-.6.2-1.1.6-1.2 1.2" />
+              <!-- Ears -->
+              <path d="M9 9.5C6 9.5 4.5 10 4.5 11s1.5 1.5 4.5 1" />
+              <path d="M15 9.5c3 0 4.5.5 4.5 1.5s-1.5 1.5-3.5 1" />
+              <!-- Ear inner detail -->
+              <path d="M8 10.5C6.5 10.5 5.5 11 5.5 11" />
+              <path d="M16 10.5c1.5 0 2.5.5 2.5.5" />
+              <!-- Beard -->
+              <path d="M11 21.5l1 2.5 1-2.5" />
             </svg>
             <span 
               class="font-heading italic font-black text-sm sm:text-[17px] tracking-wide text-slate-100 group-hover:text-white transition-colors pt-0.5 leading-none"
