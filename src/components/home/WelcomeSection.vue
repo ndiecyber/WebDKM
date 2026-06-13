@@ -150,9 +150,11 @@
                     :key="member.name" 
                     class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200/50 dark:border-white/10 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
                   >
-                    <!-- Elegant Gradient Avatar with Initials (Enlarged) -->
-                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-xl sm:text-2xl mb-4 shadow-lg ring-4 ring-indigo-500/10 group-hover:scale-105 group-hover:ring-indigo-500/20 transition-all duration-300">
-                      {{ getInitials(member.name) }}
+                    <!-- Elegant Avatar with Photo or Gradient Avatar with Initials (Enlarged) -->
+                    <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full mb-4 shadow-lg ring-4 overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center"
+                         :class="member.image ? 'ring-indigo-500/10' : 'bg-linear-to-br from-indigo-500 to-purple-600 text-white font-extrabold text-xl sm:text-2xl ring-4 ring-indigo-500/10 group-hover:ring-indigo-500/20'">
+                      <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
+                      <span v-else>{{ getInitials(member.name) }}</span>
                     </div>
                     <h4 class="font-heading text-xs sm:text-sm font-bold text-gray-950 dark:text-white leading-snug mb-1.5 min-h-[2.5rem] flex items-center justify-center">{{ member.name }}</h4>
                     <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{{ member.role }}</span>
@@ -316,6 +318,15 @@ import bpkSukardi from '@/assets/images/Sukardi.jpeg'
 import usthAi from '@/assets/images/Usth. Ai Jamaliah.jpeg'
 import usthNeneng from '@/assets/images/Usth. Neneng Aam.jpeg'
 import usthRani from '@/assets/images/Usth. Rani Rahmayati.jpeg'
+import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.jpeg'
+import penasihatAde from '@/assets/images/Ust. H Ade Karom.jpeg'
+import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.jpeg'
+import penasihatUsman from '@/assets/images/H Usman penasihat.jpeg'
+import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.jpeg'
+import usthDede from '@/assets/images/Usth. Dede Asiah.jpeg'
+import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.jpeg'
+import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.jpeg'
+import usthRayanthi from '@/assets/images/Usth.Rayanthi.jpeg'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -355,11 +366,11 @@ const getInitials = (name) => {
 }
 
 const dewanPenasihat = [
-  { name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat' },
-  { name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat' },
-  { name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat' },
-  { name: 'Bpk. H. Usman', role: 'Dewan Penasihat' },
-  { name: 'Bpk. Ayi Sunarwan', role: 'Dewan Penasihat' }
+  { name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat', image: penasihatIwa },
+  { name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat', image: penasihatAde },
+  { name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat', image: penasihatSudiana },
+  { name: 'Bpk. H. Usman', role: 'Dewan Penasihat', image: penasihatUsman },
+  { name: 'Bpk. Ayi Sunarwan', role: 'Dewan Penasihat', image: penasihatAyi }
 ]
 
 const pengurusHarian = [
@@ -373,8 +384,8 @@ const seksiDakwah = [
   { name: 'Ust. H. Dani Ramdhani', role: 'Anggota Dakwah & Pendidikan', image: dkmDani },
   { name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota Dakwah & Pendidikan', image: usthNeneng },
   { name: 'Usth. Ai Jamaliah', role: 'Anggota Dakwah & Pendidikan', image: usthAi },
-  { name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan' },
-  { name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan' }
+  { name: 'Usth. Rini Dewi Anggiani', role: 'Anggota Dakwah & Pendidikan', image: usthRini },
+  { name: 'Usth. Dede Asiah', role: 'Anggota Dakwah & Pendidikan', image: usthDede }
 ]
 
 const seksiEkonomi = [
@@ -386,7 +397,7 @@ const seksiEkonomi = [
 
 const seksiLogistik = [
   { name: 'Bpk. H. Redi Sasriandi', role: 'Anggota Peralatan & Logistik', image: bpkRedi },
-  { name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik' },
+  { name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota Peralatan & Logistik', image: bpkAditya },
   { name: 'Bpk. Sukardi', role: 'Anggota Peralatan & Logistik', image: bpkSukardi },
   { name: 'Bpk. Nanang Barkah', role: 'Anggota Peralatan & Logistik', image: bpkNanang }
 ]
@@ -394,7 +405,7 @@ const seksiLogistik = [
 const remajaMasjid = [
   { name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Remaja Masjid', image: bpkGojali },
   { name: 'Usth. Rani Rahmayati', role: 'Remaja Masjid', image: usthRani },
-  { name: 'Usth. Rayanthi', role: 'Remaja Masjid' }
+  { name: 'Usth. Rayanthi', role: 'Remaja Masjid', image: usthRayanthi }
 ]
 
 const stats = reactive([
