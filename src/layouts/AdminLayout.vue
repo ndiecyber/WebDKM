@@ -38,27 +38,43 @@
       </div>
 
       <!-- Module Switcher -->
-      <div v-if="adminStore.currentUser?.role === 'superadmin'" class="px-4 py-4 border-b border-gray-200 dark:border-white/5 shrink-0 bg-gray-50/50 dark:bg-gray-900/20">
-        <div class="bg-gray-200/50 dark:bg-gray-950 p-1.5 rounded-xl flex items-center shadow-inner ring-1 ring-black/5 dark:ring-white/5" :class="{'flex-col gap-2': isSidebarCollapsed}">
+      <div v-if="adminStore.currentRoleData?.modules?.length > 1" class="px-4 py-4 border-b border-gray-200 dark:border-white/5 shrink-0 bg-gray-50/50 dark:bg-gray-900/20">
+        <div class="bg-gray-200/50 dark:bg-gray-950 p-1.5 rounded-xl flex items-center shadow-inner ring-1 ring-black/5 dark:ring-white/5 overflow-x-auto hide-scrollbar" :class="{'flex-col gap-2': isSidebarCollapsed}">
           <button 
+            v-if="adminStore.hasModuleAccess('web')"
             @click="switchModule('web')" 
             :title="isSidebarCollapsed ? 'Web DKM' : ''"
             :class="activeModule === 'web' ? 'bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10 font-bold' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium hover:bg-white/50 dark:hover:bg-gray-800/50'" 
-            class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group w-full"
+            class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group min-w-[3rem]"
           >
             <div v-if="activeModule === 'web'" class="absolute inset-0 bg-linear-to-r from-emerald-500/10 to-transparent"></div>
-            <span v-if="!isSidebarCollapsed" class="relative z-10">Web DKM</span>
+            <span v-if="!isSidebarCollapsed" class="relative z-10 whitespace-nowrap px-2">Web</span>
             <span v-else class="relative z-10 text-sm">W</span>
           </button>
+          
           <button 
+            v-if="adminStore.hasModuleAccess('keuangan')"
             @click="switchModule('keuangan')" 
             :title="isSidebarCollapsed ? 'Keuangan DKM' : ''"
             :class="activeModule === 'keuangan' ? 'bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10 font-bold' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium hover:bg-white/50 dark:hover:bg-gray-800/50'" 
-            class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group w-full"
+            class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group min-w-[3rem]"
           >
             <div v-if="activeModule === 'keuangan'" class="absolute inset-0 bg-linear-to-r from-emerald-500/10 to-transparent"></div>
-            <span v-if="!isSidebarCollapsed" class="relative z-10">Keuangan DKM</span>
+            <span v-if="!isSidebarCollapsed" class="relative z-10 whitespace-nowrap px-2">Keuangan</span>
             <span v-else class="relative z-10 text-sm">K</span>
+          </button>
+
+          <!-- Antisipasi modul Qurban kedepannya -->
+          <button 
+            v-if="adminStore.hasModuleAccess('qurban')"
+            @click="switchModule('qurban')" 
+            :title="isSidebarCollapsed ? 'Qurban' : ''"
+            :class="activeModule === 'qurban' ? 'bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10 font-bold' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium hover:bg-white/50 dark:hover:bg-gray-800/50'" 
+            class="flex-1 py-2 text-xs rounded-lg transition-all duration-300 flex justify-center items-center gap-1.5 relative overflow-hidden group min-w-[3rem]"
+          >
+            <div v-if="activeModule === 'qurban'" class="absolute inset-0 bg-linear-to-r from-emerald-500/10 to-transparent"></div>
+            <span v-if="!isSidebarCollapsed" class="relative z-10 whitespace-nowrap px-2">Qurban</span>
+            <span v-else class="relative z-10 text-sm">Q</span>
           </button>
         </div>
       </div>
@@ -177,14 +193,13 @@
         </div>
 
         <!-- Group: Sistem -->
-        <div class="border-t border-gray-200 dark:border-white/5 pt-6">
+        <div v-show="adminStore.hasModuleAccess('sistem')" class="border-t border-gray-200 dark:border-white/5 pt-6">
           <div class="px-3 mb-2" v-if="!isSidebarCollapsed">
             <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Sistem</p>
           </div>
           <div class="space-y-1">
             <!-- Pengaturan Umum Web DKM -->
-            <router-link 
-              v-show="activeModule === 'web'"
+            <router-link
               :to="{ name: 'admin-pengaturan' }"
               :title="isSidebarCollapsed ? 'Pengaturan Umum' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -194,9 +209,8 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan Umum</span>
             </router-link>
 
-            <!-- Manajemen Pengguna (Super Admin Only) -->
-            <router-link 
-              v-if="adminStore.currentUser?.role === 'superadmin' && activeModule === 'web'"
+            <!-- Manajemen Pengguna & Peran -->
+            <router-link
               :to="{ name: 'admin-pengguna' }"
               :title="isSidebarCollapsed ? 'Manajemen Pengguna' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -206,9 +220,8 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Manajemen Pengguna</span>
             </router-link>
 
-            <!-- Log Aktivitas (Super Admin Only) -->
-            <router-link 
-              v-if="adminStore.currentUser?.role === 'superadmin' && activeModule === 'web'"
+            <!-- Log Aktivitas -->
+            <router-link
               :to="{ name: 'admin-log-aktivitas' }"
               :title="isSidebarCollapsed ? 'Log Aktivitas' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -218,17 +231,6 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Log Aktivitas</span>
             </router-link>
 
-            <!-- Pengaturan Keuangan DKM -->
-            <router-link 
-              v-show="activeModule === 'keuangan'"
-              :to="{ name: 'admin-keuangan-pengaturan' }"
-              :title="isSidebarCollapsed ? 'Pengaturan Keuangan' : ''"
-              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="[$route.name === 'admin-keuangan-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
-            >
-              <Settings class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan Keuangan</span>
-            </router-link>
           </div>
         </div>
       </nav>
@@ -291,7 +293,7 @@
           <AlertTriangle class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
           <div>
             <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-400">Mode Pratinjau (Mockup)</h4>
-            <p class="text-xs text-amber-700 dark:text-amber-500 mt-1">Halaman admin ini saat ini beroperasi dalam mode mockup (data lokal) untuk keperluan analisis dan pengembangan backend (API). Perubahan yang Anda lakukan di sini tidak akan terhubung ke database asli atau mengubah landing page.</p>
+            <p class="text-xs text-amber-700 dark:text-amber-500 mt-1">Halaman admin saat ini beroperasi dalam mode mockup (data lokal) untuk keperluan analisis dan pengembangan backend (API). Perubahan yang Anda lakukan di sini tidak akan terhubung ke database asli, beberapa pengaturan tidak mengubah yang ada di landing page.</p>
           </div>
         </div>
 
@@ -352,33 +354,47 @@ onMounted(() => {
   }
   
   
-  // Set default module based on role
-  if (adminStore.currentUser?.role === 'bendahara') {
-    activeModule.value = 'keuangan'
-  } else if (adminStore.currentUser?.role === 'humas') {
-    activeModule.value = 'web'
-  } else if (route.name?.startsWith('admin-keuangan')) {
-    activeModule.value = 'keuangan'
+  // Set default module based on role modules array and current route
+  const roleModules = adminStore.currentRoleData?.modules || ['web']
+  const isSystemRoute = ['admin-pengaturan', 'admin-pengguna', 'admin-log-aktivitas', 'admin-profil'].includes(route.name)
+  
+  if (!isSystemRoute) {
+    if (route.name?.startsWith('admin-keuangan')) {
+      activeModule.value = 'keuangan'
+    } else if (!roleModules.includes('web') && roleModules.length > 0) {
+      activeModule.value = roleModules[0]
+    } else {
+      activeModule.value = 'web'
+    }
+  } else {
+    // If landing on system route, preserve current state or use first available
+    activeModule.value = roleModules.includes(activeModule.value) ? activeModule.value : (roleModules[0] || 'web')
   }
 })
 
 const switchModule = (module) => {
   activeModule.value = module
-  if (module === 'web') {
-    router.push({ name: 'admin-dashboard' })
-  } else if (module === 'keuangan') {
+  if (module === 'keuangan') {
     router.push({ name: 'admin-keuangan-dashboard' })
+  } else if (module === 'web') {
+    router.push({ name: 'admin-dashboard' })
   }
 }
 
-watch(() => route.name, (newName) => {
-  isMobileMenuOpen.value = false
-  if (newName?.startsWith('admin-keuangan')) {
-    activeModule.value = 'keuangan'
-  } else if (newName?.startsWith('admin-')) {
-    activeModule.value = 'web'
+// Watch for route changes to update active module, unless it's a system route
+watch(
+  () => route.name,
+  (newName) => {
+    const isSystemRoute = ['admin-pengaturan', 'admin-pengguna', 'admin-log-aktivitas', 'admin-profil'].includes(newName)
+    if (isSystemRoute) return // Don't change module when navigating between system settings
+    
+    if (newName?.startsWith('admin-keuangan')) {
+      activeModule.value = 'keuangan'
+    } else {
+      activeModule.value = 'web'
+    }
   }
-})
+)
 
 const pageTitle = computed(() => {
   if (route.name === 'admin-keuangan-dashboard') return 'Dashboard Keuangan'

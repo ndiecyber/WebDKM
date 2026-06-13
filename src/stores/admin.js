@@ -26,10 +26,15 @@ export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: getStorage('admin_auth') === 'true',
     currentUser: parseSafe('admin_current_user') || { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin' },
+    roles: parseSafe('admin_roles') || [
+      { id: 1, key: 'superadmin', name: 'Super Admin', hierarchy: 1, modules: ['web', 'keuangan', 'qurban', 'sistem'] },
+      { id: 2, key: 'bendahara', name: 'Bendahara', hierarchy: 2, modules: ['keuangan'] },
+      { id: 3, key: 'sekretaris', name: 'Sekretaris', hierarchy: 3, modules: ['web'] }
+    ],
     users: parseSafe('admin_users') || [
       { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin', password: 'admin123' },
-      { id: 2, username: 'bendahara', name: 'Bendahara DKM', role: 'bendahara', password: 'password123' },
-      { id: 3, username: 'humas', name: 'Seksi Humas & Acara', role: 'humas', password: 'password123' }
+      { id: 2, username: 'bendahara', name: 'Bendahara', role: 'bendahara', password: 'password123' },
+      { id: 3, username: 'sekretaris', name: 'Sekretaris', role: 'sekretaris', password: 'password123' }
     ],
     auditLogs: parseSafe('admin_audit_logs') || [],
     committee: parseSafe('admin_committee') || {
@@ -155,6 +160,24 @@ export const useAdminStore = defineStore('admin', {
       ],
     }
   }),
+  getters: {
+    currentRoleData: (state) => {
+      return state.roles.find(r => r.key === state.currentUser?.role) || null;
+    },
+    hasModuleAccess: (state) => {
+      return (moduleKey) => {
+        const roleData = state.roles.find(r => r.key === state.currentUser?.role);
+        return roleData ? roleData.modules.includes(moduleKey) : false;
+      }
+    },
+    canManageRole: (state) => {
+      return (targetHierarchy) => {
+        const roleData = state.roles.find(r => r.key === state.currentUser?.role);
+        // User can only manage roles with a hierarchy numerically strictly greater than their own (1 is highest)
+        return roleData ? roleData.hierarchy < targetHierarchy : false;
+      }
+    }
+  },
   actions: {
     logActivity(actionName, details) {
       if (!this.currentUser) return;
@@ -181,7 +204,7 @@ export const useAdminStore = defineStore('admin', {
         this.currentUser = { ...user };
         // Don't store password in currentUser state/localStorage
         delete this.currentUser.password;
-        
+
         setStorage('admin_auth', 'true');
         setStorage('admin_current_user', JSON.stringify(this.currentUser));
         this.logActivity('Login', 'Berhasil login ke sistem');
@@ -303,6 +326,63 @@ export const useAdminStore = defineStore('admin', {
     },
     saveUsers() {
       setStorage('admin_users', JSON.stringify(this.users));
+    },
+    recalculateHierarchy() {
+      this.roles.forEach((r, index) => {
+        r.hierarchy = index + 1;
+      });
+      this.saveRoles();
+    },
+    moveRoleUp(id) {
+      const index = this.roles.findIndex(r => r.id === id);
+      // Index 0 is superadmin, cannot move anything above it, and it cannot move
+      if (index > 1) {
+        const temp = this.roles[index - 1];
+        this.roles[index - 1] = this.roles[index];
+        this.roles[index] = temp;
+        this.recalculateHierarchy();
+      }
+    },
+    moveRoleDown(id) {
+      const index = this.roles.findIndex(r => r.id === id);
+      // Index 0 is superadmin, it cannot move. Other roles can move down if not last.
+      if (index > 0 && index < this.roles.length - 1) {
+        const temp = this.roles[index + 1];
+        this.roles[index + 1] = this.roles[index];
+        this.roles[index] = temp;
+        this.recalculateHierarchy();
+      }
+    },
+    addRole(roleData) {
+      const newId = this.roles.length > 0 ? Math.max(...this.roles.map(r => r.id)) + 1 : 1;
+      roleData.hierarchy = this.roles.length + 1; // Put at the bottom
+      this.roles.push({ ...roleData, id: newId });
+      this.saveRoles();
+      this.logActivity('Tambah Role', `Menambahkan peran baru: ${roleData.name}`);
+    },
+    updateRole(id, roleData) {
+      const index = this.roles.findIndex(r => r.id === id);
+      if (index !== -1) {
+        // Prevent editing superadmin hierarchy/key to prevent lock-out
+        if (this.roles[index].key === 'superadmin') {
+          roleData.key = 'superadmin';
+          roleData.hierarchy = 1;
+        }
+        this.roles[index] = { ...this.roles[index], ...roleData };
+        this.saveRoles();
+        this.logActivity('Ubah Role', `Memperbarui data peran: ${this.roles[index].name}`);
+      }
+    },
+    deleteRole(id) {
+      const role = this.roles.find(r => r.id === id);
+      if (role && role.key !== 'superadmin') {
+        this.roles = this.roles.filter(r => r.id !== id);
+        this.saveRoles();
+        this.logActivity('Hapus Role', `Menghapus peran: ${role.name}`);
+      }
+    },
+    saveRoles() {
+      setStorage('admin_roles', JSON.stringify(this.roles));
     }
   }
 })
