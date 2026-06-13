@@ -118,9 +118,14 @@
               </div>
               <button 
                 @click="$emit('close')"
-                class="px-6 py-2.5 bg-[#072F2F] dark:bg-[#C5A55A] hover:bg-emerald-900 dark:hover:bg-[#b0934d] text-white dark:text-[#072F2F] rounded-xl font-bold text-sm transition-colors shadow-md"
+                :class="[
+                  'px-6 py-2.5 rounded-xl font-bold text-sm transition-colors shadow-md',
+                  event.type === 'artikel'
+                    ? 'bg-[#C5A55A] hover:bg-[#b0934d] text-[#072F2F]'
+                    : 'bg-[#072F2F] dark:bg-[#C5A55A] hover:bg-emerald-900 dark:hover:bg-[#b0934d] text-white dark:text-[#072F2F]'
+                ]"
               >
-                Tutup Artikel
+                {{ event.type === 'artikel' ? '📖 Tutup Artikel' : '📰 Tutup Berita' }}
               </button>
             </div>
           </div>
