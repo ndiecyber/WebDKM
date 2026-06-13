@@ -13,9 +13,28 @@
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-dark dark:text-white mb-4 transition-colors duration-500">
           Berita <span class="text-primary dark:text-secondary">Terkait</span>
         </h2>
-        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-4xl mx-auto transition-colors duration-500">
+        <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-4xl mx-auto mb-6 transition-colors duration-500">
           Simak berbagai berita dan informasi terbaru seputar kegiatan di Masjid Jami Kassiti
         </p>
+        <!-- Filter Tabs -->
+        <div class="flex items-center justify-center gap-2 flex-wrap">
+          <button
+            v-for="tab in filterTabs"
+            :key="tab.value"
+            @click="activeTypeFilter = tab.value"
+            :class="[
+              'px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border',
+              activeTypeFilter === tab.value
+                ? 'bg-primary dark:bg-secondary text-white dark:text-dark border-primary dark:border-secondary shadow-md'
+                : 'bg-white dark:bg-white/5 text-dark dark:text-white border-gray-200 dark:border-white/10 hover:border-primary dark:hover:border-secondary'
+            ]"
+          >
+            <span>{{ tab.label }}</span>
+            <span class="ml-1.5 text-[11px] px-1.5 py-0.5 rounded-full" :class="activeTypeFilter === tab.value ? 'bg-white/20' : 'bg-gray-100 dark:bg-white/10'">
+              {{ tab.value === 'semua' ? events.length : events.filter(e => e.type === tab.value).length }}
+            </span>
+          </button>
+        </div>
       </div>
 
       <!-- Events Grid -->
@@ -44,12 +63,22 @@
             />
             <div class="absolute inset-0 bg-linear-to-t from-dark/80 via-dark/20 to-transparent"></div>
 
-            <!-- Badge -->
-            <div
-              v-if="event.badge"
-              class="absolute top-4 left-4 px-3 py-1 bg-secondary text-dark text-xs font-bold rounded-full shadow-lg z-10"
-            >
-              {{ event.badge }}
+            <!-- Type + Badge Row -->
+            <div class="absolute top-4 left-4 flex items-center gap-2 z-10">
+              <!-- Type badge: Berita = emerald, Artikel = gold -->
+              <div :class="[
+                'px-2.5 py-1 text-white text-[10px] font-bold uppercase tracking-wider rounded-md shadow',
+                event.type === 'artikel' ? 'bg-[#C5A55A]' : 'bg-primary'
+              ]">
+                {{ event.type === 'artikel' ? 'Artikel' : 'Berita' }}
+              </div>
+              <!-- Status badge -->
+              <div
+                v-if="event.badge"
+                class="px-2.5 py-1 bg-secondary text-dark text-[10px] font-bold rounded-md shadow-lg"
+              >
+                {{ event.badge }}
+              </div>
             </div>
           </div>
 
@@ -128,6 +157,14 @@ const adminStore = useAdminStore()
 const headerRef = ref(null)
 const eventsRef = ref(null)
 const showAll = ref(false)
+const activeTypeFilter = ref('semua')
+
+const filterTabs = [
+  { value: 'semua', label: 'Semua' },
+  { value: 'berita', label: '📰 Berita' },
+  { value: 'artikel', label: '📖 Artikel' },
+]
+
 
 // Modal State
 const isModalOpen = ref(false)
@@ -169,8 +206,13 @@ const toggleEvents = async () => {
 
 const events = computed(() => adminStore.kegiatan)
 
+const filteredEvents = computed(() => {
+  if (activeTypeFilter.value === 'semua') return events.value
+  return events.value.filter(e => e.type === activeTypeFilter.value)
+})
+
 const visibleEvents = computed(() => {
-  return showAll.value ? events.value : events.value.slice(0, 3)
+  return showAll.value ? filteredEvents.value : filteredEvents.value.slice(0, 3)
 })
 
 onMounted(() => {

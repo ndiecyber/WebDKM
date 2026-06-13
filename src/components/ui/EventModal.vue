@@ -108,7 +108,7 @@
             <!-- Body Description Content -->
             <div 
               class="article-content text-dark/80 dark:text-white/80 leading-relaxed text-sm sm:text-base space-y-4"
-              v-html="event.description"
+              v-html="event.content || event.description"
             ></div>
 
             <!-- Share / Footer Details inside Modal -->
