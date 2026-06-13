@@ -410,46 +410,47 @@
           <div 
             v-for="(report, index) in filteredSpecialReports" 
             :key="report.id"
-            class="group bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden"
+            class="group bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 rounded-2xl transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden flex flex-col lg:flex-row items-center p-3 sm:p-4 gap-3 sm:gap-4 lg:gap-6 cursor-pointer"
+            @click="openSpecialReport(report)"
           >
-            <!-- Card Top: Icon + Title + Date + Detail Button -->
-            <div class="flex items-center gap-2.5 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 border-b border-gray-100 dark:border-white/5">
-              <!-- Icon -->
-              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary/10 dark:bg-secondary/10 flex items-center justify-center text-primary dark:text-secondary group-hover:scale-110 transition-transform duration-300 shrink-0">
-                <component :is="report.icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <!-- Left: Icon + Title -->
+            <div class="flex items-center gap-3 sm:gap-4 w-full lg:w-[35%] shrink-0">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-dark/5 dark:bg-white/5 flex items-center justify-center text-primary dark:text-secondary group-hover:scale-110 group-hover:bg-primary/10 dark:group-hover:bg-secondary/10 transition-all duration-300 shrink-0">
+                <component :is="report.icon" class="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <!-- Title & Date -->
               <div class="flex-1 min-w-0">
-                <h4 class="font-bold text-xs sm:text-sm text-dark dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors leading-tight line-clamp-1">{{ report.title }}</h4>
-                <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wide">{{ report.date }}</p>
+                <h4 class="font-bold text-sm sm:text-base text-dark dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors leading-tight line-clamp-1">{{ report.title }}</h4>
+                <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5 uppercase tracking-wide">{{ report.date }}</p>
               </div>
-              <!-- Detail Button -->
-              <button
-                @click.stop="openSpecialReport(report)"
-                class="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-primary/30 dark:border-secondary/30 bg-primary/5 dark:bg-secondary/5 hover:bg-primary hover:dark:bg-secondary hover:border-primary dark:hover:border-secondary group/btn transition-all duration-200 shrink-0"
-              >
-                <span class="text-[9px] sm:text-[10px] font-bold text-primary dark:text-secondary group-hover/btn:text-white transition-colors uppercase tracking-wide">Detail</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 text-primary dark:text-secondary group-hover/btn:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-              </button>
             </div>
 
-            <!-- Card Bottom: Stats Row (3 columns, always) -->
-            <div class="grid grid-cols-3 divide-x divide-gray-100 dark:divide-white/5">
+            <!-- Middle: Stats Grid -->
+            <div class="flex-1 w-full grid grid-cols-3 items-center divide-x divide-gray-200 dark:divide-white/10 py-1">
               <!-- Total Masuk -->
-              <div class="px-2.5 py-2 sm:px-4 sm:py-3">
-                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-0.5 font-medium">Total Masuk</span>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400 text-[10px] sm:text-xs leading-none">Rp {{ formatRupiah(report.totalPemasukan) }}</span>
+              <div class="flex flex-col pr-2 sm:pr-4">
+                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 font-semibold">Total Masuk</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400 text-[10px] sm:text-sm leading-none">Rp {{ formatRupiah(report.totalPemasukan) }}</span>
               </div>
               <!-- Total Keluar -->
-              <div class="px-2.5 py-2 sm:px-4 sm:py-3">
-                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-0.5 font-medium">Total Keluar</span>
-                <span class="font-bold text-rose-500 dark:text-rose-400 text-[10px] sm:text-xs leading-none">Rp {{ formatRupiah(report.totalPengeluaran) }}</span>
+              <div class="flex flex-col px-2 sm:px-4">
+                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 font-semibold">Total Keluar</span>
+                <span class="font-bold text-rose-500 dark:text-rose-400 text-[10px] sm:text-sm leading-none">Rp {{ formatRupiah(report.totalPengeluaran) }}</span>
               </div>
               <!-- Saldo Akhir -->
-              <div class="px-2.5 py-2 sm:px-4 sm:py-3 bg-cyan-50/40 dark:bg-cyan-950/10">
-                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-0.5 font-medium">Saldo Akhir</span>
-                <span class="font-bold text-cyan-600 dark:text-cyan-400 text-[10px] sm:text-xs leading-none">Rp {{ formatRupiah(report.sisaSaldo) }}</span>
+              <div class="flex flex-col pl-2 sm:pl-4">
+                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 font-semibold">Saldo Akhir</span>
+                <span class="font-bold text-cyan-600 dark:text-cyan-400 text-[10px] sm:text-sm leading-none">Rp {{ formatRupiah(report.sisaSaldo) }}</span>
               </div>
+            </div>
+
+            <!-- Right: Detail Button -->
+            <div class="w-full lg:w-auto shrink-0 flex justify-end lg:justify-center border-t lg:border-t-0 border-gray-100 dark:border-white/5 pt-3 lg:pt-0">
+              <button
+                class="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-full border border-gray-200 dark:border-white/10 bg-transparent hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 shrink-0"
+              >
+                <span class="text-[9px] sm:text-[10px] font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Detail</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+              </button>
             </div>
           </div>
         </div>
