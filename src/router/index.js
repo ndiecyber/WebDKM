@@ -24,6 +24,8 @@ const routes = [
         name: 'admin-dashboard',
         component: () => import('../views/admin/DashboardView.vue'),
       },
+      
+      // --- MODUL KEUANGAN ---
       {
         path: 'keuangan',
         name: 'admin-keuangan-dashboard',
@@ -49,6 +51,35 @@ const routes = [
         name: 'admin-keuangan-pengaturan',
         component: () => import('@/views/admin/KeuanganPengaturanView.vue')
       },
+
+      // --- MODUL QURBAN (BARU) ---
+      {
+        path: 'qurban',
+        name: 'admin-qurban-dashboard',
+        component: () => import('@/views/admin/QurbanDashboardView.vue')
+      },
+      {
+        path: 'qurban/target',
+        name: 'admin-qurban-target',
+        component: () => import('@/views/admin/QurbanTargetView.vue')
+      },
+      {
+        path: 'qurban/peserta',
+        name: 'admin-qurban-peserta',
+        component: () => import('@/views/admin/QurbanPesertaView.vue')
+      },
+      {
+        path: 'qurban/setoran',
+        name: 'admin-qurban-setoran',
+        component: () => import('@/views/admin/QurbanSetoranView.vue')
+      },
+      {
+        path: 'qurban/pengaturan',
+        name: 'admin-qurban-pengaturan',
+        component: () => import('@/views/admin/QurbanPengaturanView.vue')
+      },
+
+      // --- MODUL WEB DKM ---
       {
         path: 'kegiatan',
         name: 'admin-kegiatan',
@@ -69,7 +100,6 @@ const routes = [
         name: 'admin-pengaturan',
         component: () => import('../views/admin/PengaturanView.vue'),
       },
-
       {
         path: 'profil',
         name: 'admin-profil',
