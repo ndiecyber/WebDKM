@@ -165,8 +165,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck, GraduationCap, HandCoins } from 'lucide-vue-next'
-import logoImg from '@/assets/images/logo-kustom2.png'
-import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.png'
+import logoImg from '@/assets/images/logo-kustom2.webp'
+import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.webp'
 import { createSilhouetteMask } from '@/utils/image'
 import { scrollToSection } from '@/utils/scroll'
 import { useAdminStore } from '@/stores/admin'

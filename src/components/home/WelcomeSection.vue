@@ -55,17 +55,18 @@
         <!-- Right: Image -->
         <div ref="imageContent" class="relative">
           <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-            <img :src="interiorImg" alt="Interior Masjid Jami Kassiti" class="w-full h-[400px] lg:h-[550px] object-cover" />
+            <img :src="interiorImg" alt="Interior Masjid Jami Kassiti" class="w-full h-[250px] sm:h-[400px] lg:h-[550px] object-cover" />
             <div class="absolute inset-0 bg-linear-to-t from-primary/30 to-transparent"></div>
           </div>
 
           <!-- Floating Card -->
-          <div class="absolute -bottom-6 -left-6 bg-white dark:bg-dark-light rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-white/5 max-w-[280px] z-10">
-            <div class="flex items-center gap-4 mb-3">
-              <MosqueLogo variant="icon" :iconSize="48" class="text-primary dark:text-secondary drop-shadow-md" />
-              <h4 class="font-heading text-xl font-bold text-dark dark:text-white leading-tight">Masjid Kassiti</h4>
+          <div class="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 bg-white dark:bg-dark-light rounded-2xl p-4 sm:p-6 shadow-xl border border-gray-100 dark:border-white/5 max-w-[200px] sm:max-w-[280px] z-10 transition-all duration-300">
+            <div class="flex items-center gap-2.5 sm:gap-4 mb-2 sm:mb-3">
+              <MosqueLogo variant="icon" :iconSize="32" class="sm:hidden text-primary dark:text-secondary drop-shadow-md shrink-0" />
+              <MosqueLogo variant="icon" :iconSize="48" class="hidden sm:block text-primary dark:text-secondary drop-shadow-md shrink-0" />
+              <h4 class="font-heading text-base sm:text-xl font-bold text-dark dark:text-white leading-tight">Masjid Kassiti</h4>
             </div>
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti</p>
+            <p class="text-gray-600 dark:text-gray-400 text-[10px] sm:text-sm leading-relaxed">Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti</p>
           </div>
 
           <!-- Decorative Element -->
@@ -320,30 +321,30 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
-import interiorImage from '@/assets/images/mosque-interior.png'
-import dkmNasai from '@/assets/images/dkm-nasai.png'
-import dkmRandi from '@/assets/images/dkm-randi.png'
-import dkmRofik from '@/assets/images/M Ainur Rofiq.jpeg'
-import dkmIrvan from '@/assets/images/Ivan Ruchiat.jpeg'
-import dkmDani from '@/assets/images/Dani Ramdhani.jpeg'
-import bpkAli from '@/assets/images/Ali M Abduh.jpeg'
-import bpkGojali from '@/assets/images/Gojali Abdul S.jpeg'
-import bpkRedi from '@/assets/images/H Redi Sasriandi.jpeg'
-import bpkNanang from '@/assets/images/Nanang Barkah.jpeg'
-import bpkSukardi from '@/assets/images/Sukardi.jpeg'
-import usthAi from '@/assets/images/Usth. Ai Jamaliah.jpeg'
-import usthNeneng from '@/assets/images/Usth. Neneng Aam.jpeg'
-import usthRani from '@/assets/images/Usth. Rani Rahmayati.jpeg'
-import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.jpeg'
-import penasihatAde from '@/assets/images/Ust. H Ade Karom.jpeg'
-import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.jpeg'
-import penasihatUsman from '@/assets/images/H Usman penasihat.jpeg'
-import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.jpeg'
-import usthDede from '@/assets/images/Usth. Dede Asiah.jpeg'
-import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.jpeg'
-import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.jpeg'
-import usthRayanthi from '@/assets/images/Usth.Rayanthi.jpeg'
-import kaligrafiImage from '@/assets/images/kaligrafi_masjid.png'
+import interiorImage from '@/assets/images/mosque-interior.webp'
+import dkmNasai from '@/assets/images/dkm-nasai.webp'
+import dkmRandi from '@/assets/images/dkm-randi.webp'
+import dkmRofik from '@/assets/images/M Ainur Rofiq.webp'
+import dkmIrvan from '@/assets/images/Ivan Ruchiat.webp'
+import dkmDani from '@/assets/images/Dani Ramdhani.webp'
+import bpkAli from '@/assets/images/Ali M Abduh.webp'
+import bpkGojali from '@/assets/images/Gojali Abdul S.webp'
+import bpkRedi from '@/assets/images/H Redi Sasriandi.webp'
+import bpkNanang from '@/assets/images/Nanang Barkah.webp'
+import bpkSukardi from '@/assets/images/Sukardi.webp'
+import usthAi from '@/assets/images/Usth. Ai Jamaliah.webp'
+import usthNeneng from '@/assets/images/Usth. Neneng Aam.webp'
+import usthRani from '@/assets/images/Usth. Rani Rahmayati.webp'
+import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.webp'
+import penasihatAde from '@/assets/images/Ust. H Ade Karom.webp'
+import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.webp'
+import penasihatUsman from '@/assets/images/H Usman penasihat.webp'
+import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.webp'
+import usthDede from '@/assets/images/Usth. Dede Asiah.webp'
+import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.webp'
+import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.webp'
+import usthRayanthi from '@/assets/images/Usth.Rayanthi.webp'
+import kaligrafiImage from '@/assets/images/kaligrafi_masjid.webp'
 import { useAdminStore } from '@/stores/admin'
 
 gsap.registerPlugin(ScrollTrigger)

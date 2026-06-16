@@ -79,12 +79,18 @@
               </div>
 
               <!-- Contact / Supervisor -->
-              <div v-if="service.details?.contact" class="p-4 rounded-xl bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 animate-slide-up" style="animation-delay: 0.3s; animation-fill-mode: both;">
-                <div class="flex items-center gap-2 text-primary mb-2">
-                  <User class="w-4 h-4" />
-                  <span class="font-bold text-sm uppercase tracking-wider">Penanggung Jawab</span>
+              <div v-if="service.details?.contact" class="p-4 rounded-xl bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 animate-slide-up flex items-center gap-4" style="animation-delay: 0.3s; animation-fill-mode: both;">
+                <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 border-primary/25 dark:border-secondary/20 flex items-center justify-center bg-linear-to-br from-primary/15 to-primary/5 shadow-inner">
+                  <img v-if="service.details?.contactImage" :src="service.details.contactImage" :alt="service.details.contact" class="w-full h-full object-cover" />
+                  <User v-else class="w-5 h-5 text-primary" />
                 </div>
-                <p class="text-dark dark:text-white font-medium text-sm">{{ service.details.contact }}</p>
+                <div>
+                  <div class="flex items-center gap-1.5 text-primary mb-1">
+                    <User class="w-3.5 h-3.5" />
+                    <span class="font-bold text-xs uppercase tracking-wider">Penanggung Jawab</span>
+                  </div>
+                  <p class="text-dark dark:text-white font-semibold text-sm leading-snug">{{ service.details.contact }}</p>
+                </div>
               </div>
 
               <!-- Requirements -->

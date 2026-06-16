@@ -11,34 +11,45 @@
           <span class="text-primary text-xs font-semibold tracking-wider uppercase">Agenda</span>
         </div>
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-dark dark:text-white mb-4 transition-colors duration-500">
-          Berita <span class="text-primary dark:text-secondary">Terkait</span>
+          Berita & <span class="text-primary dark:text-secondary">Artikel</span>
         </h2>
         <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-4xl mx-auto mb-6 transition-colors duration-500">
-          Simak berbagai berita dan informasi terbaru seputar kegiatan di Masjid Jami Kassiti
+          Simak berbagai berita, artikel, dan informasi terbaru seputar kegiatan di Masjid Jami Kassiti
         </p>
         <!-- Filter Tabs -->
-        <div class="flex items-center justify-center gap-2 flex-wrap">
-          <button
-            v-for="tab in filterTabs"
-            :key="tab.value"
-            @click="activeTypeFilter = tab.value"
-            :class="[
-              'px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border',
-              activeTypeFilter === tab.value
-                ? 'bg-primary dark:bg-secondary text-white dark:text-dark border-primary dark:border-secondary shadow-md'
-                : 'bg-white dark:bg-white/5 text-dark dark:text-white border-gray-200 dark:border-white/10 hover:border-primary dark:hover:border-secondary'
-            ]"
-          >
-            <span>{{ tab.label }}</span>
-            <span class="ml-1.5 text-[11px] px-1.5 py-0.5 rounded-full" :class="activeTypeFilter === tab.value ? 'bg-white/20' : 'bg-gray-100 dark:bg-white/10'">
-              {{ tab.value === 'semua' ? events.length : events.filter(e => e.type === tab.value).length }}
-            </span>
-          </button>
+        <div class="flex justify-center mt-2 mb-4 w-full px-4">
+          <div class="relative flex p-1 sm:p-1.5 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-2xl sm:rounded-full w-full sm:w-auto shadow-md">
+            <!-- Sliding Background Pill -->
+            <div 
+              class="absolute top-1 sm:top-1.5 bottom-1 sm:bottom-1.5 rounded-xl sm:rounded-full bg-primary dark:bg-secondary shadow-md transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)"
+              :style="{
+                width: `calc(${100 / filterTabs.length}% - 4px)`,
+                left: `calc(${(filterTabs.findIndex(t => t.value === activeTypeFilter) * (100 / filterTabs.length))}% + 2px)`
+              }"
+            ></div>
+            
+            <button
+              v-for="tab in filterTabs"
+              :key="tab.value"
+              @click="activeTypeFilter = tab.value"
+              :class="[
+                'relative z-10 px-3 py-1.5 sm:px-5 sm:py-1.5 text-xs sm:text-sm font-semibold rounded-xl sm:rounded-full transition-colors duration-300 flex-1 flex items-center justify-center gap-1.5 whitespace-nowrap',
+                activeTypeFilter === tab.value
+                  ? 'text-white dark:text-dark'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white'
+              ]"
+            >
+              <span>{{ tab.label }}</span>
+              <span class="text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-full transition-colors duration-300" :class="activeTypeFilter === tab.value ? 'bg-white/20 dark:bg-dark/10' : 'bg-gray-200 dark:bg-white/10'">
+                {{ tab.value === 'semua' ? events.length : events.filter(e => e.type === tab.value).length }}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Events Grid -->
-      <TransitionGroup name="event-list" tag="div" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 relative" ref="eventsRef">
+      <TransitionGroup name="event-list" tag="div" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 relative" ref="eventsRef">
         <div
           v-for="(event, index) in visibleEvents"
           :key="event.title"
@@ -49,13 +60,13 @@
             transform: cardTilts[event.title] || 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', 
             transition: isHovered[event.title] ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out' 
           }"
-          class="group relative cursor-pointer bg-white/70 dark:bg-dark/40 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/50 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 transition-colors duration-500 will-change-transform shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex flex-col"
+          class="group relative cursor-pointer bg-white/70 dark:bg-dark/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl overflow-hidden border border-white/50 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 transition-colors duration-500 will-change-transform shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex flex-col"
         >
           <!-- Glassmorphism Glow Background -->
           <div class="absolute inset-0 bg-linear-to-br from-primary/0 via-transparent to-secondary/0 group-hover:from-primary/10 group-hover:to-secondary/10 transition-colors duration-700 pointer-events-none z-0"></div>
 
           <!-- Image Area -->
-          <div class="relative h-56 overflow-hidden z-10 shrink-0">
+          <div class="relative h-32 sm:h-56 overflow-hidden z-10 shrink-0">
             <img
               :src="event.image"
               :alt="event.title"
@@ -64,10 +75,10 @@
             <div class="absolute inset-0 bg-linear-to-t from-dark/80 via-dark/20 to-transparent"></div>
 
             <!-- Type + Badge Row -->
-            <div class="absolute top-4 left-4 flex items-center gap-2 z-10">
+            <div class="absolute top-2 left-2 sm:top-4 sm:left-4 flex items-center gap-1.5 sm:gap-2 z-10">
               <!-- Type badge: Berita = emerald, Artikel = gold -->
               <div :class="[
-                'px-2.5 py-1 text-white text-[10px] font-bold uppercase tracking-wider rounded-md shadow',
+                'px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-white text-[8px] sm:text-[10px] font-bold uppercase tracking-wider rounded shadow-md',
                 event.type === 'artikel' ? 'bg-[#C5A55A]' : 'bg-primary'
               ]">
                 {{ event.type === 'artikel' ? 'Artikel' : 'Berita' }}
@@ -75,7 +86,7 @@
               <!-- Status badge -->
               <div
                 v-if="event.badge"
-                class="px-2.5 py-1 bg-secondary text-dark text-[10px] font-bold rounded-md shadow-lg"
+                class="px-1.5 py-0.5 sm:px-2.5 sm:py-1 bg-secondary text-dark text-[8px] sm:text-[10px] font-bold rounded shadow-lg"
               >
                 {{ event.badge }}
               </div>
@@ -83,37 +94,37 @@
           </div>
 
           <!-- Date Card (Positioned exactly on the boundary between image and content) -->
-          <div class="absolute top-56 left-6 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-2xl px-5 py-2.5 text-center shadow-xl border border-gray-300 dark:border-white/10 transition-colors duration-500 z-20">
-            <p class="font-heading text-2xl font-bold text-primary dark:text-secondary leading-none">{{ event.day }}</p>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">{{ event.month }}</p>
+          <div class="absolute top-32 sm:top-56 left-4 sm:left-6 -translate-y-1/2 bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl px-3 py-1.5 sm:px-5 sm:py-2.5 text-center shadow-xl border border-gray-300 dark:border-white/10 transition-colors duration-500 z-20">
+            <p class="font-heading text-lg sm:text-2xl font-bold text-primary dark:text-secondary leading-none">{{ event.day }}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest mt-0.5">{{ event.month }}</p>
           </div>
 
           <!-- Content -->
-          <div class="p-6 pt-10 sm:p-8 sm:pt-12 flex flex-col grow z-10 relative">
-            <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-xs font-medium mb-4 transition-colors duration-500">
+          <div class="p-3.5 pt-7 sm:p-8 sm:pt-12 flex flex-col grow z-10 relative">
+            <div v-if="event.type !== 'artikel'" class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs font-medium mb-3 sm:mb-4 transition-colors duration-500">
               <span class="flex items-center gap-1.5">
-                <Clock class="w-4 h-4 text-primary dark:text-secondary" />
+                <Clock class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary dark:text-secondary" />
                 {{ event.time }}
               </span>
               <span class="flex items-center gap-1.5">
-                <MapPin class="w-4 h-4 text-primary dark:text-secondary" />
-                {{ event.location }}
+                <MapPin class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary dark:text-secondary shrink-0" />
+                <span class="truncate">{{ event.location }}</span>
               </span>
             </div>
 
-            <h3 class="font-heading text-xl font-bold text-dark dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300">
+            <h3 class="font-heading text-sm sm:text-xl font-bold text-dark dark:text-white mb-2 sm:mb-3 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300 line-clamp-2">
               {{ event.title }}
             </h3>
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed transition-colors duration-500 line-clamp-3 mb-6">
+            <p class="text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed transition-colors duration-500 line-clamp-2 sm:line-clamp-3 mb-4 sm:mb-6">
               {{ event.description }}
             </p>
 
             <div class="mt-auto">
               <div
-                class="inline-flex items-center gap-2 text-primary dark:text-secondary text-sm font-bold uppercase tracking-wider group-hover:gap-3 transition-all duration-300"
+                class="inline-flex items-center gap-1.5 sm:gap-2 text-primary dark:text-secondary text-[10px] sm:text-sm font-bold uppercase tracking-wider group-hover:gap-3 transition-all duration-300"
               >
-                Detail Berita
-                <ArrowRight class="w-4 h-4" />
+                {{ event.type === 'artikel' ? 'Detail Artikel' : 'Detail Berita' }}
+                <ArrowRight class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
             </div>
           </div>
@@ -121,7 +132,7 @@
       </TransitionGroup>
 
       <!-- View More Button -->
-      <div class="mt-12 flex justify-center" v-if="events.length > 3">
+      <div class="mt-12 flex justify-center" v-if="filteredEvents.length > 4">
         <button 
           @click="toggleEvents"
           class="inline-flex items-center gap-2 px-8 py-3.5 bg-white dark:bg-white/5 border border-primary/20 dark:border-white/10 hover:border-primary text-primary dark:text-white rounded-full font-bold tracking-wide transition-all duration-300 hover:shadow-[0_8px_30px_rgb(20,184,166,0.2)] hover:-translate-y-1"
@@ -161,8 +172,8 @@ const activeTypeFilter = ref('semua')
 
 const filterTabs = [
   { value: 'semua', label: 'Semua' },
-  { value: 'berita', label: '📰 Berita' },
-  { value: 'artikel', label: '📖 Artikel' },
+  { value: 'berita', label: 'Berita' },
+  { value: 'artikel', label: 'Artikel' },
 ]
 
 
@@ -212,7 +223,7 @@ const filteredEvents = computed(() => {
 })
 
 const visibleEvents = computed(() => {
-  return showAll.value ? filteredEvents.value : filteredEvents.value.slice(0, 3)
+  return showAll.value ? filteredEvents.value : filteredEvents.value.slice(0, 4)
 })
 
 onMounted(() => {
@@ -245,12 +256,17 @@ onMounted(() => {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.event-list-leave-active {
+  position: absolute;
+  /* Adjust width to avoid collapsing in grid */
+  width: calc(100% - 2rem);
+  max-width: 380px;
+}
+
 .event-list-enter-from,
 .event-list-leave-to {
   opacity: 0;
-  transform: scale(0.95) translateY(20px);
+  transform: scale(0.9) translateY(20px);
 }
 
-/* Ensure leaves don't break the grid layout abruptly if not using absolute positioning,
-   we omit position: absolute for a smoother responsive grid flow */
 </style>

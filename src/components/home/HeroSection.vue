@@ -146,11 +146,11 @@ import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Y
 import { isDonationModalOpen } from '@/composables/useDonationModal'
 import { gsap } from 'gsap'
 import { useAdminStore } from '@/stores/admin'
-import heroImg1 from '@/assets/images/hero-mosque.png'
-import heroImg2 from '@/assets/images/mosque-exterior.png'
-import heroImg3 from '@/assets/images/community-prayer.png'
-import heroImg4 from '@/assets/images/mosque-interior.png'
-import logoImg from '@/assets/images/logo-kustom.png'
+import heroImg1 from '@/assets/images/hero-mosque.webp'
+import heroImg2 from '@/assets/images/mosque-exterior.webp'
+import heroImg3 from '@/assets/images/community-prayer.webp'
+import heroImg4 from '@/assets/images/mosque-interior.webp'
+import logoImg from '@/assets/images/logo-kustom.webp'
 import { scrollToSection } from '@/utils/scroll'
 
 const adminStore = useAdminStore()

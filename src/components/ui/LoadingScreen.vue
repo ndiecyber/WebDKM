@@ -87,7 +87,7 @@
 import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
-import logoImg from '@/assets/images/logo-kustom2.png'
+import logoImg from '@/assets/images/logo-kustom2.webp'
 
 const show = ref(true)
 const logoRef = ref(null)

@@ -78,7 +78,7 @@
                   <button @click="expandedImage = qris1" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
                     <Maximize2 class="w-3 h-3" /> Perbesar
                   </button>
-                  <a :href="qris1" download="QRIS_Operasional_DKMJ.jpg" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
+                  <a :href="qris1" download="QRIS_Operasional_DKMJ.webp" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
                     <Download class="w-3 h-3" /> Simpan
                   </a>
                 </div>
@@ -111,9 +111,9 @@
 <script setup>
 import { ref } from 'vue'
 import { X, Heart, Copy, Download, Info, Maximize2 } from 'lucide-vue-next'
-import qris1 from '@/assets/images/QRIS DKMJ.jpg'
-import qris2 from '@/assets/images/QRIS DKMJ2.jpeg'
-import bsiLogo from '@/assets/images/bsi-logo.png'
+import qris1 from '@/assets/images/QRIS DKMJ.webp'
+import qris2 from '@/assets/images/QRIS DKMJ2.webp'
+import bsiLogo from '@/assets/images/bsi-logo.webp'
 
 const props = defineProps({
   isOpen: Boolean

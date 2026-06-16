@@ -266,8 +266,8 @@ import ToastContainer from '../components/ui/ToastContainer.vue'
 import { 
   LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon
 } from 'lucide-vue-next'
-import logoLight from '@/assets/images/logo-kustom.png'
-import logoDark from '@/assets/images/logo-kustom2.png'
+import logoLight from '@/assets/images/logo-kustom.webp'
+import logoDark from '@/assets/images/logo-kustom2.webp'
 import { getStorage, setStorage } from '@/utils/storage'
 
 const route = useRoute()
