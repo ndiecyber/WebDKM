@@ -1,17 +1,53 @@
 import { defineStore } from 'pinia'
 import { getStorage, setStorage, removeStorage } from '@/utils/storage'
-import heroImg from '@/assets/images/hero-mosque.png'
-import interiorImg from '@/assets/images/mosque-interior.png'
-import communityImg from '@/assets/images/community-prayer.png'
-import quranImg from '@/assets/images/quran-study.png'
-import exteriorImg from '@/assets/images/mosque-exterior.png'
-import grandInteriorImg from '@/assets/images/mosque_grand_interior.png'
-import stunningExteriorImg from '@/assets/images/mosque_stunning_exterior.png'
-import kajianImg from '@/assets/images/kajian_masjid.png'
-import sholatImg from '@/assets/images/sholat_jumat.png'
-import sosialImg from '@/assets/images/kegiatan_sosial.png'
-import malamImg from '@/assets/images/arsitektur_malam.png'
-import kaligrafiImg from '@/assets/images/kaligrafi_masjid.png'
+import heroImg from '@/assets/images/hero-mosque.webp'
+import interiorImg from '@/assets/images/mosque-interior.webp'
+import communityImg from '@/assets/images/community-prayer.webp'
+import quranImg from '@/assets/images/quran-study.webp'
+import exteriorImg from '@/assets/images/mosque-exterior.webp'
+import grandInteriorImg from '@/assets/images/mosque_grand_interior.webp'
+import stunningExteriorImg from '@/assets/images/mosque_stunning_exterior.webp'
+import kajianImg from '@/assets/images/kajian_masjid.webp'
+import sholatImg from '@/assets/images/sholat_jumat.webp'
+import sosialImg from '@/assets/images/kegiatan_sosial.webp'
+import malamImg from '@/assets/images/arsitektur_malam.webp'
+import kaligrafiImg from '@/assets/images/kaligrafi_masjid.webp'
+import dkmNasai from '@/assets/images/dkm-nasai.webp'
+import dkmRandi from '@/assets/images/dkm-randi.webp'
+import dkmRofik from '@/assets/images/M Ainur Rofiq.webp'
+import dkmIrvan from '@/assets/images/Ivan Ruchiat.webp'
+import dkmDani from '@/assets/images/Dani Ramdhani.webp'
+import bpkAli from '@/assets/images/Ali M Abduh.webp'
+import bpkGojali from '@/assets/images/Gojali Abdul S.webp'
+import bpkRedi from '@/assets/images/H Redi Sasriandi.webp'
+import bpkNanang from '@/assets/images/Nanang Barkah.webp'
+import bpkSukardi from '@/assets/images/Sukardi.webp'
+import usthAi from '@/assets/images/Usth. Ai Jamaliah.webp'
+import usthNeneng from '@/assets/images/Usth. Neneng Aam.webp'
+import usthRani from '@/assets/images/Usth. Rani Rahmayati.webp'
+import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.webp'
+import penasihatAde from '@/assets/images/Ust. H Ade Karom.webp'
+import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.webp'
+import penasihatUsman from '@/assets/images/H Usman penasihat.webp'
+import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.webp'
+import usthDede from '@/assets/images/Usth. Dede Asiah.webp'
+import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.webp'
+import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.webp'
+import usthRayanthi from '@/assets/images/Usth.Rayanthi.webp'
+import tampakMasjidImg from '@/assets/images/tampak-masjid.jpeg'
+import gerbangMasukPerumImg from '@/assets/images/gerbang-masuk-perum.jpeg'
+import pengajianAkbarImg from '@/assets/images/pengajian-akbar.jpeg'
+import pesantrenRamadanImg from '@/assets/images/pesantren-ramadan.jpeg'
+import samenHaflahImg from '@/assets/images/samen-haflah.jpeg'
+import ujianMadrasahImg from '@/assets/images/ujian-madrasah.jpeg'
+import beritaQurbanImg from '@/assets/images/berita-qurban.jpeg'
+import guruTpqImg from '@/assets/images/guru-tpq.jpeg'
+import seminarParentingImg from '@/assets/images/seminar-parenting.jpeg'
+import manasikHajiImg from '@/assets/images/manasik-haji.jpeg'
+import dtaImg from '@/assets/images/dta.jpeg'
+import pelepasanKenaikanKelasImg from '@/assets/images/pelepasan-dan-kenaikan-kelas.jpeg'
+import ujianAnakAnakTpqImg from '@/assets/images/ujian-anak-anak-tpq.jpeg'
+import seminarParenting2Img from '@/assets/images/seminar-parenting-2.jpeg'
 
 const parseSafe = (key) => {
   try {
@@ -25,13 +61,82 @@ const parseSafe = (key) => {
 export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: getStorage('admin_auth') === 'true',
-    kegiatan: parseSafe('admin_kegiatan_v3') || [
-      { id: 1, title: 'Kajian Akbar Bulanan', category: 'Kajian', description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah dan muamalah kontemporer.', image: communityImg, day: '15', month: 'Jun', time: '09:00 - 12:00', location: 'Aula Utama', badge: 'Segera' },
-      { id: 2, title: 'Wisuda Santri TPA/TPQ', category: 'Pendidikan', description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz dan tilawah.', image: quranImg, day: '22', month: 'Jun', time: '08:00 - 11:00', location: 'Masjid Utama', badge: null },
-      { id: 3, title: 'Bakti Sosial Ramadhan', category: 'Sosial', description: 'Kegiatan bakti sosial pembagian sembako dan santunan untuk dhuafa dan yatim piatu.', image: exteriorImg, day: '01', month: 'Jul', time: '07:00 - 10:00', location: 'Halaman Masjid', badge: null },
-      { id: 4, title: 'Kajian Muslimah', category: 'Kajian', description: 'Kajian khusus muslimah membahas peranan wanita dalam membangun keluarga Islami.', image: communityImg, day: '10', month: 'Jul', time: '13:00 - 15:00', location: 'Aula Lt. 2', badge: null },
-      { id: 5, title: 'Pelatihan Pengurusan Jenazah', category: 'Pendidikan', description: 'Pelatihan tata cara memandikan, mengkafani, dan menyalatkan jenazah sesuai sunnah.', image: quranImg, day: '18', month: 'Jul', time: '08:30 - 11:30', location: 'Serambi Masjid', badge: null },
-      { id: 6, title: 'Mabit & Qiyamullail', category: 'Ibadah', description: 'Malam bina iman dan taqwa, diisi dengan kajian, muhasabah, dan shalat malam berjamaah.', image: exteriorImg, day: '25', month: 'Jul', time: '20:00 - 04:30', location: 'Masjid Utama', badge: 'Terbatas' },
+    currentUser: parseSafe('admin_current_user') || { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin' },
+    roles: parseSafe('admin_roles') || [
+      { id: 1, key: 'superadmin', name: 'Super Admin', hierarchy: 1, modules: ['web', 'keuangan', 'qurban', 'sistem'] },
+      { id: 2, key: 'bendahara', name: 'Bendahara', hierarchy: 2, modules: ['keuangan'] },
+      { id: 3, key: 'sekretaris', name: 'Sekretaris', hierarchy: 3, modules: ['web'] }
+    ],
+    users: parseSafe('admin_users') || [
+      { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin', password: 'admin123' },
+      { id: 2, username: 'bendahara', name: 'Bendahara', role: 'bendahara', password: 'password123' },
+      { id: 3, username: 'sekretaris', name: 'Sekretaris', role: 'sekretaris', password: 'password123' }
+    ],
+    auditLogs: parseSafe('admin_audit_logs') || [],
+    committee: parseSafe('admin_committee_v3') || {
+      dewanPenasihat: [
+        { id: 1, name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat', image: penasihatIwa, isLeader: false },
+        { id: 2, name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat', image: penasihatAde, isLeader: false },
+        { id: 3, name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat', image: penasihatSudiana, isLeader: false },
+        { id: 4, name: 'Bpk. H. Usman', role: 'Dewan Penasihat', image: penasihatUsman, isLeader: false },
+        { id: 5, name: 'Bpk. Ayi Sunarwan', role: 'Ketua RW 07', image: penasihatAyi, isLeader: true }
+      ],
+      pengurusHarian: [
+        { id: 1, name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true, image: dkmNasai },
+        { id: 2, name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris', isLeader: false, image: dkmRofik },
+        { id: 3, name: 'Ust. Randi Rizal', role: 'Bendahara', isLeader: false, image: dkmRandi }
+      ],
+      divisi: [
+        {
+          id: 'dakwah',
+          name: 'Seksi Pendidikan & Dakwah',
+          members: [
+            { id: 1, name: 'Ust. H. Irvan Ruchiat', role: 'Koordinator', isLeader: true, image: dkmIrvan },
+            { id: 2, name: 'Ust. H. Dani Ramdhani', role: 'Anggota', isLeader: false, image: dkmDani },
+            { id: 3, name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota', isLeader: false, image: usthNeneng },
+            { id: 4, name: 'Usth. Ai Jamaliah', role: 'Anggota', isLeader: false, image: usthAi },
+            { id: 5, name: 'Usth. Rini Dewi Anggiani', role: 'Anggota', isLeader: false, image: usthRini },
+            { id: 6, name: 'Usth. Dede Asiah', role: 'Anggota', isLeader: false, image: usthDede }
+          ]
+        },
+        {
+          id: 'ekonomi',
+          name: 'Seksi Ekonomi & Wakaf',
+          members: [
+            { id: 1, name: 'Bpk. Ali M. Abduh', role: 'Koordinator', isLeader: true, image: bpkAli },
+            { id: 2, name: 'Bpk. Ujang Kurnia', role: 'Anggota', isLeader: false, image: null },
+            { id: 3, name: 'Bpk. Erwin Darmawan', role: 'Anggota', isLeader: false, image: null },
+            { id: 4, name: 'Bpk. Ade Ramdhani', role: 'Anggota', isLeader: false, image: null }
+          ]
+        },
+        {
+          id: 'logistik',
+          name: 'Seksi Peralatan & Logistik',
+          members: [
+            { id: 1, name: 'Bpk. H. Redi Sasriandi', role: 'Koordinator', isLeader: true, image: bpkRedi },
+            { id: 2, name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota', isLeader: false, image: bpkAditya },
+            { id: 3, name: 'Bpk. Sukardi', role: 'Anggota', isLeader: false, image: bpkSukardi },
+            { id: 4, name: 'Bpk. Nanang Barkah', role: 'Anggota', isLeader: false, image: bpkNanang }
+          ]
+        },
+        {
+          id: 'remaja',
+          name: 'Remaja Masjid',
+          members: [
+            { id: 1, name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Koordinator', isLeader: true, image: bpkGojali },
+            { id: 2, name: 'Usth. Rani Rahmayati', role: 'Anggota', isLeader: false, image: usthRani },
+            { id: 3, name: 'Usth. Rayanthi', role: 'Anggota', isLeader: false, image: usthRayanthi }
+          ]
+        }
+      ]
+    },
+    kegiatan: parseSafe('admin_kegiatan_v12') || [
+      { id: 1, title: 'Kajian Akbar Bulanan', type: 'berita', category: 'Kajian', badge: 'Segera', image: pengajianAkbarImg, day: '15', month: 'Jun', time: '09:00 - 12:00', location: 'Aula Utama', author: 'Tim DKM Kassiti', hits: 312, description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah and muamalah kontemporer.', content: '<p>Masjid Jami Kassiti kembali menggelar <strong>Kajian Akbar Bulanan</strong> yang dihadiri lebih dari 300 jamaah dari berbagai penjuru wilayah Arjasari dan sekitarnya. <img src="' + pengajianAkbarImg + '" style="float: right; margin-left: 1.5rem; margin-bottom: 0.5rem; width: 45%; max-width: 320px; min-width: 150px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);" alt="Suasana Kajian" /> Kajian berlangsung di Aula Utama Masjid dengan penceramah tamu Ustadz H. Ahmad Faruqi, Lc., M.A., alumni Al-Azhar Kairo yang aktif membina majelis taklim di Jawa Barat.</p><p>Tema kajian kali ini adalah <strong>"Fiqih Muamalah Kontemporer: Transaksi Digital dan Hukum Islam"</strong>. Materi sangat relevan mengingat maraknya transaksi berbasis digital, mulai dari dompet elektronik, investasi online, hingga platform pinjaman berbasis aplikasi yang kini menjamur di masyarakat modern.</p><p>Beberapa poin penting yang dibahas antara lain:</p><ul><li>Hukum bertransaksi menggunakan dompet digital dan mata uang kripto dalam perspektif fiqih.</li><li>Syarat dan rukun akad jual beli online agar sesuai syariat Islam.</li><li>Perbedaan antara riba dan bunga bank dalam perspektif ulama kontemporer.</li><li>Alternatif keuangan syariah yang halal dan penuh keberkahan untuk kehidupan sehari-hari.</li></ul><p>Kajian berlangsung sangat interaktif dengan sesi tanya jawab yang antusias. Acara ditutup dengan doa bersama dan ramah tamah. DKM berkomitmen menyelenggarakan kajian berkualitas setiap bulan demi meningkatkan wawasan keagamaan masyarakat.</p><blockquote>"Dengan memahami fiqih muamalah, kita dapat meraih rezeki yang halal sekaligus keberkahan dalam setiap transaksi." &mdash; Ustadz H. Ahmad Faruqi, Lc., M.A.</blockquote>' },
+      { id: 2, title: 'Wisuda Santri TPA/TPQ', type: 'berita', category: 'Pendidikan', badge: null, image: pelepasanKenaikanKelasImg, day: '22', month: 'Jun', time: '08:00 - 11:00', location: 'Masjid Utama', author: 'Pengurus TPQ', hits: 195, description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz and tilawah.', content: '<p>Sebuah momen membanggakan kembali hadir di Masjid Jami Kassiti. <img src="' + pelepasanKenaikanKelasImg + '" style="float: right; margin-left: 1.5rem; margin-bottom: 0.5rem; width: 45%; max-width: 320px; min-width: 150px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);" alt="Wisuda Santri" /> <strong>Wisuda Santri TPA/TPQ Tahun Ajaran 2025/2026</strong> resmi digelar dengan penuh kekhidmatan dan kebahagiaan. Sebanyak 48 santri yang telah menyelesaikan program tahfidz dan tilawah Al-Quran dinyatakan lulus and berhak menerima ijazah wisuda yang membanggakan.</p><p>Acara wisuda dihadiri oleh para orang tua santri, wali murid, pengurus DKM, serta sejumlah tokoh masyarakat setempat. Suasana penuh haru mewarnai jalannya acara ketika para santri melantunkan hafalan Al-Quran di hadapan seluruh tamu undangan yang hadir memenuhi ruang masjid.</p><p>Rangkaian acara wisuda meliputi:</p><ul><li>Tilawah Al-Quran pembuka oleh santri terbaik angkatan ini.</li><li>Sambutan Kepala TPA/TPQ and perwakilan DKM Kassiti.</li><li>Prosesi penyerahan ijazah dan penghargaan santri berprestasi.</li><li>Penampilan seni islami: nasyid and hafalan surat pendek.</li><li>Doa bersama dan tasyakuran sederhana untuk semua peserta yang hadir.</li></ul><p>Kepala TPA/TPQ, Usth. Ai Jamaliah, menyampaikan rasa syukurnya atas pencapaian para santri dan mengajak seluruh orang tua untuk terus mendukung putra-putri mereka dalam perjalanan menuntut ilmu Al-Quran meski telah menyelesaikan program dasar ini.</p><blockquote>"Wisuda ini bukan akhir dari belajar, melainkan awal dari perjalanan panjang menghafal dan mengamalkan Al-Quran dalam kehidupan sehari-hari." &mdash; Usth. Ai Jamaliah</blockquote>' },
+      { id: 3, title: 'Bakti Sosial Ramadhan', type: 'berita', category: 'Sosial', badge: null, image: exteriorImg, day: '01', month: 'Jul', time: '07:00 - 10:00', location: 'Halaman Masjid', author: 'Divisi Sosial DKM', hits: 278, description: 'Kegiatan bakti sosial pembagian sembako dan santunan untuk dhuafa dan yatim piatu.', content: '<p>Dalam rangka memperkuat kepedulian sosial dan ukhuwah islamiyah, <img src="' + exteriorImg + '" style="float: right; margin-left: 1.5rem; margin-bottom: 0.5rem; width: 45%; max-width: 320px; min-width: 150px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);" alt="Bakti Sosial" /> <strong>DKM Masjid Jami Kassiti</strong> kembali menggelar <strong>Bakti Sosial Ramadhan</strong>. Kegiatan tahunan ini berhasil menyalurkan ratusan paket sembako dan santunan tunai kepada para dhuafa, fakir miskin, dan anak yatim piatu di sekitar lingkungan Perumahan Arjamukti dan desa-desa tetangga.</p><p>Kegiatan berlangsung sejak pukul 07.00 WIB di Halaman Masjid Jami Kassiti dan dihadiri oleh ratusan penerima manfaat yang antri dengan tertib. Setiap paket sembako berisikan beras 5 kg, minyak goreng 2 liter, gula pasir 1 kg, terigu, mi instan, dan kebutuhan pokok lainnya yang disesuaikan dengan kebutuhan masing-masing penerima manfaat.</p><p>Selain penyaluran sembako, DKM juga menyerahkan santunan tunai kepada 30 anak yatim piatu yang hadir bersama walinya. Dana yang terkumpul merupakan hasil donasi jamaah melalui program ZIS (Zakat, Infaq, dan Sedekah) Masjid Jami Kassiti yang dikelola secara transparan dan akuntabel dengan laporan yang dipublikasikan rutin.</p><p>Ketua DKM menegaskan bahwa kegiatan ini merupakan wujud nyata komitmen masjid sebagai pusat dakwah dan sosial kemasyarakatan. Program bakti sosial akan terus dilaksanakan rutin, tidak hanya di bulan Ramadhan, tetapi juga di momen-momen penting lainnya sepanjang tahun.</p><blockquote>"Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya. Kegiatan sosial ini adalah cara nyata kita mengamalkan sabda Rasulullah SAW." &mdash; Ketua DKM Masjid Jami Kassiti</blockquote>' },
+      { id: 4, title: 'Kajian Muslimah', type: 'artikel', category: 'Kajian', badge: null, image: seminarParentingImg, day: '10', month: 'Jul', time: '13:00 - 15:00', location: 'Aula Lt. 2', author: 'Seksi Dakwah DKM', hits: 156, description: 'Kajian khusus muslimah membahas peranan wanita dalam membangun keluarga Islami.', content: '<p><strong>Kajian Muslimah</strong> Masjid Jami Kassiti hadir kembali dengan tema yang sangat inspiratif: <strong>"Muslimah Cerdas: Membangun Keluarga Sakinah di Era Digital"</strong>. Kajian khusus untuk para ibu, remaja putri, dan muslimah umum ini berlangsung di Aula Lantai 2 Masjid Jami Kassiti dengan penuh semangat dan keantusiasan yang luar biasa dari para peserta.</p><div style="display: flex; justify-content: center; margin: 1.5rem 0;"><img src="' + seminarParentingImg + '" style="width: 100%; max-width: 320px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);" alt="Kajian Muslimah" /></div><p>Pemateri kajian kali ini adalah Usth. Hj. Siti Maemunah, M.Pd.I., seorang pendidik dan konselor keluarga berpengalaman yang aktif membina kajian muslimah di beberapa masjid di Kabupaten Tasikmalaya. Beliau memaparkan bagaimana muslimah modern dapat memanfaatkan teknologi secara bijak tanpa mengorbankan nilai-nilai keislaman yang mulia.</p><p>Materi utama kajian mencakup topik-topik penting:</p><ul><li>Peran muslimah sebagai madrasah pertama dan utama bagi anak-anaknya sejak dini.</li><li>Tips praktis mendampingi anak di era gadget dan media sosial yang penuh tantangan.</li><li>Menjaga keharmonisan rumah tangga dengan pola komunikasi islami yang sehat and bijak.</li><li>Pentingnya terus menuntut ilmu agama bagi para muslimah di segala usia dan latar belakang.</li></ul><p>Kajian ini diikuti oleh lebih dari 80 muslimah yang hadir dengan penuh semangat. Sesi tanya jawab berlangsung sangat hidup dengan berbagai pertanyaan seputar permasalahan rumah tangga dan pengasuhan anak yang langsung dijawab dengan perspektif syariat yang bijaksana dan menenangkan hati.</p>' },
+      { id: 5, title: 'Pelatihan Pengurusan Jenazah', type: 'artikel', category: 'Pendidikan', badge: null, image: quranImg, day: '18', month: 'Jul', time: '08:30 - 11:30', location: 'Serambi Masjid', author: 'Divisi Pendidikan DKM', hits: 143, description: 'Pelatihan tata cara memandikan, mengkafani, dan menyalatkan jenazah sesuai sunnah.', content: '<p>DKM Masjid Jami Kassiti menyelenggarakan <strong>Pelatihan Tata Cara Pengurusan Jenazah</strong> yang terbuka untuk seluruh jamaah dan masyarakat umum. Pelatihan ini diadakan dalam rangka meningkatkan pemahaman dan kemampuan praktis umat Islam dalam melaksanakan fardhu kifayah pengurusan jenazah sesuai tuntunan syariat Islam yang benar sesuai ajaran Rasulullah SAW.</p><div style="display: flex; justify-content: center; margin: 1.5rem 0;"><img src="' + quranImg + '" style="width: 100%; max-width: 320px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);" alt="Pelatihan Jenazah" /></div><p>Pelatihan dipandu oleh Ustadz Miftahul Huda, S.Ag., seorang praktisi dan pengajar fiqih jenazah yang berpengalaman lebih dari 15 tahun. Materi disampaikan secara sistematis mulai dari teori dasar hingga praktik langsung menggunakan boneka peraga yang telah disiapkan oleh panitia penyelenggara dengan baik.</p><p>Kurikulum pelatihan yang komprehensif meliputi:</p><ul><li>Hukum dan keutamaan mengurus jenazah saudara muslim dalam ajaran Islam.</li><li>Tata cara memandikan jenazah laki-laki dan perempuan sesuai sunnah yang shahih.</li><li>Cara mengkafani jenazah dengan benar sesuai jenis kelamin dan kondisi jenazah.</li><li>Tata cara menshalatkan jenazah: niat, urutan takbir, bacaan doa, dan gerakannya.</li><li>Adab, sunnah, dan hal-hal yang dilarang dalam proses pemakaman jenazah.</li></ul><p>Pelatihan ini sangat diminati jamaah, terbukti dengan kuota 40 peserta yang langsung terpenuhi dalam waktu singkat sejak pendaftaran dibuka. Para peserta mendapatkan sertifikat kehadiran dan modul panduan lengkap sebagai referensi di rumah. DKM berencana mengadakan pelatihan serupa secara rutin setidaknya dua kali dalam setahun ke depannya.</p>' },
+      { id: 6, title: 'Mabit & Qiyamullail', type: 'berita', category: 'Ibadah', badge: 'Terbatas', image: exteriorImg, day: '25', month: 'Jul', time: '20:00 - 04:30', location: 'Masjid Utama', author: 'Panitia Mabit DKM', hits: 89, description: 'Malam bina iman dan taqwa, diisi dengan kajian, muhasabah, dan shalat malam berjamaah.', content: '<p>Salah satu program unggulan pembinaan iman dan taqwa di Masjid Jami Kassiti adalah <strong>Mabit (Malam Bina Iman dan Taqwa) sekaligus Qiyamullail berjamaah</strong>. <img src="' + exteriorImg + '" style="float: right; margin-left: 1.5rem; margin-bottom: 0.5rem; width: 45%; max-width: 320px; min-width: 150px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);" alt="Mabit & Qiyamullail" /> Program ini dirancang khusus untuk mempererat hubungan spiritual jamaah dengan Allah SWT, sekaligus mempererat ukhuwah islamiyah antar sesama jamaah yang hadir bersama.</p><p>Kegiatan dimulai setelah shalat Isya berjamaah dengan agenda kajian malam bertema <strong>"Mendekatkan Diri kepada Allah di Tengah Kesibukan Dunia"</strong>. Setelah kajian, jamaah menjalani muhasabah (introspeksi diri) yang dipandu oleh Ustadz Rudi Hartono, S.Pd.I., dilanjutkan dengan istirahat singkat sebelum bangun untuk shalat malam berjamaah menjelang Subuh.</p><p>Rangkaian kegiatan Mabit secara lengkap dan terstruktur:</p><ul><li>Shalat Isya berjamaah and pembukaan kajian malam oleh panitia.</li><li>Muhasabah dan refleksi diri bersama yang dipandu oleh ustadz.</li><li>Istirahat bersama di dalam masjid hingga sepertiga malam terakhir.</li><li>Bangun pukul 02.30 WIB untuk shalat Tahajud berjamaah yang khusyuk.</li><li>Shalat Witir dan doa bersama hingga menjelang waktu Subuh tiba.</li><li>Shalat Subuh berjamaah dilanjutkan kultum singkat yang menginspirasi.</li><li>Sarapan bersama dan ramah tamah antar sesama peserta Mabit.</li></ul><p>Program Mabit ini terbuka untuk semua kalangan dengan kapasitas terbatas untuk menjaga kekhusyukan suasana ibadah. Jamaah yang ingin berpartisipasi dipersilakan mendaftar lebih awal melalui panitia DKM Masjid Jami Kassiti sebelum kuota terpenuhi.</p><blockquote>"Barangsiapa yang shalat malam karena iman dan mengharap pahala dari Allah, maka diampuni dosa-dosanya yang telah lalu." &mdash; HR. Bukhari &amp; Muslim</blockquote>' },
     ],
     finance: parseSafe('admin_finance') || {
       saldoAwal: '84,74',
@@ -76,6 +181,13 @@ export const useAdminStore = defineStore('admin', {
       slogan: 'Membangun *Iman*,\nIlmu, dan *Ukhuwah*',
       description: 'Selamat datang di Masjid Jami Kassiti Perum Arjamukti Kencana Raya Arjasari, Leuwisari, Kab. Tasikmalaya. Bergabunglah bersama kami dalam ibadah, pembelajaran, dakwah, dan pelayanan umat.',
       history: 'Masjid Jami Kassiti yang berlokasi di Perum Arjamukti Kencana Raya, Arjasari, Leuwisari, Kab. Tasikmalaya, adalah pusat ibadah dan kegiatan keislaman yang melayani umat dengan penuh dedikasi. Kami berkomitmen untuk menjadi rumah Allah yang menyejukkan, tempat berkumpulnya jamaah dalam menuntut ilmu, beribadah, dan mempererat ukhuwah islamiah.\n\nDengan berbagai program kegiatan rutin seperti kajian, TPA/TPQ, dan kegiatan sosial, kami berusaha membangun generasi muslim yang beriman, berilmu, dan bermanfaat bagi masyarakat sekitar.',
+      floatingCardTitle: 'Masjid Kassiti',
+      floatingCardDesc: 'Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti',
+      tahunBerdiri: 2015,
+      jamaahAktif: 200,
+      heroImages: [heroImg, exteriorImg, communityImg, interiorImg],
+      historyImage: interiorImg,
+      committeeDescription: 'Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.',
       instagram: 'https://instagram.com/masjidjamikassiti',
       facebook: 'https://facebook.com/masjidjamikassiti',
       youtube: 'https://youtube.com/@masjidjamikassiti',
@@ -191,7 +303,8 @@ export const useAdminStore = defineStore('admin', {
       this.saveKegiatan()
     },
     saveKegiatan() {
-      setStorage('admin_kegiatan_v3', JSON.stringify(this.kegiatan))
+      setStorage('admin_kegiatan_v12', JSON.stringify(this.kegiatan))
+      this.logActivity('Ubah Kegiatan', 'Memperbarui data kegiatan/acara')
     },
     updateFinance(data) {
       this.finance = { ...this.finance, ...data }
@@ -215,7 +328,8 @@ export const useAdminStore = defineStore('admin', {
       this.saveGallery()
     },
     saveGallery() {
-      setStorage('admin_gallery', JSON.stringify(this.gallery))
+      setStorage('admin_gallery_v5', JSON.stringify(this.gallery))
+      this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto')
     },
     addLayanan(data) {
       const newId = this.layanan.length > 0 ? Math.max(...this.layanan.map((l) => l.id)) + 1 : 1
@@ -234,7 +348,8 @@ export const useAdminStore = defineStore('admin', {
       this.saveLayanan()
     },
     saveLayanan() {
-      setStorage('admin_layanan_v6', JSON.stringify(this.layanan))
+      setStorage('admin_layanan_v11', JSON.stringify(this.layanan))
+      this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid')
     },
     saveGeneralSettings() {
       setStorage('admin_general_settings', JSON.stringify(this.generalSettings))
