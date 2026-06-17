@@ -161,6 +161,48 @@ import ReportKegiatanTemplate from '@/components/ui/ReportKegiatanTemplate.vue'
 // --- MOCK DATA (Copy dari FinanceSection) ---
 const mockReports = [
   {
+    id: 'kas-jan-2026',
+    title: 'KAS DKMJ KASSITI',
+    year: '2026',
+    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
+    date: 'Periode Bulan Januari 2026',
+    pemasukan: [
+      { no: 1, tanggal: '', uraian: 'Saldo Bulan Desember 2025', jumlah: 138200 },
+      { no: 2, tanggal: '', uraian: 'Kencleng Bln. Januari 2026', jumlah: 2233900 },
+      { no: 3, tanggal: '', uraian: 'Saldo Kegiatan PHBI Isra\' Mi\'raj 1447H', jumlah: 2437000 },
+      { no: 4, tanggal: '', uraian: 'Hamba Allah 9/01/2026', jumlah: 50000 },
+      { no: 5, tanggal: '', uraian: 'Hamba Allah 13/01/2026', jumlah: 50000 },
+      { no: 6, tanggal: '', uraian: 'Hamba Allah 31/01/2026', jumlah: 150000 }
+    ],
+    pengeluaran: [
+      { no: 1, tanggal: '', uraian: '2 Marbot Masjid 1/1/26', jumlah: 600000 },
+      { no: 2, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 2/1/26', jumlah: 70000 },
+      { no: 3, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 9/1/26', jumlah: 70000 },
+      { no: 4, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 16/1/26', jumlah: 70000 },
+      { no: 5, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 23/1/26', jumlah: 70000 },
+      { no: 6, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 30/1/26', jumlah: 70000 },
+      { no: 7, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Umum Selasa 7/1/26', jumlah: 100000 },
+      { no: 8, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Umum Selasa 13/1/26', jumlah: 100000 },
+      { no: 9, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Umum Selasa 27/1/26', jumlah: 100000 },
+      { no: 10, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu 3/1/26', jumlah: 100000 },
+      { no: 11, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu 10/1/26', jumlah: 100000 },
+      { no: 12, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu 24/1/26', jumlah: 100000 },
+      { no: 13, tanggal: '', uraian: 'Mubalig Pengajian Bulanan Ibu-Ibu Sabtu 31/1/26', jumlah: 150000 },
+      { no: 14, tanggal: '', uraian: '5 Lt Bensin Mesin Potong Rumput 2/1/26', jumlah: 80000 },
+      { no: 15, tanggal: '', uraian: '2 Petugas Potong Rumput 5/1/26', jumlah: 150000 },
+      { no: 16, tanggal: '', uraian: 'Service Mixer & Speaker Masjid 7/1/26', jumlah: 100000 },
+      { no: 17, tanggal: '', uraian: '80 Nasi Box Pengajian Bulanan Ibu-Ibu 31/1/26', jumlah: 800000 }
+    ],
+    totalPemasukan: 5059100,
+    totalPengeluaran: 2830000,
+    sisaSaldo: 2229100,
+    terbilang: 'Dua Juta Dua Ratus Dua Puluh Sembilan Ribu Seratus Rupiah',
+    keterangan: '',
+    ketua: 'Irvan Ruchiat',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'KETUA DKMJ KASSITI'
+  },
+  {
     id: 'isra-miraj',
     title: 'PHBI Isra’ Mi’raj',
     year: '2026',

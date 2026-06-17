@@ -12,28 +12,6 @@ import sholatImg from '@/assets/images/sholat_jumat.png'
 import sosialImg from '@/assets/images/kegiatan_sosial.png'
 import malamImg from '@/assets/images/arsitektur_malam.png'
 import kaligrafiImg from '@/assets/images/kaligrafi_masjid.png'
-import dkmNasai from '@/assets/images/dkm-nasai.png'
-import dkmRandi from '@/assets/images/dkm-randi.png'
-import dkmRofik from '@/assets/images/M Ainur Rofiq.jpeg'
-import dkmIrvan from '@/assets/images/Ivan Ruchiat.jpeg'
-import dkmDani from '@/assets/images/Dani Ramdhani.jpeg'
-import bpkAli from '@/assets/images/Ali M Abduh.jpeg'
-import bpkGojali from '@/assets/images/Gojali Abdul S.jpeg'
-import bpkRedi from '@/assets/images/H Redi Sasriandi.jpeg'
-import bpkNanang from '@/assets/images/Nanang Barkah.jpeg'
-import bpkSukardi from '@/assets/images/Sukardi.jpeg'
-import usthAi from '@/assets/images/Usth. Ai Jamaliah.jpeg'
-import usthNeneng from '@/assets/images/Usth. Neneng Aam.jpeg'
-import usthRani from '@/assets/images/Usth. Rani Rahmayati.jpeg'
-import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.jpeg'
-import penasihatAde from '@/assets/images/Ust. H Ade Karom.jpeg'
-import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.jpeg'
-import penasihatUsman from '@/assets/images/H Usman penasihat.jpeg'
-import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.jpeg'
-import usthDede from '@/assets/images/Usth. Dede Asiah.jpeg'
-import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.jpeg'
-import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.jpeg'
-import usthRayanthi from '@/assets/images/Usth.Rayanthi.jpeg'
 
 const parseSafe = (key) => {
   try {
@@ -47,75 +25,6 @@ const parseSafe = (key) => {
 export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: getStorage('admin_auth') === 'true',
-    currentUser: parseSafe('admin_current_user') || { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin' },
-    roles: parseSafe('admin_roles') || [
-      { id: 1, key: 'superadmin', name: 'Super Admin', hierarchy: 1, modules: ['web', 'keuangan', 'qurban', 'sistem'] },
-      { id: 2, key: 'bendahara', name: 'Bendahara', hierarchy: 2, modules: ['keuangan'] },
-      { id: 3, key: 'sekretaris', name: 'Sekretaris', hierarchy: 3, modules: ['web'] }
-    ],
-    users: parseSafe('admin_users') || [
-      { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin', password: 'admin123' },
-      { id: 2, username: 'bendahara', name: 'Bendahara', role: 'bendahara', password: 'password123' },
-      { id: 3, username: 'sekretaris', name: 'Sekretaris', role: 'sekretaris', password: 'password123' }
-    ],
-    auditLogs: parseSafe('admin_audit_logs') || [],
-    committee: parseSafe('admin_committee_v3') || {
-      dewanPenasihat: [
-        { id: 1, name: 'Ust. H. Iwa Kurniawan', role: 'Dewan Penasihat', image: penasihatIwa, isLeader: false },
-        { id: 2, name: 'Ust. H. Ade Karom', role: 'Dewan Penasihat', image: penasihatAde, isLeader: false },
-        { id: 3, name: 'Bpk. Sudiana Maska', role: 'Dewan Penasihat', image: penasihatSudiana, isLeader: false },
-        { id: 4, name: 'Bpk. H. Usman', role: 'Dewan Penasihat', image: penasihatUsman, isLeader: false },
-        { id: 5, name: 'Bpk. Ayi Sunarwan', role: 'Ketua RW 07', image: penasihatAyi, isLeader: true }
-      ],
-      pengurusHarian: [
-        { id: 1, name: "Ust. H. Ahmad Nasa'i", role: 'Ketua DKMJ', isLeader: true, image: dkmNasai },
-        { id: 2, name: 'Ust. H. M. Ainur Rofik', role: 'Sekretaris', isLeader: false, image: dkmRofik },
-        { id: 3, name: 'Ust. Randi Rizal', role: 'Bendahara', isLeader: false, image: dkmRandi }
-      ],
-      divisi: [
-        {
-          id: 'dakwah',
-          name: 'Seksi Pendidikan & Dakwah',
-          members: [
-            { id: 1, name: 'Ust. H. Irvan Ruchiat', role: 'Koordinator', isLeader: true, image: dkmIrvan },
-            { id: 2, name: 'Ust. H. Dani Ramdhani', role: 'Anggota', isLeader: false, image: dkmDani },
-            { id: 3, name: 'Usth. Neneng Aam Siti Marhamah', role: 'Anggota', isLeader: false, image: usthNeneng },
-            { id: 4, name: 'Usth. Ai Jamaliah', role: 'Anggota', isLeader: false, image: usthAi },
-            { id: 5, name: 'Usth. Rini Dewi Anggiani', role: 'Anggota', isLeader: false, image: usthRini },
-            { id: 6, name: 'Usth. Dede Asiah', role: 'Anggota', isLeader: false, image: usthDede }
-          ]
-        },
-        {
-          id: 'ekonomi',
-          name: 'Seksi Ekonomi & Wakaf',
-          members: [
-            { id: 1, name: 'Bpk. Ali M. Abduh', role: 'Koordinator', isLeader: true, image: bpkAli },
-            { id: 2, name: 'Bpk. Ujang Kurnia', role: 'Anggota', isLeader: false, image: null },
-            { id: 3, name: 'Bpk. Erwin Darmawan', role: 'Anggota', isLeader: false, image: null },
-            { id: 4, name: 'Bpk. Ade Ramdhani', role: 'Anggota', isLeader: false, image: null }
-          ]
-        },
-        {
-          id: 'logistik',
-          name: 'Seksi Peralatan & Logistik',
-          members: [
-            { id: 1, name: 'Bpk. H. Redi Sasriandi', role: 'Koordinator', isLeader: true, image: bpkRedi },
-            { id: 2, name: 'Bpk. Aditya Astra Prayudha', role: 'Anggota', isLeader: false, image: bpkAditya },
-            { id: 3, name: 'Bpk. Sukardi', role: 'Anggota', isLeader: false, image: bpkSukardi },
-            { id: 4, name: 'Bpk. Nanang Barkah', role: 'Anggota', isLeader: false, image: bpkNanang }
-          ]
-        },
-        {
-          id: 'remaja',
-          name: 'Remaja Masjid',
-          members: [
-            { id: 1, name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Koordinator', isLeader: true, image: bpkGojali },
-            { id: 2, name: 'Usth. Rani Rahmayati', role: 'Anggota', isLeader: false, image: usthRani },
-            { id: 3, name: 'Usth. Rayanthi', role: 'Anggota', isLeader: false, image: usthRayanthi }
-          ]
-        }
-      ]
-    },
     kegiatan: parseSafe('admin_kegiatan_v3') || [
       { id: 1, title: 'Kajian Akbar Bulanan', category: 'Kajian', description: 'Kajian ilmu agama bersama ustadz ternama membahas fiqih ibadah dan muamalah kontemporer.', image: communityImg, day: '15', month: 'Jun', time: '09:00 - 12:00', location: 'Aula Utama', badge: 'Segera' },
       { id: 2, title: 'Wisuda Santri TPA/TPQ', category: 'Pendidikan', description: 'Perayaan kelulusan para santri TPA/TPQ yang telah menyelesaikan program tahfidz dan tilawah.', image: quranImg, day: '22', month: 'Jun', time: '08:00 - 11:00', location: 'Masjid Utama', badge: null },
@@ -138,40 +47,35 @@ export const useAdminStore = defineStore('admin', {
       periodeSingkat: '29 Mei - 2 Jun',
       selisihBersih: '7.000.000'
     },
-    gallery: parseSafe('admin_gallery') || [
-      { id: 1, image: heroImg, caption: 'Kawasan Masjid Kassiti', subcaption: 'Pemandangan udara masjid dan perumahan yang asri dan hijau.', tag: 'Udara', iconName: 'MapPin', date: 'Baru saja' },
-      { id: 2, image: stunningExteriorImg, caption: 'Pesona Senja', subcaption: 'Kemegahan arsitektur masjid di kala senja dengan tata cahaya yang indah.', tag: 'Eksklusif', iconName: 'Camera', date: 'Baru saja' },
-      { id: 3, image: interiorImg, caption: 'Keheningan Interior', subcaption: 'Desain ruang sholat utama yang tenang, sejuk, dan khusyuk.', tag: 'Fasilitas', iconName: 'Building', date: 'Baru saja' },
-      { id: 4, image: grandInteriorImg, caption: 'Kemegahan Interior', subcaption: 'Detail ornamen geometris dan lampu gantung kristal yang memukau jamaah.', tag: 'Desain', iconName: 'Building', date: 'Baru saja' },
-      { id: 5, image: sholatImg, caption: 'Sholat Jumat Bersama', subcaption: 'Kekhusyukan jamaah saat melaksanakan ibadah sholat Jumat.', tag: 'Ibadah', iconName: 'Users', date: 'Baru saja' },
-      { id: 6, image: communityImg, caption: 'Ukhuwah Jamaah', subcaption: 'Momen kebersamaan dan kekeluargaan jamaah Masjid Jami Kassiti.', tag: 'Sosial', iconName: 'Users', date: 'Baru saja' },
-      { id: 7, image: kajianImg, caption: 'Kajian Rutin', subcaption: 'Majelis ilmu yang diisi oleh asatidzah berkompeten.', tag: 'Kajian', iconName: 'BookOpen', date: 'Baru saja' },
-      { id: 8, image: quranImg, caption: 'Pendidikan Al-Quran', subcaption: 'TPA/TPQ untuk mencetak generasi Islami yang cinta Al-Quran.', tag: 'Edukasi', iconName: 'BookOpen', date: 'Baru saja' },
-      { id: 9, image: sosialImg, caption: 'Bakti Sosial', subcaption: 'Kegiatan pembagian santunan untuk warga sekitar.', tag: 'Sosial', iconName: 'Users', date: 'Baru saja' },
-      { id: 10, image: exteriorImg, caption: 'Arsitektur Menawan', subcaption: 'Keindahan kubah dan eksterior yang menjadi ikon perumahan.', tag: 'Arsitektur', iconName: 'Camera', date: 'Baru saja' },
-      { id: 11, image: malamImg, caption: 'Cahaya Malam', subcaption: 'Suasana masjid yang syahdu dan bercahaya di malam hari.', tag: 'Arsitektur', iconName: 'Camera', date: 'Baru saja' },
-      { id: 12, image: kaligrafiImg, caption: 'Detail Kaligrafi', subcaption: 'Seni kaligrafi indah yang menghiasi dinding masjid.', tag: 'Desain', iconName: 'Building', date: 'Baru saja' },
+    gallery: parseSafe('admin_gallery_v5') || [
+      { id: 1, image: tampakMasjidImg, caption: 'Tampak Masjid', subcaption: 'Keindahan eksterior Masjid Jami Kassiti.', tag: 'Arsitektur', iconName: 'Building', date: 'Baru saja' },
+      { id: 2, image: gerbangMasukPerumImg, caption: 'Gerbang Masuk', subcaption: 'Akses masuk menuju kawasan Masjid Jami Kassiti.', tag: 'Kawasan', iconName: 'MapPin', date: 'Baru saja' },
+      { id: 3, image: pengajianAkbarImg, caption: 'Pengajian Akbar', subcaption: 'Momen berharga saat pelaksanaan pengajian akbar.', tag: 'Kajian', iconName: 'Users', date: 'Baru saja' },
+      { id: 4, image: pesantrenRamadanImg, caption: 'Pesantren Ramadan', subcaption: 'Kegiatan mendalam mempelajari agama selama bulan suci.', tag: 'Edukasi', iconName: 'BookOpen', date: 'Baru saja' },
+      { id: 5, image: samenHaflahImg, caption: 'Samen / Haflah', subcaption: 'Perayaan dan kelulusan santri dengan penuh kegembiraan.', tag: 'Pendidikan', iconName: 'BookOpen', date: 'Baru saja' },
+      { id: 6, image: ujianMadrasahImg, caption: 'Ujian Madrasah', subcaption: 'Suasana ujian para santri madrasah dengan tertib.', tag: 'Pendidikan', iconName: 'BookOpen', date: 'Baru saja' },
+      { id: 7, image: beritaQurbanImg, caption: 'Kegiatan Qurban', subcaption: 'Pelaksanaan penyembelihan dan distribusi hewan qurban.', tag: 'Sosial', iconName: 'Users', date: 'Baru saja' },
+      { id: 8, image: guruTpqImg, caption: 'Guru TPQ', subcaption: 'Para pengajar TPQ Masjid Jami Kassiti.', tag: 'Edukasi', iconName: 'Users', date: 'Baru saja' },
+      { id: 9, image: seminarParentingImg, caption: 'Seminar Parenting', subcaption: 'Kegiatan seminar untuk mendidik anak sesuai sunnah.', tag: 'Kajian', iconName: 'BookOpen', date: 'Baru saja' },
+      { id: 10, image: manasikHajiImg, caption: 'Manasik Haji', subcaption: 'Pelatihan manasik haji untuk anak-anak dan warga.', tag: 'Edukasi', iconName: 'MapPin', date: 'Baru saja' },
+      { id: 11, image: dtaImg, caption: 'Kegiatan DTA', subcaption: 'Pembelajaran agama di Madrasah Diniyah Takmiliyah Awaliyah.', tag: 'Pendidikan', iconName: 'BookOpen', date: 'Baru saja' },
+      { id: 12, image: pelepasanKenaikanKelasImg, caption: 'Pelepasan Santri', subcaption: 'Momen haru pelepasan dan kenaikan kelas para santri.', tag: 'Edukasi', iconName: 'Users', date: 'Baru saja' },
+      { id: 13, image: ujianAnakAnakTpqImg, caption: 'Ujian Santri TPQ', subcaption: 'Suasana ujian hafalan dan bacaan santri TPQ Masjid Jami Kassiti.', tag: 'Pendidikan', iconName: 'BookOpen', date: 'Baru saja' },
+      { id: 14, image: seminarParenting2Img, caption: 'Kajian Parenting', subcaption: 'Materi pembekalan untuk mewujudkan keluarga yang harmonis dan sakinah.', tag: 'Kajian', iconName: 'Users', date: 'Baru saja' },
     ],
-    layanan: parseSafe('admin_layanan_v6') || [
-      { id: 1, title: 'Sholat Berjamaah', category: 'Ibadah', bgImage: communityImg, description: 'Sholat lima waktu dan sholat Jumat berjamaah dengan imam yang berpengalaman.', iconName: 'Sholat', badge: 'Tersedia', badgeColor: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800', details: { fullDescription: 'Masjid Jami Kassiti menyelenggarakan sholat berjamaah lima waktu secara rutin, dilengkapi dengan fasilitas tempat wudhu yang bersih, karpet yang nyaman, dan pendingin ruangan. Kami juga menyelenggarakan Sholat Jumat dengan khatib-khatib pilihan yang membawakan materi khutbah inspiratif dan aktual.', schedule: 'Setiap Waktu Sholat & Jumat 11.30 WIB', location: 'Ruang Utama & Lantai 2 Masjid Jami Kassiti', contact: 'DKM Masjid (Bpk. Ahmad)', requirements: ['Pakaian sopan dan menutup aurat', 'Menjaga ketertiban dan kebersihan'] } },
-      { id: 2, title: 'Kajian Rutin', category: 'Pendidikan', bgImage: interiorImg, description: 'Kajian ilmu agama setiap pekan meliputi tafsir, hadits, fiqih, dan akhlak.', iconName: 'BookOpen', badge: 'Terjadwal', badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800', details: { fullDescription: 'Program kajian rutin terbuka untuk umum (Ikhwan & Akhwat) yang diisi oleh asatidzah berkompeten. Materi kajian disusun secara terstruktur mulai dari dasar hingga lanjutan, mencakup pembahasan Tafsir Al-Quran, Hadits Arbain, Fiqih Ibadah, dan Sirah Nabawiyah.', schedule: 'Rabu (Ba\'da Maghrib) & Ahad (Ba\'da Subuh)', location: 'Ruang Utama Masjid', contact: 'Divisi Dakwah (Bpk. Rizky)', requirements: ['Membawa alat tulis (opsional)', 'Terbuka untuk umum'] } },
-      { id: 3, title: 'TPQ (Taman Pendidikan Al-Qur\'an)', category: 'Pendidikan', bgImage: quranImg, description: 'Program pendidikan Al-Quran untuk anak-anak dengan metode pembelajaran modern.', iconName: 'GraduationCap', badge: 'Pendaftaran Buka', badgeColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800', details: { fullDescription: 'Taman Pendidikan Al-Quran (TPQ) Masjid Jami Kassiti mendidik generasi muda agar cinta Al-Quran. Kurikulum mencakup baca tulis Al-Quran (Metode Iqro/Tilawati), hafalan surat pendek, doa sehari-hari, praktik ibadah, dan pembentukan akhlakul karimah.', schedule: 'Senin - Kamis, 15.30 - 17.00 WIB', location: 'Ruang Kelas TPA (Lantai 2)', contact: 'Kepala TPA (Ust. Salman)', requirements: ['Usia 5 - 12 Tahun', 'Mengisi formulir pendaftaran', 'Fotokopi Akta Kelahiran'] } },
-      { id: 6, title: 'DTA (Diniyah Takmiliyah Awaliyah)', category: 'Pendidikan', bgImage: quranImg, description: 'Program pendidikan keagamaan Islam non-formal sebagai pelengkap pendidikan formal anak.', iconName: 'GraduationCap', badge: 'Pendaftaran Buka', badgeColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800', details: { fullDescription: 'Diniyah Takmiliyah Awaliyah (DTA) Masjid Jami Kassiti menyelenggarakan pendidikan keagamaan Islam bagi anak-anak usia sekolah dasar. Program ini dirancang untuk memperkuat pemahaman agama anak di luar jam sekolah formal dengan kurikulum terpadu meliputi Aqidah, Akhlak, Fiqih Ibadah, Tarikh (Sejarah Islam), Hadits, serta praktik ibadah sehari-hari.', schedule: 'Senin - Sabtu, 14.00 - 15.30 WIB', location: 'Ruang Kelas Lantai 2 Masjid Jami Kassiti', contact: 'Layanan DTA (Bpk. Ade)', requirements: ['Mengisi formulir pendaftaran', 'Fotokopi Akta Kelahiran & Kartu Keluarga', 'Membayar biaya administrasi pendaftaran'] } },
-      { id: 5, title: 'Zakat & Infaq', category: 'Ibadah', bgImage: exteriorImg, description: 'Pengelolaan dan penyaluran zakat, infaq, dan sedekah secara transparan.', iconName: 'HandCoins', badge: 'Aktif', badgeColor: 'bg-primary/10 text-primary-dark dark:text-primary-light border border-primary/20', details: { fullDescription: 'Unit Pengumpul Zakat (UPZ) Masjid Jami Kassiti memfasilitasi jamaah dalam menunaikan Zakat Fitrah, Zakat Maal, Infaq, dan Sedekah. Dana yang terkumpul disalurkan kepada asnaf yang berhak and untuk operasional kemakmuran masjid dengan laporan keuangan yang dipublikasikan rutin.', schedule: 'Layanan 24 Jam (Transfer) / 08.00-17.00 (Offline)', location: 'Kantor Sekretariat Masjid', contact: 'Divisi ZISWAF (Bpk. Lukman)', requirements: ['Menerima konsultasi hitung Zakat Maal', 'Menerima jemput zakat khusus area terdekat'] } },
-      { id: 4, title: 'Remaja Masjid', category: 'Sosial', bgImage: sosialImg, description: 'Wadah kegiatan dan kreativitas pemuda-pemudi muslim Masjid Jami Kassiti.', iconName: 'Users', badge: 'Aktif', badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800', details: { fullDescription: 'Remaja Masjid Jami Kassiti (IRMAS) merupakan wadah pembinaan, kreativitas, dan kolaborasi pemuda-pemudi muslim dalam memakmurkan masjid. Kegiatan meliputi kajian kepemudaan, pelatihan skill, olahraga, bakti sosial, dan pengembangan seni budaya Islami.', schedule: 'Setiap Akhir Pekan (Sabtu & Ahad)', location: 'Masjid Jami Kassiti & Lingkungan Sekitar', contact: 'Koordinator IRMAS (Sdr. Gojali)', requirements: ['Pemuda/pemudi usia 13 - 25 tahun', 'Memiliki semangat belajar dan berorganisasi', 'Mengisi form keanggotaan'] } }
+    layanan: parseSafe('admin_layanan_v11') || [
+      { id: 1, title: 'Sholat Berjamaah', category: 'Ibadah', bgImage: tampakMasjidImg, description: 'Sholat lima waktu dan sholat Jumat berjamaah dengan imam yang berpengalaman.', iconName: 'Sholat', badge: 'Tersedia', badgeColor: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800', details: { fullDescription: 'Masjid Jami Kassiti menyelenggarakan sholat berjamaah lima waktu secara rutin, dilengkapi dengan fasilitas tempat wudhu yang bersih, karpet yang nyaman, dan pendingin ruangan. Kami juga menyelenggarakan Sholat Jumat dengan khatib-khatib pilihan yang membawakan materi khutbah inspiratif dan aktual.', schedule: 'Setiap Waktu Sholat & Jumat 11.30 WIB', location: 'Ruang Utama & Lantai 2 Masjid Jami Kassiti', contact: 'DKM Masjid (Bpk. H. Irvan Ruchiat)', contactImage: dkmIrvan, requirements: ['Pakaian sopan dan menutup aurat', 'Menjaga ketertiban dan kebersihan'] } },
+      { id: 2, title: 'Kajian Rutin', category: 'Pendidikan', bgImage: pengajianAkbarImg, description: 'Kajian ilmu agama setiap pekan meliputi tafsir, hadits, fiqih, dan akhlak.', iconName: 'BookOpen', badge: 'Terjadwal', badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800', details: { fullDescription: 'Program kajian rutin terbuka untuk umum (Ikhwan & Akhwat) yang diisi oleh asatidzah berkompeten. Materi kajian disusun secara terstruktur mulai dari dasar hingga lanjutan, mencakup pembahasan Tafsir Al-Quran, Hadits Arbain, Fiqih Ibadah, dan Sirah Nabawiyah.', schedule: 'Rabu (Ba\'da Maghrib) & Ahad (Ba\'da Subuh)', location: 'Ruang Utama Masjid', contact: 'Divisi Dakwah (Bpk. H. Irvan Ruchiat)', contactImage: dkmIrvan, requirements: ['Membawa alat tulis (opsional)', 'Terbuka untuk umum'] } },
+      { id: 3, title: 'TPQ (Taman Pendidikan Al-Qur\'an)', category: 'Pendidikan', bgImage: guruTpqImg, description: 'Program pendidikan Al-Quran untuk anak-anak dengan metode pembelajaran modern.', iconName: 'GraduationCap', badge: 'Pendaftaran Buka', badgeColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800', details: { fullDescription: 'Taman Pendidikan Al-Quran (TPQ) Masjid Jami Kassiti mendidik generasi muda agar cinta Al-Quran. Kurikulum mencakup baca tulis Al-Quran (Metode Iqro/Tilawati), hafalan surat pendek, doa sehari-hari, praktik ibadah, dan pembentukan akhlakul karimah.', schedule: 'Senin - Kamis, 15.30 - 17.00 WIB', location: 'Ruang Kelas TPA (Lantai 2)', contact: 'Kepala TPA (Usth. Ai Jamaliah)', contactImage: usthAi, requirements: ['Usia 5 - 12 Tahun', 'Mengisi formulir pendaftaran', 'Fotokopi Akta Kelahiran'], staff: [{ name: 'Usth. Ai Jamaliah', role: 'Kepala Sekolah', image: usthAi }, { name: 'Usth. Rini Dewi Anggiani', role: 'Guru', image: usthRini }, { name: 'Usth. Dede Asiah', role: 'Guru', image: usthDede }, { name: 'Usth. Rani Rahmayati', role: 'Guru', image: usthRani }] } },
+      { id: 6, title: 'DTA (Diniyah Takmiliyah Awaliyah)', category: 'Pendidikan', bgImage: dtaImg, description: 'Program pendidikan keagamaan Islam non-formal sebagai pelengkap pendidikan formal anak.', iconName: 'GraduationCap', badge: 'Pendaftaran Buka', badgeColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800', details: { fullDescription: 'Diniyah Takmiliyah Awaliyah (DTA) Masjid Jami Kassiti menyelenggarakan pendidikan keagamaan Islam bagi anak-anak usia sekolah dasar. Program ini dirancang untuk memperkuat pemahaman agama anak di luar jam sekolah formal dengan kurikulum terpadu meliputi Aqidah, Akhlak, Fiqih Ibadah, Tarikh (Sejarah Islam), Hadits, serta praktik ibadah sehari-hari.', schedule: 'Senin - Sabtu, 15.30 - 17.00 WIB', location: 'Ruang Kelas Lantai 2 Masjid Jami Kassiti', contact: 'Kepala DTA (Usth. Neneng Aam S.M)', contactImage: usthNeneng, requirements: ['Mengisi formulir pendaftaran', 'Fotokopi Akta Kelahiran & Kartu Keluarga', 'Membayar biaya administrasi pendaftaran'], staff: [{ name: 'Usth. Neneng Aam Siti Marhamah', role: 'Kepala DTA', image: usthNeneng }, { name: 'Usth. Raya', role: 'Guru', image: usthRayanthi }, { name: 'Usth. Sani', role: 'Guru' }, { name: 'Bpk. Dani R', role: 'Guru' }] } },
+      { id: 5, title: 'Zakat & Infaq', category: 'Ibadah', bgImage: beritaQurbanImg, description: 'Pengelolaan dan penyaluran zakat, infaq, dan sedekah secara transparan.', iconName: 'HandCoins', badge: 'Aktif', badgeColor: 'bg-primary/10 text-primary-dark dark:text-primary-light border border-primary/20', details: { fullDescription: 'Unit Pengumpul Zakat (UPZ) Masjid Jami Kassiti memfasilitasi jamaah dalam menunaikan Zakat Fitrah, Zakat Maal, Infaq, dan Sedekah. Dana yang terkumpul disalurkan kepada asnaf yang berhak and untuk operasional kemakmuran masjid dengan laporan keuangan yang dipublikasikan rutin.', schedule: 'Layanan 24 Jam (Transfer) / 08.00-17.00 (Offline)', location: 'Kantor Sekretariat Masjid', contact: 'Divisi ZISWAF (Bpk. ALI M Abduh)', contactImage: bpkAli, requirements: ['Menerima konsultasi hitung Zakat Maal', 'Menerima jemput zakat khusus area terdekat'] } },
+      { id: 4, title: 'Remaja Masjid', category: 'Sosial', bgImage: sosialImg, description: 'Wadah kegiatan dan kreativitas pemuda-pemudi muslim Masjid Jami Kassiti.', iconName: 'Users', badge: 'Aktif', badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800', details: { fullDescription: 'Remaja Masjid Jami Kassiti (IRMAS) merupakan wadah pembinaan, kreativitas, dan kolaborasi pemuda-pemudi muslim dalam memakmurkan masjid. Kegiatan meliputi kajian kepemudaan, pelatihan skill, olahraga, bakti sosial, dan pengembangan seni budaya Islami.', schedule: 'Setiap Akhir Pekan (Sabtu & Ahad)', location: 'Masjid Jami Kassiti & Lingkungan Sekitar', contact: 'Koordinator IRMAS (Sdr. Gojali)', contactImage: bpkGojali, requirements: ['Pemuda/pemudi usia 13 - 25 tahun', 'Memiliki semangat belajar dan berorganisasi', 'Mengisi form keanggotaan'], staff: [{ name: 'Bpk. Gojali Abdul Syafi\'i', role: 'Koordinator', image: bpkGojali }, { name: 'Usth. Rani Rahmayati', role: 'Anggota', image: usthRani }, { name: 'Usth. Rayanthi', role: 'Anggota', image: usthRayanthi }] } }
     ],
     generalSettings: parseSafe('admin_general_settings') || {
       name: 'Perumahan Arjamukti Kencana Raya',
       slogan: 'Membangun *Iman*,\nIlmu, dan *Ukhuwah*',
       description: 'Selamat datang di Masjid Jami Kassiti Perum Arjamukti Kencana Raya Arjasari, Leuwisari, Kab. Tasikmalaya. Bergabunglah bersama kami dalam ibadah, pembelajaran, dakwah, dan pelayanan umat.',
       history: 'Masjid Jami Kassiti yang berlokasi di Perum Arjamukti Kencana Raya, Arjasari, Leuwisari, Kab. Tasikmalaya, adalah pusat ibadah dan kegiatan keislaman yang melayani umat dengan penuh dedikasi. Kami berkomitmen untuk menjadi rumah Allah yang menyejukkan, tempat berkumpulnya jamaah dalam menuntut ilmu, beribadah, dan mempererat ukhuwah islamiah.\n\nDengan berbagai program kegiatan rutin seperti kajian, TPA/TPQ, dan kegiatan sosial, kami berusaha membangun generasi muslim yang beriman, berilmu, dan bermanfaat bagi masyarakat sekitar.',
-      floatingCardTitle: 'Masjid Kassiti',
-      floatingCardDesc: 'Pusat kegiatan ibadah dan sosial kemasyarakatan di Perumahan Arjamukti',
-      tahunBerdiri: 2015,
-      jamaahAktif: 200,
-      heroImages: [heroImg, exteriorImg, communityImg, interiorImg],
-      historyImage: interiorImg,
-      committeeDescription: 'Mengenal lebih dekat para pelayan jamaah Masjid Jami Kassiti periode 2023-2026.',
       instagram: 'https://instagram.com/masjidjamikassiti',
       facebook: 'https://facebook.com/masjidjamikassiti',
       youtube: 'https://youtube.com/@masjidjamikassiti',
@@ -288,7 +192,6 @@ export const useAdminStore = defineStore('admin', {
     },
     saveKegiatan() {
       setStorage('admin_kegiatan_v3', JSON.stringify(this.kegiatan))
-      this.logActivity('Ubah Kegiatan', 'Memperbarui data kegiatan/acara');
     },
     updateFinance(data) {
       this.finance = { ...this.finance, ...data }
@@ -313,7 +216,6 @@ export const useAdminStore = defineStore('admin', {
     },
     saveGallery() {
       setStorage('admin_gallery', JSON.stringify(this.gallery))
-      this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto');
     },
     addLayanan(data) {
       const newId = this.layanan.length > 0 ? Math.max(...this.layanan.map((l) => l.id)) + 1 : 1
@@ -333,7 +235,6 @@ export const useAdminStore = defineStore('admin', {
     },
     saveLayanan() {
       setStorage('admin_layanan_v6', JSON.stringify(this.layanan))
-      this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid');
     },
     saveGeneralSettings() {
       setStorage('admin_general_settings', JSON.stringify(this.generalSettings))

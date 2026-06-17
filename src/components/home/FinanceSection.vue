@@ -63,7 +63,7 @@
               </div>
               <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Saldo Awal</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">{{ getCardSubtitle }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -88,7 +88,7 @@
               <div class="flex-1 h-1 rounded-full bg-primary/10 dark:bg-secondary/10 overflow-hidden">
                 <div ref="progressBar1" class="h-full bg-linear-to-r from-primary to-primary-light dark:from-secondary dark:to-secondary-light rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.saldoAwalFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.saldoAwalFull }}</span>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
               </div>
               <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Pemasukan</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">{{ getCardSubtitle }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -130,12 +130,13 @@
             <div class="flex items-end gap-1 text-green-600 dark:text-green-400 font-bold font-heading">
               <span class="text-sm sm:text-2xl">Rp</span>
               <span class="text-xl sm:text-4xl leading-none drop-shadow-md" ref="counter2">0</span>
+              <span class="text-sm sm:text-xl pb-0.5">jt</span>
             </div>
             <div class="flex items-center gap-2 mt-2 sm:mt-3">
               <div class="flex-1 h-1 rounded-full bg-green-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-green-500 to-emerald-400 rounded-full" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.pemasukanFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.pemasukanFull }}</span>
             </div>
           </div>
         </div>
@@ -158,7 +159,7 @@
               </div>
               <h3 class="text-dark dark:text-white/90 font-semibold text-sm sm:text-base transition-colors duration-500">Pengeluaran</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">{{ getCardSubtitle }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -177,12 +178,13 @@
             <div class="flex items-end gap-1 text-red-500 font-bold font-heading">
               <span class="text-sm sm:text-2xl">Rp</span>
               <span class="text-xl sm:text-4xl leading-none drop-shadow-md" ref="counter3">0</span>
+              <span class="text-sm sm:text-xl pb-0.5">jt</span>
             </div>
             <div class="flex items-center gap-2 mt-2 sm:mt-3">
               <div class="flex-1 h-1 rounded-full bg-red-500/10 overflow-hidden">
                 <div class="h-full bg-linear-to-r from-red-500 to-orange-400 rounded-full" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.pengeluaranFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.pengeluaranFull }}</span>
             </div>
           </div>
         </div>
@@ -205,11 +207,8 @@
                 </div>
                 <h3 class="text-dark dark:text-white font-bold text-sm sm:text-base transition-colors duration-500">Saldo Akhir</h3>
               </div>
-              <button class="px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-800 rounded-full hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-white transition-all duration-300 shrink-0 shadow-md">
-                Detail
-              </button>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">Periode Bulan Lalu</p>
+            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mb-2 sm:mb-4 ml-[38px] sm:ml-[46px] transition-colors duration-500">{{ getCardSubtitle }}</p>
             
             <!-- Sparkline Chart -->
             <div class="mb-2 sm:mb-4 ml-1">
@@ -236,17 +235,18 @@
               <div class="flex-1 h-1 rounded-full bg-cyan-500/10 overflow-hidden">
                 <div ref="progressBar4" class="h-full bg-linear-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
-              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ adminStore.finance.saldoAkhirFull }}</span>
+              <span class="text-gray-400 dark:text-gray-500 text-[10px] font-medium">Rp {{ currentMonthData.saldoAkhirFull }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Summary Stats Row -->
-      <div ref="summaryRef" class="relative z-[60] mt-4 sm:mt-6 bg-white/60 dark:bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-gray-300 dark:border-white/20 shadow-md">
-        <div class="grid grid-cols-2 lg:grid-cols-4 divide-x divide-gray-100 dark:divide-white/10">
-          <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-primary/5 dark:hover:bg-secondary/5 transition-colors duration-300">
-            <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+      <div ref="summaryRef" class="relative z-[60] mt-3 sm:mt-4 bg-white/60 dark:bg-white/5 backdrop-blur-xl rounded-[10px] sm:rounded-2xl border border-gray-300 dark:border-white/20 shadow-md">
+        <div class="grid grid-cols-2 lg:grid-cols-4">
+          <!-- Cell 1: Periode -->
+          <div class="p-2.5 sm:p-3 lg:p-4 group hover:bg-primary/5 dark:hover:bg-secondary/5 transition-colors duration-300 flex flex-col justify-center items-center h-full min-h-[85px] sm:min-h-[110px] border-r border-b lg:border-b-0 border-gray-300 dark:border-white/20">
+            <div class="flex items-center justify-center gap-1.5 mb-1">
               <CalendarDays class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary dark:text-secondary" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Periode</span>
             </div>
@@ -255,10 +255,10 @@
               <div class="relative inline-block" ref="dropdownRef">
                 <button 
                   @click="isDropdownOpen = !isDropdownOpen"
-                  class="flex items-center justify-between gap-2 px-3 py-1.5 min-w-[90px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
+                  class="flex items-center justify-between gap-1 px-2 py-1 min-w-[70px] sm:min-w-[80px] rounded-md border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
                 >
-                  <span class="font-bold text-xs sm:text-sm text-dark dark:text-white">{{ selectedMonth }}</span>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
+                  <span class="font-bold text-[11px] sm:text-xs text-dark dark:text-white">{{ selectedMonth }}</span>
+                  <ChevronDown class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
                 </button>
 
                 <Transition
@@ -269,13 +269,13 @@
                   leave-from-class="transform scale-100 opacity-100"
                   leave-to-class="transform scale-95 opacity-0"
                 >
-                  <div v-if="isDropdownOpen" class="absolute left-1/2 -translate-x-1/2 mt-2 w-32 bg-white dark:bg-[#1a1f2e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden z-[60] py-1">
-                    <div class="max-h-48 overflow-y-auto custom-scrollbar">
+                  <div v-if="isDropdownOpen" class="absolute left-1/2 -translate-x-1/2 mt-1.5 w-28 bg-white dark:bg-[#1a1f2e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden z-[60] py-1">
+                    <div class="max-h-40 overflow-y-auto custom-scrollbar">
                       <button
                         v-for="month in months"
                         :key="month"
                         @click="selectMonth(month)"
-                        class="w-full text-left px-3 py-2 text-xs sm:text-sm transition-colors duration-200"
+                        class="w-full text-left px-3 py-1.5 text-xs transition-colors duration-200"
                         :class="[
                           selectedMonth === month 
                             ? 'bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary font-bold' 
@@ -293,10 +293,10 @@
               <div class="relative inline-block" ref="summaryYearDropdownRef">
                 <button 
                   @click="isSummaryYearDropdownOpen = !isSummaryYearDropdownOpen"
-                  class="flex items-center justify-between gap-2 px-3 py-1.5 min-w-[75px] rounded-lg border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
+                  class="flex items-center justify-between gap-1 px-2 py-1 min-w-[65px] sm:min-w-[70px] rounded-md border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-primary/30 dark:hover:border-secondary/30 transition-all duration-300 group/btn shadow-[0_2px_10px_rgb(0,0,0,0.02)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
                 >
-                  <span class="font-bold text-xs sm:text-sm text-dark dark:text-white">{{ summarySelectedYear }}</span>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isSummaryYearDropdownOpen }" />
+                  <span class="font-bold text-[11px] sm:text-xs text-dark dark:text-white">{{ summarySelectedYear }}</span>
+                  <ChevronDown class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-400 group-hover/btn:text-primary dark:group-hover/btn:text-secondary transition-transform duration-300" :class="{ 'rotate-180': isSummaryYearDropdownOpen }" />
                 </button>
 
                 <Transition
@@ -307,12 +307,12 @@
                   leave-from-class="transform scale-100 opacity-100"
                   leave-to-class="transform scale-95 opacity-0"
                 >
-                  <div v-if="isSummaryYearDropdownOpen" class="absolute left-1/2 -translate-x-1/2 mt-2 w-24 bg-white dark:bg-[#1a1f2e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden z-[60] py-1">
+                  <div v-if="isSummaryYearDropdownOpen" class="absolute left-1/2 -translate-x-1/2 mt-1.5 w-24 bg-white dark:bg-[#1a1f2e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden z-[60] py-1">
                     <button
                       v-for="year in summaryYears"
                       :key="year"
                       @click="selectSummaryYear(year)"
-                      class="w-full text-left px-3 py-2 text-xs sm:text-sm transition-colors duration-200"
+                      class="w-full text-left px-3 py-1.5 text-xs transition-colors duration-200"
                       :class="[
                         summarySelectedYear === year 
                           ? 'bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary font-bold' 
@@ -325,9 +325,24 @@
                 </Transition>
               </div>
             </div>
+
+            <!-- Tombol Detail Ringkasan Laporan -->
+            <div class="mt-2 flex justify-center">
+              <button 
+                @click="openMonthlyReport"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-primary/30 dark:border-secondary/30 bg-primary/5 dark:bg-secondary/5 hover:bg-primary/10 dark:hover:bg-secondary/10 hover:border-primary dark:hover:border-secondary transition-all duration-300 cursor-pointer shadow-xs text-[10px] sm:text-[11px] font-bold text-primary dark:text-secondary uppercase tracking-wider"
+              >
+                <span>Detail Laporan</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary dark:text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                </svg>
+              </button>
+            </div>
           </div>
-          <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-green-500/5 transition-colors duration-300">
-            <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+
+          <!-- Cell 2: Total Masuk -->
+          <div class="p-2.5 sm:p-3 lg:p-4 group hover:bg-green-500/5 transition-colors duration-300 flex flex-col justify-center items-center h-full min-h-[85px] sm:min-h-[110px] border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-white/20">
+            <div class="flex items-center justify-center gap-1.5 mb-1">
               <ArrowUpRight class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Total Masuk</span>
             </div>
@@ -336,8 +351,10 @@
               <span class="text-xs sm:text-base leading-none" ref="sumIn">0</span>
             </div>
           </div>
-          <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-red-500/5 transition-colors duration-300">
-            <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+
+          <!-- Cell 3: Total Keluar -->
+          <div class="p-2.5 sm:p-3 lg:p-4 group hover:bg-red-500/5 transition-colors duration-300 flex flex-col justify-center items-center h-full min-h-[85px] sm:min-h-[110px] border-r border-gray-300 dark:border-white/20">
+            <div class="flex items-center justify-center gap-1.5 mb-1">
               <ArrowDownRight class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Total Keluar</span>
             </div>
@@ -346,8 +363,10 @@
               <span class="text-xs sm:text-base leading-none" ref="sumOut">0</span>
             </div>
           </div>
-          <div class="p-3 sm:p-5 lg:p-6 text-center group hover:bg-cyan-500/5 transition-colors duration-300">
-            <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+
+          <!-- Cell 4: Saldo Akhir -->
+          <div class="p-2.5 sm:p-3 lg:p-4 group hover:bg-cyan-500/5 transition-colors duration-300 flex flex-col justify-center items-center h-full min-h-[85px] sm:min-h-[110px]">
+            <div class="flex items-center justify-center gap-1.5 mb-1">
               <Activity class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-500" />
               <span class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Saldo Akhir</span>
             </div>
@@ -410,45 +429,69 @@
         </div>
         
         <div class="flex flex-col gap-3 sm:gap-3.5">
+          <!-- Empty State -->
+          <div v-if="filteredSpecialReports.length === 0" class="flex flex-col items-center justify-center py-10 px-4 border border-dashed border-gray-300 dark:border-white/10 rounded-xl bg-gray-50/30 dark:bg-white/5 transition-all duration-300">
+            <LayoutList class="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2.5" />
+            <p class="text-xs sm:text-sm font-semibold text-gray-500 dark:text-gray-400 text-center">Tidak ada rincian laporan kegiatan untuk tahun {{ selectedYear }}</p>
+          </div>
+
           <div 
             v-for="(report, index) in filteredSpecialReports" 
             :key="report.id"
+            class="group bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-primary/40 dark:hover:border-secondary/40 rounded-xl sm:rounded-2xl transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden flex flex-col lg:flex-row p-3 sm:p-4 gap-2 sm:gap-4 lg:gap-6 cursor-pointer lg:items-center"
             @click="openSpecialReport(report)"
-            class="group cursor-pointer bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 hover:border-primary/50 dark:hover:border-secondary/50 rounded-xl sm:rounded-2xl p-3 sm:px-4 sm:py-2.5 transition-all duration-300 shadow-sm hover:shadow-lg flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
           >
-            <!-- Title & Icon -->
-            <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-[35%] lg:w-[30%] shrink-0">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-primary/10 dark:bg-secondary/10 flex items-center justify-center text-primary dark:text-secondary group-hover:scale-110 transition-transform duration-300 shrink-0">
-                <component :is="report.icon" class="w-4 h-4 sm:w-4 sm:h-4" />
+            <!-- Top Row (Mobile) / Left Side (Desktop) -->
+            <div class="flex items-center justify-between w-full lg:w-[35%] shrink-0">
+              <!-- Icon + Title -->
+              <div class="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-dark/5 dark:bg-white/5 flex items-center justify-center text-primary dark:text-secondary group-hover:scale-110 group-hover:bg-primary/10 dark:group-hover:bg-secondary/10 transition-all duration-300 shrink-0">
+                  <component :is="report.icon" class="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-bold text-xs sm:text-base text-dark dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors leading-tight line-clamp-1">{{ report.title }}</h4>
+                  <p class="text-[9px] sm:text-xs text-gray-500 mt-0.5 uppercase tracking-wide">{{ report.date }}</p>
+                </div>
               </div>
-              <div class="text-left flex-1">
-                <h4 class="font-bold text-xs sm:text-sm text-dark dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors leading-tight">{{ report.title }}</h4>
-                <p class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 mt-0.5 uppercase line-clamp-1">{{ report.date }}</p>
-              </div>
-            </div>
-
-            <!-- Stats (Responsive) -->
-            <div class="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-2 sm:gap-4 text-xs items-center border-t sm:border-t-0 border-gray-300 dark:border-white/5 pt-3 sm:pt-0">
-              <div class="border-r border-gray-300 dark:border-white/5 pr-2 sm:pr-4 sm:border-l sm:border-gray-300 sm:dark:border-white/10 sm:pl-4">
-                <span class="block text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Total Masuk</span>
-                <span class="font-bold text-green-600 dark:text-green-400 text-[11px] sm:text-xs">Rp {{ formatRupiah(report.totalPemasukan) }}</span>
-              </div>
-              <div class="pl-2 sm:pr-4 sm:border-r sm:border-gray-300 sm:dark:border-white/5">
-                <span class="block text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Total Keluar</span>
-                <span class="font-bold text-red-500 text-[11px] sm:text-xs">Rp {{ formatRupiah(report.totalPengeluaran) }}</span>
-              </div>
-              <div class="col-span-2 sm:col-span-1 mt-2 sm:mt-0 pt-2 pb-2 px-3 sm:p-0 border border-gray-300 dark:border-white/5 sm:border-0 bg-gray-50 dark:bg-transparent rounded-lg sm:rounded-none flex sm:block justify-between items-center sm:items-start sm:pl-4">
-                <span class="block text-[10px] text-gray-500 dark:text-gray-400 uppercase font-semibold tracking-wider sm:mb-0.5">Saldo Akhir</span>
-                <span class="font-bold text-cyan-600 dark:text-cyan-400 text-sm">Rp {{ formatRupiah(report.sisaSaldo) }}</span>
+              
+              <!-- Detail Button (Mobile Only) -->
+              <div class="lg:hidden shrink-0 ml-2">
+                <button
+                  class="flex items-center gap-1 px-2.5 py-1 rounded-full border border-gray-200 dark:border-white/10 bg-transparent hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 shrink-0"
+                >
+                  <span class="text-[8px] font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Detail</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                </button>
               </div>
             </div>
 
-            <!-- Action -->
-            <div class="hidden sm:flex items-center justify-end shrink-0 pl-2">
-              <div class="px-3 py-1 rounded-full border border-gray-300 dark:border-white/10 bg-white dark:bg-transparent group-hover:border-primary/30 dark:group-hover:border-secondary/30 group-hover:bg-primary/5 dark:group-hover:bg-secondary/5 transition-all flex items-center gap-1.5">
-                <span class="text-[9px] font-bold text-gray-500 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-secondary uppercase tracking-wider transition-colors">Detail</span>
-                <ArrowUpRight class="w-3 h-3 text-gray-400 group-hover:text-primary dark:group-hover:text-secondary transition-colors" />
+            <!-- Middle: Stats Grid -->
+            <div class="flex-1 w-full grid grid-cols-3 items-center divide-x divide-gray-200 dark:divide-white/10 py-1 pt-2.5 mt-0.5 border-t border-gray-100 dark:border-white/5 lg:border-t-0 lg:pt-1 lg:mt-0">
+              <!-- Total Masuk -->
+              <div class="flex flex-col pr-2 sm:pr-4">
+                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 font-semibold">Total Masuk</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400 text-[10px] sm:text-sm leading-none">Rp {{ formatRupiah(report.totalPemasukan) }}</span>
               </div>
+              <!-- Total Keluar -->
+              <div class="flex flex-col px-2 sm:px-4">
+                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 font-semibold">Total Keluar</span>
+                <span class="font-bold text-rose-500 dark:text-rose-400 text-[10px] sm:text-sm leading-none">Rp {{ formatRupiah(report.totalPengeluaran) }}</span>
+              </div>
+              <!-- Saldo Akhir -->
+              <div class="flex flex-col pl-2 sm:pl-4">
+                <span class="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 font-semibold">Saldo Akhir</span>
+                <span class="font-bold text-cyan-600 dark:text-cyan-400 text-[10px] sm:text-sm leading-none">Rp {{ formatRupiah(report.sisaSaldo) }}</span>
+              </div>
+            </div>
+
+            <!-- Right: Detail Button (Desktop Only) -->
+            <div class="hidden lg:flex shrink-0">
+              <button
+                class="flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-gray-200 dark:border-white/10 bg-transparent hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 shrink-0"
+              >
+                <span class="text-[10px] font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Detail</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+              </button>
             </div>
           </div>
         </div>
@@ -504,16 +547,285 @@ const formatRupiah = (angka) => {
   return new Intl.NumberFormat('id-ID').format(angka)
 }
 
-// Tambahkan ref untuk filter bulan
-const selectedMonth = ref('Mei');
+// Tambahkan ref untuk filter bulan dan rincian data bulanan
+const selectedMonth = ref('Januari');
 const isDropdownOpen = ref(false);
 const dropdownRef = ref(null);
-const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const months = ['Januari', 'April', 'Mei', 'Juni'];
+const activeTab = ref('Semua');
+
+const monthlyFinanceData = {
+  'Januari': {
+    saldoAwal: '0,14',
+    saldoAwalFull: '138.200',
+    pemasukan: '5,06',
+    pemasukanFull: '5.059.100',
+    pengeluaran: '2,83',
+    pengeluaranFull: '2.830.000',
+    saldoAkhir: '2,23',
+    saldoAkhirFull: '2.229.100',
+    selisihBersih: '2.229.100',
+    transactions: [
+      { date: '01 Jan 2026', description: '2 Marbot Masjid', category: 'Operasional', type: 'out', amount: 600000 },
+      { date: '02 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
+      { date: '02 Jan 2026', description: '5 Lt Bensin Mesin Potong Rumput', category: 'Operasional', type: 'out', amount: 80000 },
+      { date: '03 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 100000 },
+      { date: '05 Jan 2026', description: '2 Petugas Potong Rumput', category: 'Operasional', type: 'out', amount: 150000 },
+      { date: '07 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Umum Selasa', category: 'Kajian', type: 'out', amount: 100000 },
+      { date: '07 Jan 2026', description: 'Service Mixer & Speaker Masjid', category: 'Fasilitas', type: 'out', amount: 100000 },
+      { date: '09 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
+      { date: '09 Jan 2026', description: 'Hamba Allah', category: 'Donasi', type: 'in', amount: 50000 },
+      { date: '10 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 100000 },
+      { date: '13 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Umum Selasa', category: 'Kajian', type: 'out', amount: 100000 },
+      { date: '13 Jan 2026', description: 'Hamba Allah', category: 'Donasi', type: 'in', amount: 50000 },
+      { date: '16 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
+      { date: '23 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
+      { date: '24 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 100000 },
+      { date: '27 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Umum Selasa', category: 'Kajian', type: 'out', amount: 100000 },
+      { date: '30 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
+      { date: '31 Jan 2026', description: 'Kencleng Bln. Januari 2026', category: 'Kotak Amal', type: 'in', amount: 2233900 },
+      { date: '31 Jan 2026', description: 'Saldo Kegiatan PHBI Isra\' Mi\'raj 1447H', category: 'Kegiatan', type: 'in', amount: 2437000 },
+      { date: '31 Jan 2026', description: 'Hamba Allah', category: 'Donasi', type: 'in', amount: 150000 },
+      { date: '31 Jan 2026', description: 'Mubalig Pengajian Bulanan Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 150000 },
+      { date: '31 Jan 2026', description: '80 Nasi Box Pengajian Bulanan Ibu-Ibu', category: 'Kajian', type: 'out', amount: 800000 }
+    ],
+    trend: {
+      saldo: [0.14, 0.2, 0.3, 0.5, 1.0, 1.5, 2.23],
+      income: [0, 0.05, 0.05, 0, 0, 0, 4.82],
+      expense: [0.6, 0.25, 0.2, 0.17, 0.17, 0.17, 1.12]
+    }
+  },
+  'April': {
+    saldoAwal: '80,50',
+    saldoAwalFull: '80.500.000',
+    pemasukan: '12,24',
+    pemasukanFull: '12.240.000',
+    pengeluaran: '8,00',
+    pengeluaranFull: '8.000.000',
+    saldoAkhir: '84,74',
+    saldoAkhirFull: '84.740.000',
+    selisihBersih: '4.240.000',
+    transactions: [
+      { date: '02 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 2450000 },
+      { date: '05 Apr 2026', description: 'Biaya Kebersihan & Pemeliharaan Masjid', category: 'Operasional', type: 'out', amount: 750000 },
+      { date: '09 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 2680000 },
+      { date: '12 Apr 2026', description: 'Pembayaran Listrik & Internet Bulanan', category: 'Operasional', type: 'out', amount: 1250000 },
+      { date: '15 Apr 2026', description: 'Sumbangan Donatur Pembangunan Aula', category: 'Donasi', type: 'in', amount: 3500000 },
+      { date: '16 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 2110000 },
+      { date: '20 Apr 2026', description: 'Honorarium Imam & Muadzin Bulanan', category: 'Operasional', type: 'out', amount: 4500000 },
+      { date: '23 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 1500000 },
+      { date: '26 Apr 2026', description: 'Pembelian Sabun & Alat Kebersihan', category: 'Operasional', type: 'out', amount: 500000 },
+      { date: '29 Apr 2026', description: 'Infaq Shodaqoh Hamba Allah', category: 'Donasi', type: 'in', amount: 1000000 }
+    ],
+    trend: {
+      saldo: [80.5, 82.2, 81.45, 82.88, 86.38, 83.88, 84.74],
+      income: [2.45, 0, 2.68, 0, 3.5, 2.11, 1.5],
+      expense: [0, 0.75, 0, 1.25, 0, 4.5, 0.5]
+    }
+  },
+  'Mei': {
+    saldoAwal: '84,74',
+    saldoAwalFull: '84.739.781',
+    pemasukan: '15,00',
+    pemasukanFull: '15.000.000',
+    pengeluaran: '8,00',
+    pengeluaranFull: '8.000.000',
+    saldoAkhir: '91,74',
+    saldoAkhirFull: '91.739.781',
+    selisihBersih: '7.000.000',
+    transactions: [
+      { date: '01 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 3250000 },
+      { date: '04 Mei 2026', description: 'Pemeliharaan AC Ruang Sholat Utama', category: 'Operasional', type: 'out', amount: 1200000 },
+      { date: '08 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 2950000 },
+      { date: '10 Mei 2026', description: 'Pembelian Perlengkapan Sound System', category: 'Fasilitas', type: 'out', amount: 1800000 },
+      { date: '15 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 3100000 },
+      { date: '19 Mei 2026', description: 'Pembayaran Rekening Listrik & Air', category: 'Operasional', type: 'out', amount: 1500000 },
+      { date: '22 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 3700000 },
+      { date: '25 Mei 2026', description: 'Honorarium Imam, Khotib & Muadzin', category: 'Operasional', type: 'out', amount: 3500000 },
+      { date: '29 Mei 2026', description: 'Sumbangan Donatur Pengembangan TPQ', category: 'Donasi', type: 'in', amount: 2000000 }
+    ],
+    trend: {
+      saldo: [84.74, 87.99, 86.79, 89.74, 91.04, 87.54, 91.74],
+      income: [3.25, 0, 2.95, 0, 3.1, 3.7, 2.0],
+      expense: [0, 1.2, 0, 1.8, 0, 3.5, 0]
+    }
+  },
+  'Juni': {
+    saldoAwal: '91,74',
+    saldoAwalFull: '91.739.781',
+    pemasukan: '18,50',
+    pemasukanFull: '18.500.000',
+    pengeluaran: '10,25',
+    pengeluaranFull: '10.250.000',
+    saldoAkhir: '99,99',
+    saldoAkhirFull: '99.989.781',
+    selisihBersih: '8.250.000',
+    transactions: [
+      { date: '02 Jun 2026', description: 'Sumbangan Pembangunan Kanopi Masjid', category: 'Donasi', type: 'in', amount: 5000000 },
+      { date: '05 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 2850000 },
+      { date: '08 Jun 2026', description: 'Bantuan Sosial Paket Sembako Yatim', category: 'Sosial', type: 'out', amount: 2500000 },
+      { date: '12 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 3120000 },
+      { date: '15 Jun 2026', description: 'Pembayaran Listrik, Air & Wifi Bulanan', category: 'Operasional', type: 'out', amount: 1750000 },
+      { date: '19 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 3430000 },
+      { date: '22 Jun 2026', description: 'Pembelian Cat Tembok dan Alat Kerja Bakti', category: 'Operasional', type: 'out', amount: 1500000 },
+      { date: '26 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 4100000 },
+      { date: '28 Jun 2026', description: 'Honorarium Bulanan Marbot & Pengajar', category: 'Operasional', type: 'out', amount: 4500000 }
+    ],
+    trend: {
+      saldo: [91.74, 96.74, 99.59, 97.09, 100.21, 98.71, 99.99],
+      income: [5.0, 2.85, 0, 3.12, 3.43, 4.1, 0],
+      expense: [0, 0, 2.5, 0, 1.75, 1.5, 4.5]
+    }
+  }
+};
+
+const currentMonthData = computed(() => {
+  return monthlyFinanceData[selectedMonth.value] || monthlyFinanceData['Mei'];
+});
+
+const filteredTransactions = computed(() => {
+  const txs = currentMonthData.value.transactions || []
+  if (activeTab.value === 'Pemasukan') {
+    return txs.filter(t => t.type === 'in')
+  } else if (activeTab.value === 'Pengeluaran') {
+    return txs.filter(t => t.type === 'out')
+  }
+  return txs
+});
 
 const selectMonth = (month) => {
   selectedMonth.value = month;
   isDropdownOpen.value = false;
 };
+
+// Computed property untuk menentukan teks label bulan secara dinamis pada kartu utama
+const getCardSubtitle = computed(() => {
+  if (selectedMonth.value === 'Mei' || selectedMonth.value === 'April') {
+    return `Bulan lalu (${selectedMonth.value})`
+  } else if (selectedMonth.value === 'Juni') {
+    return `Bulan ini (${selectedMonth.value})`
+  }
+  return `Bulan ${selectedMonth.value}`
+})
+
+// Algoritma konversi angka ke teks terbilang Bahasa Indonesia secara rekursif
+const angkaKeTeks = (n) => {
+  const bilangan = [
+    '', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 
+    'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'
+  ]
+  
+  const bantu = (val) => {
+    if (val < 12) {
+      return ' ' + bilangan[Math.floor(val)]
+    } else if (val < 20) {
+      return bantu(val - 10) + ' Belas'
+    } else if (val < 100) {
+      return bantu(val / 10) + ' Puluh' + bantu(val % 10)
+    } else if (val < 200) {
+      return ' Seratus' + bantu(val - 100)
+    } else if (val < 1000) {
+      return bantu(val / 100) + ' Ratus' + bantu(val % 100)
+    } else if (val < 2000) {
+      return ' Seribu' + bantu(val - 1000)
+    } else if (val < 1000000) {
+      return bantu(val / 1000) + ' Ribu' + bantu(val % 1000)
+    } else if (val < 1000000000) {
+      return bantu(val / 1000000) + ' Juta' + bantu(val % 1000000)
+    } else if (val < 1000000000000) {
+      return bantu(val / 1000000000) + ' Milyar' + bantu(val % 1000000000)
+    }
+    return ''
+  }
+
+  return bantu(n).trim()
+}
+
+// Helper untuk mendapatkan tanggal akhir bulan
+const getLastDayOfMonth = (month) => {
+  if (month === 'Februari') return '28'
+  if (['April', 'Juni', 'September', 'November'].includes(month)) return '30'
+  return '31'
+}
+
+// Computed property untuk memetakan dataset transaksi ke format template A4 Laporan Kegiatan
+const monthlyReportObj = computed(() => {
+  const monthData = currentMonthData.value
+  const monthName = selectedMonth.value
+  const year = summarySelectedYear.value
+
+  const parseNumber = (val) => {
+    if (!val) return 0
+    return parseFloat(val.toString().replace(/\./g, '').replace(',', '.')) || 0
+  }
+
+  const saldoAwalNum = parseNumber(monthData.saldoAwalFull)
+  const totalPemasukanNum = parseNumber(monthData.pemasukanFull)
+  const totalPengeluaranNum = parseNumber(monthData.pengeluaranFull)
+  const saldoAkhirNum = parseNumber(monthData.saldoAkhirFull)
+
+  // Pemasukan: masukkan Saldo Awal sebagai item pertama
+  const pemasukanList = [
+    {
+      no: 1,
+      tanggal: `01 ${monthName.substring(0, 3)} ${year}`,
+      uraian: 'Saldo Awal Kas & Bank',
+      jumlah: saldoAwalNum
+    }
+  ]
+
+  let inIdx = 2
+  if (monthData.transactions) {
+    monthData.transactions
+      .filter(t => t.type === 'in')
+      .forEach(t => {
+        pemasukanList.push({
+          no: inIdx++,
+          tanggal: t.date,
+          uraian: t.description,
+          jumlah: t.amount
+        })
+      })
+  }
+
+  // Pengeluaran
+  const pengeluaranList = []
+  let outIdx = 1
+  if (monthData.transactions) {
+    monthData.transactions
+      .filter(t => t.type === 'out')
+      .forEach(t => {
+        pengeluaranList.push({
+          no: outIdx++,
+          tanggal: t.date,
+          uraian: t.description,
+          jumlah: t.amount
+        })
+      })
+  }
+
+  const terbilangStr = angkaKeTeks(saldoAkhirNum) + ' Rupiah'
+
+  return {
+    id: `finance-${monthName.toLowerCase()}-${year}`,
+    title: `Kas & Bank Bulanan (${monthName} ${year})`,
+    subtitle: 'MASJID JAMI KASSITI',
+    date: `Periode: 01 ${monthName} ${year} - ${getLastDayOfMonth(monthName)} ${monthName} ${year}`,
+    pemasukan: pemasukanList,
+    pengeluaran: pengeluaranList,
+    totalPemasukan: saldoAwalNum + totalPemasukanNum,
+    totalPengeluaran: totalPengeluaranNum,
+    sisaSaldo: saldoAkhirNum,
+    terbilang: terbilangStr,
+    keterangan: `Laporan keuangan resmi DKM Masjid Jami Kassiti untuk bulan ${monthName} ${year}.`
+  }
+})
+
+const openMonthlyReport = () => {
+  selectedSpecialReport.value = monthlyReportObj.value
+  isSpecialReportModalOpen.value = true
+  document.body.style.overflow = 'hidden'
+}
 
 // Handle click outside to close dropdown
 onMounted(() => {
@@ -709,6 +1021,33 @@ const specialReports = [
     ketua: 'Ust. Hasan Basri',
     bendahara: 'Randi Rizal',
     ttdKiriTitle: 'Kepala TPQ'
+  },
+  {
+    id: 'renovasi-wudhu',
+    title: 'Renovasi Tempat Wudhu',
+    year: '2024',
+    icon: Gift,
+    subtitle: 'PANITIA PEMBANGUNAN MASJID KASSITI',
+    date: '15 Agustus 2024',
+    pemasukan: [
+      { no: 1, tanggal: '01 Agt 2024', uraian: 'Kas Awal Pembangunan', jumlah: 5000000 },
+      { no: 2, tanggal: '05 Agt 2024', uraian: 'Sumbangan Donatur Utama', jumlah: 15000000 },
+      { no: 3, tanggal: '10 Agt 2024', uraian: 'Infaq Kotak Amal Khusus', jumlah: 3450000 }
+    ],
+    pengeluaran: [
+      { no: 1, tanggal: '06 Agt 2024', uraian: 'Pembelian Semen & Pasir', jumlah: 4500000 },
+      { no: 2, tanggal: '08 Agt 2024', uraian: 'Keramik & Pipa Air', jumlah: 6800000 },
+      { no: 3, tanggal: '12 Agt 2024', uraian: 'Upah Tukang Pekan 1', jumlah: 3500000 },
+      { no: 4, tanggal: '15 Agt 2024', uraian: 'Alat Sanitasi & Keran Air', jumlah: 2450000 }
+    ],
+    totalPemasukan: 23450000,
+    totalPengeluaran: 17250000,
+    sisaSaldo: 6200000,
+    terbilang: 'Enam Juta Dua Ratus Ribu Rupiah',
+    keterangan: 'Pekerjaan renovasi area wudhu pria selesai dengan lancar.',
+    ketua: 'H. Redi Sasriandi',
+    bendahara: 'Randi Rizal',
+    ttdKiriTitle: 'Ketua Panitia'
   }
 ];
 
@@ -744,10 +1083,10 @@ const sparklineLength3 = ref(500)
 const sparklineLength4 = ref(500)
 
 // Sparkline data — simulated weekly saldo trend
-const saldoData = [78, 80, 79, 82, 81, 83, 84.74]
-const incomeData = [5, 8, 3, 6, 4, 7, 0]
-const expenseData = [3, 5, 2, 4, 6, 3, 0]
-const balanceData = [78, 80, 79, 82, 81, 83, 84.74]
+const saldoData = computed(() => currentMonthData.value.trend.saldo)
+const incomeData = computed(() => currentMonthData.value.trend.income)
+const expenseData = computed(() => currentMonthData.value.trend.expense)
+const balanceData = computed(() => currentMonthData.value.trend.saldo)
 
 function generateSparklinePath(data) {
   const maxVal = Math.max(...data)
@@ -780,20 +1119,20 @@ function generateSparklineArea(data) {
   return path + ` L 200,40 L 0,40 Z`
 }
 
-const spark1 = computed(() => generateSparklinePath(saldoData))
-const spark2 = computed(() => generateSparklinePath(incomeData))
-const spark3 = computed(() => generateSparklinePath(expenseData))
-const spark4 = computed(() => generateSparklinePath(balanceData))
+const spark1 = computed(() => generateSparklinePath(saldoData.value))
+const spark2 = computed(() => generateSparklinePath(incomeData.value))
+const spark3 = computed(() => generateSparklinePath(expenseData.value))
+const spark4 = computed(() => generateSparklinePath(balanceData.value))
 
 const sparklinePath1 = computed(() => spark1.value.path)
 const sparklinePath2 = computed(() => spark2.value.path)
 const sparklinePath3 = computed(() => spark3.value.path)
 const sparklinePath4 = computed(() => spark4.value.path)
 
-const sparklineArea1 = computed(() => generateSparklineArea(saldoData))
-const sparklineArea2 = computed(() => generateSparklineArea(incomeData))
-const sparklineArea3 = computed(() => generateSparklineArea(expenseData))
-const sparklineArea4 = computed(() => generateSparklineArea(balanceData))
+const sparklineArea1 = computed(() => generateSparklineArea(saldoData.value))
+const sparklineArea2 = computed(() => generateSparklineArea(incomeData.value))
+const sparklineArea3 = computed(() => generateSparklineArea(expenseData.value))
+const sparklineArea4 = computed(() => generateSparklineArea(balanceData.value))
 
 const sparklineEndY4 = computed(() => spark4.value.lastY)
 
@@ -828,6 +1167,95 @@ const resetTilt = (index) => {
   cardTilts.value[index] = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
 }
 
+import { watch } from 'vue'
+
+const animateCounter = (element, targetValue, duration = 1.0, isDecimal = false, useScrollTrigger = false) => {
+  if (!element) return
+  const options = {
+    innerHTML: targetValue,
+    duration: duration,
+    ease: 'power3.out',
+    snap: { innerHTML: isDecimal ? 0.01 : 1 },
+    onUpdate: function() {
+      if (isDecimal) {
+        element.innerHTML = Number(this.targets()[0].innerHTML).toFixed(2).replace('.', ',')
+      } else {
+        element.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString('id-ID')
+      }
+    }
+  }
+  
+  if (useScrollTrigger) {
+    options.scrollTrigger = { trigger: '#keuangan', start: 'top 75%', once: true }
+  }
+  
+  gsap.killTweensOf(element)
+  gsap.to(element, options)
+}
+
+const animateAllCounters = (useScrollTrigger = false) => {
+  const parseNumber = (val) => parseFloat(val.toString().replace(/\./g, '').replace(',', '.')) || 0
+  const data = currentMonthData.value
+
+  animateCounter(counter1.value, parseNumber(data.saldoAwal), 1.0, true, useScrollTrigger)
+  animateCounter(counter2.value, parseNumber(data.pemasukan), 1.0, true, useScrollTrigger)
+  animateCounter(counter3.value, parseNumber(data.pengeluaran), 1.0, true, useScrollTrigger)
+  animateCounter(counter4.value, parseNumber(data.saldoAkhir), 1.0, true, useScrollTrigger)
+  
+  animateCounter(sumIn.value, parseNumber(data.pemasukanFull), 1.0, false, useScrollTrigger)
+  animateCounter(sumOut.value, parseNumber(data.pengeluaranFull), 1.0, false, useScrollTrigger)
+  animateCounter(sumDiff.value, parseNumber(data.selisihBersih), 1.0, false, useScrollTrigger)
+}
+
+const animateSparklines = (useScrollTrigger = false) => {
+  const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }
+  
+  const drawSparkline = (sparkEl, lengthRef, offsetRef, delay) => {
+    if (sparkEl) {
+      const len = sparkEl.getTotalLength()
+      lengthRef.value = len
+      offsetRef.value = len
+      
+      const animOpts = { value: 0, duration: 1.5, ease: 'power3.out', delay }
+      if (useScrollTrigger) {
+        animOpts.scrollTrigger = stConfig
+      }
+      gsap.killTweensOf(offsetRef)
+      gsap.to(offsetRef, animOpts)
+    }
+  }
+
+  setTimeout(() => {
+    drawSparkline(sparkline1.value, sparklineLength1, sparklineOffset1, 0.2)
+    drawSparkline(sparkline2.value, sparklineLength2, sparklineOffset2, 0.3)
+    drawSparkline(sparkline3.value, sparklineLength3, sparklineOffset3, 0.4)
+    drawSparkline(sparkline4.value, sparklineLength4, sparklineOffset4, 0.5)
+  }, 100)
+}
+
+const animateProgressBars = (useScrollTrigger = false) => {
+  const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }
+  
+  const animateBar = (barEl, delay) => {
+    if (barEl) {
+      const animOpts = { width: '100%', duration: 1.2, ease: 'power3.out', delay }
+      if (useScrollTrigger) {
+        animOpts.scrollTrigger = stConfig
+      }
+      gsap.fromTo(barEl, { width: '0%' }, animOpts)
+    }
+  }
+  
+  animateBar(progressBar1.value, 0.3)
+  animateBar(progressBar4.value, 0.6)
+}
+
+watch(selectedMonth, () => {
+  animateAllCounters(false)
+  animateSparklines(false)
+  animateProgressBars(false)
+})
+
 onMounted(() => {
   // Header animation
   gsap.fromTo(headerRef.value.children, { opacity: 0, y: 40 }, {
@@ -849,45 +1277,6 @@ onMounted(() => {
     })
   }
 
-  // Sparkline draw animations
-  const stConfig = { trigger: '#keuangan', start: 'top 75%', once: true }
-  
-  // Calculate actual path lengths after mount
-  setTimeout(() => {
-    if (sparkline1.value) {
-      const len = sparkline1.value.getTotalLength()
-      sparklineLength1.value = len
-      sparklineOffset1.value = len
-      gsap.to(sparklineOffset1, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.2, scrollTrigger: stConfig })
-    }
-    if (sparkline2.value) {
-      const len = sparkline2.value.getTotalLength()
-      sparklineLength2.value = len
-      sparklineOffset2.value = len
-      gsap.to(sparklineOffset2, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.3, scrollTrigger: stConfig })
-    }
-    if (sparkline3.value) {
-      const len = sparkline3.value.getTotalLength()
-      sparklineLength3.value = len
-      sparklineOffset3.value = len
-      gsap.to(sparklineOffset3, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.4, scrollTrigger: stConfig })
-    }
-    if (sparkline4.value) {
-      const len = sparkline4.value.getTotalLength()
-      sparklineLength4.value = len
-      sparklineOffset4.value = len
-      gsap.to(sparklineOffset4, { value: 0, duration: 1.5, ease: 'power3.out', delay: 0.5, scrollTrigger: stConfig })
-    }
-  }, 100)
-
-  // Progress bars
-  if (progressBar1.value) {
-    gsap.to(progressBar1.value, { width: '100%', duration: 1.2, ease: 'power3.out', delay: 0.3, scrollTrigger: stConfig })
-  }
-  if (progressBar4.value) {
-    gsap.to(progressBar4.value, { width: '100%', duration: 1.2, ease: 'power3.out', delay: 0.6, scrollTrigger: stConfig })
-  }
-
   // Summary row
   if (summaryRef.value) {
     gsap.fromTo(summaryRef.value, { opacity: 0, y: 20 }, {
@@ -904,35 +1293,10 @@ onMounted(() => {
     })
   }
 
-  // Counter animations
-  const animateCounter = (element, targetValue, duration = 1.5, isDecimal = false) => {
-    gsap.to(element, {
-      innerHTML: targetValue,
-      duration: duration,
-      ease: 'power3.out',
-      snap: { innerHTML: isDecimal ? 0.01 : 1 },
-      onUpdate: function() {
-        if (isDecimal) {
-          element.innerHTML = Number(this.targets()[0].innerHTML).toFixed(2).replace('.', ',')
-        } else {
-          element.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString('id-ID')
-        }
-      },
-      scrollTrigger: stConfig
-    })
-  }
-
-  const parseNumber = (val) => parseFloat(val.toString().replace(/\./g, '').replace(',', '.')) || 0
-
-  if (counter1.value) animateCounter(counter1.value, parseNumber(adminStore.finance.saldoAwal), 1.5, true)
-  if (counter2.value) animateCounter(counter2.value, parseNumber(adminStore.finance.pemasukan), 1.2, false)
-  if (counter3.value) animateCounter(counter3.value, parseNumber(adminStore.finance.pengeluaran), 1.2, false)
-  if (counter4.value) animateCounter(counter4.value, parseNumber(adminStore.finance.saldoAkhir), 1.5, true)
-  
-  // Summary counters
-  if (sumIn.value) animateCounter(sumIn.value, parseNumber(adminStore.finance.pemasukanFull), 1.2, false)
-  if (sumOut.value) animateCounter(sumOut.value, parseNumber(adminStore.finance.pengeluaranFull), 1.2, false)
-  if (sumDiff.value) animateCounter(sumDiff.value, parseNumber(adminStore.finance.selisihBersih), 1.2, false)
+  // Initial trigger
+  animateAllCounters(true)
+  animateSparklines(true)
+  animateProgressBars(true)
 })
 </script>
 

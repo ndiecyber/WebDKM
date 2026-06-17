@@ -131,14 +131,11 @@
                 <span class="text-secondary group-hover/phone:text-white underline decoration-secondary/50 group-hover/phone:decoration-white underline-offset-4 transition-all text-sm font-medium">
                   0853-2013-2014
                 </span>
-                <span class="text-white/60 group-hover/phone:text-white/80 text-xs mt-1 transition-colors">
-                  Ustadz Randi Rizal
-                </span>
               </a>
             </li>
             <li class="flex items-center gap-3">
               <Mail class="w-5 h-5 text-secondary shrink-0" />
-              <a href="mailto:info@masjidkassiti.id" class="text-white/60 hover:text-white transition-colors text-sm">info@masjidkassiti.id</a>
+              <a :href="'mailto:' + (adminStore.generalSettings.email || 'dkmjami.kassiti@gmail.com')" class="text-white/60 hover:text-white transition-colors text-sm">{{ adminStore.generalSettings.email || 'dkmjami.kassiti@gmail.com' }}</a>
             </li>
             <li class="flex items-center gap-3">
               <Clock class="w-5 h-5 text-secondary shrink-0" />
@@ -168,8 +165,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck, GraduationCap, HandCoins } from 'lucide-vue-next'
-import logoImg from '@/assets/images/logo-kustom2.png'
-import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.png'
+import logoImg from '@/assets/images/logo-kustom2.webp'
+import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.webp'
 import { createSilhouetteMask } from '@/utils/image'
 import { scrollToSection } from '@/utils/scroll'
 import { useAdminStore } from '@/stores/admin'

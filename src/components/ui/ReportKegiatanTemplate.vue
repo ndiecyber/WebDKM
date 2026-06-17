@@ -17,7 +17,7 @@
         <!-- Teks Kanan -->
         <div class="text-right space-y-0.5 sm:space-y-1 flex-1 flex flex-col justify-center mt-0">
           <h1 class="text-[10px] sm:text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wide leading-snug">
-            LAPORAN KEUANGAN {{ report.title }}
+            LAPORAN KEUANGAN {{ report.title.replace(/bulanan|\s*\(.*\)\s*/gi, '').trim() }}
           </h1>
           <h2 class="text-[8px] sm:text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide">
             {{ report.subtitle }}
@@ -143,8 +143,8 @@
 import { computed } from 'vue'
 import { CalendarDays, QrCode } from 'lucide-vue-next'
 // Reverted logo to the dark text version based on user feedback
-import logoLight from '@/assets/images/logo-kustom.png'
-import logoDark from '@/assets/images/logo-kustom2.png'
+import logoLight from '@/assets/images/logo-kustom.webp'
+import logoDark from '@/assets/images/logo-kustom2.webp'
 
 const props = defineProps({
   report: {

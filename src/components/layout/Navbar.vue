@@ -16,11 +16,11 @@
           <div class="flex items-center gap-2" v-if="nextPrayer">
             <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
             <span 
-              v-if="hijriDate"
+              v-if="displayDate"
               class="text-[10px] sm:text-[11px] font-medium tracking-wide uppercase transition-colors duration-500" 
               :class="(!scrolled || isDark) ? 'text-white/80' : 'text-gray-600'"
             >
-              {{ hijriDate }} <span class="mx-0.5 opacity-50">|</span>
+              {{ displayDate }} <span class="mx-0.5 opacity-50">|</span>
             </span>
             <span class="text-secondary font-bold text-[11px] sm:text-xs tracking-wide uppercase">{{ nextPrayer.name }} {{ nextPrayer.time }}</span>
           </div>
@@ -179,8 +179,8 @@ import { gsap } from 'gsap'
 import { useDark, useToggle } from '@vueuse/core'
 import { Sun, Moon, HandCoins, ShieldCheck } from 'lucide-vue-next'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
-import logoLight from '@/assets/images/logo-kustom.png'
-import logoDark from '@/assets/images/logo-kustom2.png'
+import logoLight from '@/assets/images/logo-kustom.webp'
+import logoDark from '@/assets/images/logo-kustom2.webp'
 import { usePrayerStore } from '@/stores/prayer'
 import { isDonationModalOpen } from '@/composables/useDonationModal'
 import { scrollToSection } from '@/utils/scroll'
@@ -217,7 +217,7 @@ const buttonClass = computed(() => {
 
 // Mini Prayer Logic synced from global store
 const nextPrayer = computed(() => prayerStore.nextPrayer)
-const hijriDate = computed(() => prayerStore.hijriDate)
+const displayDate = computed(() => prayerStore.displayDate)
 
 const menuItems = [
   { id: 'beranda', label: 'Beranda' },
