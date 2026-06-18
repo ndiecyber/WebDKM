@@ -144,10 +144,17 @@ import { isDonationModalOpen } from '@/composables/useDonationModal'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const adminStore = useAdminStore()
-const cta = ref(adminStore.ctaSettings)
+import { computed } from 'vue'
 
-const sliderImages = [img1, img2, img3]
+const adminStore = useAdminStore()
+const cta = computed(() => adminStore.ctaSettings)
+
+const sliderImages = computed(() => {
+  if (cta.value.sliderImages && cta.value.sliderImages.length > 0) {
+    return cta.value.sliderImages
+  }
+  return [img1, img2, img3]
+})
 const currentImageIndex = ref(0)
 let sliderInterval = null
 
@@ -186,7 +193,7 @@ const handleMouseLeave = () => {
 
 onMounted(() => {
   sliderInterval = setInterval(() => {
-    currentImageIndex.value = (currentImageIndex.value + 1) % sliderImages.length
+    currentImageIndex.value = (currentImageIndex.value + 1) % sliderImages.value.length
   }, 6000)
 
   const triggerConfig = {

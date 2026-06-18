@@ -13,7 +13,7 @@
 
         <!-- Modal Content -->
         <div 
-          class="modal-content relative w-full max-w-2xl bg-white dark:bg-dark-light rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] border border-white/20 dark:border-white/10"
+          class="modal-content relative w-full max-w-2xl md:max-w-4xl bg-white dark:bg-dark-light rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] border border-white/20 dark:border-white/10"
           role="dialog"
           aria-modal="true"
         >
@@ -79,9 +79,9 @@
               </div>
 
               <!-- Contact / Supervisor -->
-              <div v-if="service.details?.contact" class="p-4 rounded-xl bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 animate-slide-up flex items-center gap-4" style="animation-delay: 0.3s; animation-fill-mode: both;">
+              <div v-if="service.details?.supervisor" class="p-4 rounded-xl bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 animate-slide-up flex items-center gap-4" style="animation-delay: 0.3s; animation-fill-mode: both;">
                 <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 border-primary/25 dark:border-secondary/20 flex items-center justify-center bg-linear-to-br from-primary/15 to-primary/5 shadow-inner">
-                  <img v-if="service.details?.contactImage" :src="service.details.contactImage" :alt="service.details.contact" class="w-full h-full object-cover" />
+                  <img v-if="service.details?.supervisorImage" :src="service.details.supervisorImage" :alt="service.details.supervisor" class="w-full h-full object-cover" />
                   <User v-else class="w-5 h-5 text-primary" />
                 </div>
                 <div>
@@ -89,7 +89,7 @@
                     <User class="w-3.5 h-3.5" />
                     <span class="font-bold text-xs uppercase tracking-wider">Penanggung Jawab</span>
                   </div>
-                  <p class="text-dark dark:text-white font-semibold text-sm leading-snug">{{ service.details.contact }}</p>
+                  <p class="text-dark dark:text-white font-semibold text-sm leading-snug">{{ service.details.supervisor }}</p>
                 </div>
               </div>
 
@@ -130,7 +130,7 @@
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-dark/10 dark:border-white/10 animate-slide-up" style="animation-delay: 0.5s; animation-fill-mode: both;">
               <a 
-                href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20Admin%20Masjid%20Jami%20Kassiti%2C%20saya%20ingin%20bertanya%20mengenai%20layanan..." 
+                :href="whatsappLink" 
                 target="_blank"
                 class="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold transition-colors"
               >
@@ -152,9 +152,35 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { X, Calendar, MapPin, User, FileText, MessageCircle, Users, BookOpen, GraduationCap, Heart, HandCoins, Gem } from 'lucide-vue-next'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+import { useAdminStore } from '@/stores/admin'
+
+const adminStore = useAdminStore()
+
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true
+  },
+  service: {
+    type: Object,
+    default: () => ({})
+  }
+})
+
+const whatsappNumber = computed(() => {
+  if (props.service.details?.supervisorWa) {
+    return String(props.service.details.supervisorWa).replace(/\D/g, '')
+  }
+  return adminStore.generalSettings.whatsapp?.[0]?.number || '6281234567890'
+})
+
+const whatsappLink = computed(() => {
+  const text = encodeURIComponent(`Assalamu'alaikum Admin Masjid Jami Kassiti, saya ingin bertanya mengenai layanan ${props.service.title}...`)
+  return `https://wa.me/${whatsappNumber.value}?text=${text}`
+})
 
 const getInitials = (name) => {
   if (!name) return ''
@@ -171,17 +197,6 @@ const getInitials = (name) => {
 const iconMap = {
   Users, BookOpen, GraduationCap, Heart, HandCoins, Gem
 }
-
-const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true
-  },
-  service: {
-    type: Object,
-    default: () => ({})
-  }
-})
 
 const emit = defineEmits(['close'])
 
