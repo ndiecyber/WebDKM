@@ -204,7 +204,7 @@ export const useAdminStore = defineStore('admin', {
       maps: 'https://maps.app.goo.gl/HMDmpx7zZFn8GRUaA',
       mapsIframe: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.56347862248!2d107.97120309999998!3d-7.3621539!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f56e0766e01a1%3A0x673413cb1fb6f2bd!2sTasikmalaya%2C%20Tasikmalaya%20Regency%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1718000000000!5m2!1sen!2sid" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
-    ctaSettings: parseSafe('admin_cta_settings') || {
+    ctaSettings: parseSafe('admin_cta_settings_v2') || {
       title: 'Investasi Terbaik Untuk Akhirat',
       subtitle: 'Setiap rupiah yang Anda sedekahkan tidak hanya memakmurkan masjid, tapi juga mengalirkan pahala yang tak terputus bagi Anda dan keluarga.',
       quote: '"Barang siapa yang membangun masjid karena Allah, maka Allah akan membangunkan baginya rumah di surga."',
@@ -213,7 +213,8 @@ export const useAdminStore = defineStore('admin', {
       programs: [
         { id: 1, name: 'Renovasi Aula Utama', progress: 75 },
         { id: 2, name: 'Sarana Pendidikan TPQ', progress: 60 }
-      ]
+      ],
+      sliderImages: [exteriorImg, heroImg, communityImg]
     },
     masterData: parseSafe('admin_master_data_v2') || {
       kategori: [
@@ -370,7 +371,7 @@ export const useAdminStore = defineStore('admin', {
       this.logActivity('Ubah Pengaturan', 'Memperbarui pengaturan umum (teks sambutan, dsb)');
     },
     saveCtaSettings() {
-      setStorage('admin_cta_settings', JSON.stringify(this.ctaSettings))
+      setStorage('admin_cta_settings_v2', JSON.stringify(this.ctaSettings))
       this.logActivity('Ubah Donasi', 'Memperbarui pengaturan CTA Donasi');
     },
     saveMasterData() {

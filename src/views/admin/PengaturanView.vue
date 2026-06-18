@@ -403,7 +403,7 @@
           </div>
           
           <div class="p-6 sm:p-8 space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 gap-6">
               <div class="space-y-1.5">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Donasi</label>
                 <input 
@@ -413,14 +413,6 @@
                 />
               </div>
               <div class="space-y-1.5">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kutipan / Hadist</label>
-                <input 
-                  v-model="ctaSettings.quote"
-                  type="text" 
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
-                />
-              </div>
-              <div class="sm:col-span-2 space-y-1.5">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi / Subjudul</label>
                 <textarea 
                   v-model="ctaSettings.subtitle"
@@ -430,20 +422,20 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-gray-300 dark:border-white/5 pt-6 mt-6">
+            <div class="grid grid-cols-1 gap-6 border-t border-gray-300 dark:border-white/5 pt-6 mt-6">
               <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kutipan / Hadist</label>
+                <textarea 
+                  v-model="ctaSettings.quote"
+                  rows="2"
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all resize-none text-sm"
+                ></textarea>
+              </div>
+              <div class="space-y-1.5 sm:w-1/2">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sumber Kutipan</label>
                 <input 
                   v-model="ctaSettings.quoteSource"
                   type="text" 
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
-                />
-              </div>
-              <div class="space-y-1.5">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Donatur</label>
-                <input 
-                  v-model.number="ctaSettings.totalDonors"
-                  type="number" 
                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
                 />
               </div>
@@ -470,6 +462,37 @@
                     max="100"
                     class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-1.5 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
                   />
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-300 dark:border-white/5 pt-6 mt-6">
+              <div class="space-y-1.5 sm:w-1/3">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Donatur Saat Ini</label>
+                <input 
+                  v-model.number="ctaSettings.totalDonors"
+                  type="number" 
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-4 mt-6 pt-6 border-t border-gray-300 dark:border-white/5">
+              <h4 class="text-sm font-bold text-gray-900 dark:text-white">Pengaturan Background Slider</h4>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Gambar Background CTA (Bisa pilih lebih dari satu)</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-60 overflow-y-auto p-2 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg">
+                  <label v-for="item in adminStore.gallery" :key="'cta-'+item.id" class="cursor-pointer group relative rounded-lg overflow-hidden border-2 transition-all" :class="ctaSettings.sliderImages.includes(item.image) ? 'border-secondary' : 'border-transparent'">
+                    <input type="checkbox" :value="item.image" v-model="ctaSettings.sliderImages" class="hidden" />
+                    <img :src="item.image" class="w-full h-20 object-cover" />
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="text-white text-xs font-bold text-center px-1">{{ item.caption }}</span>
+                    </div>
+                    <div v-if="ctaSettings.sliderImages.includes(item.image)" class="absolute top-1 right-1 bg-secondary text-white rounded-full p-0.5 shadow-md">
+                      <Check class="w-3 h-3" />
+                    </div>
+                  </label>
                 </div>
               </div>
             </div>
@@ -848,7 +871,7 @@ const settingTabs = [
   { id: 'profil', name: 'Profil & Sejarah', icon: Globe },
   { id: 'pengurus', name: 'Susunan Pengurus', icon: Users },
   { id: 'kontak', name: 'Kontak & Lokasi', icon: LinkIcon },
-  { id: 'donasi', name: 'Ajakan Bertindak', icon: Heart },
+  { id: 'donasi', name: 'Donasi & Ajakan (CTA)', icon: Heart },
   { id: 'master', name: 'Master Data', icon: List }
 ]
 
