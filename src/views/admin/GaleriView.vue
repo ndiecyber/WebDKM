@@ -135,7 +135,7 @@
                 <select 
                   v-model="form.tag"
                   required
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
                 >
                   <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="">Pilih Label</option>
                   <option v-for="label in adminStore.masterData.label" :key="label.id" :value="label.name" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">{{ label.name }}</option>
@@ -146,7 +146,7 @@
                 <select 
                   v-model="form.category"
                   required
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
                 >
                   <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="">Pilih Kategori</option>
                   <option v-for="cat in adminStore.masterData.kategori" :key="cat.id" :value="cat.name" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">{{ cat.name }}</option>

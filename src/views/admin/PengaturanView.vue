@@ -521,7 +521,7 @@
                         <td v-if="key === 'kategori'" class="px-4 py-2">
                           <select 
                             v-model="item.iconName"
-                            class="w-full bg-transparent border border-transparent hover:border-gray-300 focus:border-secondary dark:hover:border-white/20 rounded px-2 py-1.5 text-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-secondary outline-none transition-all appearance-none text-sm"
+                            class="w-full bg-transparent border border-transparent hover:border-gray-300 focus:border-secondary dark:hover:border-white/20 rounded px-2 py-1.5 text-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-secondary outline-none transition-all text-sm"
                           >
                             <option v-for="icon in availableIcons" :key="icon.value" :value="icon.value" class="bg-white dark:bg-slate-800">{{ icon.label }}</option>
                           </select>
@@ -529,7 +529,7 @@
                         <td v-if="key !== 'kategori'" class="px-4 py-2">
                           <select 
                             v-model="item.color"
-                            class="w-full bg-transparent border border-transparent hover:border-gray-300 focus:border-secondary dark:hover:border-white/20 rounded px-2 py-1.5 text-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-secondary outline-none transition-all appearance-none"
+                            class="w-full bg-transparent border border-transparent hover:border-gray-300 focus:border-secondary dark:hover:border-white/20 rounded px-2 py-1.5 text-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-secondary outline-none transition-all"
                           >
                             <option class="bg-white dark:bg-slate-800" value="red">Merah</option>
                             <option class="bg-white dark:bg-slate-800" value="yellow">Kuning</option>
@@ -588,7 +588,7 @@
                         <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Ikon</label>
                         <select 
                           v-model="item.iconName"
-                          class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all appearance-none text-sm"
+                          class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all text-sm"
                         >
                           <option v-for="icon in availableIcons" :key="icon.value" :value="icon.value" class="bg-white dark:bg-slate-800">{{ icon.label }}</option>
                         </select>
@@ -597,7 +597,7 @@
                         <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Warna</label>
                         <select 
                           v-model="item.color"
-                          class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all appearance-none text-sm"
+                          class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all text-sm"
                         >
                           <option class="bg-white dark:bg-slate-800" value="red">Merah</option>
                           <option class="bg-white dark:bg-slate-800" value="yellow">Kuning</option>

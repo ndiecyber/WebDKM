@@ -170,7 +170,7 @@
         <div v-if="isUserModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <div class="absolute inset-0 bg-gray-950/80 backdrop-blur-sm" @click="closeUserModal"></div>
           
-          <div class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden border border-gray-200 dark:border-white/10">
+          <div class="relative w-full max-w-md md:max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden border border-gray-200 dark:border-white/10">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-white/5 shrink-0 bg-gray-50/50 dark:bg-white/5">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ isEditingUser ? 'Edit Pengguna' : 'Tambah Pengguna' }}</h3>
@@ -229,7 +229,7 @@
         <div v-if="isRoleModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <div class="absolute inset-0 bg-gray-950/80 backdrop-blur-sm" @click="closeRoleModal"></div>
           
-          <div class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden border border-gray-200 dark:border-white/10">
+          <div class="relative w-full max-w-md md:max-w-xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden border border-gray-200 dark:border-white/10">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-white/5 shrink-0 bg-gray-50/50 dark:bg-white/5">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ isEditingRole ? 'Edit Peran (Role)' : 'Tambah Peran (Role)' }}</h3>
