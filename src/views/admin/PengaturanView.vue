@@ -175,54 +175,220 @@
               <LinkIcon class="w-5 h-5 text-gray-400" />
               Kontak & Lokasi
             </h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola tautan sosial media dan nomor kontak yang bisa dihubungi.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola informasi alamat, nomor kontak, dan tautan sosial media resmi masjid.</p>
           </div>
           
-          <div class="p-6 sm:p-8 space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div class="space-y-1.5">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link Instagram</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Instagram class="h-4 w-4 text-gray-400" />
-                  </div>
+          <div class="p-6 sm:p-8 space-y-10">
+            <!-- Grup 1: Informasi Alamat & Peta -->
+            <div class="space-y-6">
+              <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2 border-b border-gray-200 dark:border-white/10 pb-2">
+                <MapPin class="w-4 h-4 text-secondary" /> Informasi Alamat & Peta
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="sm:col-span-2 space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alamat Lengkap</label>
+                  <textarea 
+                    v-model="settings.alamatLengkap"
+                    rows="2"
+                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all resize-none text-sm shadow-md"
+                    placeholder="Misal: Jl. Raya Arjamukti Blok B No. 12..."
+                  ></textarea>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kota / Kabupaten</label>
                   <input 
-                    v-model="settings.instagram"
-                    type="url" 
-                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    v-model="settings.kota"
+                    type="text" 
+                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    placeholder="Misal: Kab. Tasikmalaya"
                   />
                 </div>
-              </div>
-              
-              <div class="space-y-1.5">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor WhatsApp Pengurus</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Phone class="h-4 w-4 text-gray-400" />
-                  </div>
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kode Pos</label>
                   <input 
-                    v-model="settings.whatsapp"
-                    type="tel" 
-                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    v-model="settings.kodepos"
+                    type="text" 
+                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    placeholder="Misal: 46461"
                   />
                 </div>
-                <p class="text-xs text-gray-500">Format: 628xxx (tanpa tanda + atau 0 di depan).</p>
-              </div>
-
-              <div class="sm:col-span-2 space-y-1.5 border-t border-gray-300 dark:border-white/5 pt-6 mt-6">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link Google Maps (Lokasi Masjid)</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <MapPin class="h-4 w-4 text-gray-400" />
-                  </div>
+                <div class="sm:col-span-2 space-y-1.5 pt-4">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link Google Maps (URL)</label>
                   <input 
                     v-model="settings.maps"
                     type="url" 
-                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    placeholder="https://maps.google.com/..."
                   />
+                  <p class="text-xs text-gray-500">Tautan langsung menuju titik lokasi di Google Maps.</p>
+                </div>
+                <div class="sm:col-span-2 space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Google Maps Iframe / Embed Code</label>
+                  <textarea 
+                    v-model="settings.mapsIframe"
+                    rows="3"
+                    class="w-full font-mono bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all resize-y text-xs shadow-md"
+                    placeholder='<iframe src="..."></iframe>'
+                  ></textarea>
+                  <p class="text-xs text-gray-500">Buka Google Maps > Bagikan > Sematkan Peta, lalu salin kode HTML-nya ke sini.</p>
                 </div>
               </div>
             </div>
+
+            <!-- Grup 2: Kontak Resmi -->
+            <div class="space-y-6">
+              <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2 border-b border-gray-200 dark:border-white/10 pb-2">
+                <Phone class="w-4 h-4 text-secondary" /> Kontak Resmi
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Resmi</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Mail class="h-4 w-4 text-gray-400" />
+                    </div>
+                    <input 
+                      v-model="settings.email"
+                      type="email" 
+                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                      placeholder="info@masjidkassiti.com"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telepon Kantor (Landline)</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Phone class="h-4 w-4 text-gray-400" />
+                    </div>
+                    <input 
+                      v-model="settings.teleponKantor"
+                      type="tel" 
+                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                      placeholder="022-1234567"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Multiple WhatsApp Numbers -->
+              <div class="space-y-4 pt-2">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor WhatsApp Pengurus</label>
+                    <p class="text-xs text-gray-500">Bisa menambahkan lebih dari satu kontak (Misal: Sekretariat, ZISWAF, Layanan Jenazah).</p>
+                  </div>
+                  <button type="button" @click="addWhatsapp" class="text-xs font-medium bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-md">
+                    <Plus class="w-3.5 h-3.5" /> Tambah Kontak
+                  </button>
+                </div>
+                <div class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-white/10 p-4 space-y-3">
+                  <div v-for="(wa, index) in settings.whatsapp" :key="wa.id || index" class="flex flex-col sm:flex-row gap-3 items-end sm:items-center">
+                    <div class="flex-1 w-full space-y-1">
+                      <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">Nama / Bagian</label>
+                      <input 
+                        v-model="wa.name"
+                        type="text" 
+                        class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm"
+                        placeholder="Misal: Informasi / Sekretariat atau Nama Orang"
+                      />
+                    </div>
+                    <div class="flex-1 w-full space-y-1">
+                      <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">Nomor Telepon (Awali dengan 62)</label>
+                      <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <svg class="h-4 w-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        </div>
+                        <input 
+                          v-model="wa.number"
+                          type="tel" 
+                          class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm"
+                          placeholder="628..."
+                        />
+                      </div>
+                    </div>
+                    <button type="button" @click="removeWhatsapp(index)" class="p-2 text-gray-400 hover:text-red-500 bg-white hover:bg-red-50 dark:bg-gray-900 dark:hover:bg-red-500/10 border border-gray-200 dark:border-white/10 rounded-lg transition-colors mb-0.5" title="Hapus Kontak">
+                      <Trash2 class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grup 3: Media Sosial -->
+            <div class="space-y-6">
+              <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2 border-b border-gray-200 dark:border-white/10 pb-2">
+                <Globe class="w-4 h-4 text-secondary" /> Media Sosial
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link Instagram</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Instagram class="h-4 w-4 text-[#E1306C]" />
+                    </div>
+                    <input 
+                      v-model="settings.instagram"
+                      type="url" 
+                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link Facebook</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Facebook class="h-4 w-4 text-[#1877F2]" />
+                    </div>
+                    <input 
+                      v-model="settings.facebook"
+                      type="url" 
+                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link YouTube</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Youtube class="h-4 w-4 text-[#FF0000]" />
+                    </div>
+                    <input 
+                      v-model="settings.youtube"
+                      type="url" 
+                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link Twitter (X)</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Twitter class="h-4 w-4 text-black dark:text-white" />
+                    </div>
+                    <input 
+                      v-model="settings.twitter"
+                      type="url" 
+                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Link TikTok</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <svg class="h-4 w-4 text-black dark:text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                    </div>
+                    <input 
+                      v-model="settings.tiktok"
+                      type="url" 
+                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
           </div>
         </section>
 
@@ -649,7 +815,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check } from 'lucide-vue-next'
+import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check, Mail, Facebook, Youtube, Twitter, Trash2 } from 'lucide-vue-next'
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
 
@@ -658,6 +824,19 @@ const adminStore = useAdminStore()
 const isSaving = ref(false)
 
 const settings = ref(JSON.parse(JSON.stringify(adminStore.generalSettings)))
+// Migration for older localStorage data where whatsapp might still be a string
+if (typeof settings.value.whatsapp === 'string') {
+  settings.value.whatsapp = [{ id: 1, name: 'Pengurus / Umum', number: settings.value.whatsapp }]
+}
+if (!settings.value.email) settings.value.email = ''
+if (!settings.value.alamatLengkap) settings.value.alamatLengkap = ''
+if (!settings.value.kota) settings.value.kota = ''
+if (!settings.value.kodepos) settings.value.kodepos = ''
+if (!settings.value.mapsIframe) settings.value.mapsIframe = ''
+if (!settings.value.teleponKantor) settings.value.teleponKantor = ''
+if (settings.value.twitter === undefined) settings.value.twitter = ''
+if (settings.value.tiktok === undefined) settings.value.tiktok = ''
+
 const ctaSettings = ref(JSON.parse(JSON.stringify(adminStore.ctaSettings)))
 const masterData = ref(JSON.parse(JSON.stringify(adminStore.masterData)))
 
@@ -798,6 +977,18 @@ function setLeader(group, memberIndex, divIndex = null) {
       m.isLeader = (idx === memberIndex)
     })
   }
+}
+
+function addWhatsapp() {
+  if (!Array.isArray(settings.value.whatsapp)) {
+    settings.value.whatsapp = []
+  }
+  const newId = settings.value.whatsapp.length > 0 ? Math.max(...settings.value.whatsapp.map(w => w.id || 0)) + 1 : 1
+  settings.value.whatsapp.push({ id: newId, name: '', number: '' })
+}
+
+function removeWhatsapp(index) {
+  settings.value.whatsapp.splice(index, 1)
 }
 
 function addDivisi() {

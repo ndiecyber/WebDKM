@@ -191,8 +191,18 @@ export const useAdminStore = defineStore('admin', {
       instagram: 'https://instagram.com/masjidjamikassiti',
       facebook: 'https://facebook.com/masjidjamikassiti',
       youtube: 'https://youtube.com/@masjidjamikassiti',
-      whatsapp: '6281234567890',
-      maps: 'https://maps.google.com'
+      twitter: '',
+      tiktok: '',
+      whatsapp: [
+        { id: 1, name: 'Bpk. Randi Rizal', number: '6285320132014' }
+      ],
+      email: 'dkmjami.kassiti@gmail.com',
+      teleponKantor: '',
+      alamatLengkap: 'Masjid Kassiti Arjamukti Kencana Raya, Arjasari, Kec. Leuwisari, Kabupaten Tasikmalaya, Jawa Barat',
+      kota: 'Kab. Tasikmalaya',
+      kodepos: '46464',
+      maps: 'https://maps.app.goo.gl/HMDmpx7zZFn8GRUaA',
+      mapsIframe: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.56347862248!2d107.97120309999998!3d-7.3621539!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f56e0766e01a1%3A0x673413cb1fb6f2bd!2sTasikmalaya%2C%20Tasikmalaya%20Regency%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1718000000000!5m2!1sen!2sid" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
     },
     ctaSettings: parseSafe('admin_cta_settings') || {
       title: 'Investasi Terbaik Untuk Akhirat',

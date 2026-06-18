@@ -108,25 +108,39 @@
       
       <div class="w-px h-10 bg-white/20 ml-6"></div>
       
-      <a :href="settings.instagram || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[110px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a v-if="settings.instagram" :href="settings.instagram" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[110px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Instagram class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Instagram</span>
       </a>
       
-      <a :href="settings.facebook || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a v-if="settings.facebook" :href="settings.facebook" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Facebook class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Facebook</span>
       </a>
       
-      <a :href="settings.youtube || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a v-if="settings.youtube" :href="settings.youtube" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Youtube class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">YouTube</span>
+      </a>
+
+      <a v-if="settings.twitter" :href="settings.twitter" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+        <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
+          <Twitter class="w-4 h-4 group-hover:scale-110 transition-transform" />
+        </div>
+        <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Twitter</span>
+      </a>
+
+      <a v-if="settings.tiktok" :href="settings.tiktok" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+        <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
+          <svg class="w-4 h-4 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+        </div>
+        <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">TikTok</span>
       </a>
     </div>
 
@@ -142,7 +156,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Youtube, Wallet, HandCoins } from 'lucide-vue-next'
+import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Youtube, Twitter, Wallet, HandCoins } from 'lucide-vue-next'
 import { isDonationModalOpen } from '@/composables/useDonationModal'
 import { gsap } from 'gsap'
 import { useAdminStore } from '@/stores/admin'
