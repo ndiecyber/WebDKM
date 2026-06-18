@@ -248,6 +248,29 @@
         </div>
       </div>
 
+      <!-- Warning Alert Banner for Location (Conditional) -->
+      <div 
+        v-if="!prayerStore.isLocationEnabled" 
+        class="max-w-xl mx-auto mb-6 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-amber-500/10 border border-amber-500/30 text-amber-200 backdrop-blur-md flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center sm:text-left shadow-md relative overflow-hidden"
+      >
+        <!-- Pulsing light overlay -->
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent pointer-events-none animate-pulse"></div>
+        
+        <div class="flex items-center justify-center gap-2 relative z-10 min-w-0">
+          <MapPin class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-secondary animate-bounce shrink-0" />
+          <p class="text-[9px] sm:text-xs text-white/85 font-medium leading-tight">
+            Menggunakan waktu sholat default (Arjasari). Aktifkan GPS untuk waktu presisi.
+          </p>
+        </div>
+        
+        <button
+          @click="requestLocation"
+          class="px-2.5 py-1 bg-gradient-to-r from-secondary to-amber-500 hover:from-white hover:to-white text-dark hover:text-dark font-bold text-[9px] sm:text-[10px] rounded-md shadow-xs transition-all duration-300 shrink-0 flex items-center justify-center gap-1 group relative z-10"
+        >
+          <Compass class="w-2.5 h-2.5 sm:w-3 sm:h-3 group-hover:rotate-45 transition-transform duration-500" />
+          <span>Aktifkan</span>
+        </button>
+      </div>
 
       <!-- Countdown to Next Prayer -->
       <div v-if="nextPrayer && !loading" class="flex justify-center mb-12" ref="countdownRef">
@@ -376,8 +399,8 @@
         </button>
 
         <div class="space-y-1">
-          <p v-if="hijriDate" class="text-white/50 font-medium text-sm">
-            {{ hijriDate }}
+          <p v-if="prayerStore.displayDate" class="text-white/50 font-medium text-sm">
+            {{ prayerStore.displayDate }}
           </p>
           <p class="text-white/30 text-xs">
             Sumber data: Aladhan API • Metode: Kementerian Agama RI
@@ -540,6 +563,10 @@ const currentDate = computed(() => {
     day: 'numeric',
   })
 })
+
+watch(currentDate, (newVal) => {
+  prayerStore.setGregorianDate(newVal)
+}, { immediate: true })
 
 const locationCleanName = computed(() => {
   if (loading.value) return 'Tasikmalaya'
@@ -943,6 +970,7 @@ function setFallbackTimes() {
   prayers.value[6].time = '18:58' // Isya
   locationName.value = 'Arjasari, Jawa Barat (default)'
   qiblaDirection.value = 295.14
+  prayerStore.setLocationEnabled(false)
 
   try {
     const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', {
@@ -962,6 +990,24 @@ function setFallbackTimes() {
   updateCelestialBody()
 }
 
+async function fetchPrayerTimesWithDefault() {
+  loading.value = true
+  try {
+    prayerStore.setLocationEnabled(false)
+    await Promise.all([
+      fetchPrayerTimes(userLat.value, userLng.value),
+      reverseGeocode(userLat.value, userLng.value),
+      fetchWeather(userLat.value, userLng.value)
+    ])
+    locationName.value = 'Arjasari, Jawa Barat (default)'
+  } catch (err) {
+    console.error('Failed to fetch default location times:', err)
+    setFallbackTimes()
+  } finally {
+    loading.value = false
+  }
+}
+
 function requestLocation() {
   loading.value = true
   locationError.value = ''
@@ -973,6 +1019,7 @@ function requestLocation() {
         userLat.value = latitude
         userLng.value = longitude
         try {
+          prayerStore.setLocationEnabled(true)
           await Promise.all([
             fetchPrayerTimes(latitude, longitude),
             reverseGeocode(latitude, longitude),
@@ -987,15 +1034,15 @@ function requestLocation() {
       (err) => {
         console.warn('Geolocation error:', err)
         locationError.value = 'Akses lokasi ditolak'
-        loading.value = false
-        setFallbackTimes()
+        prayerStore.setLocationEnabled(false)
+        fetchPrayerTimesWithDefault()
       },
       { timeout: 8000, maximumAge: 300000 }
     )
   } else {
     locationError.value = 'Browser tidak mendukung lokasi'
-    loading.value = false
-    setFallbackTimes()
+    prayerStore.setLocationEnabled(false)
+    fetchPrayerTimesWithDefault()
   }
 }
 

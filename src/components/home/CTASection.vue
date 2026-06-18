@@ -7,7 +7,7 @@
     <!-- Main Container Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <!-- Immersive CTA Container -->
-      <div ref="containerRef" class="relative w-full rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden shadow-2xl bg-slate-900">
+      <div ref="containerRef" class="relative w-full rounded-[2rem] sm:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden shadow-2xl bg-slate-900">
         
         <!-- Background Image Slider with Parallax effect -->
         <div ref="bgImageRef" class="absolute inset-[-10%] w-[120%] h-[120%]">
@@ -28,18 +28,18 @@
         <div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
         
         <!-- Content Grid -->
-        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 p-6 sm:p-12 lg:p-20 items-center">
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-12 p-5 sm:p-12 lg:p-20 items-center">
           
           <!-- Left Column: Copywriting & CTA -->
           <div class="relative z-20 text-center lg:text-left">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 sm:mb-8">
-              <Heart class="w-4 h-4 text-primary animate-pulse fill-primary" />
-              <span class="text-white text-xs font-bold tracking-widest uppercase">Peluang Amal Jariyah</span>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-4 sm:mb-8">
+              <Heart class="w-3.5 h-3.5 text-primary animate-pulse fill-primary" />
+              <span class="text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase">Peluang Amal Jariyah</span>
             </div>
 
-            <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-[1.1] mb-6" v-html="cta.title"></h2>
+            <h2 class="font-heading text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-[1.1] mb-4 sm:mb-6" v-html="cta.title"></h2>
             
-            <p class="text-white/80 text-sm sm:text-base md:text-lg leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
+            <p class="text-white/80 text-xs sm:text-base md:text-lg leading-relaxed mb-6 sm:mb-10 max-w-xl mx-auto lg:mx-0">
               {{ cta.subtitle }}
             </p>
 
@@ -66,56 +66,56 @@
           </div>
 
           <!-- Right Column: Glassmorphism Info Panel with 3D Tilt -->
-          <div class="w-full flex justify-center lg:justify-end perspective-1000 mt-8 lg:mt-0">
+          <div class="w-full flex justify-center lg:justify-end perspective-1000 mt-6 lg:mt-0">
             <div 
               ref="cardRef"
               @mousemove="handleMouseMove"
               @mouseleave="handleMouseLeave"
               :style="{ transform: cardTilt, transition: isMouseOver ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out' }"
-              class="w-full max-w-[20rem] sm:max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden will-change-transform"
+              class="w-full max-w-[19rem] sm:max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl relative overflow-hidden will-change-transform"
             >
               <!-- Decorative element -->
               <div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/30 rounded-full blur-3xl pointer-events-none"></div>
 
               <!-- Hadith Quote -->
-              <div class="mb-5 sm:mb-8 relative z-10">
-                <Quote class="w-6 h-6 sm:w-8 sm:h-8 text-primary/40 mb-2 sm:mb-3" />
-                <p class="text-white/90 text-sm sm:text-base italic leading-relaxed mb-3">
+              <div class="mb-4 sm:mb-8 relative z-10">
+                <Quote class="w-5 h-5 sm:w-8 sm:h-8 text-primary/40 mb-1.5 sm:mb-3" />
+                <p class="text-white/90 text-xs sm:text-base italic leading-relaxed mb-2 sm:mb-3">
                   {{ cta.quote }}
                 </p>
                 <div class="flex items-center gap-2">
                   <div class="w-6 h-px bg-primary/50"></div>
-                  <span class="text-primary/80 text-xs font-semibold tracking-wider uppercase">{{ cta.quoteSource }}</span>
+                  <span class="text-primary/80 text-[10px] sm:text-xs font-semibold tracking-wider uppercase">{{ cta.quoteSource }}</span>
                 </div>
               </div>
 
               <!-- Progress Tracking -->
-              <div class="space-y-6 mb-8 relative z-10">
-                <div v-for="prog in cta.programs" :key="prog.id" class="space-y-2">
-                  <div class="flex justify-between text-xs sm:text-sm font-semibold">
+              <div class="space-y-4 sm:space-y-6 mb-6 sm:mb-8 relative z-10">
+                <div v-for="prog in cta.programs" :key="prog.id" class="space-y-1.5 sm:space-y-2">
+                  <div class="flex justify-between text-[11px] sm:text-sm font-semibold">
                     <span class="text-white">{{ prog.name }}</span>
                     <span class="text-primary">{{ prog.progress }}%</span>
                   </div>
-                  <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                  <div class="h-1.5 sm:h-2 w-full bg-white/10 rounded-full overflow-hidden">
                     <div class="h-full bg-linear-to-r from-primary to-amber-300 rounded-full progress-bar" :data-width="prog.progress" style="width: 0%;"></div>
                   </div>
                 </div>
               </div>
 
               <!-- Stats & Social Proof -->
-              <div class="mt-5 pt-4 sm:mt-8 sm:pt-6 border-t border-white/10 relative z-10">
-                <p class="text-white/60 text-[10px] sm:text-xs uppercase tracking-widest mb-1.5 sm:mb-2">Total Donatur Bulan Ini</p>
+              <div class="mt-4 pt-3 sm:mt-8 sm:pt-6 border-t border-white/10 relative z-10">
+                <p class="text-white/60 text-[9px] sm:text-xs uppercase tracking-widest mb-1 sm:mb-2">Total Donatur Bulan Ini</p>
                 <div class="flex items-center justify-between">
-                  <div class="flex items-baseline gap-1.5 sm:gap-2">
-                    <span ref="donationCount" class="text-3xl sm:text-4xl font-heading font-extrabold text-white">0</span>
-                    <span class="text-primary text-xs sm:text-sm font-medium">Orang</span>
+                  <div class="flex items-baseline gap-1 sm:gap-2">
+                    <span ref="donationCount" class="text-2xl sm:text-4xl font-heading font-extrabold text-white">0</span>
+                    <span class="text-primary text-[10px] sm:text-sm font-medium">Orang</span>
                   </div>
                   
                   <!-- Overlapping Avatars -->
-                  <div class="flex -space-x-2 sm:-space-x-3 pointer-events-none">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-slate-800 bg-linear-to-br from-blue-400 to-blue-600 flex items-center justify-center text-[10px] sm:text-xs text-white font-bold z-30 shadow-lg">IH</div>
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-slate-800 bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-[10px] sm:text-xs text-white font-bold z-20 shadow-lg">PD</div>
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-slate-800 bg-linear-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[10px] sm:text-xs text-white font-bold z-10 shadow-lg">+126</div>
+                  <div class="flex -space-x-1.5 sm:-space-x-3 pointer-events-none">
+                    <div class="w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-slate-800 bg-linear-to-br from-blue-400 to-blue-600 flex items-center justify-center text-[9px] sm:text-xs text-white font-bold z-30 shadow-lg">IH</div>
+                    <div class="w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-slate-800 bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-[9px] sm:text-xs text-white font-bold z-20 shadow-lg">PD</div>
+                    <div class="w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-slate-800 bg-linear-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[9px] sm:text-xs text-white font-bold z-10 shadow-lg">+126</div>
                   </div>
                 </div>
               </div>
@@ -137,9 +137,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useAdminStore } from '@/stores/admin'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import DonationModal from '@/components/ui/DonationModal.vue'
-import img1 from '@/assets/images/mosque-exterior.png'
-import img2 from '@/assets/images/hero-mosque.png'
-import img3 from '@/assets/images/community-prayer.png'
+import img1 from '@/assets/images/mosque-exterior.webp'
+import img2 from '@/assets/images/hero-mosque.webp'
+import img3 from '@/assets/images/community-prayer.webp'
 import { isDonationModalOpen } from '@/composables/useDonationModal'
 
 gsap.registerPlugin(ScrollTrigger)

@@ -11,7 +11,7 @@
           <span class="text-primary text-xs font-semibold tracking-wider uppercase">Galeri</span>
         </div>
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-dark dark:text-white mb-4 transition-colors duration-500">
-          Galeri <span class="text-primary dark:text-secondary">Masjid</span>
+          Galeri Kegiatan <span class="text-primary dark:text-secondary">Masjid</span>
         </h2>
         <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-4xl mx-auto transition-colors duration-500">
           Momen-momen berharga dalam berbagai kegiatan di Masjid Jami Kassiti
@@ -35,6 +35,7 @@
                 :src="gallery[activeIndex].image" 
                 :alt="gallery[activeIndex].caption" 
                 class="w-full h-full object-cover transition-transform duration-10000 ease-out hover:scale-110" 
+                loading="lazy"
               />
             </div>
           </Transition>
@@ -86,7 +87,7 @@
               activeIndex === index ? 'border-secondary opacity-100 scale-105 shadow-lg shadow-secondary/20 z-10' : 'border-transparent opacity-50 hover:opacity-100 grayscale hover:grayscale-0'
             ]"
           >
-            <img :src="item.image" :alt="item.caption" class="w-full h-full object-cover" />
+            <img :src="item.image" :alt="item.caption" class="w-full h-full object-cover" loading="lazy" />
             <div :class="['absolute inset-0 bg-dark transition-opacity duration-300', activeIndex === index ? 'opacity-0' : 'opacity-20']"></div>
           </button>
         </div>

@@ -17,17 +17,26 @@
           role="dialog"
           aria-modal="true"
         >
-          <!-- Header (Title & Metadata) with Islamic Pattern & Dark Emerald/Gold Theme -->
-          <div class="relative shrink-0 bg-[#072F2F] dark:bg-[#091717] p-6 sm:p-8 pt-10 text-left border-b border-primary/20 dark:border-white/10">
-            <!-- Background pattern -->
-            <div class="absolute inset-0 z-0 opacity-10 mix-blend-overlay">
-              <IslamicPattern pattern-color="#C5A55A" :show-sparkles="false" class="scale-125 pointer-events-none" />
+          <!-- Header (Title & Metadata) -->
+          <div class="relative shrink-0 overflow-hidden rounded-t-3xl p-6 sm:p-8 pt-10 text-left border-b border-gray-200 dark:border-white/10">
+            <!-- Rich Gradient Background -->
+            <div class="absolute inset-0 bg-linear-to-r from-emerald-950 via-emerald-850 to-emerald-900"></div>
+            
+            <!-- Calligraphy / Mosaic Background Image (Clear and Elegant) -->
+            <div class="absolute inset-0 opacity-15 dark:opacity-20 mix-blend-overlay">
+              <img :src="kaligrafiImg" class="w-full h-full object-cover scale-105 pointer-events-none select-none" alt="" />
             </div>
+            
+            <!-- Subtle Islamic Pattern Overlay -->
+            <IslamicPattern pattern-color="#C5A55A" :show-sparkles="true" class="opacity-25 mix-blend-overlay scale-110 transform-gpu animate-[pulse_5s_ease-in-out_infinite]" />
+            
+            <!-- Dark gradient overlay to ensure text readability -->
+            <div class="absolute inset-0 bg-linear-to-t from-black/45 via-black/10 to-transparent"></div>
             
             <!-- Close Button -->
             <button 
               @click="$emit('close')"
-              class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-colors z-20"
+              class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white border border-white/10 backdrop-blur-md transition-colors z-20"
               aria-label="Tutup"
             >
               <X class="w-4 h-4" />
@@ -35,38 +44,38 @@
 
             <!-- Category Tag & Status Badge -->
             <div class="relative z-10 flex items-center gap-2 mb-3">
-              <div class="inline-block px-2.5 py-1 bg-[#C5A55A] text-white text-[10px] font-bold uppercase tracking-wider rounded-md">
+              <div class="inline-block px-2.5 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-bold uppercase tracking-wider rounded-md">
                 {{ event.category }}
               </div>
-              <span v-if="event.badge" class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md bg-[#5c2323] text-white border border-[#8b3131]">
+              <span v-if="event.badge" class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md bg-red-500/20 text-red-300 border border-red-500/30">
                 {{ event.badge }}
               </span>
             </div>
 
             <!-- Title -->
-            <h3 class="relative z-10 font-heading text-lg sm:text-2xl font-extrabold text-white leading-snug">
+            <h3 class="relative z-10 font-heading text-lg sm:text-2xl font-extrabold text-white leading-snug drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.5)]">
               {{ event.title }}
             </h3>
 
-            <!-- Metadata Row (Matches UIN KHAS Jember reference style) -->
-            <div class="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-white/70 mt-4 font-medium">
+            <!-- Metadata Row -->
+            <div class="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-emerald-100/90 mt-4 font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
               <div class="flex items-center gap-1.5">
-                <Calendar class="w-3.5 h-3.5 text-[#C5A55A]" />
+                <Calendar class="w-3.5 h-3.5 text-amber-400" />
                 <span>{{ event.day }} {{ event.month }} 2026</span>
               </div>
-              <span class="text-white/30 hidden sm:inline">|</span>
+              <span class="text-emerald-700/50 hidden sm:inline">|</span>
               <div class="flex items-center gap-1.5">
-                <User class="w-3.5 h-3.5 text-[#C5A55A]" />
+                <User class="w-3.5 h-3.5 text-amber-400" />
                 <span>{{ event.author || 'DKM Jami Kassiti' }}</span>
               </div>
-              <span class="text-white/30 hidden sm:inline">|</span>
+              <span class="text-emerald-700/50 hidden sm:inline">|</span>
               <div class="flex items-center gap-1.5">
-                <Eye class="w-3.5 h-3.5 text-[#C5A55A]" />
+                <Eye class="w-3.5 h-3.5 text-amber-400" />
                 <span>{{ event.hits || 88 }} dibaca</span>
               </div>
-              <span class="text-white/30 hidden sm:inline">|</span>
+              <span class="text-emerald-700/50 hidden sm:inline">|</span>
               <div class="flex items-center gap-1.5">
-                <Folder class="w-3.5 h-3.5 text-[#C5A55A]" />
+                <Folder class="w-3.5 h-3.5 text-amber-400" />
                 <span>{{ event.category }}</span>
               </div>
             </div>
@@ -74,15 +83,7 @@
 
           <!-- Body Scrollable Content -->
           <div class="flex-1 overflow-y-auto p-6 sm:p-8 custom-scrollbar bg-white dark:bg-[#152020]">
-            <!-- Center Article Image (Inside scrollable content like UIN Khas) -->
-            <div class="relative w-full rounded-2xl overflow-hidden shadow-md mb-6 border border-gray-150 dark:border-white/5 bg-gray-100 dark:bg-dark-light">
-              <img 
-                v-if="event.image"
-                :src="event.image" 
-                :alt="event.title" 
-                class="w-full h-auto max-h-[360px] object-cover"
-              />
-            </div>
+
 
             <!-- Info Grid (Waktu & Lokasi) — only for berita, not artikel -->
             <div v-if="event.type !== 'artikel'" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -107,7 +108,7 @@
 
             <!-- Body Description Content -->
             <div 
-              class="article-content text-dark/80 dark:text-white/80 leading-relaxed text-sm sm:text-base space-y-4"
+              class="article-content flow-root text-dark/80 dark:text-white/80 leading-relaxed text-sm sm:text-base space-y-4"
               v-html="event.content || event.description"
             ></div>
 
@@ -139,6 +140,9 @@
 import { onMounted, onUnmounted, watch } from 'vue'
 import { X, Calendar, User, Eye, Folder, Clock, MapPin } from 'lucide-vue-next'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
+import kaligrafiImage from '@/assets/images/kaligrafi_masjid.webp'
+
+const kaligrafiImg = kaligrafiImage
 
 const props = defineProps({
   isOpen: {

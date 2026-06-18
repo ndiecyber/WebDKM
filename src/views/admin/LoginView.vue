@@ -2,7 +2,7 @@
   <div class="min-h-screen relative flex items-center justify-center overflow-hidden bg-gray-950">
     <!-- Stunning Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
-      <img src="@/assets/images/mosque-exterior.png" alt="Background" class="w-full h-full object-cover opacity-40 scale-105 animate-pulse-slow" />
+      <img src="@/assets/images/mosque-exterior.webp" alt="Background" class="w-full h-full object-cover opacity-40 scale-105 animate-pulse-slow" />
       <div class="absolute inset-0 bg-linear-to-br from-gray-950/90 via-emerald-950/80 to-gray-950/90 mix-blend-multiply"></div>
       <div class="absolute inset-0 bg-linear-to-t from-gray-950 via-transparent to-transparent"></div>
     </div>
@@ -22,7 +22,7 @@
           <div class="w-24 h-24 mx-auto mb-6 relative group">
             <div class="absolute inset-0 bg-white/20 rounded-2xl blur-xl group-hover:bg-emerald-400/30 transition-colors duration-500"></div>
             <div class="relative w-full h-full bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center p-3 shadow-inner overflow-hidden">
-              <img src="@/assets/images/logo-kustom2.png" alt="Logo" class="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500" />
+              <img src="@/assets/images/logo-kustom2.webp" alt="Logo" class="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500" />
             </div>
           </div>
           <h1 class="font-heading text-3xl font-extrabold text-white tracking-tight drop-shadow-md mb-2">Admin Portal</h1>

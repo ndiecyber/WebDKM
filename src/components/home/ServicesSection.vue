@@ -38,7 +38,7 @@
 
       <!-- Services Grid -->
       <div 
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pb-8" 
+        class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 pb-8" 
         ref="gridRef" 
         style="perspective: 1000px;"
       >
@@ -49,33 +49,33 @@
           @mousemove="handleMouseMove($event, index)"
           @mouseleave="resetTilt(index)"
           :style="{ transform: cardTilts[index] || 'scale3d(1, 1, 1)' }"
-          class="group bg-light/80 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-5 sm:p-8 border-2 border-primary/20 dark:border-white/20 relative overflow-hidden transition-all duration-300 transform-gpu cursor-pointer shadow-md hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 dark:hover:border-secondary/50"
+          class="group bg-light/80 dark:bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3.5 sm:p-8 border-2 border-primary/20 dark:border-white/20 relative overflow-hidden transition-all duration-300 transform-gpu cursor-pointer shadow-md hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 dark:hover:border-secondary/50"
         >
           <!-- Watermark Background -->
           <div class="absolute inset-0 z-0 pointer-events-none">
-            <img :src="service.bgImage" alt="" class="w-full h-full object-cover opacity-5 group-hover:opacity-[0.15] dark:mix-blend-screen transition-all duration-700 scale-110 group-hover:scale-100" />
+            <img :src="service.bgImage" alt="" class="w-full h-full object-cover opacity-5 group-hover:opacity-[0.15] dark:mix-blend-screen transition-all duration-700 scale-110 group-hover:scale-100" loading="lazy" />
             <div class="absolute inset-0 bg-linear-to-t from-white dark:from-dark via-white/80 dark:via-dark/80 to-transparent"></div>
           </div>
 
           <!-- Hover Gradient -->
           <div class="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <!-- Decorative corner -->
-          <div class="absolute top-0 right-0 w-24 h-24 bg-secondary/10 rounded-bl-[50px] -translate-y-2 translate-x-2 group-hover:bg-secondary/20 group-hover:scale-110 transition-all duration-500"></div>
+          <div class="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-secondary/10 rounded-bl-[30px] sm:rounded-bl-[50px] -translate-y-2 translate-x-2 group-hover:bg-secondary/20 group-hover:scale-110 transition-all duration-500"></div>
           
           <!-- Badge -->
           <div 
             v-if="service.badge"
-            :class="`absolute top-4 right-4 sm:top-6 sm:right-6 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-full ${service.badgeColor}`"
+            :class="`absolute top-2 right-2 sm:top-6 sm:right-6 px-2 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-xs font-bold uppercase tracking-wider rounded-full ${service.badgeColor}`"
           >
             {{ service.badge }}
           </div>
 
           <div class="relative z-10">
             <!-- Icon -->
-            <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-500 overflow-hidden">
+            <div class="w-10 h-10 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-500 overflow-hidden">
               <div 
                 v-if="service.iconName === 'Sholat' && processedSholatIcon" 
-                class="w-8 h-8 bg-primary group-hover:bg-white transition-colors duration-500"
+                class="w-5 h-5 sm:w-8 sm:h-8 bg-primary group-hover:bg-white transition-colors duration-500"
                 :style="{
                   maskImage: `url(${processedSholatIcon})`,
                   webkitMaskImage: `url(${processedSholatIcon})`,
@@ -87,19 +87,19 @@
                   webkitMaskPosition: 'center'
                 }"
               ></div>
-              <component v-else :is="iconMap[service.iconName] || iconMap.Users" class="w-7 h-7 text-primary group-hover:text-white transition-colors duration-500" />
+              <component v-else :is="iconMap[service.iconName] || iconMap.Users" class="w-5 h-5 sm:w-7 sm:h-7 text-primary group-hover:text-white transition-colors duration-500" />
             </div>
 
-            <h3 class="font-heading text-xl font-bold text-dark dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300">
+            <h3 class="font-heading text-sm sm:text-xl font-bold text-dark dark:text-white mb-2 sm:mb-3 group-hover:text-primary dark:group-hover:text-secondary transition-colors duration-300">
               {{ service.title }}
             </h3>
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-6 transition-colors duration-500">
+            <p class="text-gray-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 transition-colors duration-500">
               {{ service.description }}
             </p>
 
-            <div class="flex items-center gap-2 text-primary/80 group-hover:text-primary transition-colors duration-300 font-medium">
-              <span class="text-sm">Selengkapnya</span>
-              <ArrowRight class="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
+            <div class="flex items-center gap-1.5 sm:gap-2 text-primary/80 group-hover:text-primary transition-colors duration-300 font-medium">
+              <span class="text-xs sm:text-sm">Selengkapnya</span>
+              <ArrowRight class="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-2 transition-transform duration-300" />
             </div>
           </div>
         </div>
@@ -123,12 +123,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import ServiceModal from '@/components/ui/ServiceModal.vue'
 
-import communityImg from '@/assets/images/community-prayer.png'
-import quranImg from '@/assets/images/quran-study.png'
-import interiorImg from '@/assets/images/mosque-interior.png'
-import exteriorImg from '@/assets/images/mosque-exterior.png'
-import heroImg from '@/assets/images/hero-mosque.png'
-import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.png'
+import communityImg from '@/assets/images/community-prayer.webp'
+import quranImg from '@/assets/images/quran-study.webp'
+import interiorImg from '@/assets/images/mosque-interior.webp'
+import exteriorImg from '@/assets/images/mosque-exterior.webp'
+import heroImg from '@/assets/images/hero-mosque.webp'
+import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.webp'
 import { createSilhouetteMask } from '@/utils/image'
 import { useAdminStore } from '@/stores/admin'
 

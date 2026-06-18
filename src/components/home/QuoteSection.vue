@@ -24,18 +24,18 @@
         :style="{ transform: `rotateY(${mouseX}deg) rotateX(${mouseY}deg)` }"
       >
         <!-- The Premium Glass Card -->
-        <div ref="cardRef" class="group relative bg-white/70 dark:bg-[#111827]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 lg:p-14 shadow-2xl transition-all duration-700 hover:shadow-[0_0_80px_rgba(217,119,6,0.15)] overflow-hidden">
+        <div ref="cardRef" class="group relative bg-white/70 dark:bg-[#111827]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-[2rem] p-5 sm:p-10 lg:p-14 shadow-2xl transition-all duration-700 hover:shadow-[0_0_80px_rgba(217,119,6,0.15)] overflow-hidden">
           
           <!-- Animated Glow Border Reflection -->
           <div class="absolute inset-0 rounded-[2rem] bg-linear-to-br from-white/40 via-transparent to-white/10 dark:from-white/5 dark:to-transparent opacity-50 pointer-events-none transition-opacity duration-700 group-hover:opacity-100"></div>
 
           <!-- Decorative Large Quotes -->
-          <Quote ref="quoteIconLeft" class="absolute top-6 left-6 w-12 h-12 sm:w-16 sm:h-16 text-primary/10 dark:text-secondary/10 -rotate-12 transition-all duration-700 group-hover:scale-125 group-hover:-rotate-6 group-hover:text-secondary/20" />
-          <Quote ref="quoteIconRight" class="absolute bottom-6 right-6 w-12 h-12 sm:w-16 sm:h-16 text-secondary/10 dark:text-primary-light/10 rotate-[168deg] transition-all duration-700 group-hover:scale-125 group-hover:rotate-[174deg] group-hover:text-primary-light/20" />
+          <Quote ref="quoteIconLeft" class="absolute top-3 left-3 sm:top-6 sm:left-6 w-8 h-8 sm:w-16 sm:h-16 text-primary/10 dark:text-secondary/10 -rotate-12 transition-all duration-700 group-hover:scale-125 group-hover:-rotate-6 group-hover:text-secondary/20" />
+          <Quote ref="quoteIconRight" class="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 w-8 h-8 sm:w-16 sm:h-16 text-secondary/10 dark:text-primary-light/10 rotate-[168deg] transition-all duration-700 group-hover:scale-125 group-hover:rotate-[174deg] group-hover:text-primary-light/20" />
 
           <div class="relative z-20">
             <!-- Decorative Top Line -->
-            <div ref="linesRef" class="flex items-center justify-center gap-6 mb-8">
+            <div ref="linesRef" class="flex items-center justify-center gap-3 sm:gap-6 mb-4 sm:mb-8">
               <div class="h-px w-12 sm:w-20 bg-linear-to-r from-transparent to-secondary/60"></div>
               <div class="w-2.5 h-2.5 rotate-45 border border-secondary/60 flex items-center justify-center group-hover:animate-spin transition-all duration-500">
                 <div class="w-1 h-1 bg-secondary shadow-[0_0_10px_rgba(234,179,8,1)]"></div>
@@ -44,16 +44,16 @@
             </div>
 
             <!-- Arabic Verse -->
-            <div class="overflow-hidden mb-8">
-              <p ref="arabicRef" class="relative font-arabic text-3xl sm:text-4xl lg:text-5xl text-gray-900 dark:text-white leading-[1.8] drop-shadow-md dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-700 group-hover:drop-shadow-[0_0_25px_rgba(217,119,6,0.4)] group-hover:-translate-y-1" dir="rtl">
+            <div class="overflow-hidden mb-4 sm:mb-8">
+              <p ref="arabicRef" class="relative font-arabic text-xl sm:text-4xl lg:text-5xl text-gray-900 dark:text-white leading-[1.8] drop-shadow-md dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-700 group-hover:drop-shadow-[0_0_25px_rgba(217,119,6,0.4)] group-hover:-translate-y-1" dir="rtl">
                 <span v-if="isLoading" class="animate-pulse opacity-50 block h-14 w-64 mx-auto bg-gray-300 dark:bg-gray-700 rounded-lg"></span>
                 <span v-else>{{ quoteData.arabic }}</span>
               </p>
             </div>
 
             <!-- Translation -->
-            <div class="overflow-hidden mb-8">
-              <p ref="translationRef" class="relative text-gray-700 dark:text-gray-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto font-heading italic transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-secondary-light group-hover:to-primary-light">
+            <div class="overflow-hidden mb-4 sm:mb-8">
+              <p ref="translationRef" class="relative text-gray-700 dark:text-gray-300 text-xs sm:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto font-heading italic transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-secondary-light group-hover:to-primary-light">
                 <span v-if="isLoading" class="animate-pulse opacity-50">Memuat kutipan hari ini...</span>
                 <span v-else>{{ quoteData.translation }}</span>
               </p>

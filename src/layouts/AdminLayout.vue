@@ -185,8 +185,8 @@ import {
   LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon,
   Activity, Target, Users, History // Icon baru untuk fitur Qurban
 } from 'lucide-vue-next'
-import logoLight from '@/assets/images/logo-kustom.png'
-import logoDark from '@/assets/images/logo-kustom2.png'
+import logoLight from '@/assets/images/logo-kustom.webp'
+import logoDark from '@/assets/images/logo-kustom2.webp'
 import { getStorage, setStorage } from '@/utils/storage'
 
 const route = useRoute()
