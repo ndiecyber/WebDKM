@@ -275,7 +275,7 @@
               <div class="space-y-4 pt-2">
                 <div class="flex items-center justify-between">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor WhatsApp Pengurus</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor WhatsApp</label>
                     <p class="text-xs text-gray-500">Bisa menambahkan lebih dari satu kontak (Misal: Sekretariat, ZISWAF, Layanan Jenazah).</p>
                   </div>
                   <button type="button" @click="addWhatsapp" class="text-xs font-medium bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-md">
