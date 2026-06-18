@@ -52,7 +52,7 @@ const routes = [
         component: () => import('@/views/admin/KeuanganPengaturanView.vue')
       },
 
-      // --- MODUL QURBAN (BARU) ---
+      // --- MODUL QURBAN ---
       {
         path: 'qurban',
         name: 'admin-qurban-dashboard',
@@ -79,7 +79,7 @@ const routes = [
         component: () => import('@/views/admin/QurbanPengaturanView.vue')
       },
 
-      // --- MODUL WEB DKM ---
+      // --- MODUL WEB DKM & SISTEM ---
       {
         path: 'kegiatan',
         name: 'admin-kegiatan',
@@ -99,11 +99,24 @@ const routes = [
         path: 'pengaturan',
         name: 'admin-pengaturan',
         component: () => import('../views/admin/PengaturanView.vue'),
+        meta: { requiresSystem: true }
       },
       {
         path: 'profil',
         name: 'admin-profil',
         component: () => import('../views/admin/ProfilView.vue'),
+      },
+      {
+        path: 'pengguna',
+        name: 'admin-pengguna',
+        component: () => import('../views/admin/PenggunaView.vue'),
+        meta: { requiresSystem: true }
+      },
+      {
+        path: 'log-aktivitas',
+        name: 'admin-log-aktivitas',
+        component: () => import('../views/admin/LogAktivitasView.vue'),
+        meta: { requiresSystem: true }
       }
     ]
   },
@@ -133,6 +146,8 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !adminStore.isAuthenticated) {
     next({ name: 'admin-login' })
   } else if (to.meta.guestOnly && adminStore.isAuthenticated) {
+    next({ name: 'admin-dashboard' })
+  } else if (to.meta.requiresSystem && !adminStore.hasModuleAccess('sistem')) {
     next({ name: 'admin-dashboard' })
   } else {
     next()
