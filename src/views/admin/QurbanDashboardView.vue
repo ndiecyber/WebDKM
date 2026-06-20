@@ -1,14 +1,14 @@
 <template>
-  <div class="space-y-6 pb-8">
+  <div class="space-y-6 sm:space-y-8">
     
-    <!-- HEADER (Disamakan dengan gaya Keuangan) -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Dashboard Tabungan Qurban</h2>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard Tabungan Qurban</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Ringkasan performa finansial dan progres pendaftaran shohibul qurban tahun ini.</p>
       </div>
-      <!-- Badge Periode di Kanan (Sebagai pengganti dropdown bulan di Keuangan) -->
-      <div class="flex items-center gap-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 px-4 py-2.5 rounded-xl shadow-sm">
+      <!-- Badge Periode di Kanan -->
+      <div class="flex items-center gap-3 bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 px-4 py-2 rounded-lg shadow-sm shrink-0">
         <Calendar class="w-4 h-4 text-gray-500" />
         <span class="text-sm font-bold text-gray-700 dark:text-gray-300">Periode {{ store.periode.tahun }}</span>
         <span class="text-[10px] bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-md font-bold flex items-center">

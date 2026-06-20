@@ -1,17 +1,15 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 sm:space-y-8">
     
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <Users class="w-6 h-6 text-emerald-500" />
-          Manajemen Kelompok Sapi
-        </h2>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Atur pembagian kelompok shohibul sapi dan pindahkan anggota jika diperlukan.</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Manajemen Kelompok Sapi</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Atur pembagian kelompok shohibul sapi dan pindahkan anggota jika diperlukan.</p>
       </div>
-      <button @click="createNewGroup" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-xl shadow-sm transition-colors flex items-center gap-2">
+      <button @click="createNewGroup" class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2 shrink-0">
         <Plus class="w-4 h-4" />
-        Buat Kelompok Baru
+        <span>Buat Kelompok Baru</span>
       </button>
     </div>
 

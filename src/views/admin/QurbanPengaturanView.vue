@@ -1,17 +1,15 @@
 <template>
-  <div class="space-y-6 pb-8">
+  <div class="space-y-6 sm:space-y-8">
     
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <Settings class="w-6 h-6 text-emerald-500" />
-          Pengaturan Sistem Qurban
-        </h2>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Konfigurasi periode, master harga hewan, dan pelaksanaan tutup buku.</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Pengaturan Sistem Qurban</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Konfigurasi periode, master harga hewan, dan pelaksanaan tutup buku.</p>
       </div>
-      <button @click="saveSettings" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md shadow-emerald-500/20 transition-all flex items-center gap-2">
+      <button @click="saveSettings" class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2 shrink-0">
         <Save class="w-4 h-4" />
-        Simpan Perubahan
+        <span>Simpan Perubahan</span>
       </button>
     </div>
 
