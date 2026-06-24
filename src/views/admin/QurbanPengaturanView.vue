@@ -1,7 +1,6 @@
 <template>
   <div class="space-y-6 pb-8 max-w-5xl mx-auto">
     
-    <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm">
       <div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
@@ -11,14 +10,12 @@
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Konfigurasi periode, master harga hewan, dan pelaksanaan tutup buku.</p>
       </div>
       
-      <!-- Tombol Simpan hanya muncul jika kita sedang di Tab Periode & Harga -->
       <button v-if="activeTab === 'periode'" @click="saveSettings" class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2 shrink-0">
         <Save class="w-4 h-4" />
         <span>Simpan Perubahan</span>
       </button>
     </div>
 
-    <!-- Sistem Tab Navigasi -->
     <div class="bg-white dark:bg-gray-900 p-1.5 rounded-xl border border-gray-200 dark:border-white/5 inline-flex w-full md:w-auto overflow-x-auto">
       <button @click="activeTab = 'periode'" :class="activeTab === 'periode' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-medium'" class="px-5 py-2 rounded-lg text-sm transition-all whitespace-nowrap flex items-center gap-2">
         <Calendar class="w-4 h-4" />
@@ -34,10 +31,8 @@
       </button>
     </div>
 
-    <!-- KONTEN TAB 1: PERIODE AKTIF & HARGA -->
-    <div v-show="activeTab === 'periode'" class="space-y-6">
+    <div v-show="activeTab === 'periode'" class="space-y-6 animate-fade-in">
       
-      <!-- Step 1: Periode -->
       <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/2 flex justify-between items-center">
           <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -70,7 +65,6 @@
         </div>
       </div>
 
-      <!-- Step 2: Master Harga -->
       <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
         <div class="px-6 py-4 border-b border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/2">
           <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -108,8 +102,7 @@
       </div>
     </div>
 
-    <!-- KONTEN TAB 2: RIWAYAT PERIODE (Data Mockup Tambahan Baru) -->
-    <div v-show="activeTab === 'riwayat'" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden">
+    <div v-show="activeTab === 'riwayat'" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden animate-fade-in">
       <div class="px-6 py-4 border-b border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/2">
         <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">Daftar Riwayat Periode Qurban</h3>
         <p class="text-[10px] text-gray-500 mt-1">Data periode tahun-tahun sebelumnya yang sudah diarsipkan (Tutup Buku).</p>
@@ -131,10 +124,10 @@
                 <p class="text-[10px] text-gray-500">Tutup pada: {{ history.closed_date }}</p>
               </td>
               <td class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Rp {{ history.hargaSapiSlot.toLocaleString('id-ID') }}
+                {{ formatRupiah(history.hargaSapiSlot) }}
               </td>
               <td class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Rp {{ history.hargaKambing.toLocaleString('id-ID') }}
+                {{ formatRupiah(history.hargaKambing) }}
               </td>
               <td class="px-6 py-4">
                 <span class="px-2.5 py-1 bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 text-[10px] font-bold uppercase rounded-md flex items-center w-max gap-1">
@@ -147,8 +140,7 @@
       </div>
     </div>
 
-    <!-- KONTEN TAB 3: TUTUP BUKU (ZONA BAHAYA) -->
-    <div v-show="activeTab === 'tutup_buku'" class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-500/30 rounded-2xl shadow-sm overflow-hidden">
+    <div v-show="activeTab === 'tutup_buku'" class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-500/30 rounded-2xl shadow-sm overflow-hidden animate-fade-in">
       <div class="px-6 py-4 border-b border-red-200 dark:border-red-500/30 bg-red-100 dark:bg-red-900/30">
         <h3 class="font-bold text-red-700 dark:text-red-400 flex items-center gap-2">
           <AlertTriangle class="w-5 h-5" />
@@ -182,29 +174,59 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Settings, Save, Calendar, Tag, AlertTriangle, Archive, History } from 'lucide-vue-next'
+import { ref, onMounted } from 'vue'
+import { Settings, Save, Calendar, AlertTriangle, Archive, History } from 'lucide-vue-next'
+
+// Utilities
+const formatRupiah = (value) => {
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
+}
 
 // State Navigasi
-const activeTab = ref('periode') // Tab default saat halaman dibuka
+const activeTab = ref('periode')
 
-// Mock Data State (Sesuai instruksi: WA Dihapus)
+// Data Terkini (Mapping untuk update PeriodController)
 const settings = ref({
-  periodeName: 'Qurban 1447 H / 2026 M',
-  deadline: '2026-06-18',
-  isRegistrationOpen: true,
-  hargaSapiEkor: 28000000,
-  hargaSapiSlot: 4000000,
-  hargaKambing: 3500000
+  id: null,
+  periodeName: '',
+  deadline: '',
+  isRegistrationOpen: true, // Hanya flag UI
+  hargaSapiEkor: 0, // Hanya kalkulasi UI
+  hargaSapiSlot: 0,
+  hargaKambing: 0
 })
 
-// Mock Data Baru (Untuk Tab Riwayat Periode)
-const riwayatPeriode = ref([
-  { id: 1, name: 'Qurban 1446 H / 2025 M', closed_date: '10 Juli 2025', hargaSapiSlot: 3800000, hargaKambing: 3200000 },
-  { id: 2, name: 'Qurban 1445 H / 2024 M', closed_date: '20 Juni 2024', hargaSapiSlot: 3500000, hargaKambing: 3000000 },
-])
+const riwayatPeriode = ref([])
 
-// Auto-calculate logic
+// Simulasi load data dari endpoint `active` dan `index`
+onMounted(() => {
+  // Simulasi PeriodController@active
+  const responseActive = {
+    id: 1,
+    name: 'Qurban 1447 H / 2026 M',
+    deadline_date: '2026-06-18',
+    sapi_price_per_slot: 4000000,
+    kambing_price: 3500000,
+    is_active: true
+  }
+
+  // Populate UI settings
+  settings.value.id = responseActive.id
+  settings.value.periodeName = responseActive.name
+  settings.value.deadline = responseActive.deadline_date
+  settings.value.hargaSapiSlot = responseActive.sapi_price_per_slot
+  settings.value.hargaSapiEkor = responseActive.sapi_price_per_slot * 7
+  settings.value.hargaKambing = responseActive.kambing_price
+  settings.value.isRegistrationOpen = true
+
+  // Simulasi PeriodController@index (Riwayat)
+  riwayatPeriode.value = [
+    { id: 2, name: 'Qurban 1446 H / 2025 M', closed_date: '10 Juli 2025', hargaSapiSlot: 3800000, hargaKambing: 3200000 },
+    { id: 3, name: 'Qurban 1445 H / 2024 M', closed_date: '20 Juni 2024', hargaSapiSlot: 3500000, hargaKambing: 3000000 },
+  ]
+})
+
+// Auto-calculate logic (Tetap dipertahankan untuk UX, tapi backend cuma butuh hargaSapiSlot)
 const hitungSlotSapi = () => {
   settings.value.hargaSapiSlot = Math.round(settings.value.hargaSapiEkor / 7)
 }
@@ -212,8 +234,18 @@ const hitungEkorSapi = () => {
   settings.value.hargaSapiEkor = settings.value.hargaSapiSlot * 7
 }
 
-// Handlers
+// Handler untuk Update (Simulasi PeriodController@update)
 const saveSettings = (event) => {
+  // JSON payload yang akan dikirim ke Backend
+  const payloadToBackend = {
+    name: settings.value.periodeName,
+    deadline_date: settings.value.deadline,
+    sapi_price_per_slot: settings.value.hargaSapiSlot,
+    kambing_price: settings.value.hargaKambing
+  }
+  
+  console.log("Mengirim payload JSON ke API PeriodController@update:", payloadToBackend)
+
   const btn = event.currentTarget
   const originalHtml = btn.innerHTML
   
@@ -221,20 +253,42 @@ const saveSettings = (event) => {
   
   setTimeout(() => {
     btn.innerHTML = originalHtml
-    alert('Pengaturan periode dan master harga berhasil disimpan! Target kekurangan jamaah carry-over otomatis disesuaikan.')
+    alert('Pengaturan periode dan master harga berhasil disimpan!\n\n(Catatan: Jika ada perubahan harga, Backend otomatis telah menyesuaikan target tagihan jamaah).')
   }, 800)
 }
 
+// Handler untuk Tutup Buku (Simulasi PeriodController@rollover)
 const executeRollover = () => {
   const isConfirmed = confirm("PERINGATAN!\n\nAnda akan melakukan proses Tutup Buku (Rollover) untuk periode ini.\nData akan diarsipkan secara permanen. Anda yakin ingin melanjutkan?")
   
   if (isConfirmed) {
     const doubleConfirm = prompt("Ketik 'TUTUP BUKU' untuk mengonfirmasi eksekusi ini:")
     if (doubleConfirm === 'TUTUP BUKU') {
-      alert("Proses Tutup Buku sedang dijalankan di latar belakang. Periode ini berhasil diarsipkan.")
+      
+      console.log("Memanggil Endpoint PeriodController@rollover...")
+      
+      alert("Proses Tutup Buku berhasil dijalankan!\n\nBackend RolloverService telah memindahkan jamaah yang belum lunas (carry-over) dan mengarsipkan periode ini.")
+      
+      // Reset UI as dummy reaction
+      settings.value.periodeName = "Qurban Tahun Baru (Belum Diset)"
+      settings.value.hargaSapiSlot = 0
+      settings.value.hargaSapiEkor = 0
+      settings.value.hargaKambing = 0
+      activeTab.value = 'periode'
+
     } else {
       alert("Konfirmasi gagal. Tutup buku dibatalkan.")
     }
   }
 }
 </script>
+
+<style scoped>
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+</style>
