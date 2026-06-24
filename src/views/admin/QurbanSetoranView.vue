@@ -8,10 +8,10 @@
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola dan verifikasi semua transaksi pembayaran jamaah.</p>
       </div>
       <div class="flex gap-3 w-full sm:w-auto shrink-0">
-        <button @click="openCashDepositModal" class="flex-1 sm:flex-none bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center justify-center gap-2">
-          <Banknote class="w-4 h-4" />
-          <span>Input Setoran Tunai</span>
-        </button>
+        <button @click="openCashDepositModal" class="flex-1 sm:flex-none bg-[#387c5e] hover:bg-[#2b6149] text-white font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center justify-center gap-2">
+        <Banknote class="w-4 h-4" />
+        <span>Input Setoran Tunai</span>
+      </button>
       </div>
     </div>
 

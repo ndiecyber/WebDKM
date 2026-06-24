@@ -9,7 +9,7 @@
       </div>
       <button @click="openAddModal" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md shadow-emerald-500/20 transition-all flex items-center gap-2">
         <Plus class="w-4 h-4" />
-        <span>Tambah Peserta Manual</span>
+        <span>Tambah Peserta</span>
       </button>
     </div>
 
