@@ -296,16 +296,9 @@
         </div>
       </header>
 
-      <!-- Page Content -->
-      <div class="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col">
-        <!-- Mockup Warning Banner -->
-        <div class="mb-6 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-4 flex items-start gap-3 shadow-sm shrink-0">
-          <AlertTriangle class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-          <div>
-            <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-400">Mode Pratinjau (Mockup)</h4>
-            <p class="text-xs text-amber-700 dark:text-amber-500 mt-1">Halaman admin saat ini beroperasi dalam mode mockup (data lokal) untuk keperluan analisis dan pengembangan backend (API). Perubahan yang Anda lakukan di sini tidak akan terhubung ke database asli, beberapa pengaturan tidak mengubah yang ada di landing page.</p>
-          </div>
-        </div>
+        <!-- Page Content -->
+        <div class="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col">
+          <!-- Connected to Real Database -->
 
         <div class="max-w-7xl mx-auto w-full flex-1">
           <router-view></router-view>
