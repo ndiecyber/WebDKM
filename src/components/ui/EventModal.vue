@@ -13,7 +13,7 @@
 
         <!-- Modal Content -->
         <div 
-          class="modal-content relative w-full max-w-3xl bg-white dark:bg-[#152020] rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] border border-gray-200 dark:border-white/10 overflow-hidden text-left"
+          class="modal-content relative w-full max-w-3xl md:max-w-4xl lg:max-w-5xl bg-white dark:bg-[#152020] rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-3rem)] sm:h-auto sm:max-h-[90vh] border border-gray-200 dark:border-white/10 overflow-hidden text-left"
           role="dialog"
           aria-modal="true"
         >
@@ -108,7 +108,7 @@
 
             <!-- Body Description Content -->
             <div 
-              class="article-content flow-root text-dark/80 dark:text-white/80 leading-relaxed text-sm sm:text-base space-y-4"
+              class="article-content flow-root text-dark/80 dark:text-white/80 leading-relaxed text-sm sm:text-base"
               v-html="event.content || event.description"
             ></div>
 
@@ -231,32 +231,4 @@ onUnmounted(() => {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Styled HTML content classes */
-:deep(.article-content p) {
-  margin-bottom: 1.25rem;
-  text-align: justify;
-}
-:deep(.article-content ol), :deep(.article-content ul) {
-  margin-bottom: 1.25rem;
-  padding-left: 1.5rem;
-}
-:deep(.article-content ul) {
-  list-style-type: disc;
-}
-:deep(.article-content ol) {
-  list-style-type: decimal;
-}
-:deep(.article-content li) {
-  margin-bottom: 0.5rem;
-}
-:deep(.article-content blockquote) {
-  border-left: 4px solid var(--color-primary, #0D4F4F);
-  padding-left: 1rem;
-  font-style: italic;
-  color: rgba(156, 163, 175, 0.9);
-  margin: 1.5rem 0;
-}
-.dark :deep(.article-content blockquote) {
-  border-left-color: var(--color-secondary, #C5A55A);
-}
 </style>

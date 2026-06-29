@@ -21,7 +21,7 @@
             Pusat ibadah, pendidikan, dan kegiatan sosial untuk membangun umat yang beriman, berilmu, dan berakhlak mulia.
           </p>
           <p class="text-white/40 text-xs leading-relaxed">
-            Masjid Kassiti Arjamukti Kencana Raya, Arjasari, Kec. Leuwisari, Kabupaten Tasikmalaya, Jawa Barat 46464
+            {{ adminStore.generalSettings.alamatLengkap }}, {{ adminStore.generalSettings.kota }}, {{ adminStore.generalSettings.kodepos }}
           </p>
           
           <!-- Social Media -->
@@ -113,9 +113,9 @@
             <li class="flex items-start gap-3 group">
               <MapPin class="w-5 h-5 text-secondary mt-0.5 shrink-0 group-hover:animate-bounce" />
               <div class="flex flex-col gap-2">
-                <span class="text-white/60 text-sm leading-relaxed group-hover:text-white transition-colors">Masjid Kassiti Arjamukti Kencana Raya, Arjasari, Kec. Leuwisari, Kabupaten Tasikmalaya, Jawa Barat 46464</span>
+                <span class="text-white/60 text-sm leading-relaxed group-hover:text-white transition-colors">{{ adminStore.generalSettings.alamatLengkap }}, {{ adminStore.generalSettings.kota }}, {{ adminStore.generalSettings.kodepos }}</span>
                 <a 
-                  href="https://maps.app.goo.gl/HMDmpx7zZFn8GRUaA" 
+                  :href="adminStore.generalSettings.maps" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   class="inline-flex items-center gap-1.5 text-xs text-secondary hover:text-white transition-colors w-fit bg-secondary/10 hover:bg-secondary/20 px-3 py-1.5 rounded-md border border-secondary/20"
@@ -127,11 +127,20 @@
             </li>
             <li class="flex items-start gap-3 group">
               <Phone class="w-5 h-5 text-secondary mt-0.5 shrink-0 group-hover:animate-pulse" />
-              <a href="https://wa.me/6285320132014" target="_blank" rel="noopener noreferrer" class="flex flex-col group/phone">
-                <span class="text-secondary group-hover/phone:text-white underline decoration-secondary/50 group-hover/phone:decoration-white underline-offset-4 transition-all text-sm font-medium">
-                  0853-2013-2014
-                </span>
-              </a>
+              <div class="flex flex-col gap-2">
+                <a 
+                  v-for="wa in adminStore.generalSettings.whatsapp" 
+                  :key="wa.id" 
+                  :href="'https://wa.me/' + wa.number" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="flex flex-col group/phone"
+                >
+                  <span class="text-secondary group-hover/phone:text-white underline decoration-secondary/50 group-hover/phone:decoration-white underline-offset-4 transition-all text-sm font-medium">
+                    {{ formatWa(wa.number) }}
+                  </span>
+                </a>
+              </div>
             </li>
             <li class="flex items-center gap-3">
               <Mail class="w-5 h-5 text-secondary shrink-0" />
@@ -164,7 +173,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck, GraduationCap, HandCoins } from 'lucide-vue-next'
+import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Twitter, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck, GraduationCap, HandCoins } from 'lucide-vue-next'
 import logoImg from '@/assets/images/logo-kustom2.webp'
 import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.webp'
 import { createSilhouetteMask } from '@/utils/image'
@@ -200,11 +209,27 @@ const copyAccount = () => {
   }, 2500)
 }
 
-const socials = computed(() => [
-  { name: 'Facebook', url: adminStore.generalSettings.facebook || '#', icon: Facebook },
-  { name: 'Instagram', url: adminStore.generalSettings.instagram || '#', icon: Instagram },
-  { name: 'YouTube', url: adminStore.generalSettings.youtube || '#', icon: Youtube },
-])
+const formatWa = (num) => {
+  if (!num) return ''
+  const str = String(num).replace(/\D/g, '')
+  if (str.startsWith('62') && str.length >= 10) {
+    const code = str.slice(0, 2)
+    const part1 = str.slice(2, 5)
+    const part2 = str.slice(5, 9)
+    const part3 = str.slice(9)
+    return `+${code} ${part1} ${part2} ${part3}`.trim()
+  }
+  return '+' + str
+}
+
+const socials = computed(() => {
+  const s = []
+  if (adminStore.generalSettings.facebook) s.push({ name: 'Facebook', url: adminStore.generalSettings.facebook, icon: Facebook })
+  if (adminStore.generalSettings.instagram) s.push({ name: 'Instagram', url: adminStore.generalSettings.instagram, icon: Instagram })
+  if (adminStore.generalSettings.youtube) s.push({ name: 'YouTube', url: adminStore.generalSettings.youtube, icon: Youtube })
+  if (adminStore.generalSettings.twitter) s.push({ name: 'Twitter / X', url: adminStore.generalSettings.twitter, icon: Twitter })
+  return s
+})
 
 const quickLinks = [
   { id: 'beranda', label: 'Beranda' },

@@ -84,7 +84,7 @@
     <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       <div class="absolute inset-0 bg-gray-900/50 dark:bg-gray-950/80 backdrop-blur-sm" @click="closeModal"></div>
       
-      <div class="relative bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+      <div class="relative bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl w-full max-w-2xl md:max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
         
         <!-- Modal Header -->
         <div class="px-6 py-4 border-b border-gray-300 dark:border-white/5 flex items-center justify-between shrink-0 bg-white dark:bg-gray-900">
@@ -97,6 +97,38 @@
         <!-- Modal Body -->
         <div class="p-6 overflow-y-auto">
           <form @submit.prevent="saveItem" class="space-y-6">
+            
+            <div class="space-y-1">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gambar Utama (Background)</label>
+              <div 
+                class="relative flex justify-center rounded-xl border border-dashed border-gray-300 dark:border-white/20 bg-gray-50 dark:bg-white/5 px-6 py-6 transition-colors"
+                :class="isDraggingBg ? 'border-secondary bg-secondary/5' : 'hover:border-gray-400 dark:hover:border-white/40 hover:bg-gray-100 dark:hover:bg-white/10'"
+                @dragenter.prevent="isDraggingBg = true"
+                @dragleave.prevent="isDraggingBg = false"
+                @dragover.prevent
+                @drop.prevent="handleBgDrop"
+              >
+                <div class="text-center">
+                  <div class="mx-auto w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-md border border-gray-300 dark:border-transparent flex items-center justify-center mb-3">
+                    <UploadCloud class="w-5 h-5 text-gray-400" :class="{ 'text-secondary': isDraggingBg }" />
+                  </div>
+                  <div class="flex text-sm leading-6 text-gray-500 dark:text-gray-400 justify-center">
+                    <label class="relative cursor-pointer rounded-md font-semibold text-secondary focus-within:outline-none hover:text-yellow-600 dark:hover:text-yellow-400">
+                      <span>Pilih file</span>
+                      <input type="file" class="sr-only" @change="handleBgSelect" accept="image/*" />
+                    </label>
+                    <p class="pl-1">atau drag & drop</p>
+                  </div>
+                </div>
+                <div v-if="form.bgImage" class="absolute inset-0 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center group">
+                  <img :src="form.bgImage" class="w-full h-full object-cover opacity-90 dark:opacity-80" />
+                  <button @click.prevent="form.bgImage = null" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                    <X class="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Layanan</label>
@@ -113,7 +145,7 @@
                 <select 
                   v-model="form.category"
                   required
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
                 >
                   <option class="bg-white dark:bg-slate-800" value="Ibadah">Ibadah</option>
                   <option class="bg-white dark:bg-slate-800" value="Pendidikan">Pendidikan</option>
@@ -122,13 +154,28 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ikon Layanan</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <component :is="iconMap[form.iconName] || iconMap.Briefcase" class="w-4 h-4 text-gray-400" />
+                  </div>
+                  <select 
+                    v-model="form.iconName"
+                    required
+                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+                  >
+                    <option v-for="(comp, name) in iconMap" :key="name" :value="name" class="bg-white dark:bg-slate-800">{{ name }}</option>
+                  </select>
+                </div>
+              </div>
               <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Label (Badge)</label>
                 <select 
                   v-model="form.badge"
                   required
-                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm appearance-none"
+                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
                 >
                   <option class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white" value="">Tanpa Label</option>
                   <option v-for="label in adminStore.masterData.label" :key="label.id" :value="label.name" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">{{ label.name }}</option>
@@ -162,7 +209,7 @@
                   ></textarea>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div class="space-y-1">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jadwal / Waktu</label>
                     <input 
@@ -183,16 +230,53 @@
                       class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm"
                     />
                   </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div class="space-y-1">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kontak Person</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Penanggung Jawab</label>
                     <input 
-                      v-model="form.details.contact"
+                      v-model="form.details.supervisor"
                       type="text" 
                       required
                       placeholder="Misal: Ust. Ahmad"
                       class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm"
                     />
                   </div>
+                  <div class="space-y-1">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Foto Penanggung Jawab</label>
+                    <div class="flex items-center gap-3 mt-1">
+                      <div class="w-10 h-10 rounded-full border border-gray-300 dark:border-white/20 overflow-hidden shrink-0 bg-gray-50 dark:bg-gray-800">
+                        <img v-if="form.details.supervisorImage" :src="form.details.supervisorImage" class="w-full h-full object-cover" />
+                        <User v-else class="w-5 h-5 m-2.5 text-gray-400" />
+                      </div>
+                      <label class="cursor-pointer px-3 py-1.5 text-xs font-medium bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-white/10 transition-colors">
+                        Pilih Foto
+                        <input type="file" class="sr-only" @change="handleContactSelect" accept="image/*" />
+                      </label>
+                      <button v-if="form.details.supervisorImage" @click.prevent="form.details.supervisorImage = null" class="text-xs text-red-500 hover:text-red-700">Hapus</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-1">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor WhatsApp Pengurus</label>
+                  <div class="flex flex-col sm:flex-row gap-3">
+                    <select 
+                      v-model="form.details.supervisorWa"
+                      class="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-sm"
+                    >
+                      <option value="" class="bg-white dark:bg-slate-800">Pilih dari daftar kontak...</option>
+                      <option v-for="wa in adminStore.generalSettings.whatsapp" :key="wa.number" :value="wa.number" class="bg-white dark:bg-slate-800">{{ wa.name }} (+{{ wa.number }})</option>
+                    </select>
+                    <input 
+                      v-model="form.details.supervisorWa"
+                      type="text" 
+                      placeholder="Atau ketik manual (Awali 62...)"
+                      class="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm"
+                    />
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">Nomor ini akan digunakan untuk tombol "Hubungi Pengurus (WA)" pada layanan ini.</p>
                 </div>
 
                 <div class="space-y-1">
@@ -203,6 +287,50 @@
                     placeholder="Masukkan poin persyaratan (pisahkan tiap poin dengan baris baru/Enter)..."
                     class="w-full bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all resize-none text-sm outline-none"
                   ></textarea>
+                </div>
+                
+                <div class="pt-4 border-t border-gray-300 dark:border-white/5">
+                  <div class="flex items-center justify-between mb-3">
+                    <h5 class="text-sm font-semibold text-gray-900 dark:text-white">Tim Pengelola & Pengajar (Staff)</h5>
+                    <button type="button" @click="addStaff" class="text-xs font-medium bg-secondary/10 hover:bg-secondary/20 text-secondary px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                      <Plus class="w-3.5 h-3.5" /> Tambah Staff
+                    </button>
+                  </div>
+                  
+                  <div v-if="form.details.staff.length > 0" class="space-y-3">
+                    <div v-for="(member, idx) in form.details.staff" :key="idx" class="flex flex-col sm:flex-row gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-200 dark:border-white/10 relative">
+                      <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full border border-gray-300 dark:border-white/20 overflow-hidden shrink-0 bg-white dark:bg-gray-900">
+                          <img v-if="member.image" :src="member.image" class="w-full h-full object-cover" />
+                          <User v-else class="w-6 h-6 m-3 text-gray-400" />
+                        </div>
+                        <div class="flex flex-col gap-1">
+                          <label class="cursor-pointer text-[10px] font-medium bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 px-2 py-1 rounded text-gray-700 dark:text-gray-300 text-center transition-colors">
+                            Ganti Foto
+                            <input type="file" class="sr-only" @change="e => handleStaffSelect(e, idx)" accept="image/*" />
+                          </label>
+                          <button v-if="member.image" @click.prevent="member.image = null" class="text-[10px] text-red-500 hover:text-red-700 text-center">Hapus</button>
+                        </div>
+                      </div>
+                      
+                      <div class="flex-1 space-y-1">
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">Nama Lengkap</label>
+                        <input v-model="member.name" type="text" required placeholder="Nama" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-xs" />
+                      </div>
+                      <div class="flex-1 space-y-1">
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">Jabatan / Peran</label>
+                        <input v-model="member.role" type="text" required placeholder="Misal: Pengajar" class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all text-xs" />
+                      </div>
+                      
+                      <button @click.prevent="removeStaff(idx)" class="absolute top-3 right-3 sm:static sm:self-end sm:mb-1 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">
+                        <Trash2 class="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div v-else class="text-center py-6 bg-gray-50 dark:bg-gray-800/30 rounded-xl border border-dashed border-gray-300 dark:border-white/20">
+                    <Users class="w-6 h-6 text-gray-400 mx-auto mb-2" />
+                    <p class="text-xs text-gray-500">Belum ada data staff/pengelola.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -232,7 +360,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Plus, Edit2, Trash2, X, Briefcase, Users, BookOpen, GraduationCap, Heart, HandCoins, Gem, MapPin, Building } from 'lucide-vue-next'
+import { Plus, Edit2, Trash2, X, Briefcase, Users, User, BookOpen, GraduationCap, Heart, HandCoins, Gem, MapPin, Building, UploadCloud } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
 
@@ -249,7 +377,8 @@ const isEditing = ref(false)
 const getDefaultForm = () => ({ 
   id: null, 
   title: '', 
-  category: 'Ibadah', 
+  category: 'Ibadah',
+  iconName: 'Briefcase',
   bgImage: null,
   description: '', 
   badge: '', 
@@ -257,8 +386,11 @@ const getDefaultForm = () => ({
     fullDescription: '',
     schedule: '',
     location: '',
-    contact: '',
-    requirementsStr: ''
+    supervisor: '',
+    supervisorWa: '',
+    supervisorImage: null,
+    requirementsStr: '',
+    staff: []
   }
 })
 
@@ -268,11 +400,16 @@ function openModal(item = null) {
   if (item) {
     isEditing.value = true
     form.value = { 
+      ...getDefaultForm(),
       ...item, 
       details: {
-        ...item.details,
+        ...getDefaultForm().details,
+        ...(item.details || {}),
         requirementsStr: item.details?.requirements?.join('\n') || ''
       }
+    }
+    if (form.value.details.staff) {
+      form.value.details.staff = JSON.parse(JSON.stringify(form.value.details.staff))
     }
   } else {
     isEditing.value = false
@@ -280,6 +417,42 @@ function openModal(item = null) {
   }
   showModal.value = true
   document.body.style.overflow = 'hidden'
+}
+
+// Upload Handlers
+const isDraggingBg = ref(false)
+function handleBgDrop(e) {
+  isDraggingBg.value = false
+  const file = e.dataTransfer?.files[0]
+  if (file && file.type.startsWith('image/')) form.value.bgImage = URL.createObjectURL(file)
+}
+function handleBgSelect(e) {
+  const file = e.target.files[0]
+  if (file) form.value.bgImage = URL.createObjectURL(file)
+}
+
+const isDraggingContact = ref(false)
+function handleContactDrop(e) {
+  isDraggingContact.value = false
+  const file = e.dataTransfer?.files[0]
+  if (file && file.type.startsWith('image/')) form.value.details.supervisorImage = URL.createObjectURL(file)
+}
+function handleContactSelect(e) {
+  const file = e.target.files[0]
+  if (file) form.value.details.supervisorImage = URL.createObjectURL(file)
+}
+
+function handleStaffSelect(e, index) {
+  const file = e.target.files[0]
+  if (file) form.value.details.staff[index].image = URL.createObjectURL(file)
+}
+
+// Staff Management
+function addStaff() {
+  form.value.details.staff.push({ name: '', role: '', image: null })
+}
+function removeStaff(index) {
+  form.value.details.staff.splice(index, 1)
 }
 
 function closeModal() {
@@ -307,10 +480,6 @@ function saveItem() {
   if (isEditing.value) {
     adminStore.updateLayanan(form.value.id, dataToSave)
   } else {
-    // Gunakan background image default agar tidak kosong di frontend
-    if (adminStore.layanan.length > 0) {
-      dataToSave.bgImage = adminStore.layanan[0].bgImage
-    }
     adminStore.addLayanan(dataToSave)
   }
   

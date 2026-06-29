@@ -5,7 +5,7 @@
       <div ref="bgImage" class="absolute -inset-[5%] w-[110%] h-[110%]">
         <TransitionGroup name="slider">
           <img
-            v-for="(img, index) in sliderImages"
+            v-for="(img, index) in settings.heroImages"
             :key="img"
             v-show="currentImageIndex === index"
             :src="img"
@@ -38,14 +38,14 @@
         <!-- Badge -->
         <div ref="badge" class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-secondary/15 border border-secondary/30 mb-6 sm:mb-8 max-w-full overflow-hidden">
           <MapPin class="w-3 h-3 sm:w-4 sm:h-4 text-secondary shrink-0" />
-          <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">Perumahan Arjamukti Kencana Raya</span>
+          <span class="text-secondary text-[10px] sm:text-xs font-semibold tracking-wider uppercase whitespace-nowrap truncate">{{ adminStore.generalSettings.name }}</span>
         </div>
 
         <!-- Heading -->
         <h2
           ref="heading"
           class="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white font-bold leading-[1.2] sm:leading-[1.1] mb-4 sm:mb-6"
-          v-html="settings.slogan"
+          v-html="parsedSlogan"
         >
         </h2>
 
@@ -54,7 +54,7 @@
           ref="subtitle"
           class="text-white/70 text-sm sm:text-base md:text-xl leading-relaxed max-w-2xl mb-8 sm:mb-10"
         >
-          {{ settings.description }}
+          {{ adminStore.generalSettings.description }}
         </p>
 
         <!-- CTA Buttons -->
@@ -108,25 +108,39 @@
       
       <div class="w-px h-10 bg-white/20 ml-6"></div>
       
-      <a :href="settings.instagram || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[110px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a v-if="settings.instagram" :href="settings.instagram" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[110px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Instagram class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Instagram</span>
       </a>
       
-      <a :href="settings.facebook || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a v-if="settings.facebook" :href="settings.facebook" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Facebook class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Facebook</span>
       </a>
       
-      <a :href="settings.youtube || '#'" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+      <a v-if="settings.youtube" :href="settings.youtube" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
         <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
           <Youtube class="w-4 h-4 group-hover:scale-110 transition-transform" />
         </div>
         <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">YouTube</span>
+      </a>
+
+      <a v-if="settings.twitter" :href="settings.twitter" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+        <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
+          <Twitter class="w-4 h-4 group-hover:scale-110 transition-transform" />
+        </div>
+        <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">Twitter</span>
+      </a>
+
+      <a v-if="settings.tiktok" :href="settings.tiktok" target="_blank" rel="noopener noreferrer" class="flex items-center overflow-hidden h-10 w-10 hover:w-[105px] rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all duration-500 group shadow-lg">
+        <div class="flex items-center justify-center min-w-[40px] h-full shrink-0">
+          <svg class="w-4 h-4 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+        </div>
+        <span class="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 whitespace-nowrap">TikTok</span>
       </a>
     </div>
 
@@ -141,8 +155,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Youtube, Wallet, HandCoins } from 'lucide-vue-next'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Youtube, Twitter, Wallet, HandCoins } from 'lucide-vue-next'
 import { isDonationModalOpen } from '@/composables/useDonationModal'
 import { gsap } from 'gsap'
 import { useAdminStore } from '@/stores/admin'
@@ -154,9 +168,17 @@ import logoImg from '@/assets/images/logo-kustom.webp'
 import { scrollToSection } from '@/utils/scroll'
 
 const adminStore = useAdminStore()
-const settings = adminStore.generalSettings
+const settings = computed(() => adminStore.generalSettings)
 
-const sliderImages = [heroImg1, heroImg2, heroImg3, heroImg4]
+const parsedSlogan = computed(() => {
+  const slogan = settings.value.slogan
+  if (!slogan) return ''
+  // Convert *word* to gold span and \n to <br>
+  return slogan
+    .replace(/\*(.*?)\*/g, '<strong class="text-gradient-gold font-black drop-shadow-md">$1</strong>')
+    .replace(/\n/g, '<br />')
+})
+
 const currentImageIndex = ref(0)
 let sliderInterval = null
 const badge = ref(null)
@@ -169,7 +191,9 @@ const bgImage = ref(null)
 onMounted(() => {
   // Setup Image Slider Interval
   sliderInterval = setInterval(() => {
-    currentImageIndex.value = (currentImageIndex.value + 1) % sliderImages.length
+    if (settings.value.heroImages && settings.value.heroImages.length > 0) {
+      currentImageIndex.value = (currentImageIndex.value + 1) % settings.value.heroImages.length
+    }
   }, 6000)
 
   // Cinematic background zoom effect

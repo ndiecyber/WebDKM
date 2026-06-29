@@ -6,27 +6,12 @@
     <div class="relative z-10 space-y-6 sm:space-y-8">
     
     <!-- Welcome Header -->
-    <div class="relative overflow-hidden rounded-2xl bg-linear-to-br from-emerald-800 via-emerald-600 to-teal-900 p-8 sm:p-10 shadow-lg text-white mb-8 group">
-      <!-- Decorative background elements -->
-      <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-1000 ease-out"></div>
-      <div class="absolute bottom-0 left-0 w-full h-1/2 bg-linear-to-t from-black/20 to-transparent"></div>
-      
-      <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div>
-          <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2 drop-shadow-md">Dashboard Ringkasan</h1>
-          <p class="text-emerald-50 text-sm sm:text-base max-w-xl leading-relaxed">
-            Selamat datang kembali di pusat kendali Masjid Jami Kassiti. Pantau aktivitas, layanan, dan perkembangan umat secara real-time.
-          </p>
-        </div>
-        <div class="flex items-center gap-3">
-          <button class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 font-medium px-4 py-2.5 rounded-xl transition-all shadow-md text-sm flex items-center gap-2">
-            <Calendar class="w-4 h-4" />
-            <span>Bulan Ini</span>
-          </button>
-          <button class="bg-secondary hover:bg-yellow-400 text-emerald-950 font-bold px-4 py-2.5 rounded-xl transition-all shadow-md text-sm hover:shadow-lg hover:-translate-y-0.5 transform">
-            Unduh Laporan
-          </button>
-        </div>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard Web</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Pantau aktivitas, layanan, dan perkembangan jamaah secara real-time.
+        </p>
       </div>
     </div>
 
