@@ -322,7 +322,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async fetchKegiatan() {
       try {
-        const res = await api.get('/events');
+        const res = await api.get('/web-profile/events');
         this.kegiatan = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch kegiatan:', err);
@@ -330,7 +330,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async addKegiatan(data) {
       try {
-        await api.post('/events', data);
+        await api.post('/web-profile/events', data);
         await this.fetchKegiatan();
         this.logActivity('Tambah Kegiatan', 'Menambahkan kegiatan/acara baru');
       } catch (err) {
@@ -339,7 +339,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async updateKegiatan(id, updatedData) {
       try {
-        await api.put(`/events/${id}`, updatedData);
+        await api.put(`/web-profile/events/${id}`, updatedData);
         await this.fetchKegiatan();
         this.logActivity('Ubah Kegiatan', 'Memperbarui data kegiatan/acara');
       } catch (err) {
@@ -348,7 +348,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async deleteKegiatan(id) {
       try {
-        await api.delete(`/events/${id}`);
+        await api.delete(`/web-profile/events/${id}`);
         await this.fetchKegiatan();
         this.logActivity('Hapus Kegiatan', 'Menghapus data kegiatan/acara');
       } catch (err) {
@@ -362,7 +362,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async fetchGallery() {
       try {
-        const res = await api.get('/galleries');
+        const res = await api.get('/web-profile/galleries');
         this.gallery = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch gallery:', err);
@@ -370,7 +370,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async addGallery(data) {
       try {
-        await api.post('/galleries', data);
+        await api.post('/web-profile/galleries', data);
         await this.fetchGallery();
         this.logActivity('Tambah Galeri', 'Menambahkan foto galeri baru');
       } catch (err) {
@@ -379,7 +379,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async updateGallery(id, updatedData) {
       try {
-        await api.put(`/galleries/${id}`, updatedData);
+        await api.put(`/web-profile/galleries/${id}`, updatedData);
         await this.fetchGallery();
         this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto');
       } catch (err) {
@@ -388,7 +388,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async deleteGallery(id) {
       try {
-        await api.delete(`/galleries/${id}`);
+        await api.delete(`/web-profile/galleries/${id}`);
         await this.fetchGallery();
         this.logActivity('Hapus Galeri', 'Menghapus foto galeri');
       } catch (err) {
@@ -397,7 +397,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async fetchLayanan() {
       try {
-        const res = await api.get('/services');
+        const res = await api.get('/web-profile/services');
         // Assume API returns { data: [...] } or just an array
         this.layanan = res.data.data || res.data;
       } catch (err) {
@@ -406,7 +406,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async addLayanan(data) {
       try {
-        await api.post('/services', data);
+        await api.post('/web-profile/services', data);
         await this.fetchLayanan();
         this.logActivity('Tambah Layanan', 'Menambahkan layanan masjid baru');
       } catch (err) {
@@ -415,7 +415,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async updateLayanan(id, updatedData) {
       try {
-        await api.put(`/services/${id}`, updatedData);
+        await api.put(`/web-profile/services/${id}`, updatedData);
         await this.fetchLayanan();
         this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid');
       } catch (err) {
@@ -424,7 +424,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async deleteLayanan(id) {
       try {
-        await api.delete(`/services/${id}`);
+        await api.delete(`/web-profile/services/${id}`);
         await this.fetchLayanan();
         this.logActivity('Hapus Layanan', 'Menghapus data layanan masjid');
       } catch (err) {
@@ -445,7 +445,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async fetchCommittee() {
       try {
-        const res = await api.get('/committee');
+        const res = await api.get('/web-profile/committee');
         this.committee = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch committee:', err);
@@ -453,7 +453,7 @@ export const useAdminStore = defineStore('admin', {
     },
     async saveCommittee() {
       try {
-        await api.put('/committee', this.committee);
+        await api.put('/web-profile/committee', this.committee);
         setStorage('admin_committee_v3', JSON.stringify(this.committee));
         this.logActivity('Ubah Pengurus', 'Memperbarui struktur pengurus DKM');
       } catch (err) {
