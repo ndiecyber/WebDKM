@@ -448,11 +448,13 @@ export const useAdminStore = defineStore('admin', {
         const res = await api.get('/web-profile/committee');
         const data = res.data.data || res.data;
         
+        const defaultAvatar = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394A3B8" style="background:%23F1F5F9"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+
         const mapMember = (m) => ({
           id: m.id,
           name: m.name,
           role: m.role,
-          image: m.image,
+          image: m.image ? m.image : defaultAvatar,
           isLeader: m.is_leader !== undefined ? Boolean(m.is_leader) : Boolean(m.isLeader || false)
         });
 
