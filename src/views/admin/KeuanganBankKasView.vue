@@ -240,10 +240,50 @@
 
           <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 space-y-3">
             <div class="flex justify-between items-center text-sm border-b border-gray-200 dark:border-gray-700 pb-2">
-              <span class="text-gray-500 dark:text-gray-400">Saldo Saat Ini</span>
-              <span class="font-bold text-lg text-gray-900 dark:text-white">Rp {{ formatCurrency(selectedDetailRekening.balance) }}</span>
+              <span class="text-gray-500 dark:text-gray-400">Total Saldo Fisik</span>
+              <span class="font-bold text-lg text-gray-900 dark:text-white">Rp {{ formatCurrency(getAccountTotalBalance(selectedDetailRekening.name)) }}</span>
             </div>
-            <div class="flex justify-between text-sm" v-if="selectedDetailRekening.accountNo">
+            <!-- Rincian Alokasi Dana (Fund Accounting) -->
+            <div class="pt-1 pb-2">
+              <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Komposisi Saldo</p>
+              
+              <!-- Visual Stacked Bar -->
+              <div class="w-full h-2.5 rounded-full overflow-hidden flex mb-3 bg-gray-200 dark:bg-gray-700" v-if="getAccountTotalBalance(selectedDetailRekening.name) > 0">
+                <div 
+                  class="h-full bg-gray-400 dark:bg-gray-500 transition-all duration-500" 
+                  :style="{ width: getPercentage(getAccountGeneralBalance(selectedDetailRekening.name), getAccountTotalBalance(selectedDetailRekening.name)) + '%' }"
+                  title="Kas Umum"
+                ></div>
+                <div 
+                  v-for="(amount, progId, index) in getAccountProgramBalances(selectedDetailRekening.name)" 
+                  :key="progId"
+                  class="h-full transition-all duration-500"
+                  :class="getColorClass(index)"
+                  :style="{ width: getPercentage(amount, getAccountTotalBalance(selectedDetailRekening.name)) + '%' }"
+                  :title="getProgramName(progId)"
+                ></div>
+              </div>
+
+              <!-- List Nominal -->
+              <div class="space-y-2.5 max-h-36 overflow-y-auto custom-scrollbar-y pr-1.5">
+                <div class="flex justify-between text-sm items-center">
+                  <div class="flex items-center gap-2 shrink-0">
+                    <span class="w-2.5 h-2.5 rounded-full bg-gray-400 dark:bg-gray-500 shrink-0"></span>
+                    <span class="text-gray-600 dark:text-gray-300 truncate max-w-[140px]" title="Kas Umum">Kas Umum</span>
+                  </div>
+                  <span class="font-medium text-gray-900 dark:text-white text-right">Rp {{ formatCurrency(getAccountGeneralBalance(selectedDetailRekening.name)) }}</span>
+                </div>
+                <div v-for="(amount, progId, index) in getAccountProgramBalances(selectedDetailRekening.name)" :key="progId" class="flex justify-between text-sm items-center">
+                  <div class="flex items-center gap-2 shrink-0">
+                    <span class="w-2.5 h-2.5 rounded-full shrink-0" :class="getColorClass(index)"></span>
+                    <span class="text-gray-600 dark:text-gray-300 truncate max-w-[140px]" :title="getProgramName(progId)">{{ getProgramName(progId) }}</span>
+                  </div>
+                  <span class="font-medium text-gray-900 dark:text-white text-right">Rp {{ formatCurrency(amount) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between text-sm pt-2 border-t border-gray-200 dark:border-gray-700" v-if="selectedDetailRekening.accountNo">
               <span class="text-gray-500 dark:text-gray-400">No. Rekening</span>
               <span class="font-medium text-gray-900 dark:text-white font-mono">{{ selectedDetailRekening.accountNo }}</span>
             </div>
@@ -306,7 +346,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Saldo Sistem Saat Ini</label>
               <div class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-700 dark:text-gray-300 font-mono">
-                Rp {{ formatCurrency(penyesuaianTarget.balance) }}
+                Rp {{ formatCurrency(getAccountTotalBalance(penyesuaianTarget.name)) }}
               </div>
             </div>
             <div>
@@ -327,11 +367,19 @@
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alasan Penyesuaian <span class="text-rose-500">*</span></label>
             <input type="text" v-model="penyesuaianForm.reason" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="Misal: Uang fisik kurang karena kembalian">
           </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bebankan selisih pada Program (Opsional)</label>
+            <select v-model="penyesuaianForm.program_id" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <option :value="null">Kas Umum (Default)</option>
+              <option v-for="p in activePrograms" :key="p.id" :value="p.id">{{ p.name }}</option>
+            </select>
+          </div>
         </div>
         
         <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
           <button @click="showPenyesuaianModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
-          <button @click="showPenyesuaianModal = false" :disabled="penyesuaianDiff === 0" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg shadow-sm transition-colors">Sesuaikan Saldo</button>
+          <button @click="simpanPenyesuaian" :disabled="penyesuaianDiff === 0" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg shadow-sm transition-colors">Sesuaikan Saldo</button>
         </div>
       </div>
     </div>
@@ -485,6 +533,15 @@ import {
   Plus, ArrowLeftRight, Landmark, Wallet, Briefcase, HardHat, X, 
   ArrowUpRight, ArrowDownLeft, Pin, Scale, Pencil, QrCode, AlertTriangle, Info, ChevronLeft, ChevronRight 
 } from 'lucide-vue-next'
+import { useKeuanganStore } from '@/stores/keuangan'
+import { useToastStore } from '@/stores/toast'
+
+const keuanganStore = useKeuanganStore()
+const toast = useToastStore()
+
+const activePrograms = computed(() => keuanganStore.programs.filter(p => p.status === 'Aktif'))
+const getProgramName = (id) => keuanganStore.programs.find(p => p.id === Number(id))?.name || ''
+
 
 // State untuk Modal & Mode
 const showMutasiModal = ref(false)
@@ -574,9 +631,12 @@ const rekeningData = ref([
   { id: 5, name: 'Bank Muamalat', type: 'Bank', accountNo: '312 445 6678', ownerName: 'DKM Kassiti', desc: 'Dana Cadangan', balance: 20000000, color: 'purple', isPinned: false, isActive: false },
 ])
 
-// Computed: Sort by Pinned First
 const sortedRekening = computed(() => {
-  return [...rekeningData.value].sort((a, b) => {
+  return [...rekeningData.value].map(r => ({
+    ...r,
+    // Sync balance with store
+    balance: getAccountTotalBalance(r.name) || r.balance
+  })).sort((a, b) => {
     if (a.isPinned === b.isPinned) return 0;
     return a.isPinned ? -1 : 1;
   });
@@ -614,12 +674,37 @@ const getTodayDate = () => {
 
 const mutasiForm = ref({ from: null, to: null, amount: '', adminFee: '', date: getTodayDate(), desc: '' })
 
-const penyesuaianForm = ref({ actualBalance: '', reason: '' })
+const penyesuaianForm = ref({ actualBalance: '', reason: '', program_id: null })
 
 const penyesuaianDiff = computed(() => {
   if (!penyesuaianTarget.value || penyesuaianForm.value.actualBalance === '') return 0;
-  return Number(penyesuaianForm.value.actualBalance) - penyesuaianTarget.value.balance;
+  return Number(penyesuaianForm.value.actualBalance) - getAccountTotalBalance(penyesuaianTarget.value.name);
 })
+
+// Store Integration Helpers
+const getAccountTotalBalance = (accountName) => {
+  return keuanganStore.accountBalances[accountName]?.total || 0
+}
+
+const getAccountGeneralBalance = (accountName) => {
+  return keuanganStore.accountBalances[accountName]?.general || 0
+}
+
+const getAccountProgramBalances = (accountName) => {
+  return keuanganStore.accountBalances[accountName]?.programs || {}
+}
+
+const getPercentage = (part, total) => {
+  if (total === 0) return 0
+  return (part / total) * 100
+}
+
+const getColorClass = (index) => {
+  const colors = ['bg-emerald-500', 'bg-blue-500', 'bg-amber-500', 'bg-purple-500', 'bg-rose-500', 'bg-teal-500']
+  // Use index instead of array order since object keys iteration order might not be strictly an array index, but vue v-for with object gives (value, key, index)
+  const safeIndex = typeof index === 'number' ? index : 0;
+  return colors[safeIndex % colors.length]
+}
 
 // Actions
 const formatCurrency = (val) => {
@@ -646,8 +731,20 @@ const openEditRekeningModal = (rek) => {
 const openPenyesuaianModal = (rek) => {
   selectedDetailRekening.value = null
   penyesuaianTarget.value = rek
-  penyesuaianForm.value = { actualBalance: '', reason: '' }
+  penyesuaianForm.value = { actualBalance: '', reason: '', program_id: null }
   showPenyesuaianModal.value = true
+}
+
+const simpanPenyesuaian = () => {
+  if (penyesuaianDiff.value !== 0) {
+    keuanganStore.addBalanceAdjustment(
+      penyesuaianTarget.value.name, 
+      penyesuaianDiff.value, 
+      penyesuaianForm.value.program_id
+    )
+    toast.showToast('Penyesuaian saldo berhasil disimpan', 'success')
+  }
+  showPenyesuaianModal.value = false
 }
 
 const openMutasiModal = () => {

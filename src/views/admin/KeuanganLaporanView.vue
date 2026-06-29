@@ -61,12 +61,19 @@
 
             <!-- Pilih Kegiatan -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nama Kegiatan</label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nama Kegiatan / Program</label>
               <select v-model="selectedReportId" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all">
                 <option value="">-- Pilih Kegiatan --</option>
-                <option v-for="report in filteredReports" :key="report.id" :value="report.id">
-                  {{ report.title }}
-                </option>
+                <optgroup label="Program dari Sistem">
+                  <option v-for="report in dynamicFilteredReports" :key="report.id" :value="report.id">
+                    {{ report.title }}
+                  </option>
+                </optgroup>
+                <optgroup label="Contoh Laporan Lama">
+                  <option v-for="report in filteredReports" :key="report.id" :value="report.id">
+                    {{ report.title }}
+                  </option>
+                </optgroup>
               </select>
             </div>
             
@@ -157,6 +164,10 @@
 import { ref, computed, watch } from 'vue'
 import { Download, Monitor, FileText, Info, Loader2 } from 'lucide-vue-next'
 import ReportKegiatanTemplate from '@/components/ui/ReportKegiatanTemplate.vue'
+import { useKeuanganStore } from '@/stores/keuangan'
+
+const keuanganStore = useKeuanganStore()
+
 
 // --- MOCK DATA (Copy dari FinanceSection) ---
 const mockReports = [
@@ -289,12 +300,46 @@ const removeCustomQR = () => {
 }
 
 // --- Computed ---
+const dynamicReports = computed(() => {
+  return keuanganStore.programs.map(p => {
+    const txs = keuanganStore.transactions.filter(t => t.program_id === p.id && t.status === 'approved')
+    const pemasukan = txs.filter(t => t.type === 'in').map((t, idx) => ({ no: idx+1, tanggal: t.date, uraian: t.description, jumlah: t.amount }))
+    const pengeluaran = txs.filter(t => t.type === 'out').map((t, idx) => ({ no: idx+1, tanggal: t.date, uraian: t.description, jumlah: t.amount }))
+    const totalPemasukan = pemasukan.reduce((sum, item) => sum + item.jumlah, 0)
+    const totalPengeluaran = pengeluaran.reduce((sum, item) => sum + item.jumlah, 0)
+    
+    return {
+      id: `prog-${p.id}`,
+      title: `${p.name.toUpperCase()}`,
+      year: p.startDate ? p.startDate.substring(0, 4) : new Date().getFullYear().toString(),
+      subtitle: 'DKM KASSITI',
+      date: `Periode: ${p.startDate} s.d ${p.endDate || 'Selesai'}`,
+      pemasukan,
+      pengeluaran,
+      totalPemasukan,
+      totalPengeluaran,
+      sisaSaldo: totalPemasukan - totalPengeluaran,
+      terbilang: '-', 
+      keterangan: p.description,
+      ketua: 'Ketua Panitia',
+      bendahara: 'Bendahara Panitia',
+      ttdKiriTitle: 'Ketua Panitia'
+    }
+  })
+})
+
+const dynamicFilteredReports = computed(() => {
+  return dynamicReports.value.filter(r => r.year === selectedYear.value)
+})
+
 const filteredReports = computed(() => {
   return mockReports.filter(r => r.year === selectedYear.value)
 })
 
 const selectedReport = computed(() => {
-  return mockReports.find(r => r.id === selectedReportId.value) || null
+  return dynamicReports.value.find(r => r.id === selectedReportId.value) || 
+         mockReports.find(r => r.id === selectedReportId.value) || 
+         null
 })
 
 const processedReport = computed(() => {
@@ -303,7 +348,7 @@ const processedReport = computed(() => {
     ...selectedReport.value,
     ketua: overrideKetua.value || selectedReport.value.ketua,
     bendahara: overrideBendahara.value || selectedReport.value.bendahara,
-    keterangan: customNote.value !== '' ? customNote.value : '',
+    keterangan: customNote.value !== '' ? customNote.value : selectedReport.value.keterangan,
     date: overrideDate.value || selectedReport.value.date
   }
 })
