@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getStorage, setStorage, removeStorage } from '@/utils/storage'
+import api from '@/utils/api'
 import heroImg from '@/assets/images/hero-mosque.webp'
 import interiorImg from '@/assets/images/mosque-interior.webp'
 import communityImg from '@/assets/images/community-prayer.webp'
@@ -276,95 +277,158 @@ export const useAdminStore = defineStore('admin', {
       }
       setStorage('admin_audit_logs', JSON.stringify(this.auditLogs));
     },
-    login(username, password) {
-      // For backwards compatibility and new users array
-      const user = this.users.find(u => u.username === username && u.password === password);
-      if (user) {
-        this.isAuthenticated = true;
-        this.currentUser = { ...user };
-        // Don't store password in currentUser state/localStorage
-        delete this.currentUser.password;
-
-        setStorage('admin_auth', 'true');
-        setStorage('admin_current_user', JSON.stringify(this.currentUser));
-        this.logActivity('Login', 'Berhasil login ke sistem');
-        return true;
+    async login(username, password) {
+      try {
+        const response = await api.post('/auth/login', {
+          email: username, // assuming username is used as email or identifier
+          password: password
+        });
+        
+        if (response.data && response.data.token) {
+          const { token, user } = response.data;
+          
+          this.isAuthenticated = true;
+          this.currentUser = user;
+          
+          // Save token to localStorage for the interceptor
+          localStorage.setItem('auth_token', token);
+          setStorage('admin_auth', 'true');
+          setStorage('admin_current_user', JSON.stringify(this.currentUser));
+          
+          this.logActivity('Login', 'Berhasil login ke sistem');
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error('Login error:', error);
+        return false;
       }
-      return false;
     },
-    logout() {
+    async logout() {
       if (this.isAuthenticated) {
-        this.logActivity('Logout', 'Keluar dari sistem');
+        try {
+          await api.post('/auth/logout');
+          this.logActivity('Logout', 'Keluar dari sistem');
+        } catch (error) {
+          console.error('Logout error:', error);
+        }
       }
       this.isAuthenticated = false;
       this.currentUser = null;
+      localStorage.removeItem('auth_token');
       removeStorage('admin_auth');
       removeStorage('admin_current_user');
     },
-    addKegiatan(data) {
-      const newId = this.kegiatan.length > 0 ? Math.max(...this.kegiatan.map((k) => k.id)) + 1 : 1
-      this.kegiatan.push({ ...data, id: newId })
-      this.saveKegiatan()
-    },
-    updateKegiatan(id, updatedData) {
-      const index = this.kegiatan.findIndex((k) => k.id === id)
-      if (index !== -1) {
-        this.kegiatan[index] = { ...this.kegiatan[index], ...updatedData }
-        this.saveKegiatan()
+    async fetchKegiatan() {
+      try {
+        const res = await api.get('/events');
+        this.kegiatan = res.data.data || res.data;
+      } catch (err) {
+        console.error('Failed to fetch kegiatan:', err);
       }
     },
-    deleteKegiatan(id) {
-      this.kegiatan = this.kegiatan.filter((k) => k.id !== id)
-      this.saveKegiatan()
+    async addKegiatan(data) {
+      try {
+        await api.post('/events', data);
+        await this.fetchKegiatan();
+        this.logActivity('Tambah Kegiatan', 'Menambahkan kegiatan/acara baru');
+      } catch (err) {
+        console.error('Failed to add kegiatan:', err);
+      }
     },
-    saveKegiatan() {
-      setStorage('admin_kegiatan_v13', JSON.stringify(this.kegiatan))
-      this.logActivity('Ubah Kegiatan', 'Memperbarui data kegiatan/acara')
+    async updateKegiatan(id, updatedData) {
+      try {
+        await api.put(`/events/${id}`, updatedData);
+        await this.fetchKegiatan();
+        this.logActivity('Ubah Kegiatan', 'Memperbarui data kegiatan/acara');
+      } catch (err) {
+        console.error('Failed to update kegiatan:', err);
+      }
+    },
+    async deleteKegiatan(id) {
+      try {
+        await api.delete(`/events/${id}`);
+        await this.fetchKegiatan();
+        this.logActivity('Hapus Kegiatan', 'Menghapus data kegiatan/acara');
+      } catch (err) {
+        console.error('Failed to delete kegiatan:', err);
+      }
     },
     updateFinance(data) {
       this.finance = { ...this.finance, ...data }
       setStorage('admin_finance', JSON.stringify(this.finance))
       this.logActivity('Ubah Keuangan', 'Memperbarui data laporan keuangan');
     },
-    addGallery(data) {
-      const newId = this.gallery.length > 0 ? Math.max(...this.gallery.map((g) => g.id)) + 1 : 1
-      this.gallery.push({ ...data, id: newId })
-      this.saveGallery()
-    },
-    updateGallery(id, updatedData) {
-      const index = this.gallery.findIndex((g) => g.id === id)
-      if (index !== -1) {
-        this.gallery[index] = { ...this.gallery[index], ...updatedData }
-        this.saveGallery()
+    async fetchGallery() {
+      try {
+        const res = await api.get('/galleries');
+        this.gallery = res.data.data || res.data;
+      } catch (err) {
+        console.error('Failed to fetch gallery:', err);
       }
     },
-    deleteGallery(id) {
-      this.gallery = this.gallery.filter((g) => g.id !== id)
-      this.saveGallery()
-    },
-    saveGallery() {
-      setStorage('admin_gallery_v5', JSON.stringify(this.gallery))
-      this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto')
-    },
-    addLayanan(data) {
-      const newId = this.layanan.length > 0 ? Math.max(...this.layanan.map((l) => l.id)) + 1 : 1
-      this.layanan.push({ ...data, id: newId })
-      this.saveLayanan()
-    },
-    updateLayanan(id, updatedData) {
-      const index = this.layanan.findIndex((l) => l.id === id)
-      if (index !== -1) {
-        this.layanan[index] = { ...this.layanan[index], ...updatedData }
-        this.saveLayanan()
+    async addGallery(data) {
+      try {
+        await api.post('/galleries', data);
+        await this.fetchGallery();
+        this.logActivity('Tambah Galeri', 'Menambahkan foto galeri baru');
+      } catch (err) {
+        console.error('Failed to add gallery:', err);
       }
     },
-    deleteLayanan(id) {
-      this.layanan = this.layanan.filter((l) => l.id !== id)
-      this.saveLayanan()
+    async updateGallery(id, updatedData) {
+      try {
+        await api.put(`/galleries/${id}`, updatedData);
+        await this.fetchGallery();
+        this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto');
+      } catch (err) {
+        console.error('Failed to update gallery:', err);
+      }
     },
-    saveLayanan() {
-      setStorage('admin_layanan_v12', JSON.stringify(this.layanan))
-      this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid')
+    async deleteGallery(id) {
+      try {
+        await api.delete(`/galleries/${id}`);
+        await this.fetchGallery();
+        this.logActivity('Hapus Galeri', 'Menghapus foto galeri');
+      } catch (err) {
+        console.error('Failed to delete gallery:', err);
+      }
+    },
+    async fetchLayanan() {
+      try {
+        const res = await api.get('/services');
+        // Assume API returns { data: [...] } or just an array
+        this.layanan = res.data.data || res.data;
+      } catch (err) {
+        console.error('Failed to fetch layanan:', err);
+      }
+    },
+    async addLayanan(data) {
+      try {
+        await api.post('/services', data);
+        await this.fetchLayanan();
+        this.logActivity('Tambah Layanan', 'Menambahkan layanan masjid baru');
+      } catch (err) {
+        console.error('Failed to add layanan:', err);
+      }
+    },
+    async updateLayanan(id, updatedData) {
+      try {
+        await api.put(`/services/${id}`, updatedData);
+        await this.fetchLayanan();
+        this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid');
+      } catch (err) {
+        console.error('Failed to update layanan:', err);
+      }
+    },
+    async deleteLayanan(id) {
+      try {
+        await api.delete(`/services/${id}`);
+        await this.fetchLayanan();
+        this.logActivity('Hapus Layanan', 'Menghapus data layanan masjid');
+      } catch (err) {
+        console.error('Failed to delete layanan:', err);
+      }
     },
     saveGeneralSettings() {
       setStorage('admin_general_settings', JSON.stringify(this.generalSettings))
@@ -378,34 +442,62 @@ export const useAdminStore = defineStore('admin', {
       setStorage('admin_master_data_v2', JSON.stringify(this.masterData))
       this.logActivity('Ubah Master Data', 'Memperbarui master data (kategori/label)');
     },
-    saveCommittee() {
-      setStorage('admin_committee_v3', JSON.stringify(this.committee))
-      this.logActivity('Ubah Pengurus', 'Memperbarui struktur pengurus DKM');
-    },
-    addUser(userData) {
-      const newId = this.users.length > 0 ? Math.max(...this.users.map(u => u.id)) + 1 : 1;
-      this.users.push({ ...userData, id: newId });
-      this.saveUsers();
-      this.logActivity('Tambah Pengguna', `Menambahkan admin baru: ${userData.username}`);
-    },
-    updateUser(id, userData) {
-      const index = this.users.findIndex(u => u.id === id);
-      if (index !== -1) {
-        this.users[index] = { ...this.users[index], ...userData };
-        this.saveUsers();
-        this.logActivity('Ubah Pengguna', `Memperbarui data admin: ${this.users[index].username}`);
+    async fetchCommittee() {
+      try {
+        const res = await api.get('/committee');
+        this.committee = res.data.data || res.data;
+      } catch (err) {
+        console.error('Failed to fetch committee:', err);
       }
     },
-    deleteUser(id) {
-      const user = this.users.find(u => u.id === id);
-      if (user) {
-        this.users = this.users.filter(u => u.id !== id);
-        this.saveUsers();
-        this.logActivity('Hapus Pengguna', `Menghapus admin: ${user.username}`);
+    async saveCommittee() {
+      try {
+        await api.put('/committee', this.committee);
+        setStorage('admin_committee_v3', JSON.stringify(this.committee));
+        this.logActivity('Ubah Pengurus', 'Memperbarui struktur pengurus DKM');
+      } catch (err) {
+        console.error('Failed to save committee:', err);
+      }
+    },
+    async fetchUsers() {
+      try {
+        const res = await api.get('/users');
+        this.users = res.data.data || res.data;
+      } catch (err) {
+        console.error('Failed to fetch users:', err);
+      }
+    },
+    async addUser(userData) {
+      try {
+        await api.post('/users', userData);
+        await this.fetchUsers();
+        this.logActivity('Tambah Pengguna', `Menambahkan admin baru: ${userData.username}`);
+      } catch (err) {
+        console.error('Failed to add user:', err);
+      }
+    },
+    async updateUser(id, userData) {
+      try {
+        await api.put(`/users/${id}`, userData);
+        await this.fetchUsers();
+        const user = this.users.find(u => u.id === id);
+        this.logActivity('Ubah Pengguna', `Memperbarui data admin: ${user ? user.username : id}`);
+      } catch (err) {
+        console.error('Failed to update user:', err);
+      }
+    },
+    async deleteUser(id) {
+      try {
+        const user = this.users.find(u => u.id === id);
+        await api.delete(`/users/${id}`);
+        await this.fetchUsers();
+        this.logActivity('Hapus Pengguna', `Menghapus admin: ${user ? user.username : id}`);
+      } catch (err) {
+        console.error('Failed to delete user:', err);
       }
     },
     saveUsers() {
-      setStorage('admin_users', JSON.stringify(this.users));
+      // deprecated locally
     },
     recalculateHierarchy() {
       this.roles.forEach((r, index) => {
@@ -413,56 +505,59 @@ export const useAdminStore = defineStore('admin', {
       });
       this.saveRoles();
     },
-    moveRoleUp(id) {
-      const index = this.roles.findIndex(r => r.id === id);
-      // Index 0 is superadmin, cannot move anything above it, and it cannot move
-      if (index > 1) {
-        const temp = this.roles[index - 1];
-        this.roles[index - 1] = this.roles[index];
-        this.roles[index] = temp;
-        this.recalculateHierarchy();
+    async fetchRoles() {
+      try {
+        const res = await api.get('/roles');
+        this.roles = res.data.data || res.data;
+      } catch (err) {
+        console.error('Failed to fetch roles:', err);
       }
     },
-    moveRoleDown(id) {
-      const index = this.roles.findIndex(r => r.id === id);
-      // Index 0 is superadmin, it cannot move. Other roles can move down if not last.
-      if (index > 0 && index < this.roles.length - 1) {
-        const temp = this.roles[index + 1];
-        this.roles[index + 1] = this.roles[index];
-        this.roles[index] = temp;
-        this.recalculateHierarchy();
+    async moveRoleUp(id) {
+      try {
+        await api.patch(`/roles/${id}/move`, { direction: 'up' });
+        await this.fetchRoles();
+      } catch (err) {
+        console.error('Failed to move role up:', err);
       }
     },
-    addRole(roleData) {
-      const newId = this.roles.length > 0 ? Math.max(...this.roles.map(r => r.id)) + 1 : 1;
-      roleData.hierarchy = this.roles.length + 1; // Put at the bottom
-      this.roles.push({ ...roleData, id: newId });
-      this.saveRoles();
-      this.logActivity('Tambah Role', `Menambahkan peran baru: ${roleData.name}`);
-    },
-    updateRole(id, roleData) {
-      const index = this.roles.findIndex(r => r.id === id);
-      if (index !== -1) {
-        // Prevent editing superadmin hierarchy/key to prevent lock-out
-        if (this.roles[index].key === 'superadmin') {
-          roleData.key = 'superadmin';
-          roleData.hierarchy = 1;
-        }
-        this.roles[index] = { ...this.roles[index], ...roleData };
-        this.saveRoles();
-        this.logActivity('Ubah Role', `Memperbarui data peran: ${this.roles[index].name}`);
+    async moveRoleDown(id) {
+      try {
+        await api.patch(`/roles/${id}/move`, { direction: 'down' });
+        await this.fetchRoles();
+      } catch (err) {
+        console.error('Failed to move role down:', err);
       }
     },
-    deleteRole(id) {
-      const role = this.roles.find(r => r.id === id);
-      if (role && role.key !== 'superadmin') {
-        this.roles = this.roles.filter(r => r.id !== id);
-        this.saveRoles();
-        this.logActivity('Hapus Role', `Menghapus peran: ${role.name}`);
+    async addRole(roleData) {
+      try {
+        await api.post('/roles', roleData);
+        await this.fetchRoles();
+        this.logActivity('Tambah Role', `Menambahkan peran baru: ${roleData.name}`);
+      } catch (err) {
+        console.error('Failed to add role:', err);
+      }
+    },
+    async updateRole(id, roleData) {
+      try {
+        await api.put(`/roles/${id}`, roleData);
+        await this.fetchRoles();
+        this.logActivity('Ubah Role', `Memperbarui data peran: ${roleData.name}`);
+      } catch (err) {
+        console.error('Failed to update role:', err);
+      }
+    },
+    async deleteRole(id) {
+      try {
+        await api.delete(`/roles/${id}`);
+        await this.fetchRoles();
+        this.logActivity('Hapus Role', `Menghapus peran id: ${id}`);
+      } catch (err) {
+        console.error('Failed to delete role:', err);
       }
     },
     saveRoles() {
-      setStorage('admin_roles', JSON.stringify(this.roles));
+      // deprecated locally
     }
   }
 })
