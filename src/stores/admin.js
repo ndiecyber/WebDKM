@@ -284,8 +284,9 @@ export const useAdminStore = defineStore('admin', {
           password: password
         });
         
-        if (response.data && response.data.token) {
-          const { token, user } = response.data;
+        const resData = response.data && response.data.data ? response.data.data : response.data;
+        if (resData && resData.token) {
+          const { token, user } = resData;
           
           this.isAuthenticated = true;
           this.currentUser = user;
