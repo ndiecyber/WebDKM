@@ -446,7 +446,25 @@ export const useAdminStore = defineStore('admin', {
     async fetchCommittee() {
       try {
         const res = await api.get('/web-profile/committee');
-        this.committee = res.data.data || res.data;
+        const data = res.data.data || res.data;
+        
+        const mapMember = (m) => ({
+          id: m.id,
+          name: m.name,
+          role: m.role,
+          image: m.image,
+          isLeader: m.is_leader !== undefined ? Boolean(m.is_leader) : Boolean(m.isLeader || false)
+        });
+
+        this.committee = {
+          dewanPenasihat: (data.dewanPenasihat || []).map(mapMember),
+          pengurusHarian: (data.pengurusHarian || []).map(mapMember),
+          divisi: (data.divisi || []).map(d => ({
+            id: d.id,
+            name: d.name,
+            members: (d.members || []).map(mapMember)
+          }))
+        };
       } catch (err) {
         console.error('Failed to fetch committee:', err);
       }
