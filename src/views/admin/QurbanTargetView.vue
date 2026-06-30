@@ -4,7 +4,6 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
-          <Users class="w-6 h-6 text-emerald-500" />
           Manajemen Target Hewan
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Atur pembagian kelompok shohibul sapi dan pantau daftar jamaah mandiri kambing.</p>
@@ -32,8 +31,7 @@
           <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">Kelompok Sapi (Kolektif)</h3>
         </div>
         
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           <div v-if="sapiGroups.length === 0" class="col-span-full p-8 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300">
             <p class="text-sm text-gray-500 font-medium">Belum ada kelompok sapi yang dibuat.</p>
           </div>
@@ -41,7 +39,7 @@
           <div 
             v-for="group in sapiGroups" 
             :key="group.id"
-            class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-5 shadow-md flex flex-col space-y-4 relative overflow-hidden"
+            class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-5 shadow-md flex flex-col space-y-4 relative overflow-hidden h-full"
           >
             <div class="flex justify-between items-center border-b border-gray-100 dark:border-white/5 pb-3">
               <div class="flex items-center gap-2">
@@ -59,7 +57,7 @@
               </div>
             </div>
 
-            <div class="space-y-2">
+            <div class="space-y-2 flex-1">
               <div 
                 v-for="(member, idx) in group.shohibuls" 
                 :key="member.id"
@@ -138,8 +136,11 @@
         </div>
       </div>
     </template>
+  </div>
 
-    <div v-if="moveModal.isOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+  <Teleport to="body">
+    
+    <div v-if="moveModal.isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
       <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 p-6 animate-fade-in-down">
         <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100 dark:border-white/5">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -174,39 +175,53 @@
       </div>
     </div>
 
-    <div v-if="createModal.isOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
-      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 p-6 animate-fade-in-down">
-        <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100 dark:border-white/5">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Plus class="w-5 h-5 text-emerald-500" /> Buat Kelompok Sapi
-          </h3>
+    <div v-if="createModal.isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 animate-fade-in-down">
+        
+        <div class="p-6 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5">
+          <div>
+            <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+              <Users class="w-5 h-5 text-emerald-500" /> Simulasi Grup Sapi
+            </h3>
+          </div>
           <button @click="createModal.isOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors"><X class="w-5 h-5" /></button>
         </div>
-        <form @submit.prevent="submitCreateGroup" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Nama Kelompok</label>
-            <input v-model="createModal.name" type="text" required placeholder="Contoh: Sapi A / Sapi RT 01" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-emerald-500 outline-none sm:text-sm shadow-sm">
+        
+        <div class="p-6 bg-gray-50/50 dark:bg-black/20 h-[400px] overflow-y-auto custom-scrollbar">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            
+            <div v-for="group in sapiGroups" :key="group.id" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm transition-colors group">
+              <div class="flex justify-between items-start mb-2">
+                <span class="text-2xl group-hover:scale-110 transition-transform origin-left">🐄</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded"
+                      :class="group.shohibuls.length >= 7 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'">
+                  {{ group.shohibuls.length }}/7 Penuh
+                </span>
+              </div>
+              <h4 class="font-bold text-sm text-gray-800 dark:text-white">{{ group.name }}</h4>
+            </div>
+            
+            <button @click="submitCreateGroup" class="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-gray-500 hover:text-emerald-600 transition-all min-h-[100px]">
+              <Plus class="w-8 h-8" />
+              <span class="text-xs font-bold">Buat Sapi Baru</span>
+            </button>
+            
           </div>
-          <div class="pt-2 flex gap-3">
-            <button type="button" @click="createModal.isOpen = false" class="flex-1 py-2.5 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl transition-colors">Batal</button>
-            <button type="submit" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition-colors shadow-sm">Simpan</button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
-
-  </div>
+  </Teleport>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Users, Plus, ArrowRightLeft, ArrowRight, X, Wallet, CheckCircle } from 'lucide-vue-next'
+import { Users, Plus, ArrowRightLeft, ArrowRight, X } from 'lucide-vue-next'
 
 const formatRupiah = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
 
 const isLoading = ref(true)
 
-// MOCK DATA RESPONSE API (Struktur 100% sama dengan AnimalGroupController->index)
+// MOCK DATA RESPONSE API
 const mockGroups = ref([])
 
 onMounted(() => {
@@ -229,7 +244,6 @@ onMounted(() => {
       },
       {
         id: 3, name: 'Mandiri Kambing', target_type: 'kambing', shohibuls_count: 3,
-        // Untuk kambing, datanya tetap masuk ke shohibuls di backend. Nanti kita ekstrak.
         shohibuls: [
           { id: 8, name: 'Bapak Ilham', phone: '0811', collected_amount: 3500000, target_amount: 3500000 },
           { id: 9, name: 'Ibu Siti', phone: '0822', collected_amount: 1500000, target_amount: 3500000 },
@@ -241,47 +255,35 @@ onMounted(() => {
   }, 1000)
 })
 
-// COMPUTED UNTUK SAPI & KAMBING
-const sapiGroups = computed(() => {
-  return mockGroups.value.filter(g => g.target_type === 'sapi')
-})
+const sapiGroups = computed(() => mockGroups.value.filter(g => g.target_type === 'sapi'))
 
 const kambingList = computed(() => {
-  // Mengekstrak semua shohibul yang berasal dari grup bertipe kambing
   let kambings = []
   mockGroups.value.forEach(g => {
-    if (g.target_type === 'kambing') {
-      kambings = kambings.concat(g.shohibuls)
-    }
+    if (g.target_type === 'kambing') kambings = kambings.concat(g.shohibuls)
   })
   return kambings
 })
 
 const getGroupTotal = (group) => group.shohibuls.reduce((sum, member) => sum + member.collected_amount, 0)
 
-// MODAL PINDAH KELOMPOK (Sesuai API moveMember)
+// MODAL PINDAH KELOMPOK
 const moveModal = ref({ isOpen: false, member: null, currentGroup: null })
 
 const availableGroups = computed(() => {
   if (!moveModal.value.currentGroup) return []
-  // Filter grup sapi lain yang slotnya kurang dari 7
   return sapiGroups.value.filter(g => g.id !== moveModal.value.currentGroup.id && g.shohibuls.length < 7)
 })
 
 const openMoveModal = (member, currentGroup) => {
   moveModal.value = { isOpen: true, member, currentGroup }
-  document.body.style.overflow = 'hidden'
 }
 
 const closeMoveModal = () => {
   moveModal.value.isOpen = false
-  document.body.style.overflow = ''
 }
 
 const confirmMove = (targetGroup) => {
-  alert(`Memanggil API moveMember... \nShohibul ID: ${moveModal.value.member.id} \nGroup Tujuan ID: ${targetGroup.id}`)
-  
-  // Simulasi Update UI Lokal (Hapus dari grup lama, masuk ke grup baru)
   const oldGroup = mockGroups.value.find(g => g.id === moveModal.value.currentGroup.id)
   const newGroup = mockGroups.value.find(g => g.id === targetGroup.id)
   
@@ -289,36 +291,36 @@ const confirmMove = (targetGroup) => {
     oldGroup.shohibuls = oldGroup.shohibuls.filter(m => m.id !== moveModal.value.member.id)
     newGroup.shohibuls.push(moveModal.value.member)
   }
-  
   closeMoveModal()
 }
 
-// MODAL BUAT KELOMPOK BARU (Sesuai API store)
-const createModal = ref({ isOpen: false, name: '' })
+// MODAL SIMULASI & BUAT KELOMPOK
+const createModal = ref({ isOpen: false })
 
 const openCreateGroupModal = () => {
-  createModal.value = { isOpen: true, name: '' }
+  createModal.value.isOpen = true
 }
 
 const submitCreateGroup = () => {
-  alert(`Memanggil API Store AnimalGroup... \nNama: ${createModal.value.name}\nTarget: Sapi`)
+  const groupName = prompt("Masukkan nama kelompok sapi baru:")
   
-  // Simulasi nambah ke UI
-  mockGroups.value.push({
-    id: Math.floor(Math.random() * 1000),
-    name: createModal.value.name,
-    target_type: 'sapi',
-    shohibuls_count: 0,
-    shohibuls: []
-  })
-  
-  createModal.value.isOpen = false
+  if (groupName && groupName.trim() !== '') {
+    // Eksekusi API
+    alert(`Memanggil API Store AnimalGroup... \nNama: ${groupName}`)
+    
+    mockGroups.value.push({
+      id: Math.floor(Math.random() * 1000),
+      name: groupName,
+      target_type: 'sapi',
+      shohibuls_count: 0,
+      shohibuls: []
+    })
+  }
 }
 
 const deleteGroup = (group) => {
   if (confirm(`Apakah Anda yakin ingin menghapus kelompok ${group.name} secara permanen?`)) {
     mockGroups.value = mockGroups.value.filter(g => g.id !== group.id)
-    alert('Kelompok berhasil dihapus.')
   }
 }
 </script>

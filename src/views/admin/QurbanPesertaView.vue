@@ -13,7 +13,9 @@
       </button>
     </div>
 
-    <div class="flex flex-col sm:flex-row gap-4 relative z-10">
+    <!-- Search & Filter Bar -->
+    <div class="flex flex-col sm:flex-row gap-4 relative z-20">
+      
       <div class="relative flex-1">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <Search class="w-4 h-4 text-gray-400" />
@@ -26,22 +28,39 @@
         />
       </div>
 
-      <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-2 sm:pb-0 items-center">
+      <div class="relative shrink-0">
         <button 
-          v-for="filter in filters" 
-          :key="filter.value"
-          @click="activeFilter = filter.value"
-          class="px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shadow-sm"
-          :class="activeFilter === filter.value 
-            ? 'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800/30' 
-            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:border-white/10 dark:hover:bg-white/5'"
+          @click="isFilterOpen = !isFilterOpen" 
+          class="w-full sm:w-auto px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-300 shadow-sm flex items-center justify-between gap-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
         >
-          <span v-if="filter.icon" class="mr-1.5">{{ filter.icon }}</span>
-          {{ filter.label }}
+          <div class="flex items-center gap-2">
+            <Filter class="w-4 h-4 text-gray-400" />
+            <span v-if="selectedFilter.icon" class="mr-0.5">{{ selectedFilter.icon }}</span>
+            <span>{{ selectedFilter.label }}</span>
+          </div>
+          <ChevronDown class="w-4 h-4 text-gray-400" />
         </button>
+
+        <div v-if="isFilterOpen" class="absolute right-0 left-0 sm:left-auto mt-2 w-full sm:w-48 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/10 rounded-xl shadow-lg z-50 py-1 animate-fade-in-down overflow-hidden">
+          <button 
+            v-for="filter in filters" 
+            :key="filter.value"
+            @click="selectFilter(filter.value)"
+            class="w-full text-left px-4 py-2.5 text-sm font-medium transition-colors flex items-center gap-2"
+            :class="activeFilter === filter.value ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400' : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5'"
+          >
+            <span v-if="filter.icon" class="w-5 text-center">{{ filter.icon }}</span>
+            <span v-else class="w-5"></span> 
+            {{ filter.label }}
+            <Check v-if="activeFilter === filter.value" class="w-4 h-4 ml-auto text-emerald-600 dark:text-emerald-400" />
+          </button>
+        </div>
+        <div v-if="isFilterOpen" @click="isFilterOpen = false" class="fixed inset-0 z-40"></div>
       </div>
+
     </div>
 
+    <!-- Tabel Data -->
     <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md overflow-hidden relative z-0">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5 text-left border-collapse">
@@ -149,8 +168,13 @@
         <p>Menampilkan <span class="font-bold text-gray-900">{{ filteredPeserta.length }}</span> dari {{ mockPeserta.length }} peserta.</p>
       </div>
     </div>
+  </div>
 
-    <div v-if="selectedPeserta && modalType === 'detail'" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+  <!-- MODALS DI-TELEPORT KE BODY -->
+  <Teleport to="body">
+    
+    <!-- Modal Detail Shohibul -->
+    <div v-if="selectedPeserta && modalType === 'detail'" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
       <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden ring-1 ring-gray-200 animate-fade-in-down">
         <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
           <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
@@ -215,7 +239,8 @@
       </div>
     </div>
 
-    <div v-if="(modalType === 'add' || modalType === 'edit')" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+    <!-- Modal Form Tambah/Edit -->
+    <div v-if="(modalType === 'add' || modalType === 'edit')" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
       <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden ring-1 ring-gray-200 animate-fade-in-down">
         <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
           <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
@@ -271,7 +296,8 @@
       </div>
     </div>
 
-    <div v-if="modalType === 'delete'" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+    <!-- Modal Konfirmasi Hapus -->
+    <div v-if="modalType === 'delete'" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
       <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden ring-1 ring-gray-200 p-6 text-center animate-fade-in-down">
         <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4 border border-red-100">
           <Trash2 class="w-8 h-8 text-red-600" />
@@ -286,30 +312,38 @@
       </div>
     </div>
 
-  </div>
+  </Teleport>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User } from 'lucide-vue-next'
+import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter, ChevronDown, Check } from 'lucide-vue-next'
 
-// STATE (Disesuaikan API Backend Pandu)
+// STATE
 const isLoading = ref(true)
 const searchQuery = ref('')
+const isFilterOpen = ref(false)
 const activeFilter = ref('all')
 const modalType = ref(null) 
 const selectedPeserta = ref(null)
-// Form data diselaraskan dengan RegisterShohibulRequest & UpdateShohibulRequest
+
 const formData = ref({ name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' })
 
 const filters = [
-  { label: 'Semua', value: 'all', icon: '' },
-  { label: 'Sapi', value: 'sapi', icon: '🐄' },
-  { label: 'Kambing', value: 'kambing', icon: '🐐' },
-  { label: 'Lunas', value: 'lunas', icon: '✓' }
+  { label: 'Semua Kategori', value: 'all', icon: '' },
+  { label: 'Sapi (Kolektif)', value: 'sapi', icon: '🐄' },
+  { label: 'Kambing (Mandiri)', value: 'kambing', icon: '🐐' },
+  { label: 'Sudah Lunas', value: 'lunas', icon: '✓' }
 ]
 
-// MOCK DATA (100% Mengikuti Output JSON dari ShohibulController->index())
+const selectedFilter = computed(() => filters.find(f => f.value === activeFilter.value) || filters[0])
+
+const selectFilter = (value) => {
+  activeFilter.value = value
+  isFilterOpen.value = false
+}
+
+// MOCK DATA 
 const mockPeserta = ref([])
 
 onMounted(() => {
@@ -319,18 +353,18 @@ onMounted(() => {
         id: 1, name: 'Bapak Ahmad', phone: '081234567890', address: 'Blok A No. 12', 
         target_type: 'sapi', target_amount: 4000000, collected_amount: 4000000, 
         animal_group: { id: 1, name: 'Sapi A', target_type: 'sapi' },
-        transactions: [] // Kosong berarti tidak ada tagihan pending
+        transactions: [] 
       },
       { 
         id: 2, name: 'Ibu Fatimah', phone: '089876543210', address: 'Blok B No. 5', 
         target_type: 'sapi', target_amount: 4000000, collected_amount: 2000000, 
         animal_group: { id: 1, name: 'Sapi A', target_type: 'sapi' },
-        transactions: [{ id: 101, status: 'pending' }] // Ada tagihan pending
+        transactions: [{ id: 101, status: 'pending' }]
       },
       { 
         id: 3, name: 'Keluarga Budi', phone: '085612345678', address: 'Blok C No. 8', 
         target_type: 'kambing', target_amount: 3500000, collected_amount: 3500000, 
-        animal_group: null, // Kambing tidak punya grup
+        animal_group: null, 
         transactions: [] 
       }
     ]
@@ -338,7 +372,7 @@ onMounted(() => {
   }, 1000)
 })
 
-// COMPUTED (Filter berdasarkan key API baru)
+// COMPUTED FILTERS
 const filteredPeserta = computed(() => {
   return mockPeserta.value.filter(p => {
     const q = searchQuery.value.toLowerCase()
@@ -369,12 +403,11 @@ const openAddModal = () => {
 }
 const openEditModal = (peserta) => { 
   selectedPeserta.value = peserta; 
-  formData.value = { ...peserta } // UpdateShohibulRequest hanya butuh identitas, form kita sudah cocok
+  formData.value = { ...peserta }
   modalType.value = 'edit'; document.body.style.overflow = 'hidden' 
 }
 
 const confirmDelete = (peserta) => { 
-  // VALIDASI BACKEND: Tidak boleh hapus jika uang > 0 ATAU ada transaksi pending
   if (peserta.collected_amount > 0 || (peserta.transactions && peserta.transactions.length > 0)) {
     alert(`DITOLAK SISTEM: Shohibul ${peserta.name} memiliki saldo aktif (${formatRupiah(peserta.collected_amount)}) atau transaksi yang masih pending. Batalkan transaksi atau selesaikan refund sebelum menghapus peserta!`)
     return

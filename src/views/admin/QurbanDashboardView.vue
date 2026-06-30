@@ -1,6 +1,7 @@
 <template>
   <div class="space-y-6 sm:space-y-8 animate-fade-in pb-8">
     
+    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard Tabungan Qurban</h1>
@@ -36,8 +37,10 @@
       </div>
     </div>
 
+    <!-- Stats Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       
+      <!-- Kartu Hijau -->
       <div class="relative overflow-hidden bg-linear-to-br from-emerald-600 to-teal-800 rounded-2xl p-6 shadow-lg shadow-emerald-900/20 text-white group block hover:-translate-y-1 hover:shadow-emerald-900/30 transition-all duration-300 cursor-pointer">
         <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform duration-500 pointer-events-none">
           <Wallet class="w-24 h-24" />
@@ -58,6 +61,7 @@
         </div>
       </div>
 
+      <!-- Kartu Putih 1 -->
       <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md group block hover:-translate-y-1 hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 cursor-pointer relative overflow-hidden">
         <div class="relative z-10 flex flex-col justify-between h-full">
           <div class="flex items-center justify-between mb-4">
@@ -78,6 +82,7 @@
         </div>
       </div>
 
+      <!-- Kartu Putih 2 -->
       <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md group block hover:-translate-y-1 hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 cursor-pointer relative overflow-hidden">
         <div class="relative z-10 flex flex-col justify-between h-full">
           <div class="flex items-center justify-between mb-4">
@@ -98,6 +103,7 @@
         </div>
       </div>
 
+      <!-- Kartu Putih 3 -->
       <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md group block hover:-translate-y-1 hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 cursor-pointer relative overflow-hidden">
         <div class="relative z-10 flex flex-col justify-between h-full">
           <div class="flex items-center justify-between mb-4">
@@ -120,8 +126,10 @@
 
     </div>
 
+    <!-- Widgets Bawah -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
+      <!-- Tabel Transaksi Terbaru -->
       <div class="lg:col-span-2 bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md flex flex-col">
         <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
           <div>
@@ -133,7 +141,8 @@
             </div>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Daftar setoran masuk terbaru dari jamaah.</p>
           </div>
-          <RouterLink to="/admin/qurban-setoran" class="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 transition-colors">
+          <!-- Arahkan Link Lihat Semua ke /admin/qurban/setoran -->
+          <RouterLink to="/admin/qurban/setoran" class="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 transition-colors">
             Lihat Semua
           </RouterLink>
         </div>
@@ -197,6 +206,7 @@
         </div>
       </div>
 
+      <!-- Widget Rekap Target Hewan -->
       <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md flex flex-col">
         <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
           <h2 class="text-base font-semibold text-gray-900 dark:text-white">Rekap Target Hewan</h2>
@@ -260,8 +270,11 @@
       </div>
 
     </div>
+  </div>
 
-    <div v-if="isSimulasiOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+  <!-- MODAL SIMULASI SAPI (DIBUNGKUS TELEPORT) -->
+  <Teleport to="body">
+    <div v-if="isSimulasiOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
       <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 animate-fade-in-down">
         <div class="p-6 border-b border-gray-200 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-white/5">
           <div>
@@ -289,8 +302,7 @@
         </div>
       </div>
     </div>
-
-  </div>
+  </Teleport>
 </template>
 
 <script setup>
