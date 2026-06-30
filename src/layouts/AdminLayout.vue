@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950 flex text-gray-600 dark:text-gray-300 font-sans relative selection:bg-secondary/30 selection:text-secondary transition-colors duration-300">
     <ToastContainer />
+    <ConfirmDialog />
     
     <!-- Mobile Sidebar Overlay -->
     <div 
@@ -320,6 +321,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminStore } from '../stores/admin'
 import ToastContainer from '../components/ui/ToastContainer.vue'
+import ConfirmDialog from '../components/ui/ConfirmDialog.vue'
 import { 
   LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon, ShieldCheck, Activity, AlertTriangle, ClipboardList
 } from 'lucide-vue-next'

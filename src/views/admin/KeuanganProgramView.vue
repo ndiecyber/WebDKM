@@ -342,10 +342,12 @@ import { useRouter } from 'vue-router'
 import { Plus, X, Pencil, Trash, CalendarDays, Clock, FolderOpen, AlertCircle, Eye, Wallet, ArrowDownLeft, ArrowUpRight, Scale, Trash2 } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
+import { useDialogStore } from '@/stores/dialog'
 
 const router = useRouter()
 const keuanganStore = useKeuanganStore()
 const toast = useToastStore()
+const dialog = useDialogStore()
 
 const showModal = ref(false)
 const isEditing = ref(false)
@@ -424,8 +426,15 @@ const saveProgram = () => {
   showModal.value = false
 }
 
-const deleteProgram = (id) => {
-  if (confirm('Apakah Anda yakin ingin menghapus program ini? Transaksi terkait mungkin akan kehilangan relasi logisnya.')) {
+const deleteProgram = async (id) => {
+  const confirmed = await dialog.open({
+    title: 'Hapus Program',
+    message: 'Apakah Anda yakin ingin menghapus program ini? Transaksi terkait mungkin akan kehilangan relasi logisnya.',
+    type: 'confirm',
+    confirmText: 'Hapus',
+    cancelText: 'Batal'
+  })
+  if (confirmed) {
     keuanganStore.deleteProgram(id)
     toast.showToast('Program berhasil dihapus', 'success')
   }
