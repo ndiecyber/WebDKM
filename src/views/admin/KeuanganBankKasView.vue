@@ -19,9 +19,32 @@
         </button>
       </div>
     </div>
+    
+    <!-- Filter & Search Section -->
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
+      <div class="relative w-full md:w-96">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+        </div>
+        <input 
+          v-model="searchQuery" 
+          type="text" 
+          placeholder="Cari rekening atau kas..." 
+          class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+        />
+      </div>
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Status:</label>
+        <select v-model="filterStatus" class="w-full md:w-auto bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all shadow-md">
+          <option value="all">Semua Status</option>
+          <option value="active">Aktif Saja</option>
+          <option value="inactive">Nonaktif</option>
+        </select>
+      </div>
+    </div>
 
     <!-- Cards Section -->
-    <div class="relative group/scroll">
+    <div class="relative group/scroll" v-if="sortedRekening.length > 0">
       <div 
         class="flex gap-4 sm:gap-6 overflow-x-auto pt-4 pb-6 custom-scrollbar-x snap-x snap-mandatory scroll-smooth"
         @wheel="handleHorizontalScroll"
@@ -71,6 +94,13 @@
       <button v-if="canScrollRight" @click="scrollCards('right')" class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-white dark:bg-gray-800 shadow-md ring-1 ring-gray-200 dark:ring-white/10 text-gray-500 hover:text-gray-900 dark:hover:text-white opacity-0 group-hover/scroll:opacity-100 transition-opacity hidden sm:flex">
         <ChevronRight class="w-5 h-5" />
       </button>
+    </div>
+
+    <!-- Empty State if no accounts found -->
+    <div v-else class="py-12 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
+      <Search class="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white">Tidak ada rekening yang cocok</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Coba ubah kata kunci pencarian atau filter status.</p>
     </div>
 
     <!-- Riwayat Aktivitas Kas -->
@@ -531,7 +561,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { 
   Plus, ArrowLeftRight, Landmark, Wallet, Briefcase, HardHat, X, 
-  ArrowUpRight, ArrowDownLeft, Pin, Scale, Pencil, QrCode, AlertTriangle, Info, ChevronLeft, ChevronRight 
+  ArrowUpRight, ArrowDownLeft, Pin, Scale, Pencil, QrCode, AlertTriangle, Info, ChevronLeft, ChevronRight, Search 
 } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
@@ -631,15 +661,35 @@ const rekeningData = ref([
   { id: 5, name: 'Bank Muamalat', type: 'Bank', accountNo: '312 445 6678', ownerName: 'DKM Kassiti', desc: 'Dana Cadangan', balance: 20000000, color: 'purple', isPinned: false, isActive: false },
 ])
 
+const searchQuery = ref('')
+const filterStatus = ref('all') // 'active', 'inactive', 'all'
+
 const sortedRekening = computed(() => {
-  return [...rekeningData.value].map(r => ({
-    ...r,
-    // Sync balance with store
-    balance: getAccountTotalBalance(r.name) || r.balance
-  })).sort((a, b) => {
-    if (a.isPinned === b.isPinned) return 0;
-    return a.isPinned ? -1 : 1;
-  });
+  return [...rekeningData.value]
+    .filter(r => {
+      // Filter Status
+      if (filterStatus.value === 'active' && !r.isActive) return false
+      if (filterStatus.value === 'inactive' && r.isActive) return false
+      
+      // Filter Search
+      if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase()
+        const matchName = r.name.toLowerCase().includes(query)
+        const matchNo = r.accountNo && r.accountNo.toLowerCase().includes(query)
+        const matchType = r.type.toLowerCase().includes(query)
+        return matchName || matchNo || matchType
+      }
+      return true
+    })
+    .map(r => ({
+      ...r,
+      // Sync balance with store
+      balance: getAccountTotalBalance(r.name) || r.balance
+    }))
+    .sort((a, b) => {
+      if (a.isPinned === b.isPinned) return 0;
+      return a.isPinned ? -1 : 1;
+    });
 })
 
 // Pin Logic

@@ -16,8 +16,31 @@
       </div>
     </div>
 
+    <!-- Filter & Search Section -->
+    <div v-if="keuanganStore.programs.length > 0" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
+      <div class="relative w-full md:w-96">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+        </div>
+        <input 
+          v-model="searchQuery" 
+          type="text" 
+          placeholder="Cari program atau kegiatan..." 
+          class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+        />
+      </div>
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Status:</label>
+        <select v-model="filterStatus" class="w-full md:w-auto bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all shadow-md">
+          <option value="all">Semua Status</option>
+          <option value="Aktif">Aktif Saja</option>
+          <option value="Selesai">Selesai</option>
+        </select>
+      </div>
+    </div>
+
     <!-- View: Table Program -->
-    <div v-if="keuanganStore.programs.length > 0" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl overflow-hidden shadow-md">
+    <div v-if="filteredPrograms.length > 0" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl overflow-hidden shadow-md">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[800px]">
           <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-300 dark:border-white/5">
@@ -29,7 +52,7 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-            <tr v-for="program in keuanganStore.programs" :key="program.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
+            <tr v-for="program in filteredPrograms" :key="program.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
               <!-- Program Info -->
               <td class="px-6 py-4">
                 <div class="flex items-start gap-3">
@@ -94,6 +117,13 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- Empty State for Search -->
+    <div v-else-if="keuanganStore.programs.length > 0 && filteredPrograms.length === 0" class="py-12 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
+      <Search class="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white">Tidak ada program yang cocok</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Coba ubah kata kunci pencarian atau filter status.</p>
     </div>
     
     <!-- Empty State -->
@@ -339,7 +369,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { Plus, X, Pencil, Trash, CalendarDays, Clock, FolderOpen, AlertCircle, Eye, Wallet, ArrowDownLeft, ArrowUpRight, Scale, Trash2 } from 'lucide-vue-next'
+import { Plus, X, Pencil, Trash, CalendarDays, Clock, FolderOpen, AlertCircle, Eye, Wallet, ArrowDownLeft, ArrowUpRight, Scale, Trash2, Search } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
 import { useDialogStore } from '@/stores/dialog'
@@ -361,6 +391,28 @@ const selectedProgram = ref(null)
 const rolloverForm = ref({ targetProgramId: 'general', sources: [] })
 
 const activePrograms = computed(() => keuanganStore.programs.filter(p => p.status === 'Aktif'))
+
+const searchQuery = ref('')
+const filterStatus = ref('all') // 'Aktif', 'Selesai', 'all'
+
+const filteredPrograms = computed(() => {
+  return keuanganStore.programs.filter(p => {
+    // Filter Status
+    if (filterStatus.value !== 'all' && p.status !== filterStatus.value) return false
+    
+    // Filter Search
+    if (searchQuery.value) {
+      const query = searchQuery.value.toLowerCase()
+      const matchName = p.name.toLowerCase().includes(query)
+      const matchDesc = p.description && p.description.toLowerCase().includes(query)
+      return matchName || matchDesc
+    }
+    return true
+  }).sort((a, b) => {
+    if (a.status === b.status) return b.id - a.id;
+    return a.status === 'Aktif' ? -1 : 1;
+  });
+})
 
 const formatCurrency = (val) => {
   return val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0"
