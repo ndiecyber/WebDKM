@@ -559,12 +559,14 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale, HelpCircle, PieChart, ChevronDown, Wallet, Layers, Table } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
 
 const keuanganStore = useKeuanganStore()
 const toast = useToastStore()
+const route = useRoute()
 
 const activePrograms = computed(() => keuanganStore.programs.filter(p => p.status === 'Aktif'))
 const getProgramName = (id) => keuanganStore.programs.find(p => p.id === id)?.name || ''
@@ -593,6 +595,9 @@ const handleKeydown = (e) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
+  if (route.query.program_id) {
+    activeProgramFilter.value = parseInt(route.query.program_id)
+  }
 })
 
 onUnmounted(() => {
