@@ -5,7 +5,7 @@
       <div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Program & Kegiatan</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Kelola kegiatan masjid dan alokasi dana khusus (Fund Accounting).
+          Kelola kegiatan masjid dan alokasi dana khusus.
         </p>
       </div>
       <div class="flex items-center gap-3">
