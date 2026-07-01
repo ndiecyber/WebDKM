@@ -188,6 +188,15 @@
               <FileBarChart class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Laporan</span>
             </router-link>
+            <router-link 
+              :to="{ name: 'admin-keuangan-pengaturan' }"
+              :title="isSidebarCollapsed ? 'Pengaturan' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-keuangan-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <Settings class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan</span>
+            </router-link>
           </div>
         </div>
 
@@ -209,18 +218,9 @@
           </div>
 
           <div class="px-3 mb-2 mt-6" v-if="!isSidebarCollapsed">
-            <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Manajemen Qurban</p>
+            <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Qurban</p>
           </div>
           <div class="space-y-1">
-            <router-link 
-              :to="{ name: 'admin-qurban-target' }"
-              :title="isSidebarCollapsed ? 'Target Hewan' : ''"
-              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="[$route.name === 'admin-qurban-target' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
-            >
-              <Target class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Target Hewan</span>
-            </router-link>
             <router-link 
               :to="{ name: 'admin-qurban-peserta' }"
               :title="isSidebarCollapsed ? 'Data Peserta' : ''"
@@ -231,6 +231,15 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Data Peserta</span>
             </router-link>
             <router-link 
+              :to="{ name: 'admin-qurban-target' }"
+              :title="isSidebarCollapsed ? 'Target Hewan' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-qurban-target' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <Target class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Target Hewan</span>
+            </router-link>
+            <router-link 
               :to="{ name: 'admin-qurban-setoran' }"
               :title="isSidebarCollapsed ? 'Riwayat Setoran' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -238,6 +247,15 @@
             >
               <History class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Riwayat Setoran</span>
+            </router-link>
+            <router-link 
+              :to="{ name: 'admin-qurban-pengaturan' }"
+              :title="isSidebarCollapsed ? 'Pengaturan' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-qurban-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <Settings class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan</span>
             </router-link>
           </div>
         </div>
@@ -252,34 +270,12 @@
             <router-link
               v-show="activeModule === 'web'"
               :to="{ name: 'admin-pengaturan' }"
-              :title="isSidebarCollapsed ? 'Pengaturan Umum' : ''"
+              :title="isSidebarCollapsed ? 'Pengaturan' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               :class="[$route.name === 'admin-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
             >
               <Settings class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan Umum</span>
-            </router-link>
-
-            <router-link
-              v-show="activeModule === 'keuangan'"
-              :to="{ name: 'admin-keuangan-pengaturan' }"
-              :title="isSidebarCollapsed ? 'Pengaturan Keuangan' : ''"
-              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="[$route.name === 'admin-keuangan-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
-            >
-              <Settings class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan Keuangan</span>
-            </router-link>
-
-            <router-link
-              v-show="activeModule === 'qurban'"
-              :to="{ name: 'admin-qurban-pengaturan' }"
-              :title="isSidebarCollapsed ? 'Pengaturan Qurban' : ''"
-              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="[$route.name === 'admin-qurban-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
-            >
-              <Settings class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan Qurban</span>
+              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan</span>
             </router-link>
 
             <!-- Manajemen Pengguna & Peran (Fitur Tim Baru) -->
@@ -474,7 +470,7 @@ const pageTitle = computed(() => {
   if (route.name === 'admin-kegiatan') return 'Berita Masjid'
   if (route.name === 'admin-galeri') return 'Galeri Foto'
   if (route.name === 'admin-layanan') return 'Layanan & Fasilitas'
-  if (route.name === 'admin-pengaturan') return 'Pengaturan Umum'
+  if (route.name === 'admin-pengaturan') return 'Pengaturan'
   if (route.name === 'admin-pengguna') return 'Manajemen Pengguna'
   if (route.name === 'admin-log-aktivitas') return 'Log Aktivitas'
   
