@@ -290,6 +290,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { History, Search, CheckCircle, Clock, Banknote, XCircle, Pencil, ArrowRight, Filter, ChevronDown } from 'lucide-vue-next'
+import { qurbanMockData } from '@/utils/qurbanMock'
 
 const isLoading = ref(true)
 const searchQuery = ref('')
@@ -322,13 +323,9 @@ const paginatedData = ref({
 
 onMounted(() => {
   setTimeout(() => {
-    paginatedData.value.data = [
-      { id: 'TX-1A2B', amount: 500000, created_at: '2026-06-24T08:30:00Z', payment_method: 'qris', status: 'pending', shohibul: { id: 1, name: 'Bapak Ahmad', target_type: 'sapi' } },
-      { id: 'TX-3C4D', amount: 3000000, created_at: '2026-06-23T14:15:00Z', payment_method: 'tunai', status: 'success', shohibul: { id: 2, name: 'Ibu Fatimah', target_type: 'sapi' } },
-      { id: 'TX-5E6F', amount: 1000000, created_at: '2026-06-22T09:00:00Z', payment_method: 'transfer bank', status: 'success', shohibul: { id: 3, name: 'Keluarga Budi', target_type: 'sapi' } },
-      { id: 'TX-7G8H', amount: 2000000, created_at: '2026-06-20T16:45:00Z', payment_method: 'va bsi', status: 'cancelled', shohibul: { id: 4, name: 'Haji Suryana', target_type: 'sapi' } },
-      { id: 'TX-9I0J', amount: 3500000, created_at: '2026-06-19T11:20:00Z', payment_method: 'qris', status: 'pending', shohibul: { id: 5, name: 'Deni Setiawan', target_type: 'kambing' } }
-    ]
+    paginatedData.value.data = qurbanMockData.transactions;
+    paginatedData.value.total = qurbanMockData.transactions.length;
+    paginatedData.value.to = qurbanMockData.transactions.length;
     isLoading.value = false
   }, 1000)
 })

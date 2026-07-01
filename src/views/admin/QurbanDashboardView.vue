@@ -260,6 +260,7 @@ import {
   Wallet, CheckCircle, TrendingUp, TrendingDown, Users, PieChart, 
   AlertCircle, Calendar, Clock, ChevronDown, ArrowUpRight
 } from 'lucide-vue-next'
+import { qurbanMockData } from '@/utils/qurbanMock'
 
 const isLoading = ref(true)
 const showPeriodeDropdown = ref(false)
@@ -303,34 +304,20 @@ const store = ref({
 
 onMounted(() => {
   setTimeout(() => {
+    const daysRemaining = Math.max(0, Math.ceil((new Date(qurbanMockData.period.deadline_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+    
     store.value = {
       period: {
-        id: 1,
-        name: "1447 H / 2026 M",
-        deadline_date: "2026-06-30",
-        days_remaining: 45
+        id: qurbanMockData.period.id,
+        name: qurbanMockData.period.name,
+        deadline_date: qurbanMockData.period.deadline_date,
+        days_remaining: daysRemaining
       },
-      summary: {
-        total_shohibul: 45,
-        total_collected: 42500000,
-        total_target: 85000000,
-        count_lunas: 12,
-        count_belum_lunas: 33,
-        percentage: 50.0
-      },
-      animals: {
-        sapi_shohibul: 21,
-        kambing_shohibul: 24,
-        sapi_groups: 3,
-        estimated_sapi: 3
-      },
-      pending_transactions: 5,
-      recent_transactions: [
-        { id: 1, amount: 4000000, method: 'Transfer BSI', status: 'success', created_at: '2026-06-15T14:00:00Z', shohibul: { id: 1, name: 'Ibu Fatimah', target_type: 'sapi' } },
-        { id: 2, amount: 500000, method: 'QRIS', status: 'pending', created_at: '2026-06-16T10:00:00Z', shohibul: { id: 2, name: 'Bapak Ahmad', target_type: 'sapi' } },
-        { id: 3, amount: 3500000, method: 'Tunai', status: 'success', created_at: '2026-06-14T09:00:00Z', shohibul: { id: 3, name: 'Deni Setiawan', target_type: 'kambing' } }
-      ],
-      settings: { hargaSapi: 28000000, hargaSlotSapi: 4000000, hargaKambing: 3500000 }
+      summary: qurbanMockData.summary,
+      animals: qurbanMockData.animals,
+      pending_transactions: qurbanMockData.transactions.filter(t => t.status === 'pending').length,
+      recent_transactions: qurbanMockData.transactions.slice(0, 5),
+      settings: qurbanMockData.settings
     }
     isLoading.value = false
   }, 1200)

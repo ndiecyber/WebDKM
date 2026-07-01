@@ -226,6 +226,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Users, Plus, ArrowRightLeft, ArrowRight, X } from 'lucide-vue-next'
+import { qurbanMockData } from '@/utils/qurbanMock'
 
 const formatRupiah = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
 
@@ -236,32 +237,26 @@ const mockGroups = ref([])
 
 onMounted(() => {
   setTimeout(() => {
-    mockGroups.value = [
-      {
-        id: 1, name: 'Sapi 1', target_type: 'sapi', shohibuls_count: 3,
-        shohibuls: [
-          { id: 1, name: 'Bapak Ahmad', phone: '081234567890', collected_amount: 4000000, target_amount: 4000000 },
-          { id: 2, name: 'Ibu Fatimah', phone: '089876543210', collected_amount: 2000000, target_amount: 4000000 },
-          { id: 4, name: 'Haji Suryana', phone: '08551234', collected_amount: 4000000, target_amount: 4000000 }
-        ]
-      },
-      {
-        id: 2, name: 'Sapi 2', target_type: 'sapi', shohibuls_count: 2,
-        shohibuls: [
-          { id: 6, name: 'Keluarga Budi', phone: '08111222', collected_amount: 1000000, target_amount: 4000000 },
-          { id: 7, name: 'Deni Setiawan', phone: '08771122', collected_amount: 0, target_amount: 4000000 }
-        ]
-      },
-      {
-        id: 3, name: 'Mandiri Kambing', target_type: 'kambing', shohibuls_count: 3,
-        shohibuls: [
-          { id: 8, name: 'Bapak Ilham', phone: '0811', collected_amount: 3500000, target_amount: 3500000 },
-          { id: 9, name: 'Ibu Siti', phone: '0822', collected_amount: 1500000, target_amount: 3500000 },
-          { id: 10, name: 'Kang Ujang', phone: '0833', collected_amount: 3500000, target_amount: 3500000 }
-        ]
-      }
-    ]
-    isLoading.value = false
+    // Generate groups that match the view's expected format 
+    // Target view expects both sapi groups and a pseudo kambing group
+    
+    let simulatedGroups = qurbanMockData.animalGroups.map(g => ({
+      ...g,
+      shohibuls_count: g.shohibuls.length
+    }));
+    
+    // Add Kambing pseudo-group
+    const kambingShohibuls = qurbanMockData.shohibuls.filter(s => s.target_type === 'kambing');
+    simulatedGroups.push({
+      id: 'kambing-group-1',
+      name: 'Mandiri Kambing',
+      target_type: 'kambing',
+      shohibuls_count: kambingShohibuls.length,
+      shohibuls: kambingShohibuls
+    });
+    
+    mockGroups.value = simulatedGroups;
+    isLoading.value = false;
   }, 1000)
 })
 

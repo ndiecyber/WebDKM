@@ -103,7 +103,7 @@
                   <div class="ml-4">
                     <div class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
                       {{ peserta.name }}
-                      <span v-if="peserta.transactions && peserta.transactions.length > 0" class="px-1.5 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[9px] uppercase tracking-wider rounded-md font-bold animate-pulse" title="Ada tagihan pending">
+                      <span v-if="peserta.transactions && peserta.transactions.some(tx => tx.status === 'pending')" class="px-1.5 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[9px] uppercase tracking-wider rounded-md font-bold animate-pulse" title="Ada tagihan pending">
                         Ada Tagihan
                       </span>
                     </div>
@@ -194,7 +194,7 @@
               <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ selectedPeserta.name }}</h4>
               <div class="flex items-center gap-2 mt-1">
                 <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-[10px] text-gray-500 font-mono font-bold rounded uppercase border border-gray-200 dark:border-gray-700">ID: {{ selectedPeserta.id }}</span>
-                <span v-if="selectedPeserta.transactions && selectedPeserta.transactions.length > 0" class="px-2 py-1 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[10px] font-bold rounded uppercase border border-amber-200 dark:border-amber-500/20">Ada Transaksi Pending</span>
+                <span v-if="selectedPeserta.transactions && selectedPeserta.transactions.some(tx => tx.status === 'pending')" class="px-2 py-1 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[10px] font-bold rounded uppercase border border-amber-200 dark:border-amber-500/20">Ada Transaksi Pending</span>
               </div>
             </div>
           </div>
@@ -339,6 +339,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter, ChevronDown, Check } from 'lucide-vue-next'
+import { qurbanMockData } from '@/utils/qurbanMock'
 
 // STATE
 const isLoading = ref(true)
@@ -369,26 +370,7 @@ const mockPeserta = ref([])
 
 onMounted(() => {
   setTimeout(() => {
-    mockPeserta.value = [
-      { 
-        id: 1, name: 'Bapak Ahmad', phone: '081234567890', address: 'Blok A No. 12', 
-        target_type: 'sapi', target_amount: 4000000, collected_amount: 4000000, 
-        animal_group: { id: 1, name: 'Sapi A', target_type: 'sapi' },
-        transactions: [] 
-      },
-      { 
-        id: 2, name: 'Ibu Fatimah', phone: '089876543210', address: 'Blok B No. 5', 
-        target_type: 'sapi', target_amount: 4000000, collected_amount: 2000000, 
-        animal_group: { id: 1, name: 'Sapi A', target_type: 'sapi' },
-        transactions: [{ id: 101, status: 'pending' }]
-      },
-      { 
-        id: 3, name: 'Keluarga Budi', phone: '085612345678', address: 'Blok C No. 8', 
-        target_type: 'kambing', target_amount: 3500000, collected_amount: 3500000, 
-        animal_group: null, 
-        transactions: [] 
-      }
-    ]
+    mockPeserta.value = qurbanMockData.shohibuls;
     isLoading.value = false
   }, 1000)
 })
@@ -429,7 +411,7 @@ const openEditModal = (peserta) => {
 }
 
 const confirmDelete = (peserta) => { 
-  if (peserta.collected_amount > 0 || (peserta.transactions && peserta.transactions.length > 0)) {
+  if (peserta.collected_amount > 0 || (peserta.transactions && peserta.transactions.some(tx => tx.status === 'pending'))) {
     alert(`DITOLAK SISTEM: Shohibul ${peserta.name} memiliki saldo aktif (${formatRupiah(peserta.collected_amount)}) atau transaksi yang masih pending. Batalkan transaksi atau selesaikan refund sebelum menghapus peserta!`)
     return
   }
