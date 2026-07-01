@@ -293,8 +293,8 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Manajemen Pengguna</span>
             </router-link>
 
-            <!-- Log Aktivitas (Fitur Tim Baru) -->
-            <router-link
+            <!-- Log Aktivitas (Dinonaktifkan sementara) -->
+            <!-- <router-link
               :to="{ name: 'admin-log-aktivitas' }"
               :title="isSidebarCollapsed ? 'Log Aktivitas' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -302,7 +302,7 @@
             >
               <Activity class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Log Aktivitas</span>
-            </router-link>
+            </router-link> -->
 
           </div>
         </div>
