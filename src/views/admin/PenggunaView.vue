@@ -289,9 +289,11 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { Plus, Edit, Trash2, X, Save, ArrowUp, ArrowDown } from 'lucide-vue-next'
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
+import { useDialogStore } from '../../stores/dialog'
 
 const adminStore = useAdminStore()
 const toastStore = useToastStore()
+const dialog = useDialogStore()
 
 onMounted(() => {
   adminStore.fetchUsers()
@@ -421,8 +423,13 @@ function saveUser() {
   closeUserModal()
 }
 
-function confirmDeleteUser(id) {
-  if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+async function confirmDeleteUser(id) {
+  const confirmed = await dialog.open({
+    title: 'Hapus Pengguna',
+    message: 'Apakah Anda yakin ingin menghapus pengguna ini?',
+    type: 'confirm'
+  })
+  if (confirmed) {
     adminStore.deleteUser(id)
     toastStore.addToast('Pengguna berhasil dihapus.')
   }
@@ -488,7 +495,7 @@ function saveRole() {
   closeRoleModal()
 }
 
-function confirmDeleteRole(id) {
+async function confirmDeleteRole(id) {
   const role = adminStore.roles.find(r => r.id === id)
   if (role && role.key === 'superadmin') {
     toastStore.addToast('Super Admin tidak bisa dihapus!', 'error')
@@ -501,7 +508,12 @@ function confirmDeleteRole(id) {
     return
   }
 
-  if (confirm(`Apakah Anda yakin ingin menghapus peran "${role.name}"?`)) {
+  const confirmed = await dialog.open({
+    title: 'Hapus Peran',
+    message: `Apakah Anda yakin ingin menghapus peran "${role.name}"?`,
+    type: 'confirm'
+  })
+  if (confirmed) {
     adminStore.deleteRole(id)
     toastStore.addToast('Peran berhasil dihapus.')
   }

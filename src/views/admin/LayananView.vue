@@ -363,9 +363,11 @@ import { ref, onMounted } from 'vue'
 import { Plus, Edit2, Trash2, X, Briefcase, Users, User, BookOpen, GraduationCap, Heart, HandCoins, Gem, MapPin, Building, UploadCloud } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
+import { useDialogStore } from '../../stores/dialog'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
+const dialog = useDialogStore()
 
 onMounted(() => {
   adminStore.fetchLayanan()
@@ -491,8 +493,13 @@ function saveItem() {
   closeModal()
 }
 
-function deleteItem(id) {
-  if (confirm('Apakah Anda yakin ingin menghapus layanan ini?')) {
+async function deleteItem(id) {
+  const confirmed = await dialog.open({
+    title: 'Hapus Layanan',
+    message: 'Apakah Anda yakin ingin menghapus layanan ini?',
+    type: 'confirm'
+  })
+  if (confirmed) {
     adminStore.deleteLayanan(id)
     toastStore.addToast('Layanan berhasil dihapus', 'error')
   }

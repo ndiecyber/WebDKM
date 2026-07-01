@@ -165,8 +165,10 @@ import { ref, computed, watch } from 'vue'
 import { Download, Monitor, FileText, Info, Loader2 } from 'lucide-vue-next'
 import ReportKegiatanTemplate from '@/components/ui/ReportKegiatanTemplate.vue'
 import { useKeuanganStore } from '@/stores/keuangan'
+import { useDialogStore } from '@/stores/dialog'
 
 const keuanganStore = useKeuanganStore()
+const dialog = useDialogStore()
 
 
 // --- MOCK DATA (Copy dari FinanceSection) ---
@@ -436,7 +438,11 @@ const exportToPDF = () => {
       
     } catch (error) {
       console.error('Error printing:', error)
-      alert('Terjadi kesalahan saat mencetak laporan.')
+      dialog.open({
+        title: 'Gagal Mencetak',
+        message: 'Terjadi kesalahan saat mencetak laporan.',
+        type: 'alert'
+      })
     } finally {
       isExporting.value = false
     }

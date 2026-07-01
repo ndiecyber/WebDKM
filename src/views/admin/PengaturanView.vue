@@ -841,9 +841,11 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check, Mail, Facebook, Youtube, Twitter, Trash2 } from 'lucide-vue-next'
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
+import { useDialogStore } from '../../stores/dialog'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
+const dialog = useDialogStore()
 const isSaving = ref(false)
 
 const settings = ref(JSON.parse(JSON.stringify(adminStore.generalSettings)))
@@ -1045,8 +1047,14 @@ function removeWhatsapp(index) {
   settings.value.whatsapp.splice(index, 1)
 }
 
-function addDivisi() {
-  const name = prompt('Masukkan Nama Divisi/Seksi Baru:')
+async function addDivisi() {
+  const name = await dialog.open({
+    title: 'Tambah Divisi',
+    message: 'Masukkan Nama Divisi/Seksi Baru:',
+    type: 'prompt',
+    inputPlaceholder: 'Misal: Divisi Pendidikan'
+  })
+  
   if (name) {
     committee.value.divisi.push({
       id: name.toLowerCase().replace(/\s+/g, '-'),
@@ -1056,8 +1064,13 @@ function addDivisi() {
   }
 }
 
-function removeDivisi(index) {
-  if (confirm('Yakin ingin menghapus divisi ini beserta seluruh anggotanya?')) {
+async function removeDivisi(index) {
+  const confirmed = await dialog.open({
+    title: 'Hapus Divisi',
+    message: 'Yakin ingin menghapus divisi ini beserta seluruh anggotanya?',
+    type: 'confirm'
+  })
+  if (confirmed) {
     committee.value.divisi.splice(index, 1)
   }
 }

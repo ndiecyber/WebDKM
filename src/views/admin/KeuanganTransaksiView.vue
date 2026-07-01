@@ -438,7 +438,7 @@
           <!-- Program Opsional -->
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-2">
-              Alokasi Kegiatan/Program (Opsional)
+              Alokasi Kegiatan / Program (Opsional)
               <span class="group relative cursor-help">
                 <HelpCircle class="w-3.5 h-3.5 text-gray-400" />
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-gray-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-20 text-center">
@@ -559,12 +559,16 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale, HelpCircle, PieChart, ChevronDown, Wallet, Layers, Table } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
+import { useDialogStore } from '@/stores/dialog'
 
 const keuanganStore = useKeuanganStore()
 const toast = useToastStore()
+const dialog = useDialogStore()
+const route = useRoute()
 
 const activePrograms = computed(() => keuanganStore.programs.filter(p => p.status === 'Aktif'))
 const getProgramName = (id) => keuanganStore.programs.find(p => p.id === id)?.name || ''
@@ -593,6 +597,9 @@ const handleKeydown = (e) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
+  if (route.query.program_id) {
+    activeProgramFilter.value = parseInt(route.query.program_id)
+  }
 })
 
 onUnmounted(() => {
@@ -713,7 +720,7 @@ const openEditModal = (tx) => {
   showCatatModal.value = true;
 }
 
-const saveTransaction = () => {
+const saveTransaction = async () => {
   // Validasi Program Balance
   if (catatForm.value.tipe === 'out' && catatForm.value.program_id) {
     const progBal = keuanganStore.programBalances[catatForm.value.program_id] || { total: 0 }
@@ -729,7 +736,11 @@ const saveTransaction = () => {
     
     if (catatForm.value.amount > currentBal) {
       const program = activePrograms.value.find(p => p.id === catatForm.value.program_id)
-      const confirmed = window.confirm(`Peringatan: Saldo Program ${program?.name || ''} tidak mencukupi!\nSisa saldo: Rp ${currentBal}\n\nApakah Anda yakin ingin menutupi kekurangan ini menggunakan dana Kas Umum?`)
+      const confirmed = await dialog.open({
+        title: 'Peringatan Saldo',
+        message: `Saldo Program ${program?.name || ''} tidak mencukupi!\nSisa saldo: Rp ${currentBal}\n\nApakah Anda yakin ingin menutupi kekurangan ini menggunakan dana Kas Umum?`,
+        type: 'confirm'
+      })
       if (!confirmed) {
         return
       }
