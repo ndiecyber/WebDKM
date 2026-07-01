@@ -220,66 +220,130 @@
     <div v-if="selectedPeserta && modalType === 'detail'" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
       
-      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <User class="w-5 h-5 text-secondary" />
-            Detail Shohibul
-          </h3>
-          <button @click="closeModal" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"><X class="w-5 h-5" /></button>
+      <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-xl w-full max-w-lg overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
+        
+        <div class="p-6 pb-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-4">
+              <div class="w-[60px] h-[60px] rounded-2xl bg-pink-600 text-white flex items-center justify-center font-bold text-2xl shadow-sm shrink-0">
+                {{ getInitials(selectedPeserta.name) }}
+              </div>
+              <div>
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white leading-tight mb-1">{{ selectedPeserta.name }}</h4>
+                <div class="flex flex-col gap-1">
+                  <div class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 font-medium">
+                    <MapPin class="w-3.5 h-3.5" /> {{ selectedPeserta.address }}
+                  </div>
+                  <div class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 font-medium">
+                    <Phone class="w-3.5 h-3.5" /> {{ selectedPeserta.phone }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button @click="closeModal" class="p-2 bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-full transition-colors shrink-0"><X class="w-4 h-4" /></button>
+          </div>
         </div>
         
-        <div class="p-6 space-y-6">
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-2xl border border-emerald-100 dark:border-emerald-500/20">
-              {{ getInitials(selectedPeserta.name) }}
-            </div>
-            <div>
-              <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ selectedPeserta.name }}</h4>
-              <div class="flex items-center gap-2 mt-1">
-                <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-[10px] text-gray-500 font-mono font-bold rounded uppercase border border-gray-200 dark:border-gray-700">ID: {{ selectedPeserta.id }}</span>
-                <span v-if="selectedPeserta.transactions && selectedPeserta.transactions.some(tx => tx.status === 'pending')" class="px-2 py-1 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[10px] font-bold rounded uppercase border border-amber-200 dark:border-amber-500/20">Ada Transaksi Pending</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-white/5 p-4 rounded-xl space-y-3">
-            <div class="flex items-start gap-3">
-              <Phone class="w-4 h-4 text-gray-400 mt-0.5" />
-              <div>
-                <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Nomor WhatsApp</p>
-                <p class="text-sm font-bold text-gray-800 dark:text-gray-200">{{ selectedPeserta.phone }}</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <MapPin class="w-4 h-4 text-gray-400 mt-0.5" />
-              <div>
-                <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Alamat</p>
-                <p class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ selectedPeserta.address }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-white/5 p-4 rounded-xl text-center">
-              <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">Hewan Target</span>
-              <span class="text-lg font-black text-gray-900 dark:text-white flex items-center justify-center gap-1.5 capitalize">
+        <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
+          
+          <!-- Dua Kartu Header -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="border border-gray-200 dark:border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center bg-white dark:bg-gray-900 shadow-sm">
+              <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Hewan Target</span>
+              <span class="text-lg font-bold text-gray-900 dark:text-white flex items-center justify-center gap-1.5 capitalize mb-2">
                 {{ selectedPeserta.target_type === 'sapi' ? '🐄' : '🐐' }} {{ selectedPeserta.target_type }}
               </span>
-              <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium block mt-1">{{ selectedPeserta.animal_group?.name || 'Belum Diatur' }}</span>
+              <div class="px-3 py-1 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/5 rounded-lg text-[10px] text-gray-500 dark:text-gray-400 w-full font-medium shadow-sm">
+                {{ selectedPeserta.animal_group?.name || (selectedPeserta.target_type === 'sapi' ? 'Sapi (Belum diatur)' : 'Mandiri') }}
+              </div>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-white/5 p-4 rounded-xl text-center">
-              <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">Sisa Target</span>
-              <span class="text-lg font-black text-secondary flex items-center justify-center">
-                {{ formatRupiah(Math.max(0, selectedPeserta.target_amount - selectedPeserta.collected_amount)) }}
-              </span>
-              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block mt-1">Total: {{ formatRupiah(selectedPeserta.target_amount) }}</span>
+            
+            <div class="border border-gray-200 dark:border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center bg-white dark:bg-gray-900 shadow-sm">
+              <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Status Tabungan</span>
+              <div class="mb-2">
+                <span v-if="selectedPeserta.collected_amount >= selectedPeserta.target_amount" class="px-3 py-1 bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                  Sudah Lunas
+                </span>
+                <span v-else class="px-3 py-1 bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                  Belum Lunas
+                </span>
+              </div>
+              <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 w-full mt-1">
+                {{ getPercentage(selectedPeserta) }}% Terkumpul
+              </div>
             </div>
           </div>
+
+          <!-- Perkembangan Dana -->
+          <div class="border border-gray-200 dark:border-white/10 rounded-2xl p-4 space-y-4 bg-white dark:bg-gray-900 shadow-sm">
+            <div class="flex items-center gap-2 text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              Perkembangan Dana
+            </div>
+            
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500 dark:text-gray-400 font-medium">Telah Terbayar</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ formatRupiah(selectedPeserta.collected_amount) }}</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500 dark:text-gray-400 font-medium">Target Qurban</span>
+                <span class="font-bold text-gray-900 dark:text-white">{{ formatRupiah(selectedPeserta.target_amount) }}</span>
+              </div>
+            </div>
+            
+            <div class="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+              <div class="h-full bg-emerald-500 rounded-full" :style="{ width: getPercentage(selectedPeserta) + '%' }"></div>
+            </div>
+            
+            <div class="flex justify-between items-center text-sm pt-2">
+              <span class="text-gray-500 dark:text-gray-400 font-medium">Kekurangan</span>
+              <span class="font-bold text-amber-500 dark:text-amber-400">{{ formatRupiah(Math.max(0, selectedPeserta.target_amount - selectedPeserta.collected_amount)) }}</span>
+            </div>
+          </div>
+
+          <!-- Riwayat Setoran -->
+          <div>
+            <div class="flex items-center gap-2 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3 px-1 mt-6">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              Riwayat Setoran
+            </div>
+            
+            <div class="space-y-3">
+              <template v-if="selectedPeserta.transactions && selectedPeserta.transactions.length > 0">
+                <div v-for="tx in selectedPeserta.transactions" :key="tx.id" 
+                  :class="['p-4 rounded-2xl border flex items-center justify-between shadow-sm', tx.status === 'pending' ? 'border-amber-300 dark:border-amber-500/50 bg-white dark:bg-gray-900' : 'border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900']">
+                  
+                  <div class="flex items-center gap-3">
+                    <div :class="['w-10 h-10 rounded-xl flex items-center justify-center shrink-0', tx.status === 'pending' ? 'bg-amber-50 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400']">
+                      <svg v-if="tx.status === 'pending'" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      <svg v-else class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+                    </div>
+                    <div>
+                      <div :class="['text-sm font-bold', tx.status === 'pending' ? 'text-amber-600 dark:text-amber-500' : 'text-gray-900 dark:text-white']">
+                        {{ tx.status === 'pending' ? 'Menunggu Pembayaran' : 'Setoran Masuk' }}
+                      </div>
+                      <div class="text-[10px] text-gray-400 dark:text-gray-500 font-medium mt-0.5">{{ tx.date || 'Invalid Date' }}</div>
+                    </div>
+                  </div>
+                  <div :class="['font-bold text-sm', tx.status === 'pending' ? 'text-amber-600 dark:text-amber-500' : 'text-gray-900 dark:text-white']">
+                    {{ formatRupiah(tx.amount) }}
+                  </div>
+                </div>
+              </template>
+              <div v-else class="text-center py-6 border border-dashed border-gray-200 dark:border-white/10 rounded-2xl bg-gray-50 dark:bg-gray-800/50">
+                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Belum ada riwayat setoran</p>
+              </div>
+            </div>
+          </div>
+          
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800 flex justify-end gap-3">
-          <button @click="closeModal" class="px-5 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm transition-colors">Tutup</button>
+        <div class="p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900">
+          <button @click="goToSetoran" class="w-full py-3.5 bg-secondary hover:bg-secondary/90 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path><line x1="12" y1="9" x2="12" y2="15"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>
+            Tambah Setoran
+          </button>
         </div>
       </div>
     </div>
@@ -382,10 +446,12 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter, ChevronDown, Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { qurbanMockData } from '@/utils/qurbanMock'
 
 // STATE
+const router = useRouter()
 const isLoading = ref(true)
 const searchQuery = ref('')
 const activeFilter = ref('all')
@@ -463,6 +529,12 @@ const paginatedPeserta = computed(() => {
 // METHODS
 const formatRupiah = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
 const getPercentage = (peserta) => Math.min(Math.round((peserta.collected_amount / peserta.target_amount) * 100), 100)
+
+const goToSetoran = () => {
+  closeModal()
+  router.push('/admin/qurban/setoran')
+}
+
 const getInitials = (name) => {
   const split = name.split(' ')
   return split.length >= 2 ? (split[0][0] + split[1][0]).toUpperCase() : name.slice(0, 2).toUpperCase()
