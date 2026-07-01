@@ -79,7 +79,7 @@
       <nav class="flex-1 py-6 px-4 overflow-y-auto hide-scrollbar space-y-6">
         
         <!-- Group: Manajemen Konten (Web DKM) -->
-        <div v-show="activeModule === 'web'" class="border-t border-gray-200 dark:border-white/5 pt-6">
+        <div v-show="activeModule === 'web'" class="pt-2">
           <div class="px-3 mb-2" v-if="!isSidebarCollapsed">
             <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Utama</p>
           </div>
@@ -96,7 +96,7 @@
           </div>
 
           <div class="px-3 mb-2 mt-6" v-if="!isSidebarCollapsed">
-            <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Manajemen Konten</p>
+            <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Konten</p>
           </div>
           <div class="space-y-1">
             <router-link 
@@ -128,11 +128,21 @@
               <Briefcase class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Layanan & Fasilitas</span>
             </router-link>
+            
+            <router-link
+              :to="{ name: 'admin-pengaturan' }"
+              :title="isSidebarCollapsed ? 'Pengaturan' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <Settings class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan</span>
+            </router-link>
           </div>
         </div>
 
         <!-- Group: Transaksi (Keuangan DKM) -->
-        <div v-show="activeModule === 'keuangan'" class="border-t border-gray-200 dark:border-white/5 pt-6">
+        <div v-show="activeModule === 'keuangan'" class="pt-2">
           <div class="px-3 mb-2" v-if="!isSidebarCollapsed">
             <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Utama</p>
           </div>
@@ -143,7 +153,7 @@
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               :class="[$route.name === 'admin-keuangan-dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
             >
-              <Wallet class="w-5 h-5 shrink-0" />
+              <Home class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Dashboard Keuangan</span>
             </router-link>
           </div>
@@ -201,7 +211,7 @@
         </div>
 
         <!-- Group: Qurban DKM -->
-        <div v-show="activeModule === 'qurban'" class="border-t border-gray-200 dark:border-white/5 pt-6">
+        <div v-show="activeModule === 'qurban'" class="pt-2">
           <div class="px-3 mb-2" v-if="!isSidebarCollapsed">
             <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Utama</p>
           </div>
@@ -212,7 +222,7 @@
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
               :class="[$route.name === 'admin-qurban-dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
             >
-              <Activity class="w-5 h-5 shrink-0" />
+              <Home class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Dashboard Qurban</span>
             </router-link>
           </div>
@@ -261,23 +271,11 @@
         </div>
 
         <!-- Group: Sistem -->
-        <div v-show="adminStore.hasModuleAccess('sistem')" class="border-t border-gray-200 dark:border-white/5 pt-6">
+        <div v-show="adminStore.hasModuleAccess('sistem')" class="border-t border-gray-200 dark:border-white/5 pt-6 mt-6">
           <div class="px-3 mb-2" v-if="!isSidebarCollapsed">
             <p class="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 tracking-[0.2em] uppercase drop-shadow-sm">Sistem</p>
           </div>
           <div class="space-y-1">
-            <!-- Pengaturan Umum Berdasarkan Modul -->
-            <router-link
-              v-show="activeModule === 'web'"
-              :to="{ name: 'admin-pengaturan' }"
-              :title="isSidebarCollapsed ? 'Pengaturan' : ''"
-              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="[$route.name === 'admin-pengaturan' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
-            >
-              <Settings class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Pengaturan</span>
-            </router-link>
-
             <!-- Manajemen Pengguna & Peran (Fitur Tim Baru) -->
             <router-link
               :to="{ name: 'admin-pengguna' }"
