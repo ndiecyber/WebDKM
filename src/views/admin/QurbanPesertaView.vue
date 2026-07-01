@@ -24,7 +24,7 @@
           v-model="searchQuery"
           type="text" 
           class="block w-full pl-11 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl leading-5 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary sm:text-sm transition-colors shadow-sm" 
-          placeholder="Cari nama, no. HP, atau ID..." 
+          placeholder="Cari nama, no. WA, atau ID..." 
         />
       </div>
 
@@ -203,14 +203,14 @@
             <div class="flex items-start gap-3">
               <Phone class="w-4 h-4 text-gray-400 mt-0.5" />
               <div>
-                <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Nomor WhatsApp / HP</p>
+                <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Nomor WhatsApp</p>
                 <p class="text-sm font-bold text-gray-800 dark:text-gray-200">{{ selectedPeserta.phone }}</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
               <MapPin class="w-4 h-4 text-gray-400 mt-0.5" />
               <div>
-                <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Alamat Lengkap</p>
+                <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Alamat</p>
                 <p class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ selectedPeserta.address }}</p>
               </div>
             </div>
@@ -246,54 +246,70 @@
       
       <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <component :is="modalType === 'add' ? Plus : Edit2" class="w-5 h-5 text-secondary" />
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">
             {{ modalType === 'add' ? 'Tambah Shohibul Manual' : 'Edit Data Shohibul' }}
           </h3>
           <button @click="closeModal" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"><X class="w-5 h-5" /></button>
         </div>
         
-        <form @submit.prevent="submitForm" class="p-6 space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap</label>
-            <input v-model="formData.name" type="text" required class="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-secondary/50 focus:border-secondary outline-none sm:text-sm shadow-sm transition-colors">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Nomor WhatsApp / HP</label>
-            <input v-model="formData.phone" type="text" required class="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-secondary/50 focus:border-secondary outline-none sm:text-sm shadow-sm transition-colors">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Alamat Lengkap</label>
-            <textarea v-model="formData.address" required rows="2" class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-secondary/50 focus:border-secondary outline-none sm:text-sm shadow-sm transition-colors"></textarea>
-          </div>
-          
-          <div class="grid grid-cols-1 gap-4">
+        <form @submit.prevent="submitForm">
+          <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto custom-scrollbar">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap</label>
+                <input v-model="formData.name" type="text" required class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor WhatsApp</label>
+                <input v-model="formData.phone" type="text" required class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
+              </div>
+            </div>
+
             <div>
-              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Pilihan Target Hewan</label>
-              <select v-model="formData.target_type" :disabled="modalType === 'edit'" class="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-secondary/50 focus:border-secondary outline-none sm:text-sm shadow-sm disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:opacity-70 transition-colors">
-                <option value="sapi">🐄 Sapi (Kolektif / Kelompok)</option>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat</label>
+              <input type="text" v-model="formData.address" required class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pilihan Target Hewan</label>
+              <select v-model="formData.target_type" :disabled="modalType === 'edit'" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:opacity-70">
+                <option value="sapi">🐄 Sapi (Kolektif)</option>
                 <option value="kambing">🐐 Kambing (Mandiri)</option>
               </select>
             </div>
+
+            <div v-if="modalType === 'add'">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-5 border-t border-gray-200 dark:border-white/10">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Setoran Awal (Rp)</label>
+                  <input 
+                    v-model.number="formData.initial_amount" 
+                    type="number" 
+                    step="50000" 
+                    required 
+                    placeholder="0" 
+                    @invalid="e => {
+                      if (e.target.validity.valueMissing) e.target.setCustomValidity('Setoran awal wajib diisi.')
+                      else if (e.target.validity.stepMismatch) e.target.setCustomValidity('Nominal harus kelipatan Rp 50.000')
+                    }"
+                    @input="e => e.target.setCustomValidity('')"
+                    class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary focus:border-secondary transition-all"
+                  >
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Metode Pembayaran</label>
+                  <select v-model="formData.payment_method" required class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+                    <option value="tunai">Tunai (Diterima Langsung)</option>
+                    <option value="transfer">Transfer Bank (Cek Mutasi)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div v-if="modalType === 'add'" class="pt-2 border-t border-gray-100 dark:border-white/5 space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Setoran Awal (Rp)</label>
-              <input v-model.number="formData.initial_amount" type="number" required placeholder="0" class="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-secondary/50 focus:border-secondary outline-none sm:text-sm shadow-sm transition-colors">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Metode Pembayaran</label>
-              <select v-model="formData.payment_method" required class="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl focus:ring-secondary/50 focus:border-secondary outline-none sm:text-sm shadow-sm transition-colors">
-                <option value="tunai">Tunai (Diterima Langsung)</option>
-                <option value="transfer">Transfer Bank (Cek Mutasi)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="pt-4 flex justify-end gap-3 border-t border-gray-100 dark:border-white/5 mt-4">
-            <button type="button" @click="closeModal" class="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Batal</button>
-            <button type="submit" class="px-5 py-2.5 bg-secondary hover:bg-yellow-500 text-white text-sm font-bold rounded-xl shadow-sm transition-colors">Simpan Data</button>
+          <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
+            <button type="button" @click="closeModal" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
+            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors">Simpan Data</button>
           </div>
         </form>
       </div>

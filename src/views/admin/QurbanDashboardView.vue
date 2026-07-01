@@ -41,12 +41,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       
       <!-- Kartu Hijau (Total Dana) -->
-      <RouterLink to="/admin/qurban/setoran" class="relative overflow-hidden bg-linear-to-br from-emerald-600 to-teal-800 rounded-2xl p-6 shadow-lg shadow-emerald-900/20 text-white group block hover:-translate-y-1 hover:shadow-emerald-900/30 transition-all duration-300">
-        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform duration-500 pointer-events-none">
+      <div class="relative overflow-hidden bg-linear-to-br from-emerald-600 to-teal-800 rounded-2xl p-6 shadow-lg shadow-emerald-900/20 text-white block">
+        <div class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none">
           <Wallet class="w-24 h-24" />
-        </div>
-        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-          <ArrowRight class="w-5 h-5 text-emerald-100" />
         </div>
         <div class="relative z-10 flex flex-col justify-between h-full">
           <div class="flex items-center justify-between mb-4">
@@ -62,16 +59,13 @@
             </p>
           </div>
         </div>
-      </RouterLink>
+      </div>
 
       <!-- Kartu Putih 1 (Total Shohibul) -->
-      <RouterLink to="/admin/qurban/peserta" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
-        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-          <ArrowRight class="w-5 h-5 text-gray-400" />
-        </div>
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Shohibul</p>
-          <div class="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 transition-colors">
+          <div class="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-lg">
             <Users class="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
@@ -84,16 +78,13 @@
             <ArrowUpRight class="w-4 h-4" /> Pencapaian {{ store.summary.percentage }}%
           </p>
         </div>
-      </RouterLink>
+      </div>
 
       <!-- Kartu Putih 2 (Lunas) -->
-      <RouterLink to="/admin/qurban/peserta" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
-        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-          <ArrowRight class="w-5 h-5 text-gray-400" />
-        </div>
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Shohibul Lunas</p>
-          <div class="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg group-hover:bg-emerald-100 dark:group-hover:bg-emerald-500/20 transition-colors">
+          <div class="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg">
             <CheckCircle class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
           </div>
         </div>
@@ -106,16 +97,13 @@
             <TrendingUp class="w-4 h-4" /> Dari total target
           </p>
         </div>
-      </RouterLink>
+      </div>
 
       <!-- Kartu Putih 3 (Belum Lunas) -->
-      <RouterLink to="/admin/qurban/peserta" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
-        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-          <ArrowRight class="w-5 h-5 text-gray-400" />
-        </div>
+      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Belum Lunas</p>
-          <div class="p-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg group-hover:bg-rose-100 dark:group-hover:bg-rose-500/20 transition-colors">
+          <div class="p-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg">
             <AlertCircle class="w-5 h-5 text-rose-600 dark:text-rose-400" />
           </div>
         </div>
@@ -128,7 +116,7 @@
             <TrendingDown class="w-4 h-4" /> Butuh follow-up
           </p>
         </div>
-      </RouterLink>
+      </div>
 
     </div>
 
@@ -193,9 +181,6 @@
                 <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400">
                   + Rp {{ formatRupiahSimple(tx.amount) }}
                 </p>
-                <button @click="verifyClick(tx.id)" class="p-1.5 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors opacity-0 group-hover:opacity-100" title="Verifikasi / Detail">
-                  <Pencil class="w-4 h-4" />
-                </button>
               </div>
             </li>
           </ul>
@@ -206,9 +191,9 @@
       <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md flex flex-col">
         <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
           <h2 class="text-base font-semibold text-gray-900 dark:text-white">Target Hewan</h2>
-          <button @click="isSimulasiOpen = true" class="p-2 bg-secondary hover:bg-yellow-500 text-white rounded-lg transition-colors shadow-sm" title="Simulasi Grup Sapi">
-            <Layers class="w-4 h-4" />
-          </button>
+          <RouterLink to="/admin/qurban/target" class="text-xs font-medium text-secondary hover:text-yellow-600 transition-colors">
+            Lihat Semua
+          </RouterLink>
         </div>
 
         <div class="p-6 space-y-4 flex-1 flex flex-col">
@@ -222,8 +207,8 @@
               <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center text-lg">🐄</div>
                 <div>
-                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Sapi (Kolektif)</span>
-                  <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ store.animals.sapi_groups }} Grup Penuh</span>
+                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Sapi</span>
+                  <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ store.animals.sapi_shohibul }} Shohibul</span>
                 </div>
               </div>
               <div class="text-right">
@@ -235,7 +220,7 @@
               <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center text-lg">🐐</div>
                 <div>
-                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Kambing (Mandiri)</span>
+                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Kambing</span>
                   <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ store.animals.kambing_shohibul }} Shohibul</span>
                 </div>
               </div>
@@ -267,59 +252,17 @@
 
     </div>
   </div>
-
-  <!-- MODAL SIMULASI SAPI (Redesigned matching Keuangan modal standard) -->
-  <Teleport to="body">
-    <div v-if="isSimulasiOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
-      <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="isSimulasiOpen = false"></div>
-      
-      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Layers class="w-5 h-5 text-secondary" /> Simulasi Grup Sapi
-          </h3>
-          <button @click="isSimulasiOpen = false" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-            <X class="w-5 h-5" />
-          </button>
-        </div>
-        
-        <div class="p-6 bg-gray-50/50 dark:bg-gray-900/50 max-h-[70vh] overflow-y-auto custom-scrollbar">
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div v-for="n in store.animals.sapi_groups || 3" :key="n" class="bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-4 shadow-sm hover:shadow-md hover:ring-secondary/50 dark:hover:ring-secondary/50 transition-all cursor-pointer group relative">
-              <div class="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
-                Penuh
-              </div>
-              <div class="flex flex-col items-center justify-center text-center mt-2">
-                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🐄</span>
-                <h4 class="font-bold text-sm text-gray-900 dark:text-white">Grup Sapi {{ n }}</h4>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">7/7 Shohibul</p>
-              </div>
-            </div>
-            
-            <button class="bg-white dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-secondary dark:hover:border-secondary hover:bg-yellow-50 dark:hover:bg-yellow-500/10 rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-gray-500 dark:text-gray-400 hover:text-secondary dark:hover:text-secondary transition-all min-h-[140px]">
-              <Plus class="w-8 h-8" />
-              <span class="text-sm font-bold">Buat Grup Baru</span>
-            </button>
-          </div>
-        </div>
-        <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
-          <button @click="isSimulasiOpen = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Tutup</button>
-        </div>
-      </div>
-    </div>
-  </Teleport>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { 
   Wallet, CheckCircle, TrendingUp, TrendingDown, Users, PieChart, 
-  AlertCircle, Calendar, Clock, ChevronDown, Plus, Pencil, ArrowUpRight, X, ArrowRight, Layers
+  AlertCircle, Calendar, Clock, ChevronDown, ArrowUpRight
 } from 'lucide-vue-next'
 
 const isLoading = ref(true)
 const showPeriodeDropdown = ref(false)
-const isSimulasiOpen = ref(false)
 
 const periodes = [
   { id: '1447', label: 'Periode 1447 H / 2026 M' },
@@ -347,10 +290,6 @@ const changePeriode = (per) => {
   showPeriodeDropdown.value = false
   isLoading.value = true
   setTimeout(() => { isLoading.value = false }, 800)
-}
-
-const verifyClick = (id) => {
-  alert(`Memverifikasi transaksi ${id}...`)
 }
 
 const store = ref({
