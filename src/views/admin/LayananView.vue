@@ -359,13 +359,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Plus, Edit2, Trash2, X, Briefcase, Users, User, BookOpen, GraduationCap, Heart, HandCoins, Gem, MapPin, Building, UploadCloud } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
+
+onMounted(() => {
+  adminStore.fetchLayanan()
+})
 
 const iconMap = {
   Users, BookOpen, GraduationCap, Heart, HandCoins, Gem, Briefcase, MapPin, Building

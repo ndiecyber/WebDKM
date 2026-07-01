@@ -179,13 +179,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Plus, Edit2, Trash2, X, Image, UploadCloud } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
+
+onMounted(() => {
+  adminStore.fetchGallery()
+})
 
 const showModal = ref(false)
 const isEditing = ref(false)

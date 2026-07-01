@@ -285,13 +285,18 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { Plus, Edit, Trash2, X, Save, ArrowUp, ArrowDown } from 'lucide-vue-next'
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
 
 const adminStore = useAdminStore()
 const toastStore = useToastStore()
+
+onMounted(() => {
+  adminStore.fetchUsers()
+  adminStore.fetchRoles()
+})
 
 // TABS
 const activeTab = ref('users')
