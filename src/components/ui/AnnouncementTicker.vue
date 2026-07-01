@@ -19,13 +19,33 @@
 </template>
 
 <script setup>
-const announcements = [
+import { ref, onMounted } from 'vue'
+import api from '@/utils/api'
+
+const announcements = ref([
   { text: '🕌 Kajian Akbar Bulanan — 15 Juni 2026, Aula Utama', urgent: true },
   { text: '📖 Pendaftaran TPA/TPQ Semester Baru Telah Dibuka', urgent: false },
   { text: '💛 Program Donasi Renovasi Aula — Target 75% Tercapai!', urgent: false },
   { text: '🌙 Jadwal Sholat Otomatis Berdasarkan Lokasi Anda', urgent: false },
   { text: '📢 Wisuda Santri TPA/TPQ — 22 Juni 2026', urgent: false },
-]
+])
+
+onMounted(async () => {
+  try {
+    const res = await api.get('/web-profile/announcements')
+    const data = res.data.data || res.data
+    // Filter active announcements
+    const active = (data || []).filter(a => a.is_active || a.is_active === 1 || a.is_active === true)
+    if (active.length > 0) {
+      announcements.value = active.map(a => ({
+        text: a.title,
+        urgent: a.content && a.content.toLowerCase().includes('urgent')
+      }))
+    }
+  } catch (err) {
+    console.error('Failed to fetch announcements:', err)
+  }
+})
 </script>
 
 <style scoped>

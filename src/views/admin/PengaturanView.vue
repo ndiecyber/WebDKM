@@ -914,7 +914,7 @@ const hasChanges = computed(() => {
   return isSettingsChanged || isCtaChanged || isMasterDataChanged || isCommitteeChanged
 })
 
-onMounted(() => {
+onMounted(async () => {
   observer = new IntersectionObserver(([entry]) => {
     isTopButtonVisible.value = entry.isIntersecting
   }, { threshold: 0 })
@@ -923,6 +923,37 @@ onMounted(() => {
     observer.observe(topButtonRef.value)
   }
 
+  // Fetch from database API
+  await adminStore.fetchGeneralSettings()
+  await adminStore.fetchCtaSettings()
+  await adminStore.fetchMasterData()
+  await adminStore.fetchCommittee()
+
+  // Populate form refs with fresh data
+  settings.value = JSON.parse(JSON.stringify(adminStore.generalSettings))
+  
+  // Migration for older localStorage data where whatsapp might still be a string
+  if (typeof settings.value.whatsapp === 'string') {
+    settings.value.whatsapp = [{ id: 1, name: 'Pengurus / Umum', number: settings.value.whatsapp }]
+  }
+  if (!settings.value.email) settings.value.email = ''
+  if (!settings.value.alamatLengkap) settings.value.alamatLengkap = ''
+  if (!settings.value.kota) settings.value.kota = ''
+  if (!settings.value.kodepos) settings.value.kodepos = ''
+  if (!settings.value.mapsIframe) settings.value.mapsIframe = ''
+  if (!settings.value.teleponKantor) settings.value.teleponKantor = ''
+  if (settings.value.twitter === undefined) settings.value.twitter = ''
+  if (settings.value.tiktok === undefined) settings.value.tiktok = ''
+
+  ctaSettings.value = JSON.parse(JSON.stringify(adminStore.ctaSettings))
+  masterData.value = JSON.parse(JSON.stringify(adminStore.masterData))
+
+  const newCData = adminStore.committee || {}
+  committee.value = {
+    dewanPenasihat: newCData.dewanPenasihat ? JSON.parse(JSON.stringify(newCData.dewanPenasihat)) : [],
+    pengurusHarian: newCData.pengurusHarian ? JSON.parse(JSON.stringify(newCData.pengurusHarian)) : [],
+    divisi: newCData.divisi ? JSON.parse(JSON.stringify(newCData.divisi)) : []
+  }
 })
 
 onUnmounted(() => {
@@ -1041,24 +1072,27 @@ function handlePhotoUpload(event, member) {
   reader.readAsDataURL(file)
 }
 
-function saveSettings() {
+async function saveSettings() {
   isSaving.value = true
   
-  // Simulate API call
-  setTimeout(() => {
-    adminStore.generalSettings = { ...settings.value }
+  try {
+    adminStore.generalSettings = JSON.parse(JSON.stringify(settings.value))
     adminStore.ctaSettings = JSON.parse(JSON.stringify(ctaSettings.value))
     adminStore.masterData = JSON.parse(JSON.stringify(masterData.value))
     adminStore.committee = JSON.parse(JSON.stringify(committee.value))
     
-    adminStore.saveGeneralSettings()
-    adminStore.saveCtaSettings()
-    adminStore.saveMasterData()
-    adminStore.saveCommittee()
+    await adminStore.saveGeneralSettings()
+    await adminStore.saveCtaSettings()
+    await adminStore.saveMasterData()
+    await adminStore.saveCommittee()
     
-    isSaving.value = false
     toastStore.addToast('Pengaturan umum berhasil disimpan')
-  }, 1000)
+  } catch (err) {
+    console.error('Failed to save settings:', err)
+    toastStore.addToast('Gagal menyimpan pengaturan', 'error')
+  } finally {
+    isSaving.value = false
+  }
 }
 </script>
 

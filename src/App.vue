@@ -27,5 +27,8 @@ onMounted(() => {
   adminStore.fetchKegiatan()
   adminStore.fetchGallery()
   adminStore.fetchCommittee()
+  adminStore.fetchGeneralSettings()
+  adminStore.fetchCtaSettings()
+  adminStore.fetchMasterData()
 })
 </script>

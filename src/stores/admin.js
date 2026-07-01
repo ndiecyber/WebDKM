@@ -431,17 +431,168 @@ export const useAdminStore = defineStore('admin', {
         console.error('Failed to delete layanan:', err);
       }
     },
-    saveGeneralSettings() {
-      setStorage('admin_general_settings', JSON.stringify(this.generalSettings))
-      this.logActivity('Ubah Pengaturan', 'Memperbarui pengaturan umum (teks sambutan, dsb)');
+    async fetchGeneralSettings() {
+      try {
+        const res = await api.get('/web-profile/settings');
+        const data = res.data.data || res.data;
+        
+        // Map backend snake_case to frontend camelCase
+        this.generalSettings = {
+          name: data.nama_masjid || '',
+          slogan: data.slogan || '',
+          description: data.deskripsi_sambutan || '',
+          history: data.sejarah_singkat || '',
+          floatingCardTitle: data.floating_card_title || '',
+          floatingCardDesc: data.floating_card_desc || '',
+          tahunBerdiri: data.tahun_berdiri || 2015,
+          jamaahAktif: data.jamaah_aktif || 200,
+          heroImages: data.hero_images || [],
+          historyImage: data.history_image || '',
+          committeeDescription: data.committee_description || '',
+          instagram: data.link_instagram || '',
+          facebook: data.link_facebook || '',
+          youtube: data.link_youtube || '',
+          twitter: data.link_twitter || '',
+          tiktok: data.link_tiktok || '',
+          whatsapp: data.whatsapp || [],
+          email: data.email || '',
+          teleponKantor: data.telepon_kantor || '',
+          alamatLengkap: data.alamat_lengkap || '',
+          kota: data.kota || '',
+          kodepos: data.kodepos || '',
+          maps: data.link_maps || '',
+          mapsIframe: data.maps_iframe || ''
+        };
+      } catch (err) {
+        console.error('Failed to fetch general settings:', err);
+      }
     },
-    saveCtaSettings() {
-      setStorage('admin_cta_settings_v2', JSON.stringify(this.ctaSettings))
-      this.logActivity('Ubah Donasi', 'Memperbarui pengaturan CTA Donasi');
+    async saveGeneralSettings() {
+      try {
+        // Map frontend camelCase to backend snake_case
+        const payload = {
+          nama_masjid: this.generalSettings.name,
+          slogan: this.generalSettings.slogan,
+          deskripsi_sambutan: this.generalSettings.description,
+          sejarah_singkat: this.generalSettings.history,
+          floating_card_title: this.generalSettings.floatingCardTitle,
+          floating_card_desc: this.generalSettings.floatingCardDesc,
+          tahun_berdiri: this.generalSettings.tahunBerdiri,
+          jamaah_aktif: this.generalSettings.jamaahAktif,
+          hero_images: this.generalSettings.heroImages,
+          history_image: this.generalSettings.historyImage,
+          committee_description: this.generalSettings.committeeDescription,
+          link_instagram: this.generalSettings.instagram,
+          link_facebook: this.generalSettings.facebook,
+          link_youtube: this.generalSettings.youtube,
+          link_twitter: this.generalSettings.twitter,
+          link_tiktok: this.generalSettings.tiktok,
+          whatsapp: this.generalSettings.whatsapp,
+          email: this.generalSettings.email,
+          telepon_kantor: this.generalSettings.teleponKantor,
+          alamat_lengkap: this.generalSettings.alamatLengkap,
+          kota: this.generalSettings.kota,
+          kodepos: this.generalSettings.kodepos,
+          link_maps: this.generalSettings.maps,
+          maps_iframe: this.generalSettings.mapsIframe
+        };
+
+        await api.put('/web-profile/settings', payload);
+        this.logActivity('Ubah Pengaturan', 'Memperbarui pengaturan umum (teks sambutan, dsb)');
+        await this.fetchGeneralSettings();
+      } catch (err) {
+        console.error('Failed to save general settings:', err);
+      }
     },
-    saveMasterData() {
-      setStorage('admin_master_data_v2', JSON.stringify(this.masterData))
-      this.logActivity('Ubah Master Data', 'Memperbarui master data (kategori/label)');
+    async fetchCtaSettings() {
+      try {
+        const res = await api.get('/web-profile/cta');
+        const data = res.data.data || res.data;
+        
+        // Map backend to frontend
+        this.ctaSettings = {
+          title: data.title || '',
+          subtitle: data.subtitle || '',
+          quote: data.quote || '',
+          quoteSource: data.quote_source || '',
+          totalDonors: data.total_donors || 0,
+          sliderImages: data.slider_images || [],
+          programs: data.programs || []
+        };
+      } catch (err) {
+        console.error('Failed to fetch CTA settings:', err);
+      }
+    },
+    async saveCtaSettings() {
+      try {
+        // Map frontend to backend
+        const payload = {
+          title: this.ctaSettings.title,
+          subtitle: this.ctaSettings.subtitle,
+          quote: this.ctaSettings.quote,
+          quote_source: this.ctaSettings.quoteSource,
+          total_donors: this.ctaSettings.totalDonors,
+          slider_images: this.ctaSettings.sliderImages,
+          programs: (this.ctaSettings.programs || []).map(p => ({
+            id: p.id,
+            name: p.name,
+            progress: p.progress
+          }))
+        };
+
+        await api.put('/web-profile/cta', payload);
+        this.logActivity('Ubah Donasi', 'Memperbarui pengaturan CTA Donasi');
+        await this.fetchCtaSettings();
+      } catch (err) {
+        console.error('Failed to save CTA settings:', err);
+      }
+    },
+    async fetchMasterData() {
+      try {
+        const res = await api.get('/web-profile/master-categories');
+        const data = res.data.data || res.data;
+        
+        const mapItem = (item) => ({
+          id: item.id,
+          name: item.name,
+          description: item.description || '',
+          iconName: item.icon_name || '',
+          color: item.color || ''
+        });
+
+        this.masterData = {
+          kategori: (data.kategori || []).map(mapItem),
+          tipeBerita: (data.tipeBerita || []).map(mapItem),
+          label: (data.label || []).map(mapItem),
+          status: (data.status || []).map(mapItem)
+        };
+      } catch (err) {
+        console.error('Failed to fetch master data:', err);
+      }
+    },
+    async saveMasterData() {
+      try {
+        const mapItemPayload = (item) => ({
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          icon_name: item.iconName,
+          color: item.color
+        });
+
+        const payload = {
+          kategori: (this.masterData.kategori || []).map(mapItemPayload),
+          tipeBerita: (this.masterData.tipeBerita || []).map(mapItemPayload),
+          label: (this.masterData.label || []).map(mapItemPayload),
+          status: (this.masterData.status || []).map(mapItemPayload)
+        };
+
+        await api.put('/web-profile/master-categories/bulk', payload);
+        this.logActivity('Ubah Master Data', 'Memperbarui master data (kategori/label)');
+        await this.fetchMasterData();
+      } catch (err) {
+        console.error('Failed to save master data:', err);
+      }
     },
     async fetchCommittee() {
       try {
