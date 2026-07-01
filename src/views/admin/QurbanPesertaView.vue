@@ -29,34 +29,46 @@
         />
       </div>
 
-      <div class="relative shrink-0">
-        <button 
-          @click="isFilterOpen = !isFilterOpen" 
-          class="w-full sm:w-auto px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-300 shadow-sm flex items-center justify-between gap-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-        >
-          <div class="flex items-center gap-2">
-            <Filter class="w-4 h-4 text-gray-400" />
-            <span v-if="selectedFilter.icon" class="mr-0.5">{{ selectedFilter.icon }}</span>
-            <span>{{ selectedFilter.label }}</span>
-          </div>
-          <ChevronDown class="w-4 h-4 text-gray-400" />
-        </button>
-
-        <div v-if="isFilterOpen" class="absolute right-0 left-0 sm:left-auto mt-2 w-full sm:w-56 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/10 rounded-xl shadow-lg z-50 py-1 animate-fade-in-down overflow-hidden">
-          <button 
-            v-for="filter in filters" 
-            :key="filter.value"
-            @click="selectFilter(filter.value)"
-            class="w-full text-left px-4 py-2.5 text-sm font-medium transition-colors flex items-center gap-2"
-            :class="activeFilter === filter.value ? 'bg-secondary/10 text-secondary dark:bg-secondary/20' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'"
-          >
-            <span v-if="filter.icon" class="w-5 text-center">{{ filter.icon }}</span>
-            <span v-else class="w-5"></span> 
-            {{ filter.label }}
-            <Check v-if="activeFilter === filter.value" class="w-4 h-4 ml-auto text-secondary" />
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar py-0.5">
+          <button @click="setFilter('all')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'all' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/10' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 border border-transparent']">
+            Semua
+          </button>
+          <button @click="setFilter('sapi')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'sapi' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 border border-transparent']">
+            🐄 Sapi
+          </button>
+          <button @click="setFilter('kambing')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'kambing' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 border border-transparent']">
+            🐐 Kambing
           </button>
         </div>
-        <div v-if="isFilterOpen" @click="isFilterOpen = false" class="fixed inset-0 z-40"></div>
+        <div class="w-px h-6 bg-gray-200 dark:bg-white/10 hidden md:block shrink-0"></div>
+
+        <div class="relative shrink-0">
+          <button 
+            @click="isStatusFilterOpen = !isStatusFilterOpen" 
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300 whitespace-nowrap flex items-center gap-2 border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 shadow-sm"
+          >
+            <Filter class="w-4 h-4 text-gray-400" />
+            <span>{{ selectedStatusFilter.label }}</span>
+            <ChevronDown class="w-4 h-4 text-gray-400" />
+          </button>
+
+          <div v-if="isStatusFilterOpen" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/10 rounded-xl shadow-lg z-50 py-1 animate-fade-in-down overflow-hidden">
+            <button 
+              v-for="filter in statusFilters" 
+              :key="filter.value"
+              @click="selectStatusFilter(filter.value)"
+              class="w-full text-left px-4 py-2.5 text-sm font-medium transition-colors flex items-center gap-2"
+              :class="advancedFilters.status === filter.value ? 'bg-secondary/10 text-secondary dark:bg-secondary/20' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'"
+            >
+              <span v-if="filter.icon" class="w-4 text-center">{{ filter.icon }}</span>
+              <span v-else class="w-4"></span> 
+              {{ filter.label }}
+              <Check v-if="advancedFilters.status === filter.value" class="w-4 h-4 ml-auto text-secondary" />
+            </button>
+          </div>
+          <div v-if="isStatusFilterOpen" @click="isStatusFilterOpen = false" class="fixed inset-0 z-40"></div>
+        </div>
       </div>
     </div>
 
@@ -201,6 +213,8 @@
 
   <!-- MODALS DI-TELEPORT KE BODY -->
   <Teleport to="body">
+    
+
     
     <!-- Modal Detail Shohibul -->
     <div v-if="selectedPeserta && modalType === 'detail'" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
@@ -374,28 +388,35 @@ import { qurbanMockData } from '@/utils/qurbanMock'
 // STATE
 const isLoading = ref(true)
 const searchQuery = ref('')
-const isFilterOpen = ref(false)
 const activeFilter = ref('all')
 const modalType = ref(null) 
 const selectedPeserta = ref(null)
 const currentPage = ref(1)
 
-const formData = ref({ name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' })
+const isStatusFilterOpen = ref(false)
+const advancedFilters = ref({ status: 'all' })
 
-const filters = [
-  { label: 'Semua Kategori', value: 'all', icon: '' },
-  { label: 'Sapi (Kolektif)', value: 'sapi', icon: '🐄' },
-  { label: 'Kambing (Mandiri)', value: 'kambing', icon: '🐐' },
-  { label: 'Sudah Lunas', value: 'lunas', icon: '✓' }
+const statusFilters = [
+  { label: 'Semua Status', value: 'all', icon: '' },
+  { label: 'Lunas', value: 'lunas', icon: '✓' },
+  { label: 'Proses', value: 'proses', icon: '⏳' },
+  { label: 'Pending', value: 'pending', icon: '⚠️' }
 ]
 
-const selectedFilter = computed(() => filters.find(f => f.value === activeFilter.value) || filters[0])
+const selectedStatusFilter = computed(() => statusFilters.find(f => f.value === advancedFilters.value.status) || statusFilters[0])
 
-const selectFilter = (value) => {
-  activeFilter.value = value
-  isFilterOpen.value = false
+const selectStatusFilter = (value) => {
+  advancedFilters.value.status = value
+  isStatusFilterOpen.value = false
   currentPage.value = 1
 }
+
+const setFilter = (value) => {
+  activeFilter.value = value
+  currentPage.value = 1
+}
+
+const formData = ref({ name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' })
 
 // MOCK DATA 
 const mockPeserta = ref([])
@@ -416,9 +437,18 @@ const filteredPeserta = computed(() => {
     let matchesFilter = true
     if (activeFilter.value === 'sapi') matchesFilter = p.target_type === 'sapi'
     if (activeFilter.value === 'kambing') matchesFilter = p.target_type === 'kambing'
-    if (activeFilter.value === 'lunas') matchesFilter = p.collected_amount >= p.target_amount
     
-    return matchesSearch && matchesFilter
+    let matchesAdvanced = true
+    const hasPending = p.transactions && p.transactions.some(tx => tx.status === 'pending')
+    if (advancedFilters.value.status === 'pending') {
+      matchesAdvanced = hasPending
+    } else if (advancedFilters.value.status === 'lunas') {
+      matchesAdvanced = !hasPending && p.collected_amount >= p.target_amount
+    } else if (advancedFilters.value.status === 'proses') {
+      matchesAdvanced = !hasPending && p.collected_amount < p.target_amount
+    }
+    
+    return matchesSearch && matchesFilter && matchesAdvanced
   })
 })
 
