@@ -9,7 +9,7 @@
       </div>
       <button @click="openAddModal" class="px-5 py-2.5 bg-secondary hover:bg-yellow-500 text-white text-sm font-bold rounded-xl shadow-md shadow-secondary/20 transition-all flex items-center gap-2">
         <Plus class="w-4 h-4" />
-        <span>Tambah Peserta</span>
+        <span>Tambah Shohibul</span>
       </button>
     </div>
 
@@ -105,7 +105,7 @@
               <td colspan="7" class="px-4 py-12 text-center">
                 <div class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
                   <Search class="w-8 h-8 mb-3 opacity-50" />
-                  <p class="text-sm font-medium">Data peserta tidak ditemukan.</p>
+                  <p class="text-sm font-medium">Data shohibul tidak ditemukan.</p>
                 </div>
               </td>
             </tr>
