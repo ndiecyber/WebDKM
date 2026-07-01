@@ -19,7 +19,7 @@
       </div>
 
       <!-- New Gallery Carousel -->
-      <div class="max-w-5xl mx-auto" ref="galleryRef">
+      <div class="max-w-5xl mx-auto" ref="galleryRef" v-if="gallery && gallery.length > 0">
         <!-- Featured Image -->
         <div 
           class="relative w-full h-[350px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-2xl mb-6 cursor-pointer group bg-dark"
@@ -91,6 +91,11 @@
             <div :class="['absolute inset-0 bg-dark transition-opacity duration-300', activeIndex === index ? 'opacity-0' : 'opacity-20']"></div>
           </button>
         </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else class="text-center py-10">
+        <p class="text-gray-500 dark:text-gray-400">Belum ada foto galeri saat ini.</p>
       </div>
     </div>
 
