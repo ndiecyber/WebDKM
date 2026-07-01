@@ -1,6 +1,7 @@
 <template>
   <div class="space-y-6 sm:space-y-8 pb-10 animate-fade-in">
     
+    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
@@ -8,23 +9,25 @@
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Atur pembagian kelompok shohibul sapi dan pantau daftar jamaah mandiri kambing.</p>
       </div>
-      <button @click="openCreateGroupModal" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl transition-colors shadow-md shadow-emerald-500/20 text-sm flex items-center gap-2 shrink-0">
+      <button @click="openCreateGroupModal" class="bg-secondary hover:bg-yellow-500 text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-md shadow-secondary/20 text-sm flex items-center gap-2 shrink-0">
         <Plus class="w-4 h-4" />
         <span>Buat Kelompok Sapi</span>
       </button>
     </div>
 
+    <!-- Skeletons -->
     <div v-if="isLoading" class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
-      <div v-for="i in 2" :key="i" class="bg-white rounded-2xl p-5 border border-gray-200 h-64 animate-pulse">
-        <div class="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+      <div v-for="i in 2" :key="i" class="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-white/10 h-64 animate-pulse">
+        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
         <div class="space-y-3">
-          <div class="h-12 bg-gray-100 rounded w-full"></div>
-          <div class="h-12 bg-gray-100 rounded w-full"></div>
+          <div class="h-12 bg-gray-100 dark:bg-gray-800/50 rounded w-full"></div>
+          <div class="h-12 bg-gray-100 dark:bg-gray-800/50 rounded w-full"></div>
         </div>
       </div>
     </div>
 
     <template v-else>
+      <!-- Kelompok Sapi Section -->
       <div class="space-y-4">
         <div class="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-800">
           <span class="text-2xl">🐄</span>
@@ -32,25 +35,25 @@
         </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-          <div v-if="sapiGroups.length === 0" class="col-span-full p-8 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-            <p class="text-sm text-gray-500 font-medium">Belum ada kelompok sapi yang dibuat.</p>
+          <div v-if="sapiGroups.length === 0" class="col-span-full p-8 text-center bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Belum ada kelompok sapi yang dibuat.</p>
           </div>
 
           <div 
             v-for="group in sapiGroups" 
             :key="group.id"
-            class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-5 shadow-md flex flex-col space-y-4 relative overflow-hidden h-full"
+            class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-5 shadow-md flex flex-col space-y-4 relative overflow-hidden h-full"
           >
             <div class="flex justify-between items-center border-b border-gray-100 dark:border-white/5 pb-3">
               <div class="flex items-center gap-2">
                 <div>
                   <h3 class="font-bold text-gray-900 dark:text-white">{{ group.name }}</h3>
-                  <p class="text-[10px] text-gray-500">Terkumpul: <strong class="text-emerald-600 dark:text-emerald-400">{{ formatRupiah(getGroupTotal(group)) }}</strong></p>
+                  <p class="text-[10px] text-gray-500 dark:text-gray-400">Terkumpul: <strong class="text-emerald-600 dark:text-emerald-400">{{ formatRupiah(getGroupTotal(group)) }}</strong></p>
                 </div>
               </div>
               <div class="flex flex-col items-end gap-1">
                 <span class="px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider"
-                      :class="group.shohibuls.length >= 7 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'">
+                      :class="group.shohibuls.length >= 7 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'">
                   {{ group.shohibuls.length }} / 7 Slot
                 </span>
                 <button v-if="group.shohibuls.length === 0" @click="deleteGroup(group)" class="text-[10px] text-red-500 hover:underline">Hapus Kosong</button>
@@ -61,7 +64,7 @@
               <div 
                 v-for="(member, idx) in group.shohibuls" 
                 :key="member.id"
-                class="flex justify-between items-center bg-gray-50 dark:bg-white/5 p-3 rounded-xl border border-gray-100 dark:border-white/5 hover:border-emerald-200 dark:hover:border-emerald-800 transition-colors"
+                class="flex justify-between items-center bg-gray-50 dark:bg-white/[0.02] p-3 rounded-xl border border-gray-100 dark:border-white/5 hover:border-secondary/50 transition-colors group/item"
               >
                 <div class="flex items-center gap-3">
                   <span class="w-6 h-6 rounded-md bg-white dark:bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700">{{ idx + 1 }}</span>
@@ -70,14 +73,14 @@
                     <div class="flex items-center gap-2 mt-0.5">
                       <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">ID: {{ member.id }}</span>
                       <span class="text-[9px] px-1.5 py-0.5 rounded uppercase font-bold"
-                            :class="member.collected_amount >= member.target_amount ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 border border-amber-200 dark:bg-amber-900/40 dark:text-amber-400'">
+                            :class="member.collected_amount >= member.target_amount ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 border border-amber-200 dark:border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400'">
                         {{ member.collected_amount >= member.target_amount ? 'Lunas' : 'Proses' }}
                       </span>
                     </div>
                   </div>
                 </div>
                 
-                <button @click="openMoveModal(member, group)" class="p-2 bg-white dark:bg-gray-800 hover:bg-emerald-50 border border-gray-200 rounded-lg text-gray-500 hover:text-emerald-600 transition-colors shadow-sm" title="Pindah Kelompok">
+                <button @click="openMoveModal(member, group)" class="p-2 bg-white dark:bg-gray-800 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-400 hover:text-secondary transition-colors shadow-sm opacity-0 group-hover/item:opacity-100" title="Pindah Kelompok">
                   <ArrowRightLeft class="w-4 h-4" />
                 </button>
               </div>
@@ -89,7 +92,7 @@
               >
                 <div class="flex items-center gap-3">
                   <span class="w-6 h-6 rounded-md border border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center text-[10px] font-bold text-gray-400">{{ group.shohibuls.length + i }}</span>
-                  <span class="text-xs italic text-gray-500 font-medium">Slot Kosong</span>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400 font-medium">Slot Kosong</span>
                 </div>
                 <span class="text-[9px] font-bold uppercase bg-gray-100 dark:bg-gray-800 text-gray-400 px-2 py-1 rounded">Tersedia</span>
               </div>
@@ -98,6 +101,7 @@
         </div>
       </div>
 
+      <!-- Kambing Section -->
       <div class="space-y-4 pt-6 mt-6 border-t border-gray-200 dark:border-white/10">
         <div class="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-800">
           <span class="text-2xl">🐐</span>
@@ -108,7 +112,7 @@
           <div 
             v-for="(kambing, idx) in kambingList" 
             :key="kambing.id"
-            class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between hover:ring-emerald-300 transition-all duration-300 group hover:-translate-y-1"
+            class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 shadow-sm flex items-center justify-between hover:ring-secondary/50 dark:hover:ring-secondary/50 transition-all duration-300 group hover:-translate-y-1"
           >
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 flex items-center justify-center text-sm font-bold border border-orange-100 dark:border-orange-800/30">
@@ -124,14 +128,14 @@
             
             <div class="text-right">
               <span class="text-[10px] px-2 py-1 rounded uppercase font-bold"
-                    :class="kambing.collected_amount >= kambing.target_amount ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400' : 'bg-amber-50 text-amber-600 border border-amber-200 dark:bg-amber-900/40 dark:text-amber-400'">
+                    :class="kambing.collected_amount >= kambing.target_amount ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-50 text-amber-600 border border-amber-200 dark:border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400'">
                 {{ kambing.collected_amount >= kambing.target_amount ? 'Lunas' : 'Proses' }}
               </span>
             </div>
           </div>
 
-          <div v-if="kambingList.length === 0" class="col-span-full p-8 text-center bg-gray-50 dark:bg-gray-800/50 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700">
-            <p class="text-sm text-gray-500 font-medium">Belum ada jamaah yang mendaftar qurban kambing.</p>
+          <div v-if="kambingList.length === 0" class="col-span-full p-8 text-center bg-gray-50 dark:bg-gray-800/50 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Belum ada jamaah yang mendaftar qurban kambing.</p>
           </div>
         </div>
       </div>
@@ -140,18 +144,21 @@
 
   <Teleport to="body">
     
-    <div v-if="moveModal.isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
-      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 p-6 animate-fade-in-down">
+    <!-- Move Modal -->
+    <div v-if="moveModal.isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
+      <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="closeMoveModal"></div>
+      
+      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md shadow-xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 p-6 animate-fade-in-up relative z-10">
         <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100 dark:border-white/5">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <ArrowRightLeft class="w-5 h-5 text-emerald-500" /> Pindah Kelompok Sapi
+            <ArrowRightLeft class="w-5 h-5 text-secondary" /> Pindah Kelompok Sapi
           </h3>
-          <button @click="closeMoveModal" class="text-gray-400 hover:text-gray-600 transition-colors"><X class="w-5 h-5" /></button>
+          <button @click="closeMoveModal" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"><X class="w-5 h-5" /></button>
         </div>
 
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Pilih kelompok baru untuk <strong class="text-gray-900 dark:text-white">{{ moveModal.member?.name }}</strong>.<br/>
-          <span class="text-xs">Saat ini berada di: <strong class="text-emerald-600">{{ moveModal.currentGroup?.name }}</strong></span>
+          <span class="text-xs">Saat ini berada di: <strong class="text-secondary">{{ moveModal.currentGroup?.name }}</strong></span>
         </p>
 
         <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
@@ -159,49 +166,52 @@
             v-for="group in availableGroups" 
             :key="group.id"
             @click="confirmMove(group)"
-            class="w-full p-4 rounded-xl border border-gray-200 dark:border-white/10 hover:border-emerald-500 hover:bg-emerald-50 transition-all flex justify-between items-center text-left group/btn shadow-sm"
+            class="w-full p-4 rounded-xl border border-gray-200 dark:border-white/10 hover:border-secondary hover:bg-yellow-50 dark:hover:bg-yellow-500/10 transition-all flex justify-between items-center text-left group/btn shadow-sm"
           >
             <div>
               <p class="text-sm font-bold text-gray-800 dark:text-white">{{ group.name }}</p>
-              <p class="text-[10px] text-gray-500 mt-1">Sisa <strong class="text-amber-600">{{ 7 - group.shohibuls.length }}</strong> slot kosong</p>
+              <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">Sisa <strong class="text-amber-600 dark:text-amber-400">{{ 7 - group.shohibuls.length }}</strong> slot kosong</p>
             </div>
-            <ArrowRight class="w-4 h-4 text-emerald-500 transform group-hover/btn:translate-x-1 transition-transform" />
+            <ArrowRight class="w-4 h-4 text-secondary transform group-hover/btn:translate-x-1 transition-transform" />
           </button>
           
-          <div v-if="availableGroups.length === 0" class="text-center p-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-            <p class="text-xs text-gray-500">Tidak ada kelompok sapi lain yang memiliki slot kosong.</p>
+          <div v-if="availableGroups.length === 0" class="text-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-200 dark:border-gray-700">
+            <p class="text-xs text-gray-500 dark:text-gray-400">Tidak ada kelompok sapi lain yang memiliki slot kosong.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="createModal.isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
-      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 animate-fade-in-down">
+    <!-- Create Group Modal -->
+    <div v-if="createModal.isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
+      <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="createModal.isOpen = false"></div>
+      
+      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl shadow-xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 animate-fade-in-up relative z-10">
         
-        <div class="p-6 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5">
+        <div class="p-6 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
           <div>
             <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
-              <Users class="w-5 h-5 text-emerald-500" /> Simulasi Grup Sapi
+              <Users class="w-5 h-5 text-secondary" /> Simulasi Grup Sapi
             </h3>
           </div>
-          <button @click="createModal.isOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors"><X class="w-5 h-5" /></button>
+          <button @click="createModal.isOpen = false" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"><X class="w-5 h-5" /></button>
         </div>
         
-        <div class="p-6 bg-gray-50/50 dark:bg-black/20 h-[400px] overflow-y-auto custom-scrollbar">
+        <div class="p-6 bg-white dark:bg-gray-900 h-[400px] overflow-y-auto custom-scrollbar">
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
             
-            <div v-for="group in sapiGroups" :key="group.id" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm transition-colors group">
+            <div v-for="group in sapiGroups" :key="group.id" class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm transition-colors group">
               <div class="flex justify-between items-start mb-2">
                 <span class="text-2xl group-hover:scale-110 transition-transform origin-left">🐄</span>
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded"
-                      :class="group.shohibuls.length >= 7 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'">
+                      :class="group.shohibuls.length >= 7 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'">
                   {{ group.shohibuls.length }}/7 Penuh
                 </span>
               </div>
               <h4 class="font-bold text-sm text-gray-800 dark:text-white">{{ group.name }}</h4>
             </div>
             
-            <button @click="submitCreateGroup" class="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-gray-500 hover:text-emerald-600 transition-all min-h-[100px]">
+            <button @click="submitCreateGroup" class="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-secondary hover:bg-yellow-50 dark:hover:bg-yellow-500/10 rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-gray-500 dark:text-gray-400 hover:text-secondary dark:hover:text-secondary transition-all min-h-[100px]">
               <Plus class="w-8 h-8" />
               <span class="text-xs font-bold">Buat Sapi Baru</span>
             </button>
@@ -277,10 +287,12 @@ const availableGroups = computed(() => {
 
 const openMoveModal = (member, currentGroup) => {
   moveModal.value = { isOpen: true, member, currentGroup }
+  document.body.style.overflow = 'hidden'
 }
 
 const closeMoveModal = () => {
   moveModal.value.isOpen = false
+  document.body.style.overflow = ''
 }
 
 const confirmMove = (targetGroup) => {
@@ -330,6 +342,13 @@ const deleteGroup = (group) => {
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 10px; }
 
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 @keyframes fade-in-down {
   0% { opacity: 0; transform: translateY(-10px); }
   100% { opacity: 1; transform: translateY(0); }

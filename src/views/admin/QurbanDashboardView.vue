@@ -1,17 +1,17 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 animate-fade-in pb-8">
+  <div class="space-y-6 sm:space-y-8 animate-fade-in">
     
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard Tabungan Qurban</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard Qurban</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Ringkasan performa finansial dan progres shohibul qurban tahun ini.
         </p>
       </div>
       
       <div class="flex items-center gap-3">
-        <span class="hidden sm:flex text-xs bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 py-2 rounded-lg font-bold items-center ring-1 ring-red-100 dark:ring-red-900/30">
+        <span class="hidden sm:flex text-xs bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 px-3 py-2 rounded-lg font-bold items-center ring-1 ring-red-500/20 shadow-sm">
           <Clock class="w-4 h-4 mr-1.5" /> Sisa {{ store.period.days_remaining }} Hari
         </span>
 
@@ -24,11 +24,11 @@
             <ChevronDown class="w-4 h-4 ml-1 text-gray-400" />
           </button>
           
-          <div v-if="showPeriodeDropdown" class="absolute right-0 mt-2 w-full bg-white border border-gray-100 rounded-lg shadow-lg z-20 py-1 overflow-hidden animate-fade-in-down max-h-60 overflow-y-auto custom-scrollbar">
-            <button @click="changePeriode(periodes[0])" class="w-full text-left px-4 py-2 text-sm bg-emerald-50 text-emerald-600 font-medium transition-colors">
+          <div v-if="showPeriodeDropdown" class="absolute right-0 mt-2 w-full bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-lg z-20 py-1 overflow-hidden animate-fade-in-down max-h-60 overflow-y-auto custom-scrollbar">
+            <button @click="changePeriode(periodes[0])" class="w-full text-left px-4 py-2 text-sm bg-secondary/10 text-secondary dark:bg-secondary/20 font-medium transition-colors">
               1447 H / 2026 M
             </button>
-            <button @click="changePeriode(periodes[1])" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+            <button @click="changePeriode(periodes[1])" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               1446 H / 2025 M (Arsip)
             </button>
           </div>
@@ -40,10 +40,13 @@
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       
-      <!-- Kartu Hijau -->
-      <div class="relative overflow-hidden bg-linear-to-br from-emerald-600 to-teal-800 rounded-2xl p-6 shadow-lg shadow-emerald-900/20 text-white group block hover:-translate-y-1 hover:shadow-emerald-900/30 transition-all duration-300 cursor-pointer">
+      <!-- Kartu Hijau (Total Dana) -->
+      <RouterLink to="/admin/qurban/setoran" class="relative overflow-hidden bg-linear-to-br from-emerald-600 to-teal-800 rounded-2xl p-6 shadow-lg shadow-emerald-900/20 text-white group block hover:-translate-y-1 hover:shadow-emerald-900/30 transition-all duration-300">
         <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform duration-500 pointer-events-none">
           <Wallet class="w-24 h-24" />
+        </div>
+        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+          <ArrowRight class="w-5 h-5 text-emerald-100" />
         </div>
         <div class="relative z-10 flex flex-col justify-between h-full">
           <div class="flex items-center justify-between mb-4">
@@ -59,100 +62,107 @@
             </p>
           </div>
         </div>
-      </div>
+      </RouterLink>
 
-      <!-- Kartu Putih 1 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md group block hover:-translate-y-1 hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 cursor-pointer relative overflow-hidden">
-        <div class="relative z-10 flex flex-col justify-between h-full">
-          <div class="flex items-center justify-between mb-4">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Shohibul</p>
-            <div class="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 transition-colors">
-              <Users class="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            </div>
-          </div>
-          <div>
-            <div v-if="isLoading" class="h-8 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/3 mb-2"></div>
-            <h3 v-else class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ store.summary.total_shohibul }}</h3>
-            
-            <div v-if="isLoading" class="h-5 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/2 mt-2"></div>
-            <p v-else class="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center gap-1 font-medium">
-              <ArrowUpRight class="w-4 h-4" /> Pencapaian {{ store.summary.percentage }}%
-            </p>
+      <!-- Kartu Putih 1 (Total Shohibul) -->
+      <RouterLink to="/admin/qurban/peserta" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
+        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+          <ArrowRight class="w-5 h-5 text-gray-400" />
+        </div>
+        <div class="flex items-center justify-between mb-4 relative z-10">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Shohibul</p>
+          <div class="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 transition-colors">
+            <Users class="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
-      </div>
+        <div class="relative z-10">
+          <div v-if="isLoading" class="h-8 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/3 mb-2"></div>
+          <h3 v-else class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ store.summary.total_shohibul }}</h3>
+          
+          <div v-if="isLoading" class="h-5 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/2 mt-2"></div>
+          <p v-else class="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center gap-1 font-medium">
+            <ArrowUpRight class="w-4 h-4" /> Pencapaian {{ store.summary.percentage }}%
+          </p>
+        </div>
+      </RouterLink>
 
-      <!-- Kartu Putih 2 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md group block hover:-translate-y-1 hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 cursor-pointer relative overflow-hidden">
-        <div class="relative z-10 flex flex-col justify-between h-full">
-          <div class="flex items-center justify-between mb-4">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Shohibul Lunas</p>
-            <div class="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg group-hover:bg-emerald-100 dark:group-hover:bg-emerald-500/20 transition-colors">
-              <CheckCircle class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-            </div>
-          </div>
-          <div>
-            <div v-if="isLoading" class="h-8 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/3 mb-2"></div>
-            <h3 v-else class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ store.summary.count_lunas }}</h3>
-            
-            <div v-if="isLoading" class="h-5 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/2 mt-2"></div>
-            <p v-else class="text-sm text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-medium">
-              <TrendingUp class="w-4 h-4" /> Dari total target
-            </p>
+      <!-- Kartu Putih 2 (Lunas) -->
+      <RouterLink to="/admin/qurban/peserta" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
+        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+          <ArrowRight class="w-5 h-5 text-gray-400" />
+        </div>
+        <div class="flex items-center justify-between mb-4 relative z-10">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Shohibul Lunas</p>
+          <div class="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg group-hover:bg-emerald-100 dark:group-hover:bg-emerald-500/20 transition-colors">
+            <CheckCircle class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
           </div>
         </div>
-      </div>
+        <div class="relative z-10">
+          <div v-if="isLoading" class="h-8 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/3 mb-2"></div>
+          <h3 v-else class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ store.summary.count_lunas }}</h3>
+          
+          <div v-if="isLoading" class="h-5 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/2 mt-2"></div>
+          <p v-else class="text-sm text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-medium">
+            <TrendingUp class="w-4 h-4" /> Dari total target
+          </p>
+        </div>
+      </RouterLink>
 
-      <!-- Kartu Putih 3 -->
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md group block hover:-translate-y-1 hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 cursor-pointer relative overflow-hidden">
-        <div class="relative z-10 flex flex-col justify-between h-full">
-          <div class="flex items-center justify-between mb-4">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Belum Lunas</p>
-            <div class="p-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg group-hover:bg-rose-100 dark:group-hover:bg-rose-500/20 transition-colors">
-              <AlertCircle class="w-5 h-5 text-rose-600 dark:text-rose-400" />
-            </div>
-          </div>
-          <div>
-            <div v-if="isLoading" class="h-8 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/3 mb-2"></div>
-            <h3 v-else class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ store.summary.count_belum_lunas }}</h3>
-            
-            <div v-if="isLoading" class="h-5 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/2 mt-2"></div>
-            <p v-else class="text-sm text-rose-600 dark:text-rose-400 mt-2 flex items-center gap-1 font-medium">
-              <TrendingDown class="w-4 h-4" /> Butuh follow-up
-            </p>
+      <!-- Kartu Putih 3 (Belum Lunas) -->
+      <RouterLink to="/admin/qurban/peserta" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl p-6 shadow-md flex flex-col justify-between hover:shadow-lg hover:ring-gray-400 dark:hover:ring-white/20 transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
+        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+          <ArrowRight class="w-5 h-5 text-gray-400" />
+        </div>
+        <div class="flex items-center justify-between mb-4 relative z-10">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Belum Lunas</p>
+          <div class="p-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg group-hover:bg-rose-100 dark:group-hover:bg-rose-500/20 transition-colors">
+            <AlertCircle class="w-5 h-5 text-rose-600 dark:text-rose-400" />
           </div>
         </div>
-      </div>
+        <div class="relative z-10">
+          <div v-if="isLoading" class="h-8 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/3 mb-2"></div>
+          <h3 v-else class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ store.summary.count_belum_lunas }}</h3>
+          
+          <div v-if="isLoading" class="h-5 bg-gray-200 dark:bg-gray-700 animate-pulse rounded w-1/2 mt-2"></div>
+          <p v-else class="text-sm text-rose-600 dark:text-rose-400 mt-2 flex items-center gap-1 font-medium">
+            <TrendingDown class="w-4 h-4" /> Butuh follow-up
+          </p>
+        </div>
+      </RouterLink>
 
     </div>
 
     <!-- Widgets Bawah -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- Tabel Transaksi Terbaru -->
+      <!-- List Transaksi Terbaru (Redesigned like Keuangan) -->
       <div class="lg:col-span-2 bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md flex flex-col">
         <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
           <div>
             <div class="flex items-center gap-3">
-              <h2 class="text-base font-semibold text-gray-900 dark:text-white">Transaksi Terbaru</h2>
-              <span v-if="!isLoading && store.pending_transactions > 0" class="px-2 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 text-[10px] font-bold rounded">
+              <h2 class="text-base font-semibold text-gray-900 dark:text-white">Setoran Terbaru</h2>
+              <span v-if="!isLoading && store.pending_transactions > 0" class="px-2 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[10px] font-bold rounded ring-1 ring-amber-500/20">
                 {{ store.pending_transactions }} Pending
               </span>
             </div>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Daftar setoran masuk terbaru dari jamaah.</p>
           </div>
-          <!-- Arahkan Link Lihat Semua ke /admin/qurban/setoran -->
-          <RouterLink to="/admin/qurban/setoran" class="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 transition-colors">
+          <RouterLink to="/admin/qurban/setoran" class="text-xs font-medium text-secondary hover:text-yellow-600 transition-colors">
             Lihat Semua
           </RouterLink>
         </div>
         
-        <div class="p-2 flex-1 overflow-x-auto">
+        <div class="p-2 flex-1">
           <div v-if="isLoading" class="p-4 space-y-4">
             <div v-for="i in 3" :key="i" class="flex justify-between items-center animate-pulse">
-              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-              <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-8"></div>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                <div>
+                  <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-1"></div>
+                  <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                </div>
+              </div>
+              <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
             </div>
           </div>
 
@@ -161,61 +171,47 @@
             <p class="text-sm font-medium">Belum ada transaksi.</p>
           </div>
 
-          <table v-else class="w-full text-left border-collapse">
-            <thead>
-              <tr class="text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-white/5">
-                <th class="pb-3 font-semibold px-4 pt-2">ID / Shohibul</th>
-                <th class="pb-3 font-semibold px-4 pt-2">Tipe Hewan</th>
-                <th class="pb-3 font-semibold px-4 pt-2 text-right">Nominal</th>
-                <th class="pb-3 font-semibold px-4 pt-2 text-center">Waktu Setor</th>
-                <th class="pb-3 font-semibold px-4 pt-2 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody class="text-sm divide-y divide-gray-100 dark:divide-white/5">
-              <tr v-for="tx in store.recent_transactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
-                <td class="p-4">
-                  <span class="font-bold text-gray-900 dark:text-white block">{{ tx.shohibul?.name || 'Hamba Allah' }}</span>
-                  <span class="text-xs text-gray-400 font-mono">{{ formatDate(tx.created_at) }} • {{ tx.method || 'Transfer' }}</span>
-                </td>
-                <td class="p-4 text-center">
-                  <span class="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded capitalize"
-                    :class="tx.shohibul?.target_type === 'sapi' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'">
-                    {{ tx.shohibul?.target_type }}
-                  </span>
-                </td>
-                <td class="p-4 font-bold text-gray-900 dark:text-white text-right">{{ formatRupiah(tx.amount) }}</td>
-                <td class="p-4 text-center">
-                  <span v-if="tx.status === 'success'" class="inline-block bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-semibold text-[10px] uppercase">
-                    Sukses
-                  </span>
-                  <span v-else-if="tx.status === 'pending'" class="inline-block bg-amber-50 text-amber-600 px-2 py-1 rounded font-semibold text-[10px] uppercase">
-                    Pending
-                  </span>
-                  <span v-else class="inline-block bg-red-50 text-red-600 px-2 py-1 rounded font-semibold text-[10px] uppercase">
-                    Batal
-                  </span>
-                </td>
-                <td class="p-4 text-center">
-                  <button @click="verifyClick(tx.id)" class="inline-flex p-2 bg-gray-50 dark:bg-white/5 hover:bg-emerald-500 hover:text-white text-gray-400 rounded-lg transition-all border border-gray-200 dark:border-white/10 active:scale-90" title="Verifikasi / Detail">
-                    <Pencil class="w-4 h-4" />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <ul v-else class="divide-y divide-gray-100 dark:divide-white/5">
+            <li v-for="tx in store.recent_transactions" :key="tx.id" class="p-4 hover:bg-gray-50 dark:hover:bg-white/[0.02] rounded-xl transition-colors flex items-center justify-between group">
+              <div class="flex items-center gap-3">
+                <div :class="[
+                  'w-10 h-10 rounded-full flex items-center justify-center shrink-0 ring-1',
+                  tx.shohibul?.target_type === 'sapi' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 ring-blue-500/20' : 'bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 ring-purple-500/20'
+                ]">
+                  {{ tx.shohibul?.target_type === 'sapi' ? '🐄' : '🐐' }}
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ tx.shohibul?.name || 'Hamba Allah' }}</p>
+                    <span v-if="tx.status === 'success'" class="px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400">Sukses</span>
+                    <span v-else-if="tx.status === 'pending'" class="px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400">Pending</span>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ formatDate(tx.created_at) }} • {{ tx.method || 'Transfer' }}</p>
+                </div>
+              </div>
+              <div class="text-right flex items-center gap-3">
+                <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                  + Rp {{ formatRupiahSimple(tx.amount) }}
+                </p>
+                <button @click="verifyClick(tx.id)" class="p-1.5 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors opacity-0 group-hover:opacity-100" title="Verifikasi / Detail">
+                  <Pencil class="w-4 h-4" />
+                </button>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
 
       <!-- Widget Rekap Target Hewan -->
       <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-2xl shadow-md flex flex-col">
         <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
-          <h2 class="text-base font-semibold text-gray-900 dark:text-white">Rekap Target Hewan</h2>
-          <button @click="isSimulasiOpen = true" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1">
-            <Plus class="w-3 h-3" /> Buat Grup
+          <h2 class="text-base font-semibold text-gray-900 dark:text-white">Target Hewan</h2>
+          <button @click="isSimulasiOpen = true" class="p-2 bg-secondary hover:bg-yellow-500 text-white rounded-lg transition-colors shadow-sm" title="Simulasi Grup Sapi">
+            <Layers class="w-4 h-4" />
           </button>
         </div>
 
-        <div class="p-6 space-y-4">
+        <div class="p-6 space-y-4 flex-1 flex flex-col">
           <div v-if="isLoading" class="space-y-4">
             <div class="h-16 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-xl"></div>
             <div class="h-16 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-xl"></div>
@@ -224,10 +220,10 @@
           <template v-else>
             <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5">
               <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 flex items-center justify-center text-lg">🐄</div>
+                <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center text-lg">🐄</div>
                 <div>
-                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Target Sapi</span>
-                  <span class="block text-xs text-gray-500 mt-0.5">{{ store.animals.sapi_groups }} Grup Penuh</span>
+                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Sapi (Kolektif)</span>
+                  <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ store.animals.sapi_groups }} Grup Penuh</span>
                 </div>
               </div>
               <div class="text-right">
@@ -237,10 +233,10 @@
 
             <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5">
               <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 flex items-center justify-center text-lg">🐐</div>
+                <div class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-200 dark:ring-white/10 flex items-center justify-center text-lg">🐐</div>
                 <div>
-                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Target Kambing</span>
-                  <span class="block text-xs text-gray-500 mt-0.5">Mandiri</span>
+                  <span class="block text-sm font-bold text-gray-900 dark:text-white">Kambing (Mandiri)</span>
+                  <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ store.animals.kambing_shohibul }} Shohibul</span>
                 </div>
               </div>
               <div class="text-right">
@@ -248,20 +244,20 @@
               </div>
             </div>
             
-            <div class="pt-4 mt-2 border-t border-gray-200 dark:border-white/10">
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Master Harga Periode Ini</p>
+            <div class="mt-auto pt-4 border-t border-gray-200 dark:border-white/10">
+              <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Harga Periode Ini</p>
               <div class="space-y-2">
                 <div class="flex justify-between text-xs">
-                  <span class="text-gray-500">Sapi (Utuh)</span>
-                  <span class="font-bold text-gray-700 dark:text-gray-300">{{ formatRupiah(store.settings?.hargaSapi || 0) }}</span>
+                  <span class="text-gray-500 dark:text-gray-400">Sapi (Utuh)</span>
+                  <span class="font-bold text-gray-700 dark:text-gray-300">Rp {{ formatRupiahSimple(store.settings?.hargaSapi || 0) }}</span>
                 </div>
                 <div class="flex justify-between text-xs">
-                  <span class="text-gray-500">Sapi (Per Slot)</span>
-                  <span class="font-bold text-gray-700 dark:text-gray-300">{{ formatRupiah(store.settings?.hargaSlotSapi || 0) }}</span>
+                  <span class="text-gray-500 dark:text-gray-400">Sapi (Per Slot)</span>
+                  <span class="font-bold text-gray-700 dark:text-gray-300">Rp {{ formatRupiahSimple(store.settings?.hargaSlotSapi || 0) }}</span>
                 </div>
                 <div class="flex justify-between text-xs">
-                  <span class="text-gray-500">Kambing</span>
-                  <span class="font-bold text-gray-700 dark:text-gray-300">{{ formatRupiah(store.settings?.hargaKambing || 0) }}</span>
+                  <span class="text-gray-500 dark:text-gray-400">Kambing</span>
+                  <span class="font-bold text-gray-700 dark:text-gray-300">Rp {{ formatRupiahSimple(store.settings?.hargaKambing || 0) }}</span>
                 </div>
               </div>
             </div>
@@ -272,33 +268,42 @@
     </div>
   </div>
 
-  <!-- MODAL SIMULASI SAPI (DIBUNGKUS TELEPORT) -->
+  <!-- MODAL SIMULASI SAPI (Redesigned matching Keuangan modal standard) -->
   <Teleport to="body">
-    <div v-if="isSimulasiOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
-      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 animate-fade-in-down">
-        <div class="p-6 border-b border-gray-200 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-white/5">
-          <div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <Users class="w-5 h-5 text-emerald-500" /> Simulasi Grup Sapi
-            </h3>
-          </div>
-          <button @click="isSimulasiOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors"><X class="w-5 h-5" /></button>
+    <div v-if="isSimulasiOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
+      <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="isSimulasiOpen = false"></div>
+      
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <Layers class="w-5 h-5 text-secondary" /> Simulasi Grup Sapi
+          </h3>
+          <button @click="isSimulasiOpen = false" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+            <X class="w-5 h-5" />
+          </button>
         </div>
-        <div class="p-6 bg-gray-50/50 dark:bg-black/20 h-[400px] overflow-y-auto custom-scrollbar">
+        
+        <div class="p-6 bg-gray-50/50 dark:bg-gray-900/50 max-h-[70vh] overflow-y-auto custom-scrollbar">
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div v-for="n in store.animals.sapi_groups || 3" :key="n" class="bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700 rounded-xl p-4 shadow-sm hover:ring-emerald-500 transition-colors cursor-pointer group">
-              <div class="flex justify-between items-start mb-2">
-                <span class="text-2xl group-hover:scale-110 transition-transform origin-left">🐄</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">7/7 Penuh</span>
+            <div v-for="n in store.animals.sapi_groups || 3" :key="n" class="bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-white/10 rounded-xl p-4 shadow-sm hover:shadow-md hover:ring-secondary/50 dark:hover:ring-secondary/50 transition-all cursor-pointer group relative">
+              <div class="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
+                Penuh
               </div>
-              <h4 class="font-bold text-sm text-gray-900 dark:text-white">Kelompok Sapi {{ n }}</h4>
+              <div class="flex flex-col items-center justify-center text-center mt-2">
+                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🐄</span>
+                <h4 class="font-bold text-sm text-gray-900 dark:text-white">Grup Sapi {{ n }}</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">7/7 Shohibul</p>
+              </div>
             </div>
             
-            <button class="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-gray-500 hover:text-emerald-600 transition-all min-h-[100px]">
+            <button class="bg-white dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-secondary dark:hover:border-secondary hover:bg-yellow-50 dark:hover:bg-yellow-500/10 rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-gray-500 dark:text-gray-400 hover:text-secondary dark:hover:text-secondary transition-all min-h-[140px]">
               <Plus class="w-8 h-8" />
-              <span class="text-xs font-bold">Buat Sapi Baru</span>
+              <span class="text-sm font-bold">Buat Grup Baru</span>
             </button>
           </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
+          <button @click="isSimulasiOpen = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Tutup</button>
         </div>
       </div>
     </div>
@@ -309,7 +314,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { 
   Wallet, CheckCircle, TrendingUp, TrendingDown, Users, PieChart, 
-  AlertCircle, Calendar, Clock, ChevronDown, Plus, Pencil, ArrowUpRight, X,
+  AlertCircle, Calendar, Clock, ChevronDown, Plus, Pencil, ArrowUpRight, X, ArrowRight, Layers
 } from 'lucide-vue-next'
 
 const isLoading = ref(true)
@@ -328,6 +333,10 @@ const formatRupiah = (value) => {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
 }
 
+const formatRupiahSimple = (val) => {
+  return val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0"
+}
+
 const formatDate = (dateString) => {
   const date = new Date(dateString)
   return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
@@ -341,10 +350,9 @@ const changePeriode = (per) => {
 }
 
 const verifyClick = (id) => {
-  alert(`Memverifikasi transaksi ${id}... (Memicu logika verifikasi backend)`)
+  alert(`Memverifikasi transaksi ${id}...`)
 }
 
-// STRUKTUR DATA SINKRON DENGAN BACKEND
 const store = ref({
   period: { id: null, name: '', deadline_date: '', days_remaining: 0 },
   summary: { total_shohibul: 0, total_collected: 0, total_target: 0, count_lunas: 0, count_belum_lunas: 0, percentage: 0 },
@@ -396,6 +404,13 @@ onMounted(() => {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 10px; }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); }
 
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 @keyframes fade-in-down {
   0% { opacity: 0; transform: translateY(-10px); }
   100% { opacity: 1; transform: translateY(0); }
