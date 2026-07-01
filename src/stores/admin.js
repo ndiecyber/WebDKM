@@ -15,8 +15,16 @@ export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: getStorage('admin_auth') === 'true',
     currentUser: parseSafe('admin_current_user') || { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin' },
-    roles: parseSafe('admin_roles') || [],
-    users: parseSafe('admin_users') || [],
+    roles: parseSafe('admin_roles') || [
+      { id: 1, key: 'superadmin', name: 'Super Admin', hierarchy: 1, modules: ['web', 'keuangan', 'qurban', 'sistem'] },
+      { id: 2, key: 'bendahara', name: 'Bendahara', hierarchy: 2, modules: ['keuangan'] },
+      { id: 3, key: 'sekretaris', name: 'Sekretaris', hierarchy: 3, modules: ['web'] }
+    ],
+    users: parseSafe('admin_users') || [
+      { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin', password: 'admin123' },
+      { id: 2, username: 'bendahara', name: 'Bendahara', role: 'bendahara', password: 'password123' },
+      { id: 3, username: 'sekretaris', name: 'Sekretaris', role: 'sekretaris', password: 'password123' }
+    ],
     auditLogs: parseSafe('admin_audit_logs') || [],
     committee: parseSafe('admin_committee_v3') || { dewanPenasihat: [], pengurusHarian: [], divisi: [] },
     kegiatan: parseSafe('admin_kegiatan_v13') || [],
