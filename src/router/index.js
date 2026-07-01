@@ -32,6 +32,11 @@ const routes = [
         component: () => import('@/views/admin/KeuanganDashboardView.vue')
       },
       {
+        path: 'keuangan-program',
+        name: 'admin-keuangan-program',
+        component: () => import('@/views/admin/KeuanganProgramView.vue')
+      },
+      {
         path: 'keuangan-transaksi',
         name: 'admin-keuangan-transaksi',
         component: () => import('@/views/admin/KeuanganTransaksiView.vue')

@@ -9,12 +9,6 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <!-- View Toggle (Gabung/Terpisah) -->
-        <div class="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex items-center text-sm font-medium shadow-inner">
-          <button @click="viewMode = 'gabung'" :class="['px-3 py-1.5 rounded-md transition-all', viewMode === 'gabung' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300']">Gabung</button>
-          <button @click="viewMode = 'terpisah'" :class="['px-3 py-1.5 rounded-md transition-all', viewMode === 'terpisah' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300']">Terpisah</button>
-        </div>
-        
         <button @click="openCatatModal" class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-medium px-4 py-2 rounded-lg transition-colors shadow-md text-sm flex items-center gap-2">
           <Plus class="w-4 h-4" />
           <span class="hidden sm:inline">Catat Transaksi</span>
@@ -34,51 +28,91 @@
           class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
         />
       </div>
-      <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
+      
+      <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto hide-scrollbar py-0.5">
         <template v-if="viewMode === 'gabung'">
-          <button @click="setFilter('semua')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'semua' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-white/5' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400']">
+          <button @click="setFilter('semua')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'semua' ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/10' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 border border-transparent']">
             Semua
           </button>
-          <button @click="setFilter('in')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'in' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-500/20' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400']">
+          <button @click="setFilter('in')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'in' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 border border-transparent']">
             Pemasukan
           </button>
-          <button @click="setFilter('out')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'out' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 ring-1 ring-rose-500/20' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400']">
+          <button @click="setFilter('out')" :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap', activeFilter === 'out' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/30' : 'hover:bg-gray-50 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 border border-transparent']">
             Pengeluaran
           </button>
           <div class="w-px h-6 bg-gray-200 dark:bg-white/10 mx-2 hidden md:block"></div>
         </template>
         
-        <button @click="showFilterModal = true" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300 whitespace-nowrap flex items-center gap-2 ring-1 ring-gray-300 dark:ring-white/10 bg-white dark:bg-gray-800 shadow-sm">
+        <button @click="viewMode = viewMode === 'gabung' ? 'terpisah' : 'gabung'" class="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 shadow-sm" :title="viewMode === 'gabung' ? 'Ubah ke Tampilan Terpisah' : 'Ubah ke Tampilan Gabung'">
+          <Layers v-if="viewMode === 'gabung'" class="w-5 h-5" />
+          <Table v-else class="w-5 h-5" />
+        </button>
+
+        <button @click="showFilterModal = true" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300 whitespace-nowrap flex items-center gap-2 border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 shadow-sm">
           <Filter class="w-4 h-4" />
           Filter Lanjutan
         </button>
       </div>
     </div>
 
-    <!-- Summary Cards (Visible in both views) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-emerald-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
-        <div>
-          <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Total Pemasukan</p>
-          <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp 16.950.000</p>
+    <!-- Global Program Filter & Summary Dashboard -->
+    <div class="bg-white dark:bg-gray-900 rounded-2xl ring-1 ring-gray-200 dark:ring-white/10 shadow-sm p-5 md:p-6 relative overflow-hidden z-0">
+        <!-- Header & Filter -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10 mb-6">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <div class="p-1.5 bg-gray-50 dark:bg-gray-800 rounded-lg ring-1 ring-gray-200 dark:ring-white/10">
+                <PieChart class="w-4 h-4 text-secondary" />
+              </div>
+              Ringkasan Saldo Terkini
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Data: <span class="font-semibold text-secondary">{{ getActiveFilterName }}</span>
+            </p>
+          </div>
+          
+          <div class="relative w-full md:w-72 shadow-sm rounded-xl">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+              <Filter class="w-4 h-4 text-gray-400" />
+            </div>
+            <select v-model="activeProgramFilter" class="w-full appearance-none bg-none bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl pl-10 pr-10 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all cursor-pointer hover:border-gray-300 dark:hover:border-gray-700 relative z-0" style="background-image: none;">
+              <option value="all">Semua Data (Global)</option>
+              <option value="general">Hanya Kas Umum</option>
+              <optgroup label="Berdasarkan Program Khusus">
+                <option v-for="p in keuanganStore.programs" :key="p.id" :value="p.id">{{ p.name }}</option>
+              </optgroup>
+            </select>
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none z-10">
+              <ChevronDown class="w-4 h-4 text-gray-500" />
+            </div>
+          </div>
         </div>
-        <div class="p-2.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg"><ArrowDownLeft class="w-5 h-5 text-emerald-600 dark:text-emerald-400" /></div>
-      </div>
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-rose-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
-        <div>
-          <p class="text-sm font-medium text-rose-600 dark:text-rose-400">Total Pengeluaran</p>
-          <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp 4.600.000</p>
+
+        <!-- Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+          <div class="bg-white dark:bg-gray-900 ring-1 ring-emerald-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+            <div>
+              <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Total Pemasukan</p>
+              <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp {{ formatCurrency(summaryPemasukan) }}</p>
+            </div>
+            <div class="p-2.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg ring-1 ring-emerald-500/20 shadow-sm"><ArrowDownLeft class="w-5 h-5 text-emerald-600 dark:text-emerald-400" /></div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 ring-1 ring-rose-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+            <div>
+              <p class="text-sm font-medium text-rose-600 dark:text-rose-400">Total Pengeluaran</p>
+              <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp {{ formatCurrency(summaryPengeluaran) }}</p>
+            </div>
+            <div class="p-2.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg ring-1 ring-rose-500/20 shadow-sm"><ArrowUpRight class="w-5 h-5 text-rose-600 dark:text-rose-400" /></div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 ring-1 ring-blue-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+            <div>
+              <p class="text-sm font-medium text-blue-600 dark:text-blue-400">Saldo Akhir</p>
+              <p class="text-xs text-blue-500/80 dark:text-blue-400/80 mt-0.5">Pemasukan - Pengeluaran</p>
+              <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp {{ formatCurrency(summarySaldo) }}</p>
+            </div>
+            <div class="p-2.5 bg-blue-100 dark:bg-blue-500/20 rounded-lg ring-1 ring-blue-500/30 shadow-sm"><Scale class="w-5 h-5 text-blue-600 dark:text-blue-400" /></div>
+          </div>
         </div>
-        <div class="p-2.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg"><ArrowUpRight class="w-5 h-5 text-rose-600 dark:text-rose-400" /></div>
-      </div>
-      <div class="bg-white dark:bg-gray-900 ring-1 ring-blue-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
-        <div>
-          <p class="text-sm font-medium text-blue-600 dark:text-blue-400">Saldo Akhir</p>
-          <p class="text-xs text-blue-500/80 dark:text-blue-400/80 mt-0.5">Pemasukan - Pengeluaran</p>
-          <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp 12.350.000</p>
-        </div>
-        <div class="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg"><Scale class="w-5 h-5 text-blue-600 dark:text-blue-400" /></div>
-      </div>
     </div>
 
     <!-- View: Gabung -->
@@ -115,6 +149,9 @@
               </td>
               <td class="px-6 py-2.5 whitespace-nowrap">
                 <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
+                <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">
+                  {{ getProgramName(tx.program_id) }}
+                </span>
               </td>
               <td class="px-6 py-2.5 whitespace-nowrap">
                 <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 ring-1 ring-gray-300 dark:ring-white/10">
@@ -134,7 +171,7 @@
                   'font-semibold',
                   tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : (tx.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400')
                 ]">
-                  {{ tx.type === 'in' ? '+' : '-' }} Rp {{ tx.amount }}
+                  {{ tx.type === 'in' ? '+' : '-' }} Rp {{ formatCurrency(tx.amount) }}
                 </span>
               </td>
               <td class="px-6 py-2.5 whitespace-nowrap text-right">
@@ -204,6 +241,9 @@
                 </td>
                 <td class="px-6 py-2.5 whitespace-nowrap">
                   <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
+                  <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">
+                    {{ getProgramName(tx.program_id) }}
+                  </span>
                 </td>
                 <td class="px-6 py-2.5 whitespace-nowrap">
                   <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span>
@@ -217,7 +257,7 @@
                   </span>
                 </td>
                 <td :class="['px-6 py-2.5 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-emerald-600 dark:text-emerald-400']">
-                  + Rp {{ tx.amount }}
+                  + Rp {{ formatCurrency(tx.amount) }}
                 </td>
                 <td class="px-6 py-2.5 whitespace-nowrap text-right">
                   <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
@@ -283,6 +323,9 @@
                 </td>
                 <td class="px-6 py-2.5 whitespace-nowrap">
                   <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
+                  <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">
+                    {{ getProgramName(tx.program_id) }}
+                  </span>
                 </td>
                 <td class="px-6 py-2.5 whitespace-nowrap">
                   <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span>
@@ -296,7 +339,7 @@
                   </span>
                 </td>
                 <td :class="['px-6 py-2.5 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-rose-600 dark:text-rose-400']">
-                  - Rp {{ tx.amount }}
+                  - Rp {{ formatCurrency(tx.amount) }}
                 </td>
                 <td class="px-6 py-2.5 whitespace-nowrap text-right">
                   <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
@@ -392,6 +435,23 @@
             </div>
           </div>
 
+          <!-- Program Opsional -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-2">
+              Alokasi Kegiatan / Program (Opsional)
+              <span class="group relative cursor-help">
+                <HelpCircle class="w-3.5 h-3.5 text-gray-400" />
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-gray-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-20 text-center">
+                  Kosongkan jika dana masuk ke/berasal dari Kas Umum.
+                </div>
+              </span>
+            </label>
+            <select v-model="catatForm.program_id" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <option :value="null">-- Tidak ada (Kas Umum) --</option>
+              <option v-for="p in activePrograms" :key="p.id" :value="p.id">{{ p.name }}</option>
+            </select>
+          </div>
+
           <!-- Deskripsi -->
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi / Keterangan</label>
@@ -416,7 +476,7 @@
         
         <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
           <button @click="showCatatModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
-          <button @click="showCatatModal = false" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors">{{ isEditMode ? 'Simpan Perubahan' : 'Simpan Transaksi' }}</button>
+          <button @click="saveTransaction" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors">{{ isEditMode ? 'Simpan Perubahan' : 'Simpan Transaksi' }}</button>
         </div>
       </div>
     </div>
@@ -499,7 +559,20 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale } from 'lucide-vue-next'
+import { useRoute } from 'vue-router'
+import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale, HelpCircle, PieChart, ChevronDown, Wallet, Layers, Table } from 'lucide-vue-next'
+import { useKeuanganStore } from '@/stores/keuangan'
+import { useToastStore } from '@/stores/toast'
+import { useDialogStore } from '@/stores/dialog'
+
+const keuanganStore = useKeuanganStore()
+const toast = useToastStore()
+const dialog = useDialogStore()
+const route = useRoute()
+
+const activePrograms = computed(() => keuanganStore.programs.filter(p => p.status === 'Aktif'))
+const getProgramName = (id) => keuanganStore.programs.find(p => p.id === id)?.name || ''
+
 
 const viewMode = ref('terpisah') // Default terpisah sesuai permintaan
 const showCatatModal = ref(false)
@@ -524,6 +597,9 @@ const handleKeydown = (e) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
+  if (route.query.program_id) {
+    activeProgramFilter.value = parseInt(route.query.program_id)
+  }
 })
 
 onUnmounted(() => {
@@ -542,39 +618,54 @@ const catatForm = ref({
   date: '',
   account: '',
   category: '',
-  description: ''
+  description: '',
+  program_id: null
 })
 
-const transactions = [
-  { id: 1, date: '12 Okt 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '3.450.000' },
-  { id: 2, date: '10 Okt 2023', description: 'Pembayaran Listrik & Air PLN/PDAM', category: 'Operasional', account: 'BSI Masjid', type: 'out', status: 'approved', amount: '1.250.000' },
-  { id: 3, date: '08 Okt 2023', description: 'Donasi Hamba Allah (Transfer)', category: 'Donasi Umum', account: 'BSI Masjid', type: 'in', status: 'pending', amount: '5.000.000' },
-  { id: 4, date: '05 Okt 2023', description: 'Honor Penceramah Kajian', category: 'Dakwah & Kajian', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '500.000' },
-  { id: 5, date: '01 Okt 2023', description: 'Pembelian Alat Kebersihan', category: 'Pemeliharaan', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '350.000' },
-  { id: 6, date: '28 Sep 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.200.000' },
-  { id: 7, date: '25 Sep 2023', description: 'Pembelian Sound System Baru', category: 'Inventaris', account: 'BSI Masjid', type: 'out', status: 'pending', amount: '2.500.000' },
-  { id: 8, date: '21 Sep 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.300.000' },
-  { id: 9, date: '15 Sep 2023', description: 'Santunan Anak Yatim', category: 'Sosial', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '1.000.000' },
-  { id: 10, date: '12 Sep 2023', description: 'Sumbangan Hamba Allah (Tunai)', category: 'Donasi Umum', account: 'Kas Tunai', type: 'in', status: 'approved', amount: '1.500.000' },
-  { id: 11, date: '10 Sep 2023', description: 'Konsumsi Rapat Pengurus', category: 'Operasional', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '250.000' },
-  { id: 12, date: '08 Sep 2023', description: 'Pemasangan Spanduk Kajian', category: 'Publikasi', account: 'Kas Tunai', type: 'out', status: 'pending', amount: '150.000' },
-  { id: 13, date: '05 Sep 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '3.800.000' },
-  { id: 14, date: '01 Sep 2023', description: 'Sumbangan untuk Marbot', category: 'Insentif', account: 'BSI Masjid', type: 'out', status: 'approved', amount: '1.200.000' },
-  { id: 15, date: '28 Agu 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.100.000' },
-  { id: 16, date: '25 Agu 2023', description: 'Pengecatan Ulang Dinding Masjid', category: 'Pemeliharaan', account: 'BSI Masjid', type: 'out', status: 'pending', amount: '3.500.000' },
-  { id: 17, date: '21 Agu 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '3.900.000' },
-  { id: 18, date: '18 Agu 2023', description: 'Pembayaran Wi-Fi Masjid', category: 'Operasional', account: 'BSI Masjid', type: 'out', status: 'approved', amount: '350.000' },
-  { id: 19, date: '15 Agu 2023', description: 'Bantuan Fakir Miskin', category: 'Sosial', account: 'Kas Tunai', type: 'out', status: 'approved', amount: '2.000.000' },
-  { id: 20, date: '14 Agu 2023', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'Kotak Amal Utama', type: 'in', status: 'approved', amount: '4.000.000' },
-]
+const activeProgramFilter = ref('all')
+const searchQuery = ref('')
+
+const formatCurrency = (val) => {
+  return val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0"
+}
+
+const getActiveFilterName = computed(() => {
+  if (activeProgramFilter.value === 'all') return 'Semua Data (Global)'
+  if (activeProgramFilter.value === 'general') return 'Hanya Kas Umum'
+  const p = keuanganStore.programs.find(p => p.id === activeProgramFilter.value)
+  return p ? p.name : ''
+})
+
+const transactions = computed(() => {
+  let result = [...keuanganStore.transactions].sort((a, b) => b.id - a.id)
+  if (activeProgramFilter.value !== 'all') {
+    if (activeProgramFilter.value === 'general') {
+      result = result.filter(t => !t.program_id)
+    } else {
+      result = result.filter(t => t.program_id === activeProgramFilter.value)
+    }
+  }
+  return result
+})
 
 const filteredTransactions = computed(() => {
-  if (activeFilter.value === 'semua') return transactions;
-  return transactions.filter(t => t.type === activeFilter.value);
+  let result = transactions.value;
+  if (activeFilter.value !== 'semua') {
+    result = result.filter(t => t.type === activeFilter.value);
+  }
+  return result;
 })
 
-const pemasukanTransactions = computed(() => transactions.filter(t => t.type === 'in'))
-const pengeluaranTransactions = computed(() => transactions.filter(t => t.type === 'out'))
+const pemasukanTransactions = computed(() => transactions.value.filter(t => t.type === 'in'))
+const pengeluaranTransactions = computed(() => transactions.value.filter(t => t.type === 'out'))
+
+const summaryPemasukan = computed(() => {
+  return transactions.value.filter(t => t.type === 'in' && t.status === 'approved').reduce((sum, t) => sum + t.amount, 0)
+})
+const summaryPengeluaran = computed(() => {
+  return transactions.value.filter(t => t.type === 'out' && t.status === 'approved').reduce((sum, t) => sum + t.amount, 0)
+})
+const summarySaldo = computed(() => summaryPemasukan.value - summaryPengeluaran.value)
 
 const totalPages = computed(() => Math.ceil(filteredTransactions.value.length / 10))
 const totalPagesPemasukan = computed(() => Math.ceil(pemasukanTransactions.value.length / 5))
@@ -604,10 +695,11 @@ const openCatatModal = () => {
     tipe: 'in',
     status: 'approved',
     amount: '',
-    date: '',
-    account: '',
-    category: '',
-    description: ''
+    date: new Date().toISOString().split('T')[0],
+    account: keuanganStore.accounts[0].name,
+    category: 'Infaq Mingguan',
+    description: '',
+    program_id: null
   };
   showCatatModal.value = true;
 }
@@ -615,15 +707,60 @@ const openCatatModal = () => {
 const openEditModal = (tx) => {
   isEditMode.value = true;
   catatForm.value = {
+    id: tx.id,
     tipe: tx.type,
     status: tx.status || 'approved',
-    amount: tx.amount.replace(/\./g, ''), // Strip dots for input
-    date: tx.date, // In a real app, parse this properly to YYYY-MM-DD
+    amount: tx.amount,
+    date: tx.date,
     account: tx.account,
     category: tx.category,
-    description: tx.description
+    description: tx.description,
+    program_id: tx.program_id || null
   };
   showCatatModal.value = true;
+}
+
+const saveTransaction = async () => {
+  // Validasi Program Balance
+  if (catatForm.value.tipe === 'out' && catatForm.value.program_id) {
+    const progBal = keuanganStore.programBalances[catatForm.value.program_id] || { total: 0 }
+    let currentBal = progBal.total
+    
+    // If editing, add back the old amount before checking
+    if (isEditMode.value) {
+      const oldTx = keuanganStore.transactions.find(t => t.id === catatForm.value.id)
+      if (oldTx && oldTx.type === 'out' && oldTx.program_id === catatForm.value.program_id) {
+        currentBal += oldTx.amount
+      }
+    }
+    
+    if (catatForm.value.amount > currentBal) {
+      const program = activePrograms.value.find(p => p.id === catatForm.value.program_id)
+      const confirmed = await dialog.open({
+        title: 'Peringatan Saldo',
+        message: `Saldo Program ${program?.name || ''} tidak mencukupi!\nSisa saldo: Rp ${currentBal}\n\nApakah Anda yakin ingin menutupi kekurangan ini menggunakan dana Kas Umum?`,
+        type: 'confirm'
+      })
+      if (!confirmed) {
+        return
+      }
+    }
+  }
+
+  const txData = {
+    ...catatForm.value,
+    type: catatForm.value.tipe,
+  }
+
+  if (isEditMode.value) {
+    keuanganStore.updateTransaction(txData.id, txData)
+    toast.showToast('Transaksi berhasil diubah', 'success')
+  } else {
+    keuanganStore.addTransaction(txData)
+    toast.showToast('Transaksi berhasil ditambahkan', 'success')
+  }
+  
+  showCatatModal.value = false
 }
 </script>
 

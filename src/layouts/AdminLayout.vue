@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950 flex text-gray-600 dark:text-gray-300 font-sans relative selection:bg-secondary/30 selection:text-secondary transition-colors duration-300">
     <ToastContainer />
+    <ConfirmDialog />
     
     <div 
       v-if="isMobileMenuOpen" 
@@ -159,6 +160,15 @@
             >
               <ArrowLeftRight class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Transaksi</span>
+            </router-link>
+            <router-link 
+              :to="{ name: 'admin-keuangan-program' }"
+              :title="isSidebarCollapsed ? 'Program & Kegiatan' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-keuangan-program' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <ClipboardList class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Program & Kegiatan</span>
             </router-link>
             <router-link 
               :to="{ name: 'admin-keuangan-bank-kas' }"
@@ -369,9 +379,10 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminStore } from '../stores/admin'
 import ToastContainer from '../components/ui/ToastContainer.vue'
+import ConfirmDialog from '../components/ui/ConfirmDialog.vue'
 // Menggabungkan ikon dari kedua sisi (termasuk fitur Qurban & fitur Log Aktivitas/Admin)
 import { 
-  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon, ShieldCheck, Activity, AlertTriangle, Target, Users, History
+  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon, ShieldCheck, Activity, AlertTriangle, Target, Users, History, ClipboardList
 } from 'lucide-vue-next'
 import logoLight from '@/assets/images/logo-kustom.webp'
 import logoDark from '@/assets/images/logo-kustom2.webp'
@@ -473,6 +484,7 @@ const pageTitle = computed(() => {
   if (route.name === 'admin-keuangan-bank-kas') return 'Bank & Kas'
   if (route.name === 'admin-keuangan-laporan') return 'Laporan Keuangan'
   if (route.name === 'admin-keuangan-pengaturan') return 'Pengaturan Keuangan'
+  if (route.name === 'admin-keuangan-program') return 'Program & Kegiatan'
 
   // Title Qurban DKM
   if (route.name === 'admin-qurban-dashboard') return 'Dashboard Tabungan Qurban'
