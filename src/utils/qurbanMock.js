@@ -114,7 +114,7 @@ export function generateQurbanData() {
           payment_number: null,
           total_payment: amount,
           created_at: randomDate(new Date('2026-01-01'), new Date('2026-06-30')),
-          shohibul: { id: shohibul.id, name: shohibul.name, target_type: shohibul.target_type }
+          shohibul: { id: shohibul.id, name: shohibul.name, target_type: shohibul.target_type, phone: shohibul.phone, address: shohibul.address }
         };
         transactions.push(tx);
         shohibul.transactions.push(tx);
@@ -136,7 +136,7 @@ export function generateQurbanData() {
         payment_number: null,
         total_payment: targetAmount,
         created_at: randomDate(new Date('2026-06-01'), new Date('2026-06-30')),
-        shohibul: { id: shohibul.id, name: shohibul.name, target_type: shohibul.target_type }
+        shohibul: { id: shohibul.id, name: shohibul.name, target_type: shohibul.target_type, phone: shohibul.phone, address: shohibul.address }
       };
       transactions.push(tx);
       shohibul.transactions.push(tx);
@@ -156,7 +156,7 @@ export function generateQurbanData() {
       payment_number: null,
       total_payment: s.target_amount,
       created_at: randomDate(new Date('2026-01-01'), new Date('2026-05-31')),
-      shohibul: { id: s.id, name: s.name, target_type: s.target_type }
+      shohibul: { id: s.id, name: s.name, target_type: s.target_type, phone: s.phone, address: s.address }
     });
   }
 
