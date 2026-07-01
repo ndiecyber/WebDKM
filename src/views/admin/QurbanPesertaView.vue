@@ -463,10 +463,10 @@ const isStatusFilterOpen = ref(false)
 const advancedFilters = ref({ status: 'all' })
 
 const statusFilters = [
-  { label: 'Semua Status', value: 'all', icon: '' },
-  { label: 'Lunas', value: 'lunas', icon: '✓' },
-  { label: 'Proses', value: 'proses', icon: '⏳' },
-  { label: 'Pending', value: 'pending', icon: '⚠️' }
+  { label: 'Semua Status', value: 'all', },
+  { label: 'Lunas', value: 'lunas', },
+  { label: 'Proses', value: 'proses', },
+  { label: 'Pending', value: 'pending', }
 ]
 
 const selectedStatusFilter = computed(() => statusFilters.find(f => f.value === advancedFilters.value.status) || statusFilters[0])

@@ -475,9 +475,9 @@ const sapiStatusFilter = ref('all')
 const isSapiStatusFilterOpen = ref(false)
 
 const sapiStatusFilters = [
-  { label: 'Semua Status', value: 'all', icon: '' },
-  { label: 'Lunas', value: 'lunas', icon: '✓' },
-  { label: 'Proses', value: 'proses', icon: '⏳' }
+  { label: 'Semua Status', value: 'all', },
+  { label: 'Lunas', value: 'lunas', },
+  { label: 'Proses', value: 'proses', }
 ]
 
 const selectedSapiStatusFilter = computed(() => sapiStatusFilters.find(f => f.value === sapiStatusFilter.value) || sapiStatusFilters[0])
@@ -513,9 +513,9 @@ const kambingStatusFilter = ref('all')
 const isKambingStatusFilterOpen = ref(false)
 
 const kambingStatusFilters = [
-  { label: 'Semua Status', value: 'all', icon: '' },
-  { label: 'Lunas', value: 'lunas', icon: '✓' },
-  { label: 'Proses', value: 'proses', icon: '⏳' }
+  { label: 'Semua Status', value: 'all', },
+  { label: 'Lunas', value: 'lunas', },
+  { label: 'Proses', value: 'proses', }
 ]
 
 const selectedKambingStatusFilter = computed(() => kambingStatusFilters.find(f => f.value === kambingStatusFilter.value) || kambingStatusFilters[0])
