@@ -79,6 +79,11 @@ const routes = [
         component: () => import('@/views/admin/QurbanSetoranView.vue')
       },
       {
+        path: 'qurban/periode',
+        name: 'admin-qurban-periode',
+        component: () => import('@/views/admin/QurbanPeriodeView.vue')
+      },
+      {
         path: 'qurban/pengaturan',
         name: 'admin-qurban-pengaturan',
         component: () => import('@/views/admin/QurbanPengaturanView.vue')

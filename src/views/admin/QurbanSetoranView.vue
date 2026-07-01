@@ -7,11 +7,21 @@
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Riwayat Setoran</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola dan verifikasi semua transaksi pembayaran jamaah.</p>
       </div>
-      <div class="flex gap-3 w-full sm:w-auto shrink-0">
-        <button @click="openCashDepositModal" class="flex-1 sm:flex-none bg-secondary hover:bg-yellow-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-md shadow-secondary/20 transition-all text-sm flex items-center justify-center gap-2">
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0 items-center">
+        <QurbanPeriodSelector />
+        <button v-if="!qurbanStore.isArchiveMode" @click="openCashDepositModal" class="flex-1 sm:flex-none bg-secondary hover:bg-yellow-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-md shadow-secondary/20 transition-all text-sm flex items-center justify-center gap-2">
           <Plus class="w-4 h-4" />
           <span>Input Setoran</span>
         </button>
+      </div>
+    </div>
+
+    <!-- Archive Banner -->
+    <div v-if="qurbanStore.isArchiveMode" class="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+      <AlertTriangle class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+      <div>
+        <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-400">Mode Arsip (Read-Only)</h4>
+        <p class="text-xs text-amber-700 dark:text-amber-500 mt-1">Anda sedang melihat data setoran untuk periode yang sudah berakhir. Penambahan atau verifikasi transaksi tidak dapat dilakukan dalam mode ini.</p>
       </div>
     </div>
 
@@ -192,7 +202,8 @@
               <td class="px-4 py-3 whitespace-nowrap text-right">
                 <div class="flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                   <button @click="openReceipt(tx)" class="text-gray-400 hover:text-secondary bg-gray-50 dark:bg-gray-800 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 p-2 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Detail & Verifikasi">
-                    <Pencil class="w-4 h-4" />
+                    <Pencil v-if="!qurbanStore.isArchiveMode && tx.status === 'pending'" class="w-4 h-4" />
+                    <Eye v-else class="w-4 h-4" />
                   </button>
                 </div>
               </td>
@@ -264,7 +275,7 @@
           </div>
 
           <div class="p-5 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-            <template v-if="selectedTx.status === 'pending'">
+            <template v-if="selectedTx.status === 'pending' && !qurbanStore.isArchiveMode">
               <div class="mb-4 p-3 bg-amber-50 dark:bg-amber-500/10 rounded-lg flex gap-3 text-amber-700 dark:text-amber-400 text-xs leading-relaxed text-left">
                 <AlertTriangle class="w-5 h-5 shrink-0" />
                 <p><strong>Peringatan!</strong> Pastikan dana sudah benar-benar masuk ke rekening DKM sebelum Anda menekan tombol Terima & Lunas.</p>
@@ -404,11 +415,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { History, Search, CheckCircle, Clock, Banknote, XCircle, Pencil, ArrowRight, Filter, ChevronDown, Check, Phone, MapPin, AlertTriangle, Plus, Landmark, QrCode, X } from 'lucide-vue-next'
+import { ref, computed, onMounted, watch } from 'vue'
+import { History, Search, CheckCircle, Clock, Banknote, XCircle, Pencil, ArrowRight, Filter, ChevronDown, Check, Phone, MapPin, AlertTriangle, Plus, Landmark, QrCode, X, Eye } from 'lucide-vue-next'
 import { qurbanMockData } from '@/utils/qurbanMock'
+import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
+import { useQurbanStore } from '@/stores/qurban'
 
-const isLoading = ref(true)
+const qurbanStore = useQurbanStore()
+const localLoading = ref(true)
+const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 const searchQuery = ref('')
 const isFilterOpen = ref(false)
 const statusFilter = ref('all') 
@@ -466,8 +481,13 @@ onMounted(() => {
     paginatedData.value.data = qurbanMockData.transactions;
     paginatedData.value.total = qurbanMockData.transactions.length;
     paginatedData.value.to = qurbanMockData.transactions.length;
-    isLoading.value = false
+    localLoading.value = false
   }, 1000)
+})
+
+watch(() => qurbanStore.selectedPeriodId, () => {
+  // Simulate fetching data for the new period
+  paginatedData.value.data = qurbanMockData.transactions.slice().sort(() => Math.random() - 0.5)
 })
 
 const filteredTransactions = computed(() => {

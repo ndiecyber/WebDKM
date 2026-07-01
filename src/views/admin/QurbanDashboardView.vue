@@ -15,25 +15,8 @@
           <Clock class="w-4 h-4 mr-1.5" /> Sisa {{ store.period.days_remaining }} Hari
         </span>
 
-        <div class="relative">
-          <button @click="showPeriodeDropdown = !showPeriodeDropdown" :disabled="isLoading" class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-300 dark:ring-white/10 shadow-md text-sm flex items-center gap-2 min-w-[180px] justify-between disabled:opacity-50">
-            <div class="flex items-center gap-2">
-              <Calendar class="w-4 h-4 text-gray-400" />
-              <span>{{ selectedPeriodeLabel }}</span>
-            </div>
-            <ChevronDown class="w-4 h-4 ml-1 text-gray-400" />
-          </button>
+        <QurbanPeriodSelector />
           
-          <div v-if="showPeriodeDropdown" class="absolute right-0 mt-2 w-full bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-lg z-20 py-1 overflow-hidden animate-fade-in-down max-h-60 overflow-y-auto custom-scrollbar">
-            <button @click="changePeriode(periodes[0])" class="w-full text-left px-4 py-2 text-sm bg-secondary/10 text-secondary dark:bg-secondary/20 font-medium transition-colors">
-              1447 H / 2026 M
-            </button>
-            <button @click="changePeriode(periodes[1])" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              1446 H / 2025 M (Arsip)
-            </button>
-          </div>
-          <div v-if="showPeriodeDropdown" @click="showPeriodeDropdown = false" class="fixed inset-0 z-10"></div>
-        </div>
       </div>
     </div>
 
@@ -258,20 +241,16 @@
 import { ref, computed, onMounted } from 'vue'
 import { 
   Wallet, CheckCircle, TrendingUp, TrendingDown, Users, PieChart, 
-  AlertCircle, Calendar, Clock, ChevronDown, ArrowUpRight
+  AlertCircle, Calendar, Clock, ArrowUpRight
 } from 'lucide-vue-next'
 import { qurbanMockData } from '@/utils/qurbanMock'
+import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
+import { useQurbanStore } from '@/stores/qurban'
 
-const isLoading = ref(true)
-const showPeriodeDropdown = ref(false)
+const qurbanStore = useQurbanStore()
 
-const periodes = [
-  { id: '1447', label: 'Periode 1447 H / 2026 M' },
-  { id: '1446', label: 'Periode 1446 H / 2025 M (Arsip)' },
-  { id: '1445', label: 'Periode 1445 H / 2024 M (Arsip)' }
-]
-const selectedPeriode = ref(periodes[0])
-const selectedPeriodeLabel = computed(() => selectedPeriode.value.label)
+const localLoading = ref(true)
+const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 
 const formatRupiah = (value) => {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
@@ -286,12 +265,7 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
 }
 
-const changePeriode = (per) => {
-  selectedPeriode.value = per
-  showPeriodeDropdown.value = false
-  isLoading.value = true
-  setTimeout(() => { isLoading.value = false }, 800)
-}
+
 
 const store = ref({
   period: { id: null, name: '', deadline_date: '', days_remaining: 0 },
@@ -319,7 +293,7 @@ onMounted(() => {
       recent_transactions: qurbanMockData.transactions.slice(0, 5),
       settings: qurbanMockData.settings
     }
-    isLoading.value = false
+    localLoading.value = false
   }, 1200)
 })
 </script>

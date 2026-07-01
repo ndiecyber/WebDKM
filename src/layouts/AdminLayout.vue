@@ -259,6 +259,15 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Riwayat Setoran</span>
             </router-link>
             <router-link 
+              :to="{ name: 'admin-qurban-periode' }"
+              :title="isSidebarCollapsed ? 'Manajemen Periode' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-qurban-periode' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <Calendar class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Manajemen Periode</span>
+            </router-link>
+            <router-link 
               :to="{ name: 'admin-qurban-pengaturan' }"
               :title="isSidebarCollapsed ? 'Pengaturan' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -485,6 +494,7 @@ const pageTitle = computed(() => {
   if (route.name === 'admin-qurban-target') return 'Manajemen Target Hewan'
   if (route.name === 'admin-qurban-peserta') return 'Data Shohibul Qurban'
   if (route.name === 'admin-qurban-setoran') return 'Riwayat Setoran'
+  if (route.name === 'admin-qurban-periode') return 'Manajemen Periode Qurban'
   if (route.name === 'admin-qurban-pengaturan') return 'Pengaturan Qurban'
 
   return 'Admin Panel'

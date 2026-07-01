@@ -7,10 +7,22 @@
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Data Shohibul Qurban</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola data pendaftar shohibul qurban tahun ini.</p>
       </div>
-      <button @click="openAddModal" class="px-5 py-2.5 bg-secondary hover:bg-yellow-500 text-white text-sm font-bold rounded-xl shadow-md shadow-secondary/20 transition-all flex items-center gap-2">
-        <Plus class="w-4 h-4" />
-        <span>Tambah Shohibul</span>
-      </button>
+      <div class="flex items-center gap-3">
+        <QurbanPeriodSelector />
+        <button v-if="!qurbanStore.isArchiveMode" @click="openAddModal" class="px-5 py-2.5 bg-secondary hover:bg-yellow-500 text-white text-sm font-bold rounded-xl shadow-md shadow-secondary/20 transition-all flex items-center gap-2">
+          <Plus class="w-4 h-4" />
+          <span class="hidden sm:inline">Tambah Shohibul</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Archive Banner -->
+    <div v-if="qurbanStore.isArchiveMode" class="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+      <AlertTriangle class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+      <div>
+        <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-400">Mode Arsip (Read-Only)</h4>
+        <p class="text-xs text-amber-700 dark:text-amber-500 mt-1">Anda sedang melihat data peserta untuk periode yang sudah berakhir. Penambahan, perubahan, atau penghapusan data tidak dapat dilakukan dalam mode ini.</p>
+      </div>
     </div>
 
     <!-- Search & Filter Bar -->
@@ -176,10 +188,10 @@
                   <button @click="openDetails(peserta)" class="text-gray-400 hover:text-secondary bg-gray-50 dark:bg-gray-800 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Lihat Detail">
                     <Eye class="w-3.5 h-3.5" />
                   </button>
-                  <button @click="openEditModal(peserta)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Peserta">
+                  <button v-if="!qurbanStore.isArchiveMode" @click="openEditModal(peserta)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Peserta">
                     <Edit2 class="w-3.5 h-3.5" />
                   </button>
-                  <button @click="confirmDelete(peserta)" class="text-gray-400 hover:text-red-500 bg-gray-50 dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Hapus Peserta">
+                  <button v-if="!qurbanStore.isArchiveMode" @click="confirmDelete(peserta)" class="text-gray-400 hover:text-red-500 bg-gray-50 dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Hapus Peserta">
                     <Trash2 class="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -339,7 +351,7 @@
           
         </div>
 
-        <div class="p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900">
+        <div v-if="!qurbanStore.isArchiveMode" class="p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900">
           <button @click="goToSetoran" class="w-full py-3.5 bg-secondary hover:bg-secondary/90 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path><line x1="12" y1="9" x2="12" y2="15"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>
             Tambah Setoran
@@ -447,12 +459,16 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter, ChevronDown, Check, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter, ChevronDown, Check, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-vue-next'
 import { qurbanMockData } from '@/utils/qurbanMock'
+import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
+import { useQurbanStore } from '@/stores/qurban'
 
 // STATE
 const router = useRouter()
-const isLoading = ref(true)
+const qurbanStore = useQurbanStore()
+const localLoading = ref(true)
+const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 const searchQuery = ref('')
 const activeFilter = ref('all')
 const modalType = ref(null) 
@@ -490,8 +506,13 @@ const mockPeserta = ref([])
 onMounted(() => {
   setTimeout(() => {
     mockPeserta.value = qurbanMockData.shohibuls;
-    isLoading.value = false
+    localLoading.value = false
   }, 1000)
+})
+
+watch(() => qurbanStore.selectedPeriodId, () => {
+  // Simulate fetching data for the new period
+  mockPeserta.value = qurbanMockData.shohibuls.slice().sort(() => Math.random() - 0.5)
 })
 
 // COMPUTED FILTERS

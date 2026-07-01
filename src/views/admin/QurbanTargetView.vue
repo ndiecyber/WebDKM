@@ -9,6 +9,18 @@
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Atur pembagian kelompok shohibul sapi dan pantau daftar jamaah mandiri kambing.</p>
       </div>
+      <div class="flex items-center gap-3">
+        <QurbanPeriodSelector />
+      </div>
+    </div>
+
+    <!-- Archive Banner -->
+    <div v-if="qurbanStore.isArchiveMode" class="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-4 flex items-start gap-3 shadow-sm mt-0">
+      <AlertTriangle class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+      <div>
+        <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-400">Mode Arsip (Read-Only)</h4>
+        <p class="text-xs text-amber-700 dark:text-amber-500 mt-1">Anda sedang melihat data target hewan untuk periode yang sudah berakhir. Penambahan sapi atau pemindahan jamaah tidak dapat dilakukan.</p>
+      </div>
     </div>
 
     <!-- Skeletons -->
@@ -43,8 +55,7 @@
             <div v-if="activeTab === 'kambing'" class="absolute bottom-0 left-0 right-0 h-0.5 bg-secondary rounded-t-full"></div>
           </button>
         </div>
-        
-        <button v-if="activeTab === 'sapi'" @click="openCreateGroupModal" class="bg-secondary hover:bg-yellow-500 text-white font-bold px-4 py-2 rounded-xl shadow-md shadow-secondary/20 transition-all text-sm flex items-center justify-center gap-2 mb-2">
+        <button v-if="activeTab === 'sapi' && !qurbanStore.isArchiveMode" @click="openCreateGroupModal" class="bg-secondary hover:bg-yellow-500 text-white font-bold px-4 py-2 rounded-xl shadow-md shadow-secondary/20 transition-all text-sm flex items-center justify-center gap-2 mb-2">
           <Plus class="w-4 h-4" />
           <span class="hidden sm:inline">Tambah Sapi</span>
         </button>
@@ -140,16 +151,18 @@
                         :class="getGroupTotal(group) >= getGroupTargetTotal(group) ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'">
                     {{ getGroupTotal(group) >= getGroupTargetTotal(group) ? 'Lunas' : 'Proses' }}
                   </span>
-                  <button v-if="group.shohibuls.length === 0" @click="deleteGroup(group)" class="text-xs text-red-500 hover:underline">Hapus</button>
+                  <button v-if="group.shohibuls.length === 0 && !qurbanStore.isArchiveMode" @click="deleteGroup(group)" class="text-xs text-red-500 hover:underline">Hapus</button>
                 </div>
               </div>
 
               <div class="space-y-1.5">
-                <button 
+                <component 
+                  :is="qurbanStore.isArchiveMode ? 'div' : 'button'"
                   v-for="(member, idx) in group.shohibuls" 
                   :key="member.id"
-                  @click="openMoveModal(member, group)"
-                  class="w-full text-left flex justify-between items-center bg-gray-50/50 dark:bg-white/[0.02] py-2.5 px-3 rounded-lg border border-gray-100 dark:border-white/5 hover:border-secondary/50 hover:bg-yellow-50/30 dark:hover:bg-yellow-500/5 transition-colors group/item cursor-pointer"
+                  @click="!qurbanStore.isArchiveMode ? openMoveModal(member, group) : null"
+                  class="w-full text-left flex justify-between items-center bg-gray-50/50 dark:bg-white/[0.02] py-2.5 px-3 rounded-lg border border-gray-100 dark:border-white/5 group/item transition-colors"
+                  :class="!qurbanStore.isArchiveMode ? 'hover:border-secondary/50 hover:bg-yellow-50/30 dark:hover:bg-yellow-500/5 cursor-pointer' : ''"
                 >
                   <div class="flex items-center gap-3 min-w-0 pr-2">
                     <span class="text-xs font-bold text-gray-400 w-4 text-right">{{ idx + 1 }}.</span>
@@ -164,11 +177,11 @@
                           :class="member.collected_amount >= member.target_amount ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 border border-amber-200 dark:border-amber-500/20 dark:bg-amber-500/20'">
                       {{ member.collected_amount >= member.target_amount ? 'Lunas' : 'Proses' }}
                     </span>
-                    <div class="p-2 text-gray-400 group-hover/item:text-secondary group-hover/item:bg-white dark:group-hover/item:bg-gray-800 rounded-md transition-colors" title="Pindah Kelompok">
+                    <div v-if="!qurbanStore.isArchiveMode" class="p-2 text-gray-400 group-hover/item:text-secondary group-hover/item:bg-white dark:group-hover/item:bg-gray-800 rounded-md transition-colors" title="Pindah Kelompok">
                       <ArrowRightLeft class="w-4 h-4" />
                     </div>
                   </div>
-                </button>
+                </component>
 
                 <div 
                   v-for="i in Math.max(0, 7 - group.shohibuls.length)" 
@@ -412,9 +425,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Users, Plus, ArrowRightLeft, ArrowRight, X, Trash2, Search, Filter, ChevronDown, Check, MapPin } from 'lucide-vue-next'
+import { ref, computed, onMounted, watch } from 'vue'
+import { Users, Plus, ArrowRightLeft, ArrowRight, X, Trash2, Search, Filter, ChevronDown, Check, MapPin, AlertTriangle } from 'lucide-vue-next'
 import { qurbanMockData } from '@/utils/qurbanMock'
+import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
+import { useQurbanStore } from '@/stores/qurban'
+
+const qurbanStore = useQurbanStore()
+const localLoading = ref(true)
+const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 
 const formatRupiah = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
 const getPercentage = (peserta) => Math.min(Math.round((peserta.collected_amount / peserta.target_amount) * 100), 100)
@@ -423,7 +442,6 @@ const getInitials = (name) => {
   return split.length >= 2 ? (split[0][0] + split[1][0]).toUpperCase() : name.slice(0, 2).toUpperCase()
 }
 
-const isLoading = ref(true)
 const activeTab = ref('sapi')
 
 const totalSapiCount = computed(() => sapiGroups.value.length)
@@ -464,8 +482,13 @@ onMounted(() => {
     });
     
     mockGroups.value = simulatedGroups;
-    isLoading.value = false;
+    localLoading.value = false;
   }, 1000)
+})
+
+watch(() => qurbanStore.selectedPeriodId, () => {
+  // Simulate fetching data for the new period
+  mockGroups.value = mockGroups.value.slice().sort(() => Math.random() - 0.5)
 })
 
 const sapiGroups = computed(() => mockGroups.value.filter(g => g.target_type === 'sapi'))
