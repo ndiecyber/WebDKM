@@ -314,6 +314,18 @@ export const useAdminStore = defineStore('admin', {
         const res = await api.get('/web-profile/settings');
         const data = res.data.data || res.data;
         
+        let parsedHeroImages = [];
+        if (Array.isArray(data.hero_images)) {
+          parsedHeroImages = data.hero_images;
+        } else if (typeof data.hero_images === 'string' && data.hero_images.trim() !== '') {
+          try {
+            parsedHeroImages = JSON.parse(data.hero_images);
+            if (!Array.isArray(parsedHeroImages)) parsedHeroImages = [];
+          } catch (e) {
+            parsedHeroImages = [];
+          }
+        }
+        
         // Map backend snake_case to frontend camelCase
         this.generalSettings = {
           name: data.nama_masjid || '',
@@ -324,7 +336,7 @@ export const useAdminStore = defineStore('admin', {
           floatingCardDesc: data.floating_card_desc || '',
           tahunBerdiri: data.tahun_berdiri || 2015,
           jamaahAktif: data.jamaah_aktif || 200,
-          heroImages: data.hero_images || [],
+          heroImages: parsedHeroImages,
           historyImage: data.history_image || '',
           committeeDescription: data.committee_description || '',
           instagram: data.link_instagram || '',
@@ -389,6 +401,18 @@ export const useAdminStore = defineStore('admin', {
         const res = await api.get('/web-profile/cta');
         const data = res.data.data || res.data;
         
+        let parsedSliderImages = [];
+        if (Array.isArray(data.slider_images)) {
+          parsedSliderImages = data.slider_images;
+        } else if (typeof data.slider_images === 'string' && data.slider_images.trim() !== '') {
+          try {
+            parsedSliderImages = JSON.parse(data.slider_images);
+            if (!Array.isArray(parsedSliderImages)) parsedSliderImages = [];
+          } catch (e) {
+            parsedSliderImages = [];
+          }
+        }
+        
         // Map backend to frontend
         this.ctaSettings = {
           title: data.title || '',
@@ -396,7 +420,7 @@ export const useAdminStore = defineStore('admin', {
           quote: data.quote || '',
           quoteSource: data.quote_source || '',
           totalDonors: data.total_donors || 0,
-          sliderImages: data.slider_images || [],
+          sliderImages: parsedSliderImages,
           programs: data.programs || []
         };
       } catch (err) {
@@ -483,13 +507,11 @@ export const useAdminStore = defineStore('admin', {
         const res = await api.get('/web-profile/committee');
         const data = res.data.data || res.data;
         
-        const defaultAvatar = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394A3B8" style="background:%23F1F5F9"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
-
         const mapMember = (m) => ({
           id: m.id,
           name: m.name,
           role: m.role,
-          image: m.image ? m.image : defaultAvatar,
+          image: m.image || null,
           isLeader: m.is_leader !== undefined ? Boolean(m.is_leader) : Boolean(m.isLeader || false)
         });
 

@@ -837,11 +837,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check, Mail, Facebook, Youtube, Twitter, Trash2 } from 'lucide-vue-next'
-import { useAdminStore } from '../../stores/admin'
-import { useToastStore } from '../../stores/toast'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useAdminStore } from '@/stores/admin'
+import { useToastStore } from '@/stores/toast'
+import api from '@/utils/api'
 import { useDialogStore } from '../../stores/dialog'
+import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check, Mail, Facebook, Youtube, Twitter, Trash2 } from 'lucide-vue-next'
 import { validateFileSize } from '@/utils/fileValidator'
 
 const toastStore = useToastStore()
@@ -1058,7 +1059,7 @@ async function addDivisi() {
   
   if (name) {
     committee.value.divisi.push({
-      id: name.toLowerCase().replace(/\s+/g, '-'),
+      id: Date.now(),
       name: name,
       members: []
     })
@@ -1076,18 +1077,33 @@ async function removeDivisi(index) {
   }
 }
 
-function handlePhotoUpload(event, member) {
+async function handlePhotoUpload(event, member) {
   const file = event.target.files[0]
   if (!file) return
   if (!validateFileSize(file)) {
     event.target.value = ''
     return
   }
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    member.image = e.target.result
+  
+  // Show local preview immediately for better UX
+  const previewUrl = URL.createObjectURL(file)
+  member.image = previewUrl
+
+  // Upload to backend
+  const formData = new FormData()
+  formData.append('image', file)
+  
+  try {
+    const res = await api.post('/web-profile/committee/upload-photo', formData)
+    if (res.data && res.data.data && res.data.data.image_path) {
+      member.image = res.data.data.image_path
+      URL.revokeObjectURL(previewUrl)
+    }
+  } catch (error) {
+    toastStore.addToast('Gagal mengunggah foto pengurus', 'error')
+    member.image = null // Revert on failure
+    URL.revokeObjectURL(previewUrl)
   }
-  reader.readAsDataURL(file)
 }
 
 async function saveSettings() {
