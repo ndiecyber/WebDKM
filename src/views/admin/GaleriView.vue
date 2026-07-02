@@ -184,6 +184,7 @@ import { Plus, Edit2, Trash2, X, Image, UploadCloud } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
 import { useDialogStore } from '../../stores/dialog'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
@@ -239,6 +240,7 @@ function handleDrop(e) {
   isDragging.value = false
   const file = e.dataTransfer?.files[0]
   if (file && file.type.startsWith('image/')) {
+    if (!validateFileSize(file)) return
     form.value.image = URL.createObjectURL(file)
   } else {
     toastStore.addToast('Format file tidak didukung', 'error')
@@ -248,6 +250,10 @@ function handleDrop(e) {
 function handleFileSelect(e) {
   const file = e.target.files[0]
   if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
     form.value.image = URL.createObjectURL(file)
   }
 }

@@ -364,6 +364,7 @@ import { Plus, Edit2, Trash2, X, Briefcase, Users, User, BookOpen, GraduationCap
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
 import { useDialogStore } from '../../stores/dialog'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
@@ -430,27 +431,51 @@ const isDraggingBg = ref(false)
 function handleBgDrop(e) {
   isDraggingBg.value = false
   const file = e.dataTransfer?.files[0]
-  if (file && file.type.startsWith('image/')) form.value.bgImage = URL.createObjectURL(file)
+  if (file && file.type.startsWith('image/')) {
+    if (!validateFileSize(file)) return
+    form.value.bgImage = URL.createObjectURL(file)
+  }
 }
 function handleBgSelect(e) {
   const file = e.target.files[0]
-  if (file) form.value.bgImage = URL.createObjectURL(file)
+  if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
+    form.value.bgImage = URL.createObjectURL(file)
+  }
 }
 
 const isDraggingContact = ref(false)
 function handleContactDrop(e) {
   isDraggingContact.value = false
   const file = e.dataTransfer?.files[0]
-  if (file && file.type.startsWith('image/')) form.value.details.supervisorImage = URL.createObjectURL(file)
+  if (file && file.type.startsWith('image/')) {
+    if (!validateFileSize(file)) return
+    form.value.details.supervisorImage = URL.createObjectURL(file)
+  }
 }
 function handleContactSelect(e) {
   const file = e.target.files[0]
-  if (file) form.value.details.supervisorImage = URL.createObjectURL(file)
+  if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
+    form.value.details.supervisorImage = URL.createObjectURL(file)
+  }
 }
 
 function handleStaffSelect(e, index) {
   const file = e.target.files[0]
-  if (file) form.value.details.staff[index].image = URL.createObjectURL(file)
+  if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
+    form.value.details.staff[index].image = URL.createObjectURL(file)
+  }
 }
 
 // Staff Management

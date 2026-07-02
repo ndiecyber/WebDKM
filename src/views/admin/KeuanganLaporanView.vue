@@ -166,6 +166,7 @@ import { Download, Monitor, FileText, Info, Loader2 } from 'lucide-vue-next'
 import ReportKegiatanTemplate from '@/components/ui/ReportKegiatanTemplate.vue'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useDialogStore } from '@/stores/dialog'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const keuanganStore = useKeuanganStore()
 const dialog = useDialogStore()
@@ -291,6 +292,10 @@ const customQRUrl = ref(null)
 const handleQRUpload = (e) => {
   const file = e.target.files[0]
   if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = '' // reset input
+      return
+    }
     if (customQRUrl.value) URL.revokeObjectURL(customQRUrl.value)
     customQRUrl.value = URL.createObjectURL(file)
   }

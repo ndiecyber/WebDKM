@@ -8,6 +8,9 @@
 import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
+import api from '@/utils/api'
+import { useToastStore } from '@/stores/toast'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const props = defineProps({
   modelValue: {
@@ -63,22 +66,36 @@ onMounted(() => {
       setTimeout(() => { isUpdating = false }, 50)
     })
 
-    // Tangani custom image handler jika diperlukan agar gambar diubah menjadi base64 (Quill default memang base64)
+    // Custom image handler untuk upload gambar ke server, bukan base64
     quill.getModule('toolbar').addHandler('image', () => {
       const input = document.createElement('input')
       input.setAttribute('type', 'file')
       input.setAttribute('accept', 'image/*')
       input.click()
 
-      input.onchange = () => {
+      input.onchange = async () => {
         const file = input.files[0]
         if (file) {
-          const reader = new FileReader()
-          reader.onload = (e) => {
-            const range = quill.getSelection()
-            quill.insertEmbed(range.index, 'image', e.target.result)
+          if (!validateFileSize(file)) return // hentikan proses upload jika tidak valid
+
+          const formData = new FormData()
+          formData.append('image', file)
+
+          try {
+            const response = await api.post('/web-profile/events/upload-image', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            })
+            
+            const imageUrl = response.data?.data?.url
+            if (imageUrl) {
+              const range = quill.getSelection(true) || { index: quill.getLength() }
+              quill.insertEmbed(range.index, 'image', imageUrl)
+            }
+          } catch (error) {
+            console.error('Gagal mengupload gambar:', error)
           }
-          reader.readAsDataURL(file)
         }
       }
     })
@@ -90,8 +107,8 @@ onMounted(() => {
       'ql-underline': 'Underline',
       'ql-strike': 'Strike',
       'ql-header': 'Header Size',
-      'ql-list\\[value="ordered"\\]': 'Ordered List',
-      'ql-list\\[value="bullet"\\]': 'Bullet List',
+      'ql-list[value="ordered"]': 'Ordered List',
+      'ql-list[value="bullet"]': 'Bullet List',
       'ql-align': 'Alignment',
       'ql-blockquote': 'Blockquote',
       'ql-link': 'Insert Link',
@@ -104,7 +121,7 @@ onMounted(() => {
       if (editorContainer.value && editorContainer.value.parentElement) {
         Object.keys(tooltips).forEach(key => {
           const els = editorContainer.value.parentElement.querySelectorAll(`.${key}`);
-          els.forEach(el => el.setAttribute('title', tooltips[key.replace(/\\/g, '')]));
+          els.forEach(el => el.setAttribute('title', tooltips[key]));
         });
       }
     }, 100);

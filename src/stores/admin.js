@@ -15,19 +15,19 @@ export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: getStorage('admin_auth') === 'true',
     currentUser: parseSafe('admin_current_user') || { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin' },
-    roles: parseSafe('admin_roles') || [
+    roles: [
       { id: 1, key: 'superadmin', name: 'Super Admin', hierarchy: 1, modules: ['web', 'keuangan', 'qurban', 'sistem'] },
       { id: 2, key: 'bendahara', name: 'Bendahara', hierarchy: 2, modules: ['keuangan'] },
       { id: 3, key: 'sekretaris', name: 'Sekretaris', hierarchy: 3, modules: ['web'] }
     ],
-    users: parseSafe('admin_users') || [
+    users: [
       { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin', password: 'admin123' },
       { id: 2, username: 'bendahara', name: 'Bendahara', role: 'bendahara', password: 'password123' },
       { id: 3, username: 'sekretaris', name: 'Sekretaris', role: 'sekretaris', password: 'password123' }
     ],
     auditLogs: parseSafe('admin_audit_logs') || [],
-    committee: parseSafe('admin_committee_v3') || { dewanPenasihat: [], pengurusHarian: [], divisi: [] },
-    kegiatan: parseSafe('admin_kegiatan_v13') || [],
+    committee: { dewanPenasihat: [], pengurusHarian: [], divisi: [] },
+    kegiatan: [],
     finance: parseSafe('admin_finance') || {
       saldoAwal: '84,74',
       saldoAwalFull: '84.739.781',
@@ -42,9 +42,9 @@ export const useAdminStore = defineStore('admin', {
       periodeSingkat: '29 Mei - 2 Jun',
       selisihBersih: '7.000.000'
     },
-    gallery: parseSafe('admin_gallery_v5') || [],
-    layanan: parseSafe('admin_layanan_v12') || [],
-    generalSettings: parseSafe('admin_general_settings') || {
+    gallery: [],
+    layanan: [],
+    generalSettings: {
       name: '',
       slogan: '',
       description: '',
@@ -70,7 +70,7 @@ export const useAdminStore = defineStore('admin', {
       maps: '',
       mapsIframe: ''
     },
-    ctaSettings: parseSafe('admin_cta_settings_v2') || {
+    ctaSettings: {
       title: '',
       subtitle: '',
       quote: '',
@@ -79,7 +79,7 @@ export const useAdminStore = defineStore('admin', {
       programs: [],
       sliderImages: []
     },
-    masterData: parseSafe('admin_master_data_v2') || { kategori: [], tipeBerita: [], label: [], status: [] }
+    masterData: { kategori: [], tipeBerita: [], label: [], status: [] }
   }),
   getters: {
     currentRoleData: (state) => {
@@ -166,6 +166,7 @@ export const useAdminStore = defineStore('admin', {
         this.kegiatan = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch kegiatan:', err);
+        throw err;
       }
     },
     async addKegiatan(data) {
@@ -175,15 +176,22 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Tambah Kegiatan', 'Menambahkan kegiatan/acara baru');
       } catch (err) {
         console.error('Failed to add kegiatan:', err);
+        throw err;
       }
     },
     async updateKegiatan(id, updatedData) {
       try {
-        await api.put(`/web-profile/events/${id}`, updatedData);
+        if (updatedData instanceof FormData) {
+          updatedData.append('_method', 'PUT');
+          await api.post(`/web-profile/events/${id}`, updatedData);
+        } else {
+          await api.put(`/web-profile/events/${id}`, updatedData);
+        }
         await this.fetchKegiatan();
         this.logActivity('Ubah Kegiatan', 'Memperbarui data kegiatan/acara');
       } catch (err) {
         console.error('Failed to update kegiatan:', err);
+        throw err;
       }
     },
     async deleteKegiatan(id) {
@@ -193,6 +201,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Hapus Kegiatan', 'Menghapus data kegiatan/acara');
       } catch (err) {
         console.error('Failed to delete kegiatan:', err);
+        throw err;
       }
     },
     updateFinance(data) {
@@ -206,6 +215,7 @@ export const useAdminStore = defineStore('admin', {
         this.gallery = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch gallery:', err);
+        throw err;
       }
     },
     async addGallery(data) {
@@ -215,6 +225,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Tambah Galeri', 'Menambahkan foto galeri baru');
       } catch (err) {
         console.error('Failed to add gallery:', err);
+        throw err;
       }
     },
     async updateGallery(id, updatedData) {
@@ -224,6 +235,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto');
       } catch (err) {
         console.error('Failed to update gallery:', err);
+        throw err;
       }
     },
     async deleteGallery(id) {
@@ -233,6 +245,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Hapus Galeri', 'Menghapus foto galeri');
       } catch (err) {
         console.error('Failed to delete gallery:', err);
+        throw err;
       }
     },
     async fetchLayanan() {
@@ -242,6 +255,7 @@ export const useAdminStore = defineStore('admin', {
         this.layanan = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch layanan:', err);
+        throw err;
       }
     },
     async addLayanan(data) {
@@ -251,6 +265,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Tambah Layanan', 'Menambahkan layanan masjid baru');
       } catch (err) {
         console.error('Failed to add layanan:', err);
+        throw err;
       }
     },
     async updateLayanan(id, updatedData) {
@@ -260,6 +275,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid');
       } catch (err) {
         console.error('Failed to update layanan:', err);
+        throw err;
       }
     },
     async deleteLayanan(id) {
@@ -269,6 +285,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Hapus Layanan', 'Menghapus data layanan masjid');
       } catch (err) {
         console.error('Failed to delete layanan:', err);
+        throw err;
       }
     },
     async fetchGeneralSettings() {
@@ -305,6 +322,7 @@ export const useAdminStore = defineStore('admin', {
         };
       } catch (err) {
         console.error('Failed to fetch general settings:', err);
+        throw err;
       }
     },
     async saveGeneralSettings() {
@@ -342,6 +360,7 @@ export const useAdminStore = defineStore('admin', {
         await this.fetchGeneralSettings();
       } catch (err) {
         console.error('Failed to save general settings:', err);
+        throw err;
       }
     },
     async fetchCtaSettings() {
@@ -361,6 +380,7 @@ export const useAdminStore = defineStore('admin', {
         };
       } catch (err) {
         console.error('Failed to fetch CTA settings:', err);
+        throw err;
       }
     },
     async saveCtaSettings() {
@@ -385,6 +405,7 @@ export const useAdminStore = defineStore('admin', {
         await this.fetchCtaSettings();
       } catch (err) {
         console.error('Failed to save CTA settings:', err);
+        throw err;
       }
     },
     async fetchMasterData() {
@@ -408,6 +429,7 @@ export const useAdminStore = defineStore('admin', {
         };
       } catch (err) {
         console.error('Failed to fetch master data:', err);
+        throw err;
       }
     },
     async saveMasterData() {
@@ -432,6 +454,7 @@ export const useAdminStore = defineStore('admin', {
         await this.fetchMasterData();
       } catch (err) {
         console.error('Failed to save master data:', err);
+        throw err;
       }
     },
     async fetchCommittee() {
@@ -460,6 +483,7 @@ export const useAdminStore = defineStore('admin', {
         };
       } catch (err) {
         console.error('Failed to fetch committee:', err);
+        throw err;
       }
     },
     async saveCommittee() {
@@ -469,6 +493,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Ubah Pengurus', 'Memperbarui struktur pengurus DKM');
       } catch (err) {
         console.error('Failed to save committee:', err);
+        throw err;
       }
     },
     async fetchUsers() {
@@ -477,6 +502,7 @@ export const useAdminStore = defineStore('admin', {
         this.users = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch users:', err);
+        throw err;
       }
     },
     async addUser(userData) {
@@ -486,6 +512,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Tambah Pengguna', `Menambahkan admin baru: ${userData.username}`);
       } catch (err) {
         console.error('Failed to add user:', err);
+        throw err;
       }
     },
     async updateUser(id, userData) {
@@ -496,6 +523,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Ubah Pengguna', `Memperbarui data admin: ${user ? user.username : id}`);
       } catch (err) {
         console.error('Failed to update user:', err);
+        throw err;
       }
     },
     async deleteUser(id) {
@@ -506,6 +534,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Hapus Pengguna', `Menghapus admin: ${user ? user.username : id}`);
       } catch (err) {
         console.error('Failed to delete user:', err);
+        throw err;
       }
     },
     saveUsers() {
@@ -523,6 +552,7 @@ export const useAdminStore = defineStore('admin', {
         this.roles = res.data.data || res.data;
       } catch (err) {
         console.error('Failed to fetch roles:', err);
+        throw err;
       }
     },
     async moveRoleUp(id) {
@@ -531,6 +561,7 @@ export const useAdminStore = defineStore('admin', {
         await this.fetchRoles();
       } catch (err) {
         console.error('Failed to move role up:', err);
+        throw err;
       }
     },
     async moveRoleDown(id) {
@@ -539,6 +570,7 @@ export const useAdminStore = defineStore('admin', {
         await this.fetchRoles();
       } catch (err) {
         console.error('Failed to move role down:', err);
+        throw err;
       }
     },
     async addRole(roleData) {
@@ -548,6 +580,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Tambah Role', `Menambahkan peran baru: ${roleData.name}`);
       } catch (err) {
         console.error('Failed to add role:', err);
+        throw err;
       }
     },
     async updateRole(id, roleData) {
@@ -557,6 +590,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Ubah Role', `Memperbarui data peran: ${roleData.name}`);
       } catch (err) {
         console.error('Failed to update role:', err);
+        throw err;
       }
     },
     async deleteRole(id) {
@@ -566,6 +600,7 @@ export const useAdminStore = defineStore('admin', {
         this.logActivity('Hapus Role', `Menghapus peran id: ${id}`);
       } catch (err) {
         console.error('Failed to delete role:', err);
+        throw err;
       }
     },
     saveRoles() {

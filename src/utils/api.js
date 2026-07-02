@@ -1,9 +1,9 @@
 import axios from 'axios';
+import { useToastStore } from '@/stores/toast';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/v1',
+  baseURL: 'http://api.localhost:8000/v1',
   headers: {
-    'Content-Type': 'application/json',
     'Accept': 'application/json'
   }
 });
@@ -27,16 +27,33 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // Token expired or unauthorized
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('admin_auth');
-      localStorage.removeItem('admin_current_user');
-      // Redirect to login if not already there
-      if (window.location.pathname !== '/admin/login') {
-        window.location.href = '/admin/login';
+    let errorMessage = 'Terjadi kesalahan pada server';
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
+
+      if (error.response.status === 401) {
+        // Token expired or unauthorized
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('admin_auth');
+        localStorage.removeItem('admin_current_user');
+        errorMessage = 'Sesi Anda telah habis. Silakan login kembali.';
+        // Redirect to login if not already there
+        if (window.location.pathname !== '/admin/login') {
+          window.location.href = '/admin/login';
+        }
       }
+    } else if (error.request) {
+      errorMessage = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.';
     }
+
+    // Show toast for error
+    try {
+      const toast = useToastStore();
+      toast.addToast(errorMessage, 'error');
+    } catch (e) {
+      console.error('Toast failed to display:', e);
+    }
+
     return Promise.reject(error);
   }
 );

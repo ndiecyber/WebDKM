@@ -842,6 +842,7 @@ import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, 
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
 import { useDialogStore } from '../../stores/dialog'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
@@ -1078,6 +1079,10 @@ async function removeDivisi(index) {
 function handlePhotoUpload(event, member) {
   const file = event.target.files[0]
   if (!file) return
+  if (!validateFileSize(file)) {
+    event.target.value = ''
+    return
+  }
   const reader = new FileReader()
   reader.onload = (e) => {
     member.image = e.target.result
