@@ -97,6 +97,24 @@ export const useAdminStore = defineStore('admin', {
         // User can only manage roles with a hierarchy numerically strictly greater than their own (1 is highest)
         return roleData ? roleData.hierarchy < targetHierarchy : false;
       }
+    },
+    getBadgeColor: (state) => {
+      return (badgeName) => {
+        if (!badgeName) return '';
+        const label = state.masterData.label.find(l => l.name === badgeName);
+        const color = label ? label.color : 'gray';
+        
+        const colorMap = {
+          red: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800',
+          yellow: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800',
+          green: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800',
+          blue: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800',
+          purple: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border border-purple-200 dark:border-purple-800',
+          gray: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700',
+        };
+        
+        return colorMap[color] || colorMap.gray;
+      }
     }
   },
   actions: {
@@ -263,12 +281,25 @@ export const useAdminStore = defineStore('admin', {
     async fetchLayanan() {
       try {
         const res = await api.get('/web-profile/services');
-        this.layanan = (res.data.data || res.data).map(item => ({
-          ...item,
-          bgImage: item.bg_image || item.bgImage,
-          isActive: item.is_active !== undefined ? item.is_active : item.isActive,
-          sortOrder: item.sort_order !== undefined ? item.sort_order : item.sortOrder
-        }));
+        this.layanan = (res.data.data || res.data).map(item => {
+          let parsedDetails = item.details || {};
+          if (typeof parsedDetails === 'string') {
+            try {
+              parsedDetails = JSON.parse(parsedDetails);
+            } catch (e) {
+              parsedDetails = {};
+            }
+          }
+
+          return {
+            ...item,
+            details: parsedDetails,
+            bgImage: item.bg_image || item.bgImage,
+            iconName: item.icon || item.iconName,
+            isActive: item.is_active !== undefined ? item.is_active : item.isActive,
+            sortOrder: item.sort_order !== undefined ? item.sort_order : item.sortOrder
+          };
+        });
       } catch (err) {
         console.error('Failed to fetch layanan:', err);
         throw err;

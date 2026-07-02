@@ -65,7 +65,7 @@
           <!-- Badge -->
           <div 
             v-if="service.badge"
-            :class="`absolute top-2 right-2 sm:top-6 sm:right-6 px-2 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-xs font-bold uppercase tracking-wider rounded-full ${service.badgeColor}`"
+            :class="`absolute top-2 right-2 sm:top-6 sm:right-6 px-2 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-xs font-bold uppercase tracking-wider rounded-full ${adminStore.getBadgeColor(service.badge)}`"
           >
             {{ service.badge }}
           </div>
