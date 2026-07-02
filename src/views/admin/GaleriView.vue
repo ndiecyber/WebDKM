@@ -100,7 +100,7 @@
                 <!-- Preview Overlay -->
                 <div v-if="form.image" class="absolute inset-0 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center group">
                   <img :src="form.image" class="h-full object-cover opacity-90 dark:opacity-80" />
-                  <button @click.prevent="form.image = ''" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                  <button @click.prevent="form.image = ''; selectedFile = null" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
                     <X class="w-4 h-4" />
                   </button>
                 </div>
@@ -198,8 +198,10 @@ const showModal = ref(false)
 const isEditing = ref(false)
 const isDragging = ref(false)
 const form = ref({ id: null, image: '', caption: '', subcaption: '', tag: '', category: 'Umum' })
+const selectedFile = ref(null)
 
 function openModal(item = null) {
+  selectedFile.value = null
   if (item) {
     isEditing.value = true
     form.value = { ...item }
@@ -216,24 +218,32 @@ function closeModal() {
   document.body.style.overflow = ''
 }
 
-function saveItem() {
-  if (!form.value.image || !form.value.caption) return
+async function saveItem() {
+  if ((!form.value.image && !selectedFile.value) || !form.value.caption) return
   
-  if (isEditing.value) {
-    adminStore.updateGallery(form.value.id, { ...form.value })
-  } else {
-    adminStore.addGallery({
-      image: form.value.image,
-      caption: form.value.caption,
-      subcaption: form.value.subcaption,
-      tag: form.value.tag,
-      iconName: form.value.iconName,
-      date: 'Baru saja'
-    })
+  const formData = new FormData()
+  formData.append('caption', form.value.caption)
+  if (form.value.subcaption) formData.append('subcaption', form.value.subcaption)
+  if (form.value.tag) formData.append('tag', form.value.tag)
+  if (form.value.category) formData.append('category', form.value.category)
+  formData.append('is_active', 1)
+
+  if (selectedFile.value) {
+    formData.append('image', selectedFile.value)
   }
-  
-  toastStore.addToast(isEditing.value ? 'Foto berhasil diperbarui' : 'Foto baru berhasil ditambahkan')
-  closeModal()
+
+  try {
+    if (isEditing.value) {
+      await adminStore.updateGallery(form.value.id, formData)
+      toastStore.addToast('Foto berhasil diperbarui', 'success')
+    } else {
+      await adminStore.addGallery(formData)
+      toastStore.addToast('Foto baru berhasil ditambahkan', 'success')
+    }
+    closeModal()
+  } catch (err) {
+    // Error is handled globally
+  }
 }
 
 function handleDrop(e) {
@@ -241,6 +251,7 @@ function handleDrop(e) {
   const file = e.dataTransfer?.files[0]
   if (file && file.type.startsWith('image/')) {
     if (!validateFileSize(file)) return
+    selectedFile.value = file
     form.value.image = URL.createObjectURL(file)
   } else {
     toastStore.addToast('Format file tidak didukung', 'error')
@@ -254,6 +265,7 @@ function handleFileSelect(e) {
       e.target.value = ''
       return
     }
+    selectedFile.value = file
     form.value.image = URL.createObjectURL(file)
   }
 }

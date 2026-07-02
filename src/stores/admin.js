@@ -237,7 +237,12 @@ export const useAdminStore = defineStore('admin', {
     },
     async updateGallery(id, updatedData) {
       try {
-        await api.put(`/web-profile/galleries/${id}`, updatedData);
+        if (updatedData instanceof FormData) {
+          updatedData.append('_method', 'PUT');
+          await api.post(`/web-profile/galleries/${id}`, updatedData);
+        } else {
+          await api.put(`/web-profile/galleries/${id}`, updatedData);
+        }
         await this.fetchGallery();
         this.logActivity('Ubah Galeri', 'Memperbarui data galeri foto');
       } catch (err) {
@@ -281,7 +286,12 @@ export const useAdminStore = defineStore('admin', {
     },
     async updateLayanan(id, updatedData) {
       try {
-        await api.put(`/web-profile/services/${id}`, updatedData);
+        if (updatedData instanceof FormData) {
+          updatedData.append('_method', 'PUT');
+          await api.post(`/web-profile/services/${id}`, updatedData);
+        } else {
+          await api.put(`/web-profile/services/${id}`, updatedData);
+        }
         await this.fetchLayanan();
         this.logActivity('Ubah Layanan', 'Memperbarui data layanan masjid');
       } catch (err) {
