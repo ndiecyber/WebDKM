@@ -1,4 +1,14 @@
 import { defineStore } from 'pinia'
+import { getStorage, setStorage } from '@/utils/storage'
+
+const parseSafe = (key, defaultVal) => {
+  try {
+    const val = getStorage(key)
+    return val ? JSON.parse(val) : defaultVal
+  } catch (e) {
+    return defaultVal
+  }
+}
 
 export const useQurbanStore = defineStore('qurban', {
   state: () => ({
@@ -8,7 +18,13 @@ export const useQurbanStore = defineStore('qurban', {
       { id: '1445', label: '1445 H / 2024 M', status: 'arsip' }
     ],
     selectedPeriodId: '1447',
-    isLoading: false
+    isLoading: false,
+    settings: parseSafe('qurban_settings', {
+      whatsappType: 'global', // 'global' or 'custom'
+      selectedGlobalWaId: 1,
+      customWaName: '',
+      customWaNumber: ''
+    })
   }),
   getters: {
     activePeriod: (state) => state.periods.find(p => p.status === 'aktif'),
@@ -55,6 +71,10 @@ export const useQurbanStore = defineStore('qurban', {
       if (target) {
         target.status = 'arsip'
       }
+    },
+    updateSettings(newSettings) {
+      this.settings = { ...this.settings, ...newSettings }
+      setStorage('qurban_settings', JSON.stringify(this.settings))
     }
   }
 })
