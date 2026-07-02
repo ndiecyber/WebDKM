@@ -163,7 +163,11 @@ export const useAdminStore = defineStore('admin', {
     async fetchKegiatan() {
       try {
         const res = await api.get('/web-profile/events');
-        this.kegiatan = res.data.data || res.data;
+        this.kegiatan = (res.data.data || res.data).map(item => ({
+          ...item,
+          image: item.image_path || item.image,
+          isActive: item.is_active !== undefined ? item.is_active : item.isActive
+        }));
       } catch (err) {
         console.error('Failed to fetch kegiatan:', err);
         throw err;
@@ -212,7 +216,10 @@ export const useAdminStore = defineStore('admin', {
     async fetchGallery() {
       try {
         const res = await api.get('/web-profile/galleries');
-        this.gallery = res.data.data || res.data;
+        this.gallery = (res.data.data || res.data).map(item => ({
+          ...item,
+          image: item.image_path || item.image
+        }));
       } catch (err) {
         console.error('Failed to fetch gallery:', err);
         throw err;
@@ -251,8 +258,12 @@ export const useAdminStore = defineStore('admin', {
     async fetchLayanan() {
       try {
         const res = await api.get('/web-profile/services');
-        // Assume API returns { data: [...] } or just an array
-        this.layanan = res.data.data || res.data;
+        this.layanan = (res.data.data || res.data).map(item => ({
+          ...item,
+          bgImage: item.bg_image || item.bgImage,
+          isActive: item.is_active !== undefined ? item.is_active : item.isActive,
+          sortOrder: item.sort_order !== undefined ? item.sort_order : item.sortOrder
+        }));
       } catch (err) {
         console.error('Failed to fetch layanan:', err);
         throw err;

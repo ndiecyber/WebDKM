@@ -428,6 +428,9 @@ const openEditModal = (item) => {
   
   // Try to create a date string from day and month if it's missing (simulation purposes)
   let itemDate = item.date
+  if (itemDate && typeof itemDate === 'string' && itemDate.includes('T')) {
+    itemDate = itemDate.split('T')[0]
+  }
   if (!itemDate && item.day && item.month) {
     // This is just a mock logic to show a date since we changed from inputs
     // In a real app the backend provides YYYY-MM-DD
