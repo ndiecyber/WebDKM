@@ -114,6 +114,7 @@ import { X, Heart, Copy, Download, Info, Maximize2 } from 'lucide-vue-next'
 import qris1 from '@/assets/images/QRIS DKMJ.webp'
 import qris2 from '@/assets/images/QRIS DKMJ2.webp'
 import bsiLogo from '@/assets/images/bsi-logo.webp'
+import { useToastStore } from '@/stores/toast'
 
 const props = defineProps({
   isOpen: Boolean
@@ -126,7 +127,8 @@ const expandedImage = ref(null)
 
 const copyText = (text) => {
   navigator.clipboard.writeText(text)
-  alert('Nomor rekening berhasil disalin: ' + text)
+  const toastStore = useToastStore()
+  toastStore.addToast('Nomor rekening berhasil disalin: ' + text)
 }
 </script>
 

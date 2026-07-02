@@ -95,7 +95,7 @@
                   </div>
 
                   <div class="relative group/tooltip">
-                    <button @click="openDeleteModal(item)" class="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-gray-500 dark:text-white/60 hover:text-red-600 dark:hover:text-red-400 transition-all active:scale-90">
+                    <button @click="deleteItem(item)" class="p-2.5 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-gray-500 dark:text-white/60 hover:text-red-600 dark:hover:text-red-400 transition-all active:scale-90">
                       <Trash2 class="w-4 h-4" />
                     </button>
                     <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-dark text-white text-[10px] font-bold rounded shadow-lg opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">
@@ -323,34 +323,7 @@
       </div>
     </div>
 
-    <!-- Confirmation Modal (Hapus) -->
-    <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-      <div class="absolute inset-0 bg-gray-900/50 dark:bg-gray-950/80 backdrop-blur-sm" @click="closeDeleteModal"></div>
-      
-      <div class="relative bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl w-full max-w-sm shadow-2xl p-6 text-center animate-in fade-in zoom-in-95 duration-200">
-        <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-4 text-red-500">
-          <AlertTriangle class="w-8 h-8 text-red-600 dark:text-red-500" />
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Hapus Berita?</h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mb-8">
-          Tindakan ini tidak dapat dibatalkan. Berita <strong class="text-gray-700 dark:text-gray-300">"{{ itemToDelete?.title }}"</strong> akan dihapus secara permanen.
-        </p>
-        <div class="flex items-center gap-3 w-full">
-          <button 
-            @click="closeDeleteModal"
-            class="flex-1 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 transition-colors text-sm"
-          >
-            Batal
-          </button>
-          <button 
-            @click="confirmDelete"
-            class="flex-1 px-4 py-2 rounded-lg font-medium bg-red-500 hover:bg-red-600 text-white transition-colors shadow-md text-sm"
-          >
-            Ya, Hapus
-          </button>
-        </div>
-      </div>
-    </div>
+
 
   </div>
 </template>
@@ -360,21 +333,20 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { Plus, Edit, Trash2, X, Calendar, Clock, MapPin, UploadCloud, AlertTriangle, Save } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
+import { useDialogStore } from '../../stores/dialog'
 import RichTextEditor from '../../components/ui/RichTextEditor.vue'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
+const dialog = useDialogStore()
 
 // Modal States
 const showModal = ref(false)
 const isEditing = ref(false)
-const showDeleteModal = ref(false)
-const itemToDelete = ref(null)
 
 const handleKeydown = (e) => {
   if (e.key === 'Escape') {
     if (showModal.value) closeModal()
-    if (showDeleteModal.value) closeDeleteModal()
   }
 }
 
@@ -503,25 +475,19 @@ const saveKegiatan = () => {
   closeModal()
 }
 
-const openDeleteModal = (item) => {
-  itemToDelete.value = item
-  showDeleteModal.value = true
-  document.body.style.overflow = 'hidden'
-}
-
-const closeDeleteModal = () => {
-  showDeleteModal.value = false
-  itemToDelete.value = null
-  document.body.style.overflow = ''
-}
-
-const confirmDelete = () => {
-  if (itemToDelete.value) {
-    adminStore.kegiatan = adminStore.kegiatan.filter(k => k.id !== itemToDelete.value.id)
+async function deleteItem(item) {
+  const confirmed = await dialog.open({
+    title: 'Hapus Berita?',
+    message: `Tindakan ini tidak dapat dibatalkan. Berita "${item.title}" akan dihapus secara permanen.`,
+    type: 'confirm',
+    confirmText: 'Ya, Hapus'
+  })
+  
+  if (confirmed) {
+    adminStore.kegiatan = adminStore.kegiatan.filter(k => k.id !== item.id)
     adminStore.saveKegiatan()
     toastStore.addToast('Berita berhasil dihapus', 'error')
   }
-  closeDeleteModal()
 }
 </script>
 

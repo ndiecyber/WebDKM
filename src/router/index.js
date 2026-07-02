@@ -24,10 +24,17 @@ const routes = [
         name: 'admin-dashboard',
         component: () => import('../views/admin/DashboardView.vue'),
       },
+      
+      // --- MODUL KEUANGAN ---
       {
         path: 'keuangan',
         name: 'admin-keuangan-dashboard',
         component: () => import('@/views/admin/KeuanganDashboardView.vue')
+      },
+      {
+        path: 'keuangan-program',
+        name: 'admin-keuangan-program',
+        component: () => import('@/views/admin/KeuanganProgramView.vue')
       },
       {
         path: 'keuangan-transaksi',
@@ -44,6 +51,45 @@ const routes = [
         name: 'admin-keuangan-laporan',
         component: () => import('@/views/admin/KeuanganLaporanView.vue')
       },
+      {
+        path: 'keuangan-pengaturan',
+        name: 'admin-keuangan-pengaturan',
+        component: () => import('@/views/admin/KeuanganPengaturanView.vue')
+      },
+
+      // --- MODUL QURBAN ---
+      {
+        path: 'qurban',
+        name: 'admin-qurban-dashboard',
+        component: () => import('@/views/admin/QurbanDashboardView.vue')
+      },
+      {
+        path: 'qurban/target',
+        name: 'admin-qurban-target',
+        component: () => import('@/views/admin/QurbanTargetView.vue')
+      },
+      {
+        path: 'qurban/peserta',
+        name: 'admin-qurban-peserta',
+        component: () => import('@/views/admin/QurbanPesertaView.vue')
+      },
+      {
+        path: 'qurban/setoran',
+        name: 'admin-qurban-setoran',
+        component: () => import('@/views/admin/QurbanSetoranView.vue')
+      },
+      {
+        path: 'qurban/periode',
+        name: 'admin-qurban-periode',
+        component: () => import('@/views/admin/QurbanPeriodeView.vue')
+      },
+      {
+        path: 'qurban/pengaturan',
+        name: 'admin-qurban-pengaturan',
+        component: () => import('@/views/admin/QurbanPengaturanView.vue')
+      },
+
+      // --- MODUL WEB DKM & SISTEM ---
       {
         path: 'kegiatan',
         name: 'admin-kegiatan',
@@ -65,7 +111,6 @@ const routes = [
         component: () => import('../views/admin/PengaturanView.vue'),
         meta: { requiresSystem: true }
       },
-
       {
         path: 'profil',
         name: 'admin-profil',
