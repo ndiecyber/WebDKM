@@ -53,7 +53,7 @@
         <!-- Right: Image -->
         <div ref="imageContent" class="relative">
           <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-            <img :src="interiorImg" alt="Interior Masjid Jami Kassiti" class="w-full h-[250px] sm:h-[400px] lg:h-[550px] object-cover" />
+            <img :src="settings.historyImage || interiorImg" alt="Sejarah Masjid Jami Kassiti" class="w-full h-[250px] sm:h-[400px] lg:h-[550px] object-cover" />
             <div class="absolute inset-0 bg-linear-to-t from-primary/30 to-transparent"></div>
           </div>
 
@@ -171,8 +171,8 @@
                       <img v-if="member.image" :src="member.image" :alt="member.name" class="w-full h-full object-cover" />
                       <span v-else>{{ getInitials(member.name) }}</span>
                     </div>
-                    <h4 :class="member.role === 'Ketua RW 07' ? 'text-sm sm:text-base mb-1.5 font-black' : 'text-xs sm:text-sm mb-1 font-bold'" class="font-heading text-gray-950 dark:text-white leading-snug">{{ member.name }}</h4>
-                    <span :class="member.role === 'Ketua RW 07' ? 'text-[11px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 px-3.5 py-1.5 rounded-full font-extrabold shadow-sm' : 'text-[10px] text-indigo-600 dark:text-indigo-400 font-bold'" class="tracking-wider uppercase">{{ member.role }}</span>
+                    <h4 :class="member.isLeader ? 'text-sm sm:text-base mb-1.5 font-black' : 'text-xs sm:text-sm mb-1 font-bold'" class="font-heading text-gray-950 dark:text-white leading-snug">{{ member.name }}</h4>
+                    <span :class="member.isLeader ? 'text-[11px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 px-3.5 py-1.5 rounded-full font-extrabold shadow-sm' : 'text-[10px] text-indigo-600 dark:text-indigo-400 font-bold'" class="tracking-wider uppercase">{{ member.role }}</span>
                   </div>
                 </div>
               </div>
@@ -260,28 +260,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import MosqueLogo from '@/components/ui/MosqueLogo.vue'
 import interiorImage from '@/assets/images/mosque-interior.webp'
-import dkmNasai from '@/assets/images/dkm-nasai.webp'
-import dkmRandi from '@/assets/images/dkm-randi.webp'
-import dkmRofik from '@/assets/images/M Ainur Rofiq.webp'
-import dkmIrvan from '@/assets/images/Ivan Ruchiat.webp'
-import dkmDani from '@/assets/images/Dani Ramdhani.webp'
-import bpkAli from '@/assets/images/Ali M Abduh.webp'
-import bpkGojali from '@/assets/images/Gojali Abdul S.webp'
-import bpkRedi from '@/assets/images/H Redi Sasriandi.webp'
-import bpkNanang from '@/assets/images/Nanang Barkah.webp'
-import bpkSukardi from '@/assets/images/Sukardi.webp'
-import usthAi from '@/assets/images/Usth. Ai Jamaliah.webp'
-import usthNeneng from '@/assets/images/Usth. Neneng Aam.webp'
-import usthRani from '@/assets/images/Usth. Rani Rahmayati.webp'
-import penasihatIwa from '@/assets/images/Ust. H Iwa Penasihat.webp'
-import penasihatAde from '@/assets/images/Ust. H Ade Karom.webp'
-import penasihatSudiana from '@/assets/images/Bpk. Sudiana Maska.webp'
-import penasihatUsman from '@/assets/images/H Usman penasihat.webp'
-import penasihatAyi from '@/assets/images/Bpk. Ayi Sunarwan.webp'
-import usthDede from '@/assets/images/Usth. Dede Asiah.webp'
-import bpkAditya from '@/assets/images/Bpk. Aditya Astra P.webp'
-import usthRini from '@/assets/images/Usth. Rini Dewi Anggiani.webp'
-import usthRayanthi from '@/assets/images/Usth.Rayanthi.webp'
 import kaligrafiImage from '@/assets/images/kaligrafi_masjid.webp'
 import { useAdminStore } from '@/stores/admin'
 
@@ -384,13 +362,28 @@ onMounted(() => {
   }
 
   stats.forEach((stat) => {
-    gsap.to(stat, {
-      displayValue: stat.value, duration: 2, ease: 'power2.out',
-      snap: { displayValue: 1 },
-      scrollTrigger: { trigger: '#tentang', start: 'top 70%', once: true },
-    })
+    // Only animate if value is > 0, otherwise it will be picked up by the watcher
+    if (stat.value > 0) {
+      gsap.to(stat, {
+        displayValue: stat.value, duration: 2, ease: 'power2.out',
+        snap: { displayValue: 1 },
+        scrollTrigger: { trigger: '#tentang', start: 'top 70%', once: true },
+      })
+    }
   })
 })
+
+// Watch for changes in stats (e.g., when API fetch completes) to animate them if they were 0 initially
+watch(() => stats.map(s => s.value), (newValues, oldValues) => {
+  newValues.forEach((val, index) => {
+    if (val > 0 && stats[index].displayValue === 0) {
+      gsap.to(stats[index], {
+        displayValue: val, duration: 2, ease: 'power2.out',
+        snap: { displayValue: 1 }
+      })
+    }
+  })
+}, { deep: true })
 </script>
 
 <style scoped>

@@ -2,17 +2,16 @@
   <section id="beranda" class="relative min-h-screen flex items-center overflow-hidden">
     <!-- Background Image Slider -->
     <div class="absolute inset-0 bg-dark overflow-hidden">
-      <div ref="bgImage" class="absolute -inset-[5%] w-[110%] h-[110%]">
-        <TransitionGroup name="slider">
+      <div ref="bgImage" class="absolute -inset-[5%] w-[110%] h-[110%]" :style="{ backgroundImage: `url(${heroImg1})`, backgroundSize: 'cover', backgroundPosition: 'center' }">
+        <Transition name="slider">
           <img
-            v-for="(img, index) in settings.heroImages"
-            :key="img"
-            v-show="currentImageIndex === index"
-            :src="img"
+            v-if="activeHeroImages.length > 0"
+            :key="currentImageIndex"
+            :src="activeHeroImages[currentImageIndex]"
             alt="Masjid Jami Kassiti"
             class="absolute inset-0 w-full h-full object-cover origin-center"
           />
-        </TransitionGroup>
+        </Transition>
       </div>
       <div class="gradient-overlay absolute inset-0"></div>
     </div>
@@ -160,10 +159,8 @@ import { ArrowRight, Clock, MapPin, Gift, HeartHandshake, Instagram, Facebook, Y
 import { isDonationModalOpen } from '@/composables/useDonationModal'
 import { gsap } from 'gsap'
 import { useAdminStore } from '@/stores/admin'
-import heroImg1 from '@/assets/images/hero-mosque.webp'
-import heroImg2 from '@/assets/images/mosque-exterior.webp'
-import heroImg3 from '@/assets/images/community-prayer.webp'
-import heroImg4 from '@/assets/images/mosque-interior.webp'
+import heroImg1 from '@/assets/images/hero.jpeg'
+import heroImg2 from '@/assets/images/hero2.jpeg'
 import logoImg from '@/assets/images/logo-kustom.webp'
 import { scrollToSection } from '@/utils/scroll'
 
@@ -179,6 +176,13 @@ const parsedSlogan = computed(() => {
     .replace(/\n/g, '<br />')
 })
 
+const activeHeroImages = computed(() => {
+  if (settings.value.heroImages && settings.value.heroImages.length > 0) {
+    return settings.value.heroImages;
+  }
+  return [heroImg1, heroImg2];
+})
+
 const currentImageIndex = ref(0)
 let sliderInterval = null
 const badge = ref(null)
@@ -191,8 +195,8 @@ const bgImage = ref(null)
 onMounted(() => {
   // Setup Image Slider Interval
   sliderInterval = setInterval(() => {
-    if (settings.value.heroImages && settings.value.heroImages.length > 0) {
-      currentImageIndex.value = (currentImageIndex.value + 1) % settings.value.heroImages.length
+    if (activeHeroImages.value.length > 0) {
+      currentImageIndex.value = (currentImageIndex.value + 1) % activeHeroImages.value.length
     }
   }, 6000)
 
