@@ -31,3 +31,6 @@ deploy_vps*.js
 .env
 .env.*
 !.env.example
+
+.agent
+.agents
