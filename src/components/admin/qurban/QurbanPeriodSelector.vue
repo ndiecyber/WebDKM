@@ -31,12 +31,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Calendar, ChevronDown } from 'lucide-vue-next'
 import { useQurbanStore } from '@/stores/qurban'
 
 const qurbanStore = useQurbanStore()
 const showDropdown = ref(false)
+
+onMounted(async () => {
+  if (qurbanStore.periods.length === 0) {
+    await qurbanStore.fetchPeriods()
+  }
+})
 
 const selectPeriod = (id) => {
   qurbanStore.changeSelectedPeriod(id)

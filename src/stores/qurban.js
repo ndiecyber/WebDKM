@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getStorage, setStorage } from '@/utils/storage'
+import api from '@/utils/api'
 
 const parseSafe = (key, defaultVal) => {
   try {
@@ -12,13 +13,10 @@ const parseSafe = (key, defaultVal) => {
 
 export const useQurbanStore = defineStore('qurban', {
   state: () => ({
-    periods: [
-      { id: '1447', label: '1447 H / 2026 M', status: 'aktif' },
-      { id: '1446', label: '1446 H / 2025 M', status: 'arsip' },
-      { id: '1445', label: '1445 H / 2024 M', status: 'arsip' }
-    ],
-    selectedPeriodId: '1447',
+    periods: [],
+    selectedPeriodId: null,
     isLoading: false,
+    isFetchingPeriods: false,
     settings: parseSafe('qurban_settings', {
       whatsappType: 'global', // 'global' or 'custom'
       selectedGlobalWaId: 1,
@@ -35,6 +33,29 @@ export const useQurbanStore = defineStore('qurban', {
     }
   },
   actions: {
+    async fetchPeriods() {
+      if (this.isFetchingPeriods) return
+      this.isFetchingPeriods = true
+      try {
+        const response = await api.get('/qurban/admin/periods')
+        if (response.data?.success) {
+          this.periods = response.data.data.map(p => ({
+            ...p,
+            label: p.name,
+            status: p.is_active ? 'aktif' : 'arsip'
+          }))
+          
+          if (!this.selectedPeriodId && this.periods.length > 0) {
+            const active = this.periods.find(p => p.status === 'aktif')
+            this.selectedPeriodId = active ? active.id : this.periods[0].id
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch qurban periods', error)
+      } finally {
+        this.isFetchingPeriods = false
+      }
+    },
     changeSelectedPeriod(id) {
       if (this.selectedPeriodId !== id) {
         this.selectedPeriodId = id
