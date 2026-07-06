@@ -141,17 +141,25 @@
               :key="group.id"
               class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col"
             >
-              <div class="flex justify-between items-start border-b border-gray-100 dark:border-white/5 pb-3 mb-3">
-                <div>
-                  <h3 class="font-bold text-gray-900 dark:text-white text-lg">{{ group.name }}</h3>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Terkumpul: <strong :class="getGroupTotal(group) >= getGroupTargetTotal(group) ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-500'">{{ formatRupiah(getGroupTotal(group)) }}</strong> <span class="font-normal opacity-70">/ {{ formatRupiah(getGroupTargetTotal(group)) }}</span></p>
+              <div class="flex justify-between items-start border-b border-gray-100 dark:border-white/5 pb-3 mb-3 gap-2">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 mb-0.5">
+                    <h3 class="font-bold text-gray-900 dark:text-white text-lg truncate">{{ group.name }}</h3>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider shrink-0"
+                          :class="getGroupTotal(group) >= getGroupTargetTotal(group) ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'">
+                      {{ getGroupTotal(group) >= getGroupTargetTotal(group) ? 'Lunas' : 'Proses' }}
+                    </span>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Terkumpul: <strong :class="getGroupTotal(group) >= getGroupTargetTotal(group) ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-500'">{{ formatRupiah(getGroupTotal(group)) }}</strong> <span class="font-normal opacity-70">/ {{ formatRupiah(getGroupTargetTotal(group)) }}</span></p>
                 </div>
-                <div class="flex flex-col items-end gap-1.5">
-                  <span class="px-2 py-1 rounded text-[10px] font-black uppercase tracking-wider"
-                        :class="getGroupTotal(group) >= getGroupTargetTotal(group) ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'">
-                    {{ getGroupTotal(group) >= getGroupTargetTotal(group) ? 'Lunas' : 'Proses' }}
-                  </span>
-                  <button v-if="group.shohibuls.length === 0 && !qurbanStore.isArchiveMode" @click="deleteGroup(group)" class="text-xs text-red-500 hover:underline">Hapus</button>
+                
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button v-if="group.shohibuls.length < 7 && !qurbanStore.isArchiveMode" @click="openPullModal(group)" class="p-1.5 bg-secondary/10 dark:bg-yellow-500/10 text-secondary hover:bg-secondary hover:text-white dark:hover:bg-yellow-500 dark:hover:text-white rounded-lg transition-all" title="Tarik Peserta ke Kelompok Ini">
+                    <Plus class="w-4 h-4" />
+                  </button>
+                  <button v-if="group.shohibuls.length === 0 && !qurbanStore.isArchiveMode" @click="deleteGroup(group)" class="p-1.5 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white dark:bg-red-500/10 dark:hover:bg-red-500 transition-all rounded-lg" title="Hapus Kelompok">
+                    <Trash2 class="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
@@ -174,8 +182,8 @@
                   
                   <div class="flex items-center gap-2.5 shrink-0">
                     <span class="text-[10px] px-2 py-1 rounded uppercase font-bold"
-                          :class="member.collected_amount >= member.target_amount ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 border border-amber-200 dark:border-amber-500/20 dark:bg-amber-500/20'">
-                      {{ member.collected_amount >= member.target_amount ? 'Lunas' : 'Proses' }}
+                          :class="Number(member.collected_amount) > Number(member.target_amount) ? 'bg-cyan-100 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400' : Number(member.collected_amount) === Number(member.target_amount) ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 border border-amber-200 dark:border-amber-500/20 dark:bg-amber-500/20'">
+                      {{ Number(member.collected_amount) > Number(member.target_amount) ? 'Lebih' : Number(member.collected_amount) === Number(member.target_amount) ? 'Lunas' : 'Proses' }}
                     </span>
                     <div v-if="!qurbanStore.isArchiveMode" class="p-2 text-gray-400 group-hover/item:text-secondary group-hover/item:bg-white dark:group-hover/item:bg-gray-800 rounded-md transition-colors" title="Pindah Kelompok">
                       <ArrowRightLeft class="w-4 h-4" />
@@ -321,7 +329,10 @@
                       <span v-if="kambing.transactions && kambing.transactions.some(tx => tx.status === 'pending')" class="px-2 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[10px] uppercase tracking-wider rounded-md font-bold animate-pulse border border-amber-200 dark:border-amber-500/20" title="Ada tagihan pending">
                         Pending
                       </span>
-                      <span v-else-if="kambing.collected_amount >= kambing.target_amount" class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                      <span v-else-if="Number(kambing.collected_amount) > Number(kambing.target_amount)" class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/20">
+                        Kelebihan
+                      </span>
+                      <span v-else-if="Number(kambing.collected_amount) === Number(kambing.target_amount)" class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
                         Lunas
                       </span>
                       <span v-else class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
@@ -378,6 +389,77 @@
           
           <div v-if="availableGroups.length === 0" class="text-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-200 dark:border-gray-700">
             <p class="text-xs text-gray-500 dark:text-gray-400">Tidak ada kelompok sapi lain yang memiliki slot kosong.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Tarik Peserta (Pull) -->
+    <div v-if="pullModal.isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
+      <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="closePullModal"></div>
+      
+      <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-lg shadow-xl overflow-hidden ring-1 ring-gray-200 dark:ring-white/10 animate-fade-in-up relative z-10 flex flex-col max-h-[85vh]">
+        <div class="p-5 sm:p-6 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-gray-800 shrink-0">
+          <div>
+            <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+              Tarik ke {{ pullModal.targetGroup?.name }}
+            </h3>
+            <p class="text-xs text-gray-500 mt-1">Pilih peserta sapi dari kelompok lain atau yang belum punya kelompok.</p>
+          </div>
+          <button @click="closePullModal" class="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+        
+        <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-white/5 shrink-0 bg-white dark:bg-gray-900">
+          <div class="relative">
+            <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input 
+              v-model="pullModal.search"
+              type="text" 
+              placeholder="Cari nama peserta atau kelompok asal..."
+              class="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all outline-none"
+            >
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar bg-gray-50/30 dark:bg-[#0b1212] relative">
+          <!-- Loading Overlay -->
+          <div v-if="pullModal.isLoading" class="absolute inset-0 bg-white/50 dark:bg-[#0b1212]/50 backdrop-blur-sm z-10 flex items-center justify-center">
+            <div class="w-8 h-8 border-4 border-secondary/30 border-t-secondary rounded-full animate-spin"></div>
+          </div>
+
+          <div class="space-y-2">
+            <div v-for="shohibul in pullableShohibuls" :key="shohibul.id" 
+                 class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
+              <div class="flex items-center gap-3 min-w-0 pr-3">
+                <div class="w-10 h-10 rounded-full bg-secondary/10 dark:bg-yellow-500/10 flex items-center justify-center shrink-0 border border-secondary/20 text-secondary font-bold text-sm">
+                  {{ getInitials(shohibul.name) }}
+                </div>
+                <div class="min-w-0">
+                  <h4 class="font-bold text-gray-800 dark:text-white text-sm truncate" :title="shohibul.name">{{ shohibul.name }}</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate flex items-center gap-1.5" :title="shohibul.currentGroup">
+                    <MapPin class="w-3 h-3 text-gray-400" /> 
+                    <span v-if="shohibul.animal_group_id">Dari <strong>{{ shohibul.currentGroup }}</strong></span>
+                    <span v-else class="text-amber-600 dark:text-amber-500 font-medium">Belum Punya Kelompok</span>
+                  </p>
+                </div>
+              </div>
+              <button 
+                @click="confirmPull(shohibul)"
+                class="px-3 py-1.5 bg-secondary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-yellow-500 transition-colors shrink-0 flex items-center gap-1"
+              >
+                <Plus class="w-3.5 h-3.5" /> Pilih
+              </button>
+            </div>
+            
+            <div v-if="!pullModal.isLoading && pullableShohibuls.length === 0" class="p-8 text-center bg-white dark:bg-gray-900 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+              <div class="mx-auto w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-3">
+                <Users class="w-6 h-6 text-gray-400" />
+              </div>
+              <p class="text-sm font-bold text-gray-800 dark:text-white">Tidak ada peserta</p>
+              <p class="text-xs text-gray-500 mt-1">Tidak ditemukan peserta dari kelompok lain.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -577,15 +659,15 @@ const kambingList = computed(() => {
   }
   
   if (kambingStatusFilter.value === 'lunas') {
-    kambings = kambings.filter(k => k.collected_amount >= k.target_amount)
+    kambings = kambings.filter(k => Number(k.collected_amount) >= Number(k.target_amount))
   } else if (kambingStatusFilter.value === 'proses') {
-    kambings = kambings.filter(k => k.collected_amount < k.target_amount)
+    kambings = kambings.filter(k => Number(k.collected_amount) < Number(k.target_amount))
   }
   
   return kambings
 })
 
-const getGroupTotal = (group) => group.shohibuls.reduce((sum, member) => sum + member.collected_amount, 0)
+const getGroupTotal = (group) => group.shohibuls.reduce((sum, member) => sum + Number(member.collected_amount), 0)
 const getGroupTargetTotal = (group) => {
   const pricePerSlot = group.shohibuls.length > 0 ? group.shohibuls[0].target_amount : sapiShohibulPrice.value;
   return pricePerSlot * 7;
@@ -626,6 +708,72 @@ const confirmMove = async (targetGroup) => {
   closeMoveModal()
 }
 
+// MODAL TARIK PESERTA (PULL)
+const pullModal = ref({ isOpen: false, targetGroup: null, search: '', isLoading: false })
+const allSapiShohibuls = ref([])
+
+const openPullModal = async (group) => {
+  pullModal.value = { isOpen: true, targetGroup: group, search: '', isLoading: true }
+  document.body.style.overflow = 'hidden'
+  
+  try {
+    const params = qurbanStore.selectedPeriodId ? { period_id: qurbanStore.selectedPeriodId, type: 'sapi' } : { type: 'sapi' }
+    const res = await api.get('/qurban/admin/shohibul', { params })
+    if (res.data?.success) {
+      allSapiShohibuls.value = res.data.data
+    }
+  } catch (err) {
+    toastStore.addToast('Gagal memuat daftar peserta', 'error')
+  } finally {
+    pullModal.value.isLoading = false
+  }
+}
+
+const closePullModal = () => {
+  pullModal.value.isOpen = false
+  document.body.style.overflow = ''
+}
+
+const pullableShohibuls = computed(() => {
+  if (!pullModal.value.targetGroup) return []
+  
+  // Semua peserta sapi, KECUALI yang sudah ada di kelompok target ini
+  let candidates = allSapiShohibuls.value.filter(s => s.animal_group_id !== pullModal.value.targetGroup.id)
+  
+  // Format data
+  candidates = candidates.map(s => ({
+    ...s,
+    currentGroup: s.animal_group ? s.animal_group.name : 'Belum Ada Kelompok'
+  }))
+  
+  const q = pullModal.value.search.toLowerCase()
+  if (q) {
+    candidates = candidates.filter(s => s.name.toLowerCase().includes(q) || s.currentGroup.toLowerCase().includes(q))
+  }
+  
+  return candidates
+})
+
+const confirmPull = async (shohibul) => {
+  try {
+    const payload = {
+      shohibul_id: shohibul.id,
+      new_group_id: pullModal.value.targetGroup.id
+    }
+    const res = await api.post('/qurban/admin/groups/move-member', payload)
+    if (res.data?.success) {
+      toastStore.addToast(`${shohibul.name} berhasil ditambahkan ke ${pullModal.value.targetGroup.name}`, 'success')
+      fetchAnimalGroups()
+      
+      if (pullModal.value.targetGroup.shohibuls.length + 1 >= 7) {
+        closePullModal()
+      }
+    }
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal memindahkan shohibul', 'error')
+  }
+}
+
 // MODAL SIMULASI & BUAT KELOMPOK
 const createModal = ref({ isOpen: false })
 
@@ -634,7 +782,14 @@ const openCreateGroupModal = () => {
 }
 
 const submitCreateGroup = async () => {
-  const groupName = prompt("Masukkan nama kelompok sapi baru:")
+  const groupName = await dialog.open({
+    type: 'prompt',
+    title: 'Buat Kelompok Sapi',
+    message: 'Masukkan nama kelompok sapi baru (contoh: Sapi 1, Sapi A):',
+    inputPlaceholder: 'Nama Kelompok',
+    confirmText: 'Simpan',
+    cancelText: 'Batal'
+  })
   
   if (groupName && groupName.trim() !== '') {
     try {

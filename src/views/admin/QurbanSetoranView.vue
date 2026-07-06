@@ -284,12 +284,15 @@
                 <button @click="verifyTransaction(selectedTx.id)" class="flex-1 py-3 bg-secondary text-white text-sm font-bold rounded-xl shadow-sm hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2">
                   <CheckCircle class="w-4 h-4" /> Terima & Lunas
                 </button>
-                <button @click="cancelTransaction(selectedTx.id)" class="py-3 px-4 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-bold rounded-xl border border-red-100 dark:border-red-500/20 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2" title="Tolak / Batal">
+                <button @click="cancelTransaction(selectedTx)" class="py-3 px-4 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-bold rounded-xl border border-red-100 dark:border-red-500/20 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2" title="Tolak / Batal">
                   <XCircle class="w-4 h-4" /> Batal
                 </button>
               </div>
             </template>
             <template v-else>
+               <button v-if="selectedTx.status === 'success' && !qurbanStore.isArchiveMode" @click="cancelTransaction(selectedTx)" class="w-full mb-3 py-3 bg-red-600 text-white text-sm font-bold rounded-xl border border-red-700 hover:bg-red-700 shadow-md shadow-red-500/20 transition-colors flex items-center justify-center gap-2">
+                 <XCircle class="w-4 h-4" /> Void Transaksi Ini
+               </button>
                <button @click="selectedTx = null" class="w-full py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                 Tutup Struk
               </button>
@@ -416,12 +419,16 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { History, Search, CheckCircle, Clock, Banknote, XCircle, Pencil, ArrowRight, Filter, ChevronDown, Check, Phone, MapPin, AlertTriangle, Plus, Landmark, QrCode, X, Eye } from 'lucide-vue-next'
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
 import { useToastStore } from '@/stores/toast'
 import { useDialogStore } from '@/stores/dialog'
 import api from '@/utils/api'
+
+const route = useRoute()
+const router = useRouter()
 
 const qurbanStore = useQurbanStore()
 const toastStore = useToastStore()
@@ -522,7 +529,35 @@ const fetchTransactions = async (page = 1) => {
 
 onMounted(() => {
   fetchTransactions()
-  fetchShohibuls()
+  fetchShohibuls().then(async () => {
+    if (route.query.add_shohibul) {
+      cashForm.value = { 
+        shohibul_id: Number(route.query.add_shohibul), 
+        amount: null, 
+        paymentMethod: 'tunai' 
+      }
+      isCashModalOpen.value = true
+      document.body.style.overflow = 'hidden'
+      // Cleanup URL params
+      router.replace({ path: route.path, query: {} })
+    }
+    
+    if (route.query.open_tx) {
+      searchQuery.value = route.query.open_tx
+      try {
+        const params = { search: route.query.open_tx }
+        const res = await api.get('/qurban/transactions', { params })
+        if (res.data?.success && res.data.data.data.length > 0) {
+          const tx = res.data.data.data.find(t => String(t.id) === String(route.query.open_tx))
+          if (tx) {
+            selectedTx.value = tx
+            document.body.style.overflow = 'hidden'
+          }
+        }
+        router.replace({ path: route.path, query: {} })
+      } catch (err) {}
+    }
+  })
 })
 
 watch(() => qurbanStore.selectedPeriodId, () => {
@@ -539,7 +574,7 @@ const filteredTransactions = computed(() => paginatedData.value.data || [])
 // Stats are approximated from current page since we don't have global stats for transactions yet, 
 // or ideally we could get this from dashboard endpoint if needed.
 const pendingCount = computed(() => paginatedData.value.data.filter(tx => tx.status === 'pending').length)
-const totalSuccessAmount = computed(() => paginatedData.value.data.filter(tx => tx.status === 'success').reduce((sum, tx) => sum + tx.amount, 0))
+const totalSuccessAmount = computed(() => paginatedData.value.data.filter(tx => tx.status === 'success').reduce((sum, tx) => sum + Number(tx.amount), 0))
 
 const formatRupiah = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
 const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -590,18 +625,23 @@ const verifyTransaction = async (id) => {
   }
 }
 
-const cancelTransaction = async (id) => {
+const cancelTransaction = async (tx) => {
+  const isSuccess = tx.status === 'success'
+  const message = isSuccess 
+    ? 'PERHATIAN: Transaksi ini berstatus Sukses. Jika dibatalkan (VOID), saldo terkumpul milik jamaah akan dikurangi sebesar nominal transaksi. Anda yakin ingin melanjutkan?'
+    : 'Apakah Anda yakin ingin membatalkan transaksi pending ini?'
+    
   const isConfirmed = await dialog.open({
-    title: 'Batalkan Transaksi',
-    message: 'Apakah Anda yakin ingin membatalkan transaksi pending ini?',
-    type: 'confirm',
+    title: isSuccess ? 'Void Transaksi Sukses' : 'Batalkan Transaksi',
+    message: message,
+    type: 'alert',
     confirmText: 'Ya, Batalkan',
     cancelText: 'Kembali'
   })
 
   if (isConfirmed) {
     try {
-      const res = await api.post(`/qurban/admin/transactions/${id}/cancel`)
+      const res = await api.post(`/qurban/admin/transactions/${tx.id}/cancel`)
       if (res.data?.success) {
         toastStore.addToast("Transaksi berhasil dibatalkan.", "success")
         selectedTx.value = null

@@ -241,15 +241,6 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Data Shohibul</span>
             </router-link>
             <router-link 
-              :to="{ name: 'admin-qurban-target' }"
-              :title="isSidebarCollapsed ? 'Target Hewan' : ''"
-              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="[$route.name === 'admin-qurban-target' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
-            >
-              <Target class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Target Hewan</span>
-            </router-link>
-            <router-link 
               :to="{ name: 'admin-qurban-setoran' }"
               :title="isSidebarCollapsed ? 'Riwayat Setoran' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -257,6 +248,15 @@
             >
               <History class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Riwayat Setoran</span>
+            </router-link>
+            <router-link 
+              :to="{ name: 'admin-qurban-target' }"
+              :title="isSidebarCollapsed ? 'Target Hewan' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-qurban-target' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <Target class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Target Hewan</span>
             </router-link>
             <router-link 
               :to="{ name: 'admin-qurban-periode' }"

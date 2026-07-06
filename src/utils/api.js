@@ -28,11 +28,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     let errorMessage = 'Terjadi kesalahan pada server';
+    let skipGlobalToast = false;
+    
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
 
       // Handle Laravel Validation Errors (422)
-      let skipGlobalToast = false;
       if (error.response.status === 422) {
         skipGlobalToast = true;
         if (error.response.data?.errors) {
