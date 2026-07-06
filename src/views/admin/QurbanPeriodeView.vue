@@ -305,11 +305,11 @@
               </div>
               <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-500 dark:text-gray-400">Total Hewan (Sapi/Kambing)</span>
-                <span class="font-bold text-gray-900 dark:text-white">12 Sapi / 8 Kambing</span>
+                <span class="font-bold text-gray-900 dark:text-white">{{ activePeriodStats.totalSapi }} Sapi / {{ activePeriodStats.totalKambing }} Kambing</span>
               </div>
               <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-500 dark:text-gray-400">Estimasi Jamaah Carry-over</span>
-                <span class="font-bold text-amber-600 dark:text-amber-400">14 Orang (Belum Lunas)</span>
+                <span class="font-bold text-amber-600 dark:text-amber-400">{{ activePeriodStats.sapiBelumLunas + activePeriodStats.kambingBelumLunas }} Orang (Belum Lunas)</span>
               </div>
             </div>
             
@@ -510,6 +510,12 @@ const settings = ref({
 })
 
 const riwayatPeriode = ref([])
+const activePeriodStats = ref({
+  totalSapi: 0,
+  totalKambing: 0,
+  sapiBelumLunas: 0,
+  kambingBelumLunas: 0
+})
 
 const fetchPeriodsData = async () => {
   try {
@@ -524,6 +530,13 @@ const fetchPeriodsData = async () => {
           hargaSapiSlot: active.sapi_price_per_slot,
           hargaKambing: active.kambing_price,
           isRegistrationOpen: active.is_registration_open !== false
+        }
+        
+        activePeriodStats.value = {
+          totalSapi: active.totalSapi || 0,
+          totalKambing: active.totalKambing || 0,
+          sapiBelumLunas: active.sapiBelumLunas || 0,
+          kambingBelumLunas: active.kambingBelumLunas || 0
         }
       }
       

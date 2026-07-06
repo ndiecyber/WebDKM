@@ -450,11 +450,11 @@ const totalSapiCount = computed(() => sapiGroups.value.length)
 const totalSapiShohibulCount = computed(() => sapiGroups.value.reduce((acc, g) => acc + g.shohibuls.length, 0))
 const sapiPrice = computed(() => {
   const period = qurbanStore.periods.find(p => p.id === qurbanStore.selectedPeriodId)
-  return period ? period.sapi_price_per_slot * 7 : 28000000
+  return period ? period.sapi_price_per_slot * 7 : 0
 })
 const sapiShohibulPrice = computed(() => {
   const period = qurbanStore.periods.find(p => p.id === qurbanStore.selectedPeriodId)
-  return period ? period.sapi_price_per_slot : 4000000
+  return period ? period.sapi_price_per_slot : 0
 })
 
 const totalKambingCount = computed(() => {
@@ -466,7 +466,7 @@ const totalKambingCount = computed(() => {
 })
 const kambingPrice = computed(() => {
   const period = qurbanStore.periods.find(p => p.id === qurbanStore.selectedPeriodId)
-  return period ? period.kambing_price : 3500000
+  return period ? period.kambing_price : 0
 })
 
 // DATA RESPONSE API
@@ -585,7 +585,7 @@ const kambingList = computed(() => {
 
 const getGroupTotal = (group) => group.shohibuls.reduce((sum, member) => sum + member.collected_amount, 0)
 const getGroupTargetTotal = (group) => {
-  const pricePerSlot = group.shohibuls.length > 0 ? group.shohibuls[0].target_amount : 4000000;
+  const pricePerSlot = group.shohibuls.length > 0 ? group.shohibuls[0].target_amount : sapiShohibulPrice.value;
   return pricePerSlot * 7;
 }
 

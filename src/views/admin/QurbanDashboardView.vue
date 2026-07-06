@@ -157,7 +157,7 @@
                     <span v-if="tx.status === 'success'" class="px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400">Sukses</span>
                     <span v-else-if="tx.status === 'pending'" class="px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400">Pending</span>
                   </div>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ formatDate(tx.created_at) }} • {{ tx.method || 'Transfer' }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ formatDate(tx.created_at) }} • {{ tx.payment_method || 'Transfer' }}</p>
                 </div>
               </div>
               <div class="text-right flex items-center gap-3">
@@ -288,15 +288,10 @@ const fetchDashboardData = async () => {
       const data = response.data.data
       store.value = {
         ...data,
-        settings: store.value.settings
-      }
-      
-      const p = qurbanStore.periods.find(x => x.id == data.period.id)
-      if (p) {
-        store.value.settings = {
-          hargaSapi: p.sapi_price_per_slot * 7,
-          hargaSlotSapi: p.sapi_price_per_slot,
-          hargaKambing: p.kambing_price
+        settings: {
+          hargaSapi: (data.settings?.sapi_price_per_slot || 0) * 7,
+          hargaSlotSapi: data.settings?.sapi_price_per_slot || 0,
+          hargaKambing: data.settings?.kambing_price || 0
         }
       }
     }
