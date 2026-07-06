@@ -460,13 +460,15 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter, ChevronDown, Check, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-vue-next'
-import { qurbanMockData } from '@/utils/qurbanMock'
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
+import { useToastStore } from '@/stores/toast'
+import api from '@/utils/api'
 
 // STATE
 const router = useRouter()
 const qurbanStore = useQurbanStore()
+const toastStore = useToastStore()
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 const searchQuery = ref('')
@@ -500,24 +502,40 @@ const setFilter = (value) => {
 
 const formData = ref({ name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' })
 
-// MOCK DATA 
-const mockPeserta = ref([])
+// DATA
+const pesertaData = ref([])
+
+const fetchPesertaData = async () => {
+  localLoading.value = true
+  try {
+    const params = qurbanStore.selectedPeriodId ? { period_id: qurbanStore.selectedPeriodId } : {}
+    const response = await api.get('/qurban/shohibuls', { params })
+    if (response.data?.success) {
+      pesertaData.value = response.data.data
+    }
+  } catch (err) {
+    if (err.response?.status !== 404) {
+      toastStore.addToast('Gagal memuat data peserta', 'error')
+    }
+    pesertaData.value = []
+  } finally {
+    localLoading.value = false
+  }
+}
 
 onMounted(() => {
-  setTimeout(() => {
-    mockPeserta.value = qurbanMockData.shohibuls;
-    localLoading.value = false
-  }, 1000)
+  fetchPesertaData()
 })
 
-watch(() => qurbanStore.selectedPeriodId, () => {
-  // Simulate fetching data for the new period
-  mockPeserta.value = qurbanMockData.shohibuls.slice().sort(() => Math.random() - 0.5)
+watch(() => qurbanStore.selectedPeriodId, (newVal) => {
+  if (newVal) {
+    fetchPesertaData()
+  }
 })
 
 // COMPUTED FILTERS
 const filteredPeserta = computed(() => {
-  return mockPeserta.value.filter(p => {
+  return pesertaData.value.filter(p => {
     const q = searchQuery.value.toLowerCase()
     const matchesSearch = p.name.toLowerCase().includes(q) || p.id.toString().includes(q) || p.address.toLowerCase().includes(q)
     
@@ -562,14 +580,34 @@ const getInitials = (name) => {
 }
 
 // Modal Handlers
-const openDetails = (peserta) => { selectedPeserta.value = peserta; modalType.value = 'detail'; document.body.style.overflow = 'hidden' }
+const openDetails = async (peserta) => { 
+  selectedPeserta.value = peserta; 
+  modalType.value = 'detail'; 
+  document.body.style.overflow = 'hidden';
+  // Fetch full details for full transaction history
+  try {
+    const res = await api.get('/qurban/shohibuls/' + peserta.id)
+    if (res.data?.success) {
+      selectedPeserta.value = res.data.data
+      // Ensure transactions have a 'date' field compatible with template
+      if (selectedPeserta.value.transactions) {
+        selectedPeserta.value.transactions = selectedPeserta.value.transactions.map(tx => ({
+          ...tx,
+          date: new Date(tx.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        }))
+      }
+    }
+  } catch(e) {
+    console.error(e)
+  }
+}
 const openAddModal = () => { 
   formData.value = { name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' }
   modalType.value = 'add'; document.body.style.overflow = 'hidden' 
 }
 const openEditModal = (peserta) => { 
   selectedPeserta.value = peserta; 
-  formData.value = { ...peserta }
+  formData.value = { name: peserta.name, phone: peserta.phone, address: peserta.address, target_type: peserta.target_type }
   modalType.value = 'edit'; document.body.style.overflow = 'hidden' 
 }
 
@@ -583,18 +621,45 @@ const confirmDelete = (peserta) => {
 const closeModal = () => { modalType.value = null; selectedPeserta.value = null; document.body.style.overflow = '' }
 
 // Actions
-const submitForm = () => {
-  if (modalType.value === 'add') {
-    alert(`Fungsi Register API dipanggil! Peserta baru dibuat dan setoran awal Rp ${formData.value.initial_amount} berhasil dicatat melalui ${formData.value.payment_method}.`)
-  } else if (modalType.value === 'edit') {
-    alert(`Fungsi Update API dipanggil! Berhasil menyimpan perubahan identitas peserta.`)
+const submitForm = async () => {
+  try {
+    if (modalType.value === 'add') {
+      const payload = { ...formData.value }
+      const res = await api.post('/qurban/shohibuls/register', payload)
+      if (res.data?.success) {
+        toastStore.addToast('Peserta berhasil didaftarkan', 'success')
+        fetchPesertaData()
+      }
+    } else if (modalType.value === 'edit') {
+      const payload = {
+        name: formData.value.name,
+        phone: formData.value.phone,
+        address: formData.value.address
+      }
+      const res = await api.put('/qurban/admin/shohibuls/' + selectedPeserta.value.id, payload)
+      if (res.data?.success) {
+        toastStore.addToast('Data peserta berhasil diperbarui', 'success')
+        fetchPesertaData()
+      }
+    }
+    closeModal()
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal menyimpan data', 'error')
   }
-  closeModal()
 }
 
-const executeDelete = () => {
-  alert('Fungsi Destroy API dipanggil! Peserta berhasil dihapus.')
-  closeModal()
+const executeDelete = async () => {
+  try {
+    const res = await api.delete('/qurban/admin/shohibuls/' + selectedPeserta.value.id)
+    if (res.data?.success) {
+      toastStore.addToast('Peserta berhasil dihapus', 'success')
+      fetchPesertaData()
+    }
+    closeModal()
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal menghapus data', 'error')
+    closeModal()
+  }
 }
 </script>
 

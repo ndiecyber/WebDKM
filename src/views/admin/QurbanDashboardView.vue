@@ -238,16 +238,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { 
   Wallet, CheckCircle, TrendingUp, TrendingDown, Users, PieChart, 
   AlertCircle, Calendar, Clock, ArrowUpRight
 } from 'lucide-vue-next'
-import { qurbanMockData } from '@/utils/qurbanMock'
+import api from '@/utils/api'
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
+import { useToastStore } from '@/stores/toast'
 
 const qurbanStore = useQurbanStore()
+const toastStore = useToastStore()
 
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
@@ -273,28 +275,48 @@ const store = ref({
   animals: { sapi_shohibul: 0, kambing_shohibul: 0, sapi_groups: 0, estimated_sapi: 0 },
   pending_transactions: 0,
   recent_transactions: [],
-  settings: { hargaSapi: 28000000, hargaSlotSapi: 4000000, hargaKambing: 3500000 }
+  settings: { hargaSapi: 0, hargaSlotSapi: 0, hargaKambing: 0 }
 })
 
-onMounted(() => {
-  setTimeout(() => {
-    const daysRemaining = Math.max(0, Math.ceil((new Date(qurbanMockData.period.deadline_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+const fetchDashboardData = async () => {
+  localLoading.value = true
+  try {
+    const params = qurbanStore.selectedPeriodId ? { period_id: qurbanStore.selectedPeriodId } : {}
+    const response = await api.get('/qurban/dashboard/stats', { params })
     
-    store.value = {
-      period: {
-        id: qurbanMockData.period.id,
-        name: qurbanMockData.period.name,
-        deadline_date: qurbanMockData.period.deadline_date,
-        days_remaining: daysRemaining
-      },
-      summary: qurbanMockData.summary,
-      animals: qurbanMockData.animals,
-      pending_transactions: qurbanMockData.transactions.filter(t => t.status === 'pending').length,
-      recent_transactions: qurbanMockData.transactions.slice(0, 5),
-      settings: qurbanMockData.settings
+    if (response.data?.success) {
+      const data = response.data.data
+      store.value = {
+        ...data,
+        settings: store.value.settings
+      }
+      
+      const p = qurbanStore.periods.find(x => x.id == data.period.id)
+      if (p) {
+        store.value.settings = {
+          hargaSapi: p.sapi_price_per_slot * 7,
+          hargaSlotSapi: p.sapi_price_per_slot,
+          hargaKambing: p.kambing_price
+        }
+      }
     }
+  } catch (err) {
+    if (err.response?.status !== 404) {
+      toastStore.addToast('Gagal memuat data dashboard qurban', 'error')
+    }
+  } finally {
     localLoading.value = false
-  }, 1200)
+  }
+}
+
+onMounted(() => {
+  fetchDashboardData()
+})
+
+watch(() => qurbanStore.selectedPeriodId, (newVal) => {
+  if (newVal) {
+    fetchDashboardData()
+  }
 })
 </script>
 

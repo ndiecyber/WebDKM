@@ -427,11 +427,13 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { Users, Plus, ArrowRightLeft, ArrowRight, X, Trash2, Search, Filter, ChevronDown, Check, MapPin, AlertTriangle } from 'lucide-vue-next'
-import { qurbanMockData } from '@/utils/qurbanMock'
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
+import { useToastStore } from '@/stores/toast'
+import api from '@/utils/api'
 
 const qurbanStore = useQurbanStore()
+const toastStore = useToastStore()
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 
@@ -446,52 +448,62 @@ const activeTab = ref('sapi')
 
 const totalSapiCount = computed(() => sapiGroups.value.length)
 const totalSapiShohibulCount = computed(() => sapiGroups.value.reduce((acc, g) => acc + g.shohibuls.length, 0))
-const sapiPrice = 28000000
-const sapiShohibulPrice = 4000000
+const sapiPrice = computed(() => {
+  const period = qurbanStore.periods.find(p => p.id === qurbanStore.selectedPeriodId)
+  return period ? period.sapi_price_per_slot * 7 : 28000000
+})
+const sapiShohibulPrice = computed(() => {
+  const period = qurbanStore.periods.find(p => p.id === qurbanStore.selectedPeriodId)
+  return period ? period.sapi_price_per_slot : 4000000
+})
 
 const totalKambingCount = computed(() => {
   let count = 0
-  mockGroups.value.forEach(g => {
+  animalGroupsData.value.forEach(g => {
     if (g.target_type === 'kambing') count += g.shohibuls.length
   })
   return count
 })
-const kambingPrice = 3500000
+const kambingPrice = computed(() => {
+  const period = qurbanStore.periods.find(p => p.id === qurbanStore.selectedPeriodId)
+  return period ? period.kambing_price : 3500000
+})
 
-// MOCK DATA RESPONSE API
-const mockGroups = ref([])
+// DATA RESPONSE API
+const animalGroupsData = ref([])
+
+const fetchAnimalGroups = async () => {
+  localLoading.value = true
+  try {
+    const params = qurbanStore.selectedPeriodId ? { period_id: qurbanStore.selectedPeriodId } : {}
+    const response = await api.get('/qurban/groups', { params })
+    if (response.data?.success) {
+      animalGroupsData.value = response.data.data
+      
+      // Kambing is not a group in DB anymore since they are mandiri, but the backend AnimalGroup might have them?
+      // Wait, in ShohibulController we see: $group = $this->groupingService->assignGroup($period, $data['target_type']);
+      // So kambing also gets a group? Yes, target_type='kambing'.
+      // If it has groups, it will be returned here.
+    }
+  } catch (err) {
+    if (err.response?.status !== 404) {
+      toastStore.addToast('Gagal memuat data kelompok hewan', 'error')
+    }
+    animalGroupsData.value = []
+  } finally {
+    localLoading.value = false
+  }
+}
 
 onMounted(() => {
-  setTimeout(() => {
-    // Generate groups that match the view's expected format 
-    // Target view expects both sapi groups and a pseudo kambing group
-    
-    let simulatedGroups = qurbanMockData.animalGroups.map(g => ({
-      ...g,
-      shohibuls_count: g.shohibuls.length
-    }));
-    
-    // Add Kambing pseudo-group
-    const kambingShohibuls = qurbanMockData.shohibuls.filter(s => s.target_type === 'kambing');
-    simulatedGroups.push({
-      id: 'kambing-group-1',
-      name: 'Mandiri Kambing',
-      target_type: 'kambing',
-      shohibuls_count: kambingShohibuls.length,
-      shohibuls: kambingShohibuls
-    });
-    
-    mockGroups.value = simulatedGroups;
-    localLoading.value = false;
-  }, 1000)
+  fetchAnimalGroups()
 })
 
 watch(() => qurbanStore.selectedPeriodId, () => {
-  // Simulate fetching data for the new period
-  mockGroups.value = mockGroups.value.slice().sort(() => Math.random() - 0.5)
+  fetchAnimalGroups()
 })
 
-const sapiGroups = computed(() => mockGroups.value.filter(g => g.target_type === 'sapi'))
+const sapiGroups = computed(() => animalGroupsData.value.filter(g => g.target_type === 'sapi'))
 
 const searchSapiQuery = ref('')
 const sapiStatusFilter = ref('all')
@@ -550,8 +562,8 @@ const selectKambingStatusFilter = (value) => {
 
 const kambingList = computed(() => {
   let kambings = []
-  mockGroups.value.forEach(g => {
-    if (g.target_type === 'kambing') kambings = kambings.concat(g.shohibuls)
+  animalGroupsData.value.forEach(g => {
+    if (g.target_type === 'kambing' && g.shohibuls) kambings = kambings.concat(g.shohibuls)
   })
   
   const query = searchKambingQuery.value.toLowerCase()
@@ -595,13 +607,19 @@ const closeMoveModal = () => {
   document.body.style.overflow = ''
 }
 
-const confirmMove = (targetGroup) => {
-  const oldGroup = mockGroups.value.find(g => g.id === moveModal.value.currentGroup.id)
-  const newGroup = mockGroups.value.find(g => g.id === targetGroup.id)
-  
-  if (oldGroup && newGroup) {
-    oldGroup.shohibuls = oldGroup.shohibuls.filter(m => m.id !== moveModal.value.member.id)
-    newGroup.shohibuls.push(moveModal.value.member)
+const confirmMove = async (targetGroup) => {
+  try {
+    const payload = {
+      shohibul_id: moveModal.value.member.id,
+      new_group_id: targetGroup.id
+    }
+    const res = await api.post('/qurban/admin/groups/move-member', payload)
+    if (res.data?.success) {
+      toastStore.addToast(`Shohibul berhasil dipindahkan ke ${targetGroup.name}`, 'success')
+      fetchAnimalGroups()
+    }
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal memindahkan shohibul', 'error')
   }
   closeMoveModal()
 }
@@ -613,26 +631,38 @@ const openCreateGroupModal = () => {
   createModal.value.isOpen = true
 }
 
-const submitCreateGroup = () => {
+const submitCreateGroup = async () => {
   const groupName = prompt("Masukkan nama kelompok sapi baru:")
   
   if (groupName && groupName.trim() !== '') {
-    // Eksekusi API
-    alert(`Memanggil API Store AnimalGroup... \nNama: ${groupName}`)
-    
-    mockGroups.value.push({
-      id: Math.floor(Math.random() * 1000),
-      name: groupName,
-      target_type: 'sapi',
-      shohibuls_count: 0,
-      shohibuls: []
-    })
+    try {
+      const payload = {
+        name: groupName.trim(),
+        target_type: 'sapi'
+      }
+      const res = await api.post('/qurban/admin/groups', payload)
+      if (res.data?.success) {
+        toastStore.addToast(`Kelompok sapi "${groupName}" berhasil dibuat`, 'success')
+        createModal.value.isOpen = false
+        fetchAnimalGroups()
+      }
+    } catch (err) {
+      toastStore.addToast(err.response?.data?.message || 'Gagal membuat kelompok sapi', 'error')
+    }
   }
 }
 
-const deleteGroup = (group) => {
+const deleteGroup = async (group) => {
   if (confirm(`Apakah Anda yakin ingin menghapus kelompok ${group.name} secara permanen?`)) {
-    mockGroups.value = mockGroups.value.filter(g => g.id !== group.id)
+    try {
+      const res = await api.delete(`/qurban/admin/groups/${group.id}`)
+      if (res.data?.success) {
+        toastStore.addToast(`Kelompok ${group.name} berhasil dihapus`, 'success')
+        fetchAnimalGroups()
+      }
+    } catch (err) {
+      toastStore.addToast(err.response?.data?.message || 'Gagal menghapus kelompok', 'error')
+    }
   }
 }
 </script>

@@ -417,11 +417,13 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { History, Search, CheckCircle, Clock, Banknote, XCircle, Pencil, ArrowRight, Filter, ChevronDown, Check, Phone, MapPin, AlertTriangle, Plus, Landmark, QrCode, X, Eye } from 'lucide-vue-next'
-import { qurbanMockData } from '@/utils/qurbanMock'
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
+import { useToastStore } from '@/stores/toast'
+import api from '@/utils/api'
 
 const qurbanStore = useQurbanStore()
+const toastStore = useToastStore()
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 const searchQuery = ref('')
@@ -434,7 +436,19 @@ const isDropdownOpen = ref(false)
 const searchShohibul = ref('')
 const cashForm = ref({ shohibul_id: '', amount: null, paymentMethod: 'tunai' })
 
-const shohibulList = computed(() => qurbanMockData.shohibuls || [])
+const shohibulList = ref([])
+
+const fetchShohibuls = async () => {
+  try {
+    const params = qurbanStore.selectedPeriodId ? { period_id: qurbanStore.selectedPeriodId } : {}
+    const response = await api.get('/qurban/shohibuls', { params })
+    if (response.data?.success) {
+      shohibulList.value = response.data.data
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 const filteredShohibuls = computed(() => {
   if (!searchShohibul.value) return shohibulList.value
@@ -469,37 +483,59 @@ const paginatedData = ref({
   current_page: 1,
   data: [],
   from: 1,
-  to: 5,
-  total: 5,
+  to: 0,
+  total: 0,
   per_page: 20,
   next_page_url: null,
   prev_page_url: null
 })
 
-onMounted(() => {
-  setTimeout(() => {
-    paginatedData.value.data = qurbanMockData.transactions;
-    paginatedData.value.total = qurbanMockData.transactions.length;
-    paginatedData.value.to = qurbanMockData.transactions.length;
+let searchTimeout = null
+watch(searchQuery, () => {
+  clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(() => {
+    fetchTransactions(1)
+  }, 500)
+})
+
+const fetchTransactions = async (page = 1) => {
+  localLoading.value = true
+  try {
+    const params = {
+      page,
+      period_id: qurbanStore.selectedPeriodId || '',
+      status: statusFilter.value === 'all' ? '' : statusFilter.value,
+      search: searchQuery.value || ''
+    }
+    const res = await api.get('/qurban/transactions', { params })
+    if (res.data?.success) {
+      paginatedData.value = res.data.data
+    }
+  } catch (err) {
+    toastStore.addToast('Gagal memuat data transaksi', 'error')
+  } finally {
     localLoading.value = false
-  }, 1000)
+  }
+}
+
+onMounted(() => {
+  fetchTransactions()
+  fetchShohibuls()
 })
 
 watch(() => qurbanStore.selectedPeriodId, () => {
-  // Simulate fetching data for the new period
-  paginatedData.value.data = qurbanMockData.transactions.slice().sort(() => Math.random() - 0.5)
+  fetchTransactions()
+  fetchShohibuls()
 })
 
-const filteredTransactions = computed(() => {
-  if (!paginatedData.value.data) return []
-  return paginatedData.value.data.filter(tx => {
-    const q = searchQuery.value.toLowerCase()
-    const matchesSearch = tx.shohibul.name.toLowerCase().includes(q) || tx.id.toLowerCase().includes(q)
-    const matchesStatus = statusFilter.value === 'all' ? true : tx.status === statusFilter.value
-    return matchesSearch && matchesStatus
-  })
+watch(statusFilter, () => {
+  fetchTransactions(1)
 })
 
+const filteredTransactions = computed(() => paginatedData.value.data || [])
+
+// Stats are approximated from current page since we don't have global stats for transactions yet, 
+// or ideally we could get this from dashboard endpoint if needed.
 const pendingCount = computed(() => paginatedData.value.data.filter(tx => tx.status === 'pending').length)
 const totalSuccessAmount = computed(() => paginatedData.value.data.filter(tx => tx.status === 'success').reduce((sum, tx) => sum + tx.amount, 0))
 
@@ -529,47 +565,61 @@ const closeCashModal = () => {
   document.body.style.overflow = '' 
 }
 
-const verifyTransaction = (id) => {
+const verifyTransaction = async (id) => {
   if (confirm("Yakin memverifikasi setoran ini secara manual? Pastikan uang sudah masuk ke rekening DKM.")) {
-    const tx = paginatedData.value.data.find(t => t.id === id)
-    if (tx) { 
-      tx.status = 'success'
-      alert("Transaksi berhasil diverifikasi!") 
-      selectedTx.value = null
-      document.body.style.overflow = ''
+    try {
+      const res = await api.post(`/qurban/admin/transactions/${id}/verify`)
+      if (res.data?.success) {
+        toastStore.addToast("Transaksi berhasil diverifikasi!", "success")
+        selectedTx.value = null
+        document.body.style.overflow = ''
+        fetchTransactions(paginatedData.value.current_page)
+      }
+    } catch (err) {
+      toastStore.addToast(err.response?.data?.message || 'Gagal memverifikasi', 'error')
     }
   }
 }
 
-const cancelTransaction = (id) => {
-  if (confirm("Apakah Anda yakin ingin membatalkan transaksi pending ini? Aksi ini sesuai fungsi 'cancel' di backend.")) {
-    const tx = paginatedData.value.data.find(t => t.id === id)
-    if (tx) { 
-      tx.status = 'cancelled'
-      alert("Transaksi berhasil dibatalkan.") 
-      selectedTx.value = null
-      document.body.style.overflow = ''
+const cancelTransaction = async (id) => {
+  if (confirm("Apakah Anda yakin ingin membatalkan transaksi pending ini?")) {
+    try {
+      const res = await api.post(`/qurban/admin/transactions/${id}/cancel`)
+      if (res.data?.success) {
+        toastStore.addToast("Transaksi berhasil dibatalkan.", "success")
+        selectedTx.value = null
+        document.body.style.overflow = ''
+        fetchTransactions(paginatedData.value.current_page)
+      }
+    } catch (err) {
+      toastStore.addToast(err.response?.data?.message || 'Gagal membatalkan', 'error')
     }
   }
 }
 
-const submitCashDeposit = () => {
+const submitCashDeposit = async () => {
   if (!cashForm.value.shohibul_id) {
     alert("Silakan pilih shohibul terlebih dahulu.")
     return
   }
   
-  paginatedData.value.data.unshift({
-    id: `TX-MANUAL-${Math.floor(Math.random() * 1000)}`,
-    amount: cashForm.value.amount,
-    created_at: new Date().toISOString(),
-    payment_method: cashForm.value.paymentMethod,
-    status: 'success',
-    shohibul: { ...selectedShohibul.value } 
-  })
-  
-  alert("Setoran manual berhasil dicatat (Sesuai alur 'manualDeposit' Backend)!")
-  closeCashModal()
+  try {
+    const payload = {
+      shohibul_id: cashForm.value.shohibul_id,
+      amount: cashForm.value.amount
+    }
+    
+    // We assume backend uses the manual deposit endpoint (POST /admin/transactions/manual)
+    // Wait, the API for manual deposit might only accept amount and shohibul_id
+    const res = await api.post('/qurban/admin/transactions/manual', payload)
+    if (res.data?.success) {
+      toastStore.addToast("Setoran manual berhasil dicatat", "success")
+      closeCashModal()
+      fetchTransactions()
+    }
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal mencatat setoran', 'error')
+  }
 }
 </script>
 
