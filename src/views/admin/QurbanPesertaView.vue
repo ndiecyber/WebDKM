@@ -463,12 +463,14 @@ import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
 import { useToastStore } from '@/stores/toast'
+import { useDialogStore } from '@/stores/dialog'
 import api from '@/utils/api'
 
 // STATE
 const router = useRouter()
 const qurbanStore = useQurbanStore()
 const toastStore = useToastStore()
+const dialog = useDialogStore()
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 const searchQuery = ref('')
@@ -611,9 +613,14 @@ const openEditModal = (peserta) => {
   modalType.value = 'edit'; document.body.style.overflow = 'hidden' 
 }
 
-const confirmDelete = (peserta) => { 
+const confirmDelete = async (peserta) => { 
   if (peserta.collected_amount > 0 || (peserta.transactions && peserta.transactions.some(tx => tx.status === 'pending'))) {
-    alert(`DITOLAK SISTEM: Shohibul ${peserta.name} memiliki saldo aktif (${formatRupiah(peserta.collected_amount)}) atau transaksi yang masih pending. Batalkan transaksi atau selesaikan refund sebelum menghapus peserta!`)
+    await dialog.open({
+      title: 'Penolakan Sistem',
+      message: `Shohibul ${peserta.name} memiliki saldo aktif (${formatRupiah(peserta.collected_amount)}) atau transaksi yang masih pending. Batalkan transaksi atau selesaikan refund sebelum menghapus peserta!`,
+      type: 'alert',
+      confirmText: 'Mengerti'
+    })
     return
   }
   selectedPeserta.value = peserta; modalType.value = 'delete'; document.body.style.overflow = 'hidden' 

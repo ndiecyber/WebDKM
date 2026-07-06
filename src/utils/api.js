@@ -31,6 +31,19 @@ api.interceptors.response.use(
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
 
+      // Handle Laravel Validation Errors (422)
+      let skipGlobalToast = false;
+      if (error.response.status === 422) {
+        skipGlobalToast = true;
+        if (error.response.data?.errors) {
+          // Get the first error message from the validation errors object
+          const firstError = Object.values(error.response.data.errors)[0][0];
+          errorMessage = firstError;
+          // Mutate response so local catch blocks also show the specific error
+          error.response.data.message = errorMessage;
+        }
+      }
+
       if (error.response.status === 401) {
         // Token expired or unauthorized
         localStorage.removeItem('auth_token');
@@ -47,11 +60,13 @@ api.interceptors.response.use(
     }
 
     // Show toast for error
-    try {
-      const toast = useToastStore();
-      toast.addToast(errorMessage, 'error');
-    } catch (e) {
-      console.error('Toast failed to display:', e);
+    if (typeof skipGlobalToast === 'undefined' || !skipGlobalToast) {
+      try {
+        const toast = useToastStore();
+        toast.addToast(errorMessage, 'error');
+      } catch (e) {
+        console.error('Toast failed to display:', e);
+      }
     }
 
     return Promise.reject(error);

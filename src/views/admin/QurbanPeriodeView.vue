@@ -10,8 +10,9 @@
         @click="openWizard"
         class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-bold px-5 py-2.5 rounded-xl shadow-md shadow-secondary/20 transition-all text-sm flex items-center gap-2 justify-center shrink-0"
       >
-        <FolderSync class="w-4 h-4" />
-        <span>Tutup Buku & Buka Periode Baru</span>
+        <FolderSync class="w-4 h-4" v-if="settings.id" />
+        <Plus class="w-4 h-4" v-else />
+        <span>{{ settings.id ? 'Tutup Buku & Buka Periode Baru' : 'Buka Periode Baru' }}</span>
       </button>
     </div>
 
@@ -269,7 +270,7 @@
           <div class="flex justify-between items-start mb-4">
             <div>
               <h3 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
-                Tutup Buku & Mulai Periode Baru
+                {{ settings.id ? 'Tutup Buku & Mulai Periode Baru' : 'Mulai Periode Baru' }}
               </h3>
               <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Langkah {{ wizardModal.step }} dari 2</p>
             </div>
@@ -299,17 +300,30 @@
             
             <div class="p-5 bg-gray-50/50 dark:bg-gray-800/30 rounded-xl border border-gray-100 dark:border-white/5 space-y-3">
               <h4 class="font-bold text-gray-900 dark:text-white text-sm border-b border-gray-200 dark:border-gray-700 pb-2">Ringkasan Sistem Saat Ini</h4>
-              <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Judul Periode</span>
-                <span class="font-bold text-gray-900 dark:text-white">{{ settings.periodeName }}</span>
+              
+              <!-- Data Ringkasan (Hanya Tampil Jika Ada Periode Aktif) -->
+              <div v-if="settings.id" class="space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500 dark:text-gray-400">Periode yang akan ditutup</span>
+                  <span class="font-bold text-gray-900 dark:text-white">{{ settings.periodeName }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500 dark:text-gray-400">Total Hewan (Sapi/Kambing)</span>
+                  <span class="font-bold text-gray-900 dark:text-white">{{ activePeriodStats.totalSapi }} Sapi / {{ activePeriodStats.totalKambing }} Kambing</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500 dark:text-gray-400">Estimasi Jamaah Carry-over</span>
+                  <span class="font-bold text-amber-600 dark:text-amber-400">{{ activePeriodStats.sapiBelumLunas + activePeriodStats.kambingBelumLunas }} Orang (Belum Lunas)</span>
+                </div>
               </div>
-              <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Total Hewan (Sapi/Kambing)</span>
-                <span class="font-bold text-gray-900 dark:text-white">{{ activePeriodStats.totalSapi }} Sapi / {{ activePeriodStats.totalKambing }} Kambing</span>
-              </div>
-              <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Estimasi Jamaah Carry-over</span>
-                <span class="font-bold text-amber-600 dark:text-amber-400">{{ activePeriodStats.sapiBelumLunas + activePeriodStats.kambingBelumLunas }} Orang (Belum Lunas)</span>
+              
+              <div v-else>
+                <div class="p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-lg flex items-start gap-3">
+                  <AlertTriangle class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                  <p class="text-xs text-blue-700 dark:text-blue-400">
+                    Belum ada periode aktif. Pembuatan periode baru ini tidak akan melakukan migrasi data carry-over karena ini adalah periode pertama.
+                  </p>
+                </div>
               </div>
             </div>
             
@@ -648,12 +662,19 @@ const executeWizard = async () => {
       name: wizardModal.value.form.periodeName,
       deadline_date: wizardModal.value.form.deadline,
       sapi_price_per_slot: wizardModal.value.form.hargaSapiSlot,
-      kambing_price: wizardModal.value.form.hargaKambing
+      kambing_price: wizardModal.value.form.hargaKambing,
+      is_active: true
     }
     
-    const res = await api.post('/qurban/admin/rollover/execute', payload)
+    let res;
+    if (settings.value.id) {
+      res = await api.post('/qurban/admin/rollover/execute', payload)
+    } else {
+      res = await api.post('/qurban/admin/periods', payload)
+    }
+    
     if (res.data?.success) {
-      toastStore.addToast('Proses Tutup Buku & Buat Periode Baru berhasil', 'success')
+      toastStore.addToast(settings.value.id ? 'Proses Tutup Buku & Buat Periode Baru berhasil' : 'Periode Baru berhasil dibuat', 'success')
       wizardModal.value.isOpen = false
       fetchPeriodsData()
       qurbanStore.isFetchingPeriods = false

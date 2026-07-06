@@ -420,10 +420,12 @@ import { History, Search, CheckCircle, Clock, Banknote, XCircle, Pencil, ArrowRi
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
 import { useToastStore } from '@/stores/toast'
+import { useDialogStore } from '@/stores/dialog'
 import api from '@/utils/api'
 
 const qurbanStore = useQurbanStore()
 const toastStore = useToastStore()
+const dialog = useDialogStore()
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 const searchQuery = ref('')
@@ -566,7 +568,14 @@ const closeCashModal = () => {
 }
 
 const verifyTransaction = async (id) => {
-  if (confirm("Yakin memverifikasi setoran ini secara manual? Pastikan uang sudah masuk ke rekening DKM.")) {
+  const isConfirmed = await dialog.open({
+    title: 'Verifikasi Setoran',
+    message: 'Yakin memverifikasi setoran ini secara manual? Pastikan uang sudah masuk ke rekening DKM.',
+    type: 'confirm',
+    confirmText: 'Ya, Verifikasi'
+  })
+
+  if (isConfirmed) {
     try {
       const res = await api.post(`/qurban/admin/transactions/${id}/verify`)
       if (res.data?.success) {
@@ -582,7 +591,15 @@ const verifyTransaction = async (id) => {
 }
 
 const cancelTransaction = async (id) => {
-  if (confirm("Apakah Anda yakin ingin membatalkan transaksi pending ini?")) {
+  const isConfirmed = await dialog.open({
+    title: 'Batalkan Transaksi',
+    message: 'Apakah Anda yakin ingin membatalkan transaksi pending ini?',
+    type: 'confirm',
+    confirmText: 'Ya, Batalkan',
+    cancelText: 'Kembali'
+  })
+
+  if (isConfirmed) {
     try {
       const res = await api.post(`/qurban/admin/transactions/${id}/cancel`)
       if (res.data?.success) {
@@ -599,7 +616,7 @@ const cancelTransaction = async (id) => {
 
 const submitCashDeposit = async () => {
   if (!cashForm.value.shohibul_id) {
-    alert("Silakan pilih shohibul terlebih dahulu.")
+    toastStore.addToast("Silakan pilih shohibul terlebih dahulu.", "warning")
     return
   }
   

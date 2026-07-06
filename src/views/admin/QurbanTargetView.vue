@@ -430,10 +430,12 @@ import { Users, Plus, ArrowRightLeft, ArrowRight, X, Trash2, Search, Filter, Che
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
 import { useToastStore } from '@/stores/toast'
+import { useDialogStore } from '@/stores/dialog'
 import api from '@/utils/api'
 
 const qurbanStore = useQurbanStore()
 const toastStore = useToastStore()
+const dialog = useDialogStore()
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 
@@ -653,7 +655,15 @@ const submitCreateGroup = async () => {
 }
 
 const deleteGroup = async (group) => {
-  if (confirm(`Apakah Anda yakin ingin menghapus kelompok ${group.name} secara permanen?`)) {
+  const isConfirmed = await dialog.open({
+    title: 'Hapus Kelompok',
+    message: `Apakah Anda yakin ingin menghapus kelompok ${group.name} secara permanen?`,
+    type: 'confirm',
+    confirmText: 'Ya, Hapus',
+    cancelText: 'Batal'
+  })
+
+  if (isConfirmed) {
     try {
       const res = await api.delete(`/qurban/admin/groups/${group.id}`)
       if (res.data?.success) {

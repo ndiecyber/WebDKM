@@ -12,7 +12,7 @@
       
       <div class="flex items-center gap-3">
         <span class="hidden sm:flex text-xs bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 px-3 py-2 rounded-lg font-bold items-center ring-1 ring-red-500/20 shadow-sm">
-          <Clock class="w-4 h-4 mr-1.5" /> Sisa {{ store.period.days_remaining }} Hari
+          <Clock class="w-4 h-4 mr-1.5" /> Sisa {{ Math.ceil(store.period.days_remaining) }} Hari
         </span>
 
         <QurbanPeriodSelector />
