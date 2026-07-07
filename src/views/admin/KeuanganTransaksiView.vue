@@ -17,15 +17,16 @@
     </div>
 
     <!-- Filter & Search Bar -->
-    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
-      <div class="relative w-full md:w-96">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 shadow-md relative z-20">
+      
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <Search class="w-4 h-4 text-gray-400" />
         </div>
         <input 
           type="text" 
           placeholder="Cari deskripsi atau nominal..." 
-          class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+          class="block w-full pl-11 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl leading-5 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary sm:text-sm transition-colors shadow-sm"
         />
       </div>
       
@@ -56,11 +57,11 @@
     </div>
 
     <!-- Global Program Filter & Summary Dashboard -->
-    <div class="bg-white dark:bg-gray-900 rounded-2xl ring-1 ring-gray-200 dark:ring-white/10 shadow-sm p-5 md:p-6 relative overflow-hidden z-0">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl ring-1 ring-gray-200 dark:ring-white/10 shadow-sm p-4 relative overflow-hidden z-0">
         <!-- Header & Filter -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10 mb-4">
           <div>
-            <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <div class="p-1.5 bg-gray-50 dark:bg-gray-800 rounded-lg ring-1 ring-gray-200 dark:ring-white/10">
                 <PieChart class="w-4 h-4 text-secondary" />
               </div>
@@ -89,28 +90,28 @@
         </div>
 
         <!-- Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
-          <div class="bg-white dark:bg-gray-900 ring-1 ring-emerald-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 relative z-10">
+          <div class="bg-white dark:bg-gray-900 ring-1 ring-emerald-500/20 rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
             <div>
-              <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Total Pemasukan</p>
-              <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp {{ formatCurrency(summaryPemasukan) }}</p>
+              <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400">Total Pemasukan</p>
+              <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">Rp {{ formatCurrency(summaryPemasukan) }}</p>
             </div>
-            <div class="p-2.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg ring-1 ring-emerald-500/20 shadow-sm"><ArrowDownLeft class="w-5 h-5 text-emerald-600 dark:text-emerald-400" /></div>
+            <div class="p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg ring-1 ring-emerald-500/20 shadow-sm"><ArrowDownLeft class="w-4 h-4 text-emerald-600 dark:text-emerald-400" /></div>
           </div>
-          <div class="bg-white dark:bg-gray-900 ring-1 ring-rose-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white dark:bg-gray-900 ring-1 ring-rose-500/20 rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
             <div>
-              <p class="text-sm font-medium text-rose-600 dark:text-rose-400">Total Pengeluaran</p>
-              <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp {{ formatCurrency(summaryPengeluaran) }}</p>
+              <p class="text-xs font-medium text-rose-600 dark:text-rose-400">Total Pengeluaran</p>
+              <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">Rp {{ formatCurrency(summaryPengeluaran) }}</p>
             </div>
-            <div class="p-2.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg ring-1 ring-rose-500/20 shadow-sm"><ArrowUpRight class="w-5 h-5 text-rose-600 dark:text-rose-400" /></div>
+            <div class="p-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg ring-1 ring-rose-500/20 shadow-sm"><ArrowUpRight class="w-4 h-4 text-rose-600 dark:text-rose-400" /></div>
           </div>
-          <div class="bg-white dark:bg-gray-900 ring-1 ring-blue-500/20 rounded-xl p-5 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white dark:bg-gray-900 ring-1 ring-blue-500/20 rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
             <div>
-              <p class="text-sm font-medium text-blue-600 dark:text-blue-400">Saldo Akhir</p>
-              <p class="text-xs text-blue-500/80 dark:text-blue-400/80 mt-0.5">Pemasukan - Pengeluaran</p>
-              <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Rp {{ formatCurrency(summarySaldo) }}</p>
+              <p class="text-xs font-medium text-blue-600 dark:text-blue-400">Saldo Akhir</p>
+              <p class="text-[10px] text-blue-500/80 dark:text-blue-400/80 mt-0.5">Pemasukan - Pengeluaran</p>
+              <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">Rp {{ formatCurrency(summarySaldo) }}</p>
             </div>
-            <div class="p-2.5 bg-blue-100 dark:bg-blue-500/20 rounded-lg ring-1 ring-blue-500/30 shadow-sm"><Scale class="w-5 h-5 text-blue-600 dark:text-blue-400" /></div>
+            <div class="p-2 bg-blue-100 dark:bg-blue-500/20 rounded-lg ring-1 ring-blue-500/30 shadow-sm"><Scale class="w-4 h-4 text-blue-600 dark:text-blue-400" /></div>
           </div>
         </div>
     </div>
@@ -120,22 +121,22 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[800px]">
           <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-300 dark:border-white/5">
-            <tr>
-              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Tanggal</th>
-              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Deskripsi</th>
-              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kategori</th>
-              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kas/Rekening</th>
-              <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Status</th>
-              <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Nominal</th>
-              <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Aksi</th>
+            <tr class="text-[11px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th scope="col" class="px-4 py-3 font-bold">Tanggal</th>
+              <th scope="col" class="px-4 py-3 font-bold">Deskripsi</th>
+              <th scope="col" class="px-4 py-3 font-bold">Kategori</th>
+              <th scope="col" class="px-4 py-3 font-bold">Kas/Rekening</th>
+              <th scope="col" class="px-4 py-3 font-bold">Status</th>
+              <th scope="col" class="px-4 py-3 font-bold text-right">Nominal</th>
+              <th scope="col" class="px-4 py-3 font-bold text-right w-[1%] whitespace-nowrap">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 dark:divide-white/5">
             <tr v-for="tx in paginatedFilteredTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
-              <td class="px-6 py-2.5 whitespace-nowrap">
+              <td class="px-4 py-3 whitespace-nowrap">
                 <div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div>
               </td>
-              <td class="px-6 py-2.5">
+              <td class="px-4 py-3">
                 <div class="flex items-center gap-3">
                   <div :class="[
                     'w-8 h-8 rounded-full flex items-center justify-center shrink-0',
@@ -147,18 +148,18 @@
                   <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.description">{{ tx.description }}</p>
                 </div>
               </td>
-              <td class="px-6 py-2.5 whitespace-nowrap">
+              <td class="px-4 py-3 whitespace-nowrap">
                 <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
                 <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">
                   {{ getProgramName(tx.program_id) }}
                 </span>
               </td>
-              <td class="px-6 py-2.5 whitespace-nowrap">
+              <td class="px-4 py-3 whitespace-nowrap">
                 <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 ring-1 ring-gray-300 dark:ring-white/10">
                   {{ tx.account }}
                 </span>
               </td>
-              <td class="px-6 py-2.5 whitespace-nowrap">
+              <td class="px-4 py-3 whitespace-nowrap">
                 <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
                   Approved
                 </span>
@@ -166,7 +167,7 @@
                   Pending
                 </span>
               </td>
-              <td class="px-6 py-2.5 whitespace-nowrap text-right">
+              <td class="px-4 py-3 whitespace-nowrap text-right">
                 <span :class="[
                   'font-semibold',
                   tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : (tx.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400')
@@ -174,10 +175,10 @@
                   {{ tx.type === 'in' ? '+' : '-' }} Rp {{ formatCurrency(tx.amount) }}
                 </span>
               </td>
-              <td class="px-6 py-2.5 whitespace-nowrap text-right">
-                <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-                  <button @click="openEditModal(tx)" class="p-1.5 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors" title="Edit">
-                    <Pencil class="w-4 h-4" />
+              <td class="px-4 py-3 whitespace-nowrap text-right w-[1%]">
+                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button @click="openEditModal(tx)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Transaksi">
+                    <Pencil class="w-3.5 h-3.5" />
                   </button>
                 </div>
               </td>
@@ -221,34 +222,34 @@
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[700px]">
             <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/30 border-b border-gray-200 dark:border-white/5">
-              <tr>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Tanggal</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Deskripsi</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kategori</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kas/Rekening</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Status</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Nominal</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Aksi</th>
+            <tr class="text-[11px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th scope="col" class="px-4 py-3 font-bold">Tanggal</th>
+                <th scope="col" class="px-4 py-3 font-bold">Deskripsi</th>
+                <th scope="col" class="px-4 py-3 font-bold">Kategori</th>
+                <th scope="col" class="px-4 py-3 font-bold">Kas/Rekening</th>
+                <th scope="col" class="px-4 py-3 font-bold">Status</th>
+                <th scope="col" class="px-4 py-3 font-bold text-right">Nominal</th>
+                <th scope="col" class="px-4 py-3 font-bold text-right w-[1%] whitespace-nowrap">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-white/5">
               <tr v-for="tx in paginatedPemasukanTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div>
                 </td>
-                <td class="px-6 py-2.5">
+                <td class="px-4 py-3">
                   <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.description">{{ tx.description }}</p>
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
                   <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">
                     {{ getProgramName(tx.program_id) }}
                   </span>
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span>
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
                     Approved
                   </span>
@@ -256,13 +257,13 @@
                     Pending
                   </span>
                 </td>
-                <td :class="['px-6 py-2.5 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-emerald-600 dark:text-emerald-400']">
+                <td :class="['px-4 py-3 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-emerald-600 dark:text-emerald-400']">
                   + Rp {{ formatCurrency(tx.amount) }}
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap text-right">
-                  <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-                    <button @click="openEditModal(tx)" class="p-1 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors" title="Edit">
-                      <Pencil class="w-4 h-4" />
+                <td class="px-4 py-3 whitespace-nowrap text-right w-[1%]">
+                  <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button @click="openEditModal(tx)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Transaksi">
+                      <Pencil class="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </td>
@@ -303,34 +304,34 @@
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[700px]">
             <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/30 border-b border-gray-200 dark:border-white/5">
-              <tr>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Tanggal</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Deskripsi</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kategori</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Kas/Rekening</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider">Status</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Nominal</th>
-                <th scope="col" class="px-6 py-3 font-semibold tracking-wider text-right">Aksi</th>
+              <tr class="text-[11px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th scope="col" class="px-4 py-3 font-bold">Tanggal</th>
+                <th scope="col" class="px-4 py-3 font-bold">Deskripsi</th>
+                <th scope="col" class="px-4 py-3 font-bold">Kategori</th>
+                <th scope="col" class="px-4 py-3 font-bold">Kas/Rekening</th>
+                <th scope="col" class="px-4 py-3 font-bold">Status</th>
+                <th scope="col" class="px-4 py-3 font-bold text-right">Nominal</th>
+                <th scope="col" class="px-4 py-3 font-bold text-right w-[1%] whitespace-nowrap">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-white/5">
               <tr v-for="tx in paginatedPengeluaranTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div>
                 </td>
-                <td class="px-6 py-2.5">
+                <td class="px-4 py-3">
                   <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.description">{{ tx.description }}</p>
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
                   <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">
                     {{ getProgramName(tx.program_id) }}
                   </span>
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span>
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap">
+                <td class="px-4 py-3 whitespace-nowrap">
                   <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">
                     Approved
                   </span>
@@ -338,13 +339,13 @@
                     Pending
                   </span>
                 </td>
-                <td :class="['px-6 py-2.5 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-rose-600 dark:text-rose-400']">
+                <td :class="['px-4 py-3 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-rose-600 dark:text-rose-400']">
                   - Rp {{ formatCurrency(tx.amount) }}
                 </td>
-                <td class="px-6 py-2.5 whitespace-nowrap text-right">
-                  <div class="flex items-center justify-end opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-                    <button @click="openEditModal(tx)" class="p-1 text-gray-400 hover:text-secondary dark:hover:text-yellow-500 rounded transition-colors" title="Edit">
-                      <Pencil class="w-4 h-4" />
+                <td class="px-4 py-3 whitespace-nowrap text-right w-[1%]">
+                  <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button @click="openEditModal(tx)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Transaksi">
+                      <Pencil class="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </td>

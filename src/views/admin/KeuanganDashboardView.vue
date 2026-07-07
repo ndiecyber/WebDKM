@@ -9,29 +9,13 @@
           Ringkasan performa finansial Masjid Jami Kassiti bulan ini.
         </p>
       </div>
-      <div class="flex items-center gap-3">
-        <div class="relative">
-          <button @click="showMonthDropdown = !showMonthDropdown" class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-300 dark:ring-white/10 shadow-md text-sm flex items-center gap-2 min-w-[150px] justify-between">
-            <div class="flex items-center gap-2">
-              <Calendar class="w-4 h-4 text-gray-400" />
-              <span>{{ selectedMonth }}</span>
-            </div>
-            <ChevronDown class="w-4 h-4 ml-1 text-gray-400" />
-          </button>
-          
-          <div v-if="showMonthDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-lg z-20 py-1 overflow-hidden animate-fade-in-down max-h-60 overflow-y-auto custom-scrollbar">
-            <button 
-              v-for="month in months" 
-              :key="month"
-              @click="selectedMonth = month; showMonthDropdown = false"
-              :class="['w-full text-left px-4 py-2 text-sm transition-colors', selectedMonth === month ? 'bg-secondary/10 text-secondary dark:bg-secondary/20 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700']"
-            >
-              {{ month }}
-            </button>
-          </div>
-          <!-- Backdrop -->
-          <div v-if="showMonthDropdown" @click="showMonthDropdown = false" class="fixed inset-0 z-10"></div>
-        </div>
+      <div class="flex items-center gap-2">
+        <select v-model="selectedMonthOnly" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary/50 transition-all shadow-sm">
+          <option v-for="month in monthNames" :key="month" :value="month">{{ month }}</option>
+        </select>
+        <select v-model="selectedYearOnly" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary/50 transition-all shadow-sm">
+          <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
+        </select>
       </div>
     </div>
 
@@ -137,10 +121,6 @@
             
             <!-- Dropdown Menu -->
             <div v-if="showChartMenu" class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-lg z-20 py-1 overflow-hidden animate-fade-in-down">
-              <button @click="exportChart" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
-                <Image class="w-4 h-4 text-gray-400" />
-                Unduh PNG
-              </button>
               <button v-if="chartType === 'line'" @click="toggleChartType" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
                 <BarChart3 class="w-4 h-4 text-gray-400" />
                 Ubah ke Diagram Batang
@@ -212,15 +192,17 @@ import {
 import VueApexCharts from 'vue3-apexcharts'
 
 // Month Dropdown Setup
-const showMonthDropdown = ref(false)
 const currentDate = new Date()
 const currentYear = currentDate.getFullYear()
 const monthNames = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ]
-const months = monthNames.map(m => `${m} ${currentYear}`)
-const selectedMonth = ref(`${monthNames[currentDate.getMonth()]} ${currentYear}`)
+const availableYears = [currentYear.toString(), (currentYear - 1).toString(), (currentYear - 2).toString()]
+const selectedMonthOnly = ref(monthNames[currentDate.getMonth()])
+const selectedYearOnly = ref(currentYear.toString())
+
+const selectedMonth = computed(() => `${selectedMonthOnly.value} ${selectedYearOnly.value}`)
 
 // Chart Setup
 const showChartMenu = ref(false)
@@ -229,18 +211,6 @@ const cashFlowChart = ref(null)
 
 const toggleChartType = () => {
   chartType.value = chartType.value === 'bar' ? 'line' : 'bar'
-  showChartMenu.value = false
-}
-
-const exportChart = () => {
-  if (cashFlowChart.value) {
-    cashFlowChart.value.chart.dataURI().then(({ imgURI }) => {
-      const a = document.createElement("a");
-      a.href = imgURI;
-      a.download = `arus-kas-${selectedMonth.value.toLowerCase().replace(' ', '-')}.png`;
-      a.click();
-    });
-  }
   showChartMenu.value = false
 }
 

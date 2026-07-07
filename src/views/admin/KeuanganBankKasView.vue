@@ -21,16 +21,16 @@
     </div>
     
     <!-- Filter & Search Section -->
-    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
-      <div class="relative w-full md:w-96">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 shadow-md relative z-20">
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <Search class="w-4 h-4 text-gray-400" />
         </div>
         <input 
           v-model="searchQuery" 
           type="text" 
           placeholder="Cari rekening atau kas..." 
-          class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+          class="block w-full pl-11 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl leading-5 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary sm:text-sm transition-colors shadow-sm"
         />
       </div>
       <div class="flex items-center gap-2 w-full md:w-auto">
@@ -46,7 +46,7 @@
     <!-- Cards Section -->
     <div class="relative group/scroll" v-if="sortedRekening.length > 0">
       <div 
-        class="flex gap-4 sm:gap-6 overflow-x-auto pt-4 pb-6 custom-scrollbar-x snap-x snap-mandatory scroll-smooth"
+        class="flex gap-4 sm:gap-6 overflow-x-auto pt-2 pb-4 custom-scrollbar-x snap-x snap-mandatory scroll-smooth"
         @wheel="handleHorizontalScroll"
         ref="cardContainerRef"
       >
@@ -54,7 +54,7 @@
         v-for="rek in sortedRekening" 
         :key="rek.id"
         @click="openDetailRekening(rek)"
-        class="relative shrink-0 w-[280px] sm:w-[320px] snap-center overflow-hidden rounded-2xl text-white p-6 shadow-lg group cursor-pointer ring-1 ring-black/5 dark:ring-white/10 transition-transform hover:-translate-y-1"
+        class="relative shrink-0 w-[280px] sm:w-[320px] snap-center overflow-hidden rounded-2xl text-white p-5 shadow-lg group cursor-pointer ring-1 ring-black/5 dark:ring-white/10 transition-transform hover:-translate-y-1"
         :class="getBgClass(rek.color, rek.isActive)"
       >
         <!-- Pin Button -->
@@ -71,7 +71,7 @@
           <component :is="getIcon(rek.type)" class="w-32 h-32" />
         </div>
         
-        <div class="relative z-10 flex flex-col h-full justify-between min-h-[160px]">
+        <div class="relative z-10 flex flex-col h-full justify-between min-h-[140px]">
           <div class="flex items-center justify-between pr-10">
             <h3 class="font-medium tracking-wide truncate pr-2 text-white/90" :class="{'line-through opacity-75': !rek.isActive}">{{ rek.name }}</h3>
           </div>
@@ -79,7 +79,7 @@
             <span class="px-2.5 py-1 text-xs font-semibold rounded-md backdrop-blur-sm border border-white/20 bg-white/10">{{ rek.type }}</span>
             <span v-if="!rek.isActive" class="px-2.5 py-1 text-xs font-semibold rounded-md backdrop-blur-sm border border-rose-500/30 bg-rose-500/30 text-rose-50">Nonaktif</span>
           </div>
-          <div class="mt-8">
+          <div class="mt-4">
             <p class="text-3xl font-bold tracking-tight">Rp {{ formatCurrency(rek.balance) }}</p>
             <p class="text-white/70 text-sm mt-1 font-mono tracking-wider">{{ rek.accountNo || rek.desc }}</p>
           </div>
@@ -107,24 +107,24 @@
     <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl overflow-hidden shadow-md">
       <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Riwayat Aktivitas Kas</h3>
-        <button class="text-sm font-medium text-secondary hover:text-yellow-600 transition-colors">Lihat Semua</button>
+        <RouterLink to="/admin/keuangan-transaksi" class="text-sm font-medium text-secondary hover:text-yellow-600 transition-colors">Lihat Semua</RouterLink>
       </div>
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[800px]">
-          <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-300 dark:border-white/5">
-            <tr>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tanggal</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tipe</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Dari / Rekening Terkait</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Ke Tujuan</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Nominal</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider text-right">Aksi</th>
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5 text-left border-collapse">
+          <thead class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-white/5">
+            <tr class="text-[11px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th scope="col" class="px-4 py-3 font-bold">Tanggal</th>
+              <th scope="col" class="px-4 py-3 font-bold">Tipe</th>
+              <th scope="col" class="px-4 py-3 font-bold">Dari / Rekening Terkait</th>
+              <th scope="col" class="px-4 py-3 font-bold">Ke Tujuan</th>
+              <th scope="col" class="px-4 py-3 font-bold">Nominal</th>
+              <th scope="col" class="px-4 py-3 font-bold text-right w-[1%] whitespace-nowrap">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-            <tr v-for="act in activityData" :key="act.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
-              <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white font-medium">{{ act.date }}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
+          <tbody class="divide-y divide-gray-100 dark:divide-white/5 text-sm text-gray-600 dark:text-gray-400">
+            <tr v-for="act in activityData" :key="act.id" class="hover:bg-gray-50/80 dark:hover:bg-white/[0.02] transition-colors group">
+              <td class="px-4 py-3 whitespace-nowrap text-gray-900 dark:text-white font-medium">{{ act.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
                 <span :class="[
                   'px-2.5 py-1 text-xs font-semibold rounded-md',
                   act.activityType === 'mutasi' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 ring-1 ring-blue-500/20' : 
@@ -133,27 +133,29 @@
                   {{ act.activityType === 'mutasi' ? 'Mutasi Antar Kas' : 'Penyesuaian Saldo' }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
+              <td class="px-4 py-3 whitespace-nowrap">
                 <span class="inline-flex items-center gap-2">
                   <span v-if="act.activityType === 'mutasi'" class="w-2 h-2 rounded-full bg-rose-400"></span>
                   <Scale v-else class="w-4 h-4 text-gray-400" />
                   {{ act.from }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
+              <td class="px-4 py-3 whitespace-nowrap">
                 <span v-if="act.activityType === 'mutasi'" class="inline-flex items-center gap-2">
                   <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                   {{ act.to }}
                 </span>
                 <span v-else class="text-gray-400 dark:text-gray-500 italic">- N/A -</span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap font-semibold" :class="act.subType === 'minus' ? 'text-rose-600 dark:text-rose-400' : (act.subType === 'plus' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-white')">
+              <td class="px-4 py-3 whitespace-nowrap font-semibold" :class="act.subType === 'minus' ? 'text-rose-600 dark:text-rose-400' : (act.subType === 'plus' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-white')">
                 {{ act.subType === 'minus' ? '-' : (act.subType === 'plus' ? '+' : '') }} Rp {{ formatCurrency(act.amount) }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right">
-                <button @click="openDetailActivity(act)" class="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
-                  Detail
-                </button>
+              <td class="px-4 py-3 whitespace-nowrap text-right w-[1%]">
+                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button @click="openDetailActivity(act)" class="text-gray-400 hover:text-secondary bg-gray-50 dark:bg-gray-800 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Detail">
+                    <Eye class="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -561,7 +563,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { 
   Plus, ArrowLeftRight, Landmark, Wallet, Briefcase, HardHat, X, 
-  ArrowUpRight, ArrowDownLeft, Pin, Scale, Pencil, QrCode, AlertTriangle, Info, ChevronLeft, ChevronRight, Search 
+  ArrowUpRight, ArrowDownLeft, Pin, Scale, Pencil, QrCode, AlertTriangle, Info, ChevronLeft, ChevronRight, Search, Eye 
 } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
