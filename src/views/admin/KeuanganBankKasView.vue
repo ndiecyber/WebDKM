@@ -318,13 +318,13 @@
             <div v-else class="space-y-4">
               <div v-for="act in detailActivities" :key="act.id" class="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-white/5 flex items-center justify-between">
                 <div>
-                  <p class="text-sm font-medium text-gray-900 dark:text-white">{{ act.jenis === 'adjustment' ? 'Penyesuaian Saldo' : (act.bank_kas_tujuan_id === selectedDetailRekening.id ? 'Masuk (Mutasi)' : 'Keluar (Mutasi)') }}</p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ new Date(act.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'}) }}</p>
+                  <p class="text-sm font-medium text-gray-900 dark:text-white">{{ act.type === 'adjustment' ? 'Penyesuaian Saldo' : (act.is_pemasukan ? 'Masuk (Mutasi)' : 'Keluar (Mutasi)') }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ new Date(act.tanggal).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) }}</p>
                   <p v-if="act.deskripsi" class="text-xs text-gray-600 dark:text-gray-300 mt-1">{{ act.deskripsi }}</p>
                 </div>
                 <div class="text-right">
-                  <p :class="['font-bold text-sm', act.jenis === 'adjustment' ? (act.nominal_perubahan > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400') : (act.bank_kas_tujuan_id === selectedDetailRekening.id ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400')]">
-                    {{ (act.jenis === 'adjustment' ? act.nominal_perubahan > 0 : act.bank_kas_tujuan_id === selectedDetailRekening.id) ? '+' : '' }}{{ act.jenis === 'adjustment' ? formatCurrencyLocal(act.nominal_perubahan) : formatCurrencyLocal(act.nominal) }}
+                  <p :class="['font-bold text-sm', act.is_pemasukan ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400']">
+                    {{ act.is_pemasukan ? '+' : '-' }}{{ formatCurrencyLocal(Math.abs(act.nominal)) }}
                   </p>
                 </div>
               </div>
@@ -338,12 +338,17 @@
             <div v-else-if="!detailProgramBalances.length" class="text-center py-8 text-gray-500 dark:text-gray-400">
               <p>Tidak ada saldo program yang tercatat di rekening ini.</p>
             </div>
-            <div v-else class="space-y-3">
-              <div v-for="pb in detailProgramBalances" :key="pb.program_id" class="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-white/5">
-                <div>
-                  <h4 class="font-medium text-gray-900 dark:text-white">{{ pb.program?.nama || 'Program (Terhapus)' }}</h4>
+            <div v-else class="space-y-4">
+              <div class="flex justify-center mb-4">
+                <apexchart type="donut" width="300" :options="programChartOptions" :series="programChartSeries"></apexchart>
+              </div>
+              <div class="space-y-3">
+                <div v-for="pb in detailProgramBalances" :key="pb.program_id" class="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-white/5">
+                  <div>
+                    <h4 class="font-medium text-gray-900 dark:text-white">{{ pb.nama_program || 'Program (Terhapus)' }}</h4>
+                  </div>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatCurrencyLocal(pb.saldo) }}</span>
                 </div>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatCurrencyLocal(pb.total_balance) }}</span>
               </div>
             </div>
           </template>
@@ -533,6 +538,49 @@ const detailActivities = ref([])
 const detailProgramBalances = ref([])
 const isDetailLoading = ref(false)
 
+const programChartSeries = computed(() => detailProgramBalances.value.map(pb => pb.saldo))
+const programChartOptions = computed(() => {
+  const isDark = document.documentElement.classList.contains('dark')
+  return {
+    chart: { type: 'donut', background: 'transparent' },
+    labels: detailProgramBalances.value.map(pb => pb.nama_program || 'Unknown'),
+    theme: { mode: isDark ? 'dark' : 'light' },
+    stroke: { show: true, colors: isDark ? ['#1f2937'] : ['#ffffff'], width: 2 },
+    dataLabels: { enabled: false },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '70%',
+          labels: {
+            show: true,
+            name: { show: true, fontSize: '12px', color: isDark ? '#9ca3af' : '#6b7280' },
+            value: {
+              show: true,
+              fontSize: '14px',
+              fontWeight: 600,
+              color: isDark ? '#f3f4f6' : '#111827',
+              formatter: (val) => 'Rp ' + parseInt(val).toLocaleString('id-ID')
+            },
+            total: {
+              show: true,
+              label: 'Total Alokasi',
+              color: isDark ? '#9ca3af' : '#6b7280',
+              formatter: (w) => {
+                const total = w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                return 'Rp ' + total.toLocaleString('id-ID')
+              }
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      y: { formatter: (val) => 'Rp ' + parseInt(val).toLocaleString('id-ID') }
+    },
+    legend: { show: false }
+  }
+})
+
 watch(selectedDetailRekening, (newVal) => {
   if (newVal) {
     detailTab.value = 'info'
@@ -678,7 +726,7 @@ const openEditRekeningModal = (rek) => {
 const saveRekening = async () => {
   if (isSaving.value) return
   if (!rekForm.value.name) {
-    toast.showToast('Nama rekening wajib diisi', 'error')
+    toast.addToast('Nama rekening wajib diisi', 'error')
     return
   }
 
@@ -686,14 +734,14 @@ const saveRekening = async () => {
   try {
     if (isEditRekeningMode.value) {
       await keuanganStore.updateBankKas(rekForm.value.id, rekForm.value, qrFile.value)
-      toast.showToast('Rekening berhasil diubah', 'success')
+      toast.addToast('Rekening berhasil diubah', 'success')
     } else {
       await keuanganStore.createBankKas(rekForm.value, qrFile.value)
-      toast.showToast('Rekening berhasil ditambahkan', 'success')
+      toast.addToast('Rekening berhasil ditambahkan', 'success')
     }
     showFormRekeningModal.value = false
   } catch (err) {
-    toast.showToast(err.response?.data?.message || 'Gagal menyimpan rekening', 'error')
+    toast.addToast(err.response?.data?.message || 'Gagal menyimpan rekening', 'error')
   } finally {
     isSaving.value = false
   }
@@ -706,9 +754,9 @@ const openDetailRekening = (rek) => {
 const togglePin = async (rek) => {
   try {
     await keuanganStore.updateBankKas(rek.id, { isPinned: !rek.isPinned })
-    toast.showToast(rek.isPinned ? 'Rekening dilepaskan' : 'Rekening disematkan', 'success')
+    toast.addToast(rek.isPinned ? 'Rekening dilepaskan' : 'Rekening disematkan', 'success')
   } catch (err) {
-    toast.showToast('Gagal merubah status semat', 'error')
+    toast.addToast('Gagal merubah status semat', 'error')
   }
 }
 
@@ -728,7 +776,7 @@ const openPenyesuaianModal = (rek) => {
 const simpanPenyesuaian = async () => {
   if (isSaving.value) return
   if (!penyesuaianForm.value.reason) {
-    toast.showToast('Alasan penyesuaian wajib diisi', 'error')
+    toast.addToast('Alasan penyesuaian wajib diisi', 'error')
     return
   }
   if (penyesuaianDiff.value !== 0) {
@@ -739,11 +787,11 @@ const simpanPenyesuaian = async () => {
         deskripsi: penyesuaianForm.value.reason,
         date: penyesuaianForm.value.date
       })
-      toast.showToast('Penyesuaian saldo berhasil disimpan', 'success')
+      toast.addToast('Penyesuaian saldo berhasil disimpan', 'success')
       showPenyesuaianModal.value = false
       selectedDetailRekening.value = null
     } catch (err) {
-      toast.showToast(err.response?.data?.message || 'Gagal menyimpan penyesuaian', 'error')
+      toast.addToast(err.response?.data?.message || 'Gagal menyimpan penyesuaian', 'error')
     } finally {
       isSaving.value = false
     }
@@ -761,11 +809,11 @@ const openMutasiModal = () => {
 const simpanMutasi = async () => {
   if (isSaving.value) return
   if (!mutasiForm.value.from || !mutasiForm.value.to || !mutasiForm.value.amount) {
-    toast.showToast('Mohon lengkapi rekening asal, tujuan, dan nominal', 'error')
+    toast.addToast('Mohon lengkapi rekening asal, tujuan, dan nominal', 'error')
     return
   }
   if (mutasiForm.value.from === mutasiForm.value.to) {
-    toast.showToast('Rekening asal dan tujuan tidak boleh sama', 'error')
+    toast.addToast('Rekening asal dan tujuan tidak boleh sama', 'error')
     return
   }
 
@@ -780,14 +828,14 @@ const simpanMutasi = async () => {
       bankKasTujuanId: mutasiForm.value.to,
       date: mutasiForm.value.date
     })
-    toast.showToast('Mutasi kas berhasil dicatat', 'success')
+    toast.addToast('Mutasi kas berhasil dicatat', 'success')
     showMutasiModal.value = false
     // Refresh bank_kas to update balances
     await keuanganStore.fetchBankKas()
     // Refresh transactions to show recent transfer in activity table
     await keuanganStore.fetchTransactions({ tipe: 'transfer', per_page: 5 })
   } catch (err) {
-    toast.showToast(err.response?.data?.message || 'Gagal memproses mutasi', 'error')
+    toast.addToast(err.response?.data?.message || 'Gagal memproses mutasi', 'error')
   } finally {
     isSaving.value = false
   }

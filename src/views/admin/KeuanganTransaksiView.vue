@@ -746,10 +746,10 @@ const approveTransaction = async (tx) => {
   if (confirm(`Setujui transaksi "${tx.name || tx.description}"?`)) {
     try {
       await keuanganStore.updateTransactionStatus(tx.id, 'approved')
-      toast.showToast('Transaksi berhasil disetujui', 'success')
+      toast.addToast('Transaksi berhasil disetujui', 'success')
       refetchTransactions(keuanganStore.pagination.transactions.page)
     } catch (err) {
-      toast.showToast('Gagal menyetujui transaksi', 'error')
+      toast.addToast('Gagal menyetujui transaksi', 'error')
     }
   }
 }
@@ -757,7 +757,7 @@ const approveTransaction = async (tx) => {
 const saveTransaction = async () => {
   if (isSaving.value) return
   if (!catatForm.value.name) {
-    toast.showToast('Nama transaksi wajib diisi', 'error')
+    toast.addToast('Nama transaksi wajib diisi', 'error')
     return
   }
 
@@ -783,17 +783,17 @@ const saveTransaction = async () => {
 
     if (isEditMode.value) {
       await keuanganStore.updateTransaction(catatForm.value.id, data)
-      toast.showToast('Transaksi berhasil diubah', 'success')
+      toast.addToast('Transaksi berhasil diubah', 'success')
     } else {
       await keuanganStore.createTransaction(data)
-      toast.showToast('Transaksi berhasil ditambahkan', 'success')
+      toast.addToast('Transaksi berhasil ditambahkan', 'success')
     }
     
     showCatatModal.value = false
     refetchTransactions(keuanganStore.pagination.transactions.page)
   } catch (err) {
     const message = err.response?.data?.message || 'Gagal menyimpan transaksi'
-    toast.showToast(message, 'error')
+    toast.addToast(message, 'error')
   } finally {
     isSaving.value = false
   }

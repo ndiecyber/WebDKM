@@ -141,7 +141,7 @@ const loadData = async (page = 1) => {
     trashedItems.value = res.items
     pagination.value = { currentPage: res.currentPage, lastPage: res.lastPage }
   } catch (err) {
-    toast.showToast('Gagal memuat data sampah', 'error')
+    toast.addToast('Gagal memuat data sampah', 'error')
   } finally {
     loading.value = false
   }
@@ -185,7 +185,7 @@ const formatDate = (dateStr) => {
 const restoreItem = async (id) => {
   try {
     await keuanganStore.restoreTrashed(activeTab.value, id)
-    toast.showToast('Data berhasil dipulihkan', 'success')
+    toast.addToast('Data berhasil dipulihkan', 'success')
     loadData(pagination.value.currentPage)
     
     // Refresh main store data in background
@@ -194,7 +194,7 @@ const restoreItem = async (id) => {
     if (activeTab.value === 'programs') keuanganStore.fetchPrograms()
     if (activeTab.value === 'categories') keuanganStore.fetchCategories()
   } catch (err) {
-    toast.showToast('Gagal memulihkan data', 'error')
+    toast.addToast('Gagal memulihkan data', 'error')
   }
 }
 
@@ -207,11 +207,11 @@ const executeForceDelete = async () => {
   isDeleting.value = true
   try {
     await keuanganStore.forceDeleteTrashed(activeTab.value, itemToDelete.value.id)
-    toast.showToast('Data berhasil dihapus permanen', 'success')
+    toast.addToast('Data berhasil dihapus permanen', 'success')
     itemToDelete.value = null
     loadData(pagination.value.currentPage)
   } catch (err) {
-    toast.showToast('Gagal menghapus data', 'error')
+    toast.addToast('Gagal menghapus data', 'error')
   } finally {
     isDeleting.value = false
   }

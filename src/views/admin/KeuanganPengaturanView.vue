@@ -139,7 +139,7 @@ onMounted(async () => {
     await keuanganStore.fetchCategories()
     populateCategories()
   } catch (err) {
-    toast.showToast('Gagal memuat kategori', 'error')
+    toast.addToast('Gagal memuat kategori', 'error')
   } finally {
     isLoading.value = false
   }
@@ -206,9 +206,9 @@ const saveSettings = async () => {
     populateCategories()
     deletedCategories.value = [] // Reset deleted list
     
-    toast.showToast('Pengaturan berhasil disimpan', 'success')
+    toast.addToast('Pengaturan berhasil disimpan', 'success')
   } catch (err) {
-    toast.showToast('Terjadi kesalahan saat menyimpan', 'error')
+    toast.addToast('Terjadi kesalahan saat menyimpan', 'error')
   } finally {
     isSaving.value = false
   }

@@ -244,7 +244,7 @@ watch(selectedReportId, async (newVal) => {
     showQR.value = true
     
   } catch (err) {
-    toast.showToast('Gagal memuat data laporan', 'error')
+    toast.addToast('Gagal memuat data laporan', 'error')
     selectedReportId.value = ''
   } finally {
     isLoadingReport.value = false

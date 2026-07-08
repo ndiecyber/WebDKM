@@ -267,9 +267,67 @@
             </div>
           </div>
           
-          <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-between shrink-0">
-            <button @click="goToTransactions(selectedDetailProgram.id)" class="px-4 py-2 text-sm font-medium text-secondary hover:text-white border border-secondary hover:bg-secondary rounded-lg transition-colors shadow-sm bg-white dark:bg-gray-900">Lihat Riwayat Transaksi</button>
-            <button @click="showDetailModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">Tutup</button>
+          <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row gap-2 justify-end shrink-0">
+            <button v-if="selectedDetailProgram?.status === 'Aktif' && selectedDetailProgram?.sisaSaldo > 0" @click="openRolloverModal" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 border border-emerald-200 rounded-lg transition-colors shadow-sm dark:bg-emerald-500/20 dark:hover:bg-emerald-500/30 dark:border-emerald-500/30 dark:text-emerald-400">Pindahkan Sisa Dana</button>
+            <button @click="goToTransactions(selectedDetailProgram.id)" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-secondary hover:text-white border border-secondary hover:bg-secondary rounded-lg transition-colors shadow-sm bg-white dark:bg-gray-900">Lihat Riwayat Transaksi</button>
+            <button @click="showDetailModal = false" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- Modal Rollover -->
+    <Teleport to="body">
+      <div v-if="showRolloverModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-0">
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="showRolloverModal = false"></div>
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden transform transition-all relative z-10 flex flex-col max-h-[90vh]">
+          <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex justify-between items-center shrink-0">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <Scale class="w-5 h-5 text-secondary" />
+              Pindahkan Sisa Dana
+            </h3>
+            <button @click="showRolloverModal = false" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+              <X class="w-5 h-5" />
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto custom-scrollbar">
+            <div v-if="isRolloverLoading" class="flex justify-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+            </div>
+            <form v-else @submit.prevent="submitRollover" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Target Program (Penerima)</label>
+                <select v-model="rolloverForm.target_program_id" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+                  <option value="">Kas Umum / Tanpa Program</option>
+                  <option v-for="p in activeProgramsForRollover" :key="p.id" :value="p.id">{{ p.nama }}</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi (Opsional)</label>
+                <textarea v-model="rolloverForm.deskripsi" rows="2" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all placeholder-gray-400" placeholder="Catatan mutasi dana..."></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rincian Fisik Sisa Dana</label>
+                <div class="bg-blue-50 dark:bg-blue-500/10 p-4 rounded-xl ring-1 ring-blue-200 dark:ring-blue-500/20 shadow-sm space-y-3">
+                  <p class="text-xs text-blue-700 dark:text-blue-400">Total sisa saldo tersebar di kas berikut dan akan dipindahkan seluruhnya.</p>
+                  <div v-for="source in rolloverSources" :key="source.bank_kas_id" class="flex justify-between items-center pb-2 border-b border-blue-200/50 dark:border-blue-500/20 last:border-0 last:pb-0">
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">{{ source.nama_kas }}</span>
+                    <span class="text-sm font-bold text-gray-900 dark:text-white">Rp {{ formatCurrencyLocal(source.amount) }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-white/5">
+                <button type="button" @click="showRolloverModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
+                <button type="submit" :disabled="isSubmittingRollover" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-secondary/90 rounded-lg transition-colors flex items-center justify-center min-w-[100px] disabled:opacity-70">
+                  <div v-if="isSubmittingRollover" class="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white mr-2"></div>
+                  Pindahkan
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -298,6 +356,64 @@ const form = ref({ id: null, name: '', description: '', startDate: '', endDate: 
 
 const showDetailModal = ref(false)
 const selectedDetailProgram = ref(null)
+
+const showRolloverModal = ref(false)
+const rolloverForm = ref({ target_program_id: '', deskripsi: '' })
+const rolloverSources = ref([])
+const isRolloverLoading = ref(false)
+const isSubmittingRollover = ref(false)
+
+const activeProgramsForRollover = computed(() => {
+  if (!selectedDetailProgram.value) return []
+  return keuanganStore.programs.filter(p => p.status === 'Aktif' && p.id !== selectedDetailProgram.value.id)
+})
+
+const openRolloverModal = async () => {
+  showDetailModal.value = false
+  showRolloverModal.value = true
+  rolloverForm.value = { target_program_id: '', deskripsi: '' }
+  rolloverSources.value = []
+  isRolloverLoading.value = true
+  
+  try {
+    const balances = await keuanganStore.fetchProgramPhysicalBalances(selectedDetailProgram.value.id)
+    rolloverSources.value = balances.map(b => ({
+      bank_kas_id: b.bank_kas_id,
+      nama_kas: b.nama_kas,
+      amount: b.saldo
+    }))
+  } catch (err) {
+    toast.addToast('Gagal memuat rincian saldo fisik', 'error')
+    showRolloverModal.value = false
+  } finally {
+    isRolloverLoading.value = false
+  }
+}
+
+const submitRollover = async () => {
+  if (isSubmittingRollover.value) return
+  isSubmittingRollover.value = true
+  
+  try {
+    const payload = {
+      target_program_id: rolloverForm.value.target_program_id || null,
+      deskripsi: rolloverForm.value.deskripsi,
+      sources: rolloverSources.value.map(s => ({
+        bank_kas_id: s.bank_kas_id,
+        amount: s.amount
+      }))
+    }
+    await keuanganStore.rolloverProgram(selectedDetailProgram.value.id, payload)
+    toast.addToast('Sisa dana berhasil dipindahkan, program selesai', 'success')
+    showRolloverModal.value = false
+    selectedDetailProgram.value = null
+    refetchPrograms(keuanganStore.pagination.programs.page)
+  } catch (err) {
+    toast.addToast(err.response?.data?.message || 'Gagal memindahkan sisa dana', 'error')
+  } finally {
+    isSubmittingRollover.value = false
+  }
+}
 
 const searchQuery = ref('')
 const filterStatus = ref('all') // 'aktif', 'selesai', 'all'
@@ -373,22 +489,22 @@ const goToTransactions = (programId) => {
 
 const saveProgram = async () => {
   if (!form.value.name || !form.value.startDate) {
-    toast.showToast('Harap lengkapi nama dan tanggal mulai', 'error')
+    toast.addToast('Harap lengkapi nama dan tanggal mulai', 'error')
     return
   }
   isSaving.value = true
   try {
     if (isEditing.value) {
       await keuanganStore.updateProgram(form.value.id, form.value)
-      toast.showToast('Program berhasil diperbarui', 'success')
+      toast.addToast('Program berhasil diperbarui', 'success')
     } else {
       await keuanganStore.createProgram(form.value)
-      toast.showToast('Program baru berhasil dibuat', 'success')
+      toast.addToast('Program baru berhasil dibuat', 'success')
     }
     showModal.value = false
     refetchPrograms(keuanganStore.pagination.programs.page)
   } catch (err) {
-    toast.showToast(err.response?.data?.message || 'Gagal menyimpan program', 'error')
+    toast.addToast(err.response?.data?.message || 'Gagal menyimpan program', 'error')
   } finally {
     isSaving.value = false
   }
@@ -405,10 +521,10 @@ const deleteProgram = async (id) => {
   if (confirmed) {
     try {
       await keuanganStore.deleteProgram(id)
-      toast.showToast('Program berhasil dihapus', 'success')
+      toast.addToast('Program berhasil dihapus', 'success')
       refetchPrograms(keuanganStore.pagination.programs.page)
     } catch (err) {
-      toast.showToast('Gagal menghapus program', 'error')
+      toast.addToast('Gagal menghapus program', 'error')
     }
   }
 }
