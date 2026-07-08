@@ -158,7 +158,13 @@
                     <ArrowDownLeft v-if="tx.type === 'in'" class="w-4 h-4" />
                     <ArrowUpRight v-else class="w-4 h-4" />
                   </div>
-                  <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.name || tx.description">{{ tx.name || tx.description }}</p>
+                  <div>
+                    <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.name || tx.description">{{ tx.name || tx.description }}</p>
+                    <div class="flex items-center gap-2 mt-0.5 text-[10px] text-gray-500 dark:text-gray-400">
+                      <span class="font-mono text-gray-400">{{ tx.nomorTransaksi }}</span>
+                      <span v-if="tx.createdByName" class="bg-gray-100 dark:bg-white/5 px-1.5 py-0.5 rounded flex items-center gap-1"><User class="w-3 h-3"/> {{ tx.createdByName }}</span>
+                    </div>
+                  </div>
                 </div>
               </td>
               <td class="px-4 py-3 whitespace-nowrap">
@@ -177,7 +183,7 @@
                   Approved
                 </span>
                 <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">
-                  Pending
+                  Draft
                 </span>
               </td>
               <td class="px-4 py-3 whitespace-nowrap text-right">
@@ -190,6 +196,9 @@
               </td>
               <td class="px-4 py-3 whitespace-nowrap text-right w-[1%]">
                 <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button v-if="tx.status === 'pending' || tx.status === 'draft'" @click="approveTransaction(tx)" class="text-emerald-500 hover:text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-800/50 p-1.5 rounded-lg transition-colors border border-emerald-200 dark:border-emerald-800/50" title="Approve Transaksi">
+                    <CheckCircle class="w-3.5 h-3.5" />
+                  </button>
                   <button @click="openEditModal(tx)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Transaksi">
                     <Pencil class="w-3.5 h-3.5" />
                   </button>
@@ -252,7 +261,13 @@
               </tr>
               <tr v-for="tx in pemasukanTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
                 <td class="px-4 py-3 whitespace-nowrap"><div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div></td>
-                <td class="px-4 py-3"><p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.name || tx.description">{{ tx.name || tx.description }}</p></td>
+                <td class="px-4 py-3">
+                  <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.name || tx.description">{{ tx.name || tx.description }}</p>
+                  <div class="flex items-center gap-2 mt-0.5 text-[10px] text-gray-500 dark:text-gray-400">
+                    <span class="font-mono text-gray-400">{{ tx.nomorTransaksi }}</span>
+                    <span v-if="tx.createdByName" class="bg-gray-100 dark:bg-white/5 px-1.5 py-0.5 rounded flex items-center gap-1"><User class="w-3 h-3"/> {{ tx.createdByName }}</span>
+                  </div>
+                </td>
                 <td class="px-4 py-3 whitespace-nowrap">
                   <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
                   <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">{{ getProgramName(tx.program_id) }}</span>
@@ -260,11 +275,12 @@
                 <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span></td>
                 <td class="px-4 py-3 whitespace-nowrap">
                   <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">Approved</span>
-                  <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">Pending</span>
+                  <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">Draft</span>
                 </td>
                 <td :class="['px-4 py-3 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-emerald-600 dark:text-emerald-400']">+ Rp {{ formatCurrencyLocal(tx.amount) }}</td>
                 <td class="px-4 py-3 whitespace-nowrap text-right w-[1%]">
                   <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button v-if="tx.status === 'pending' || tx.status === 'draft'" @click="approveTransaction(tx)" class="text-emerald-500 hover:text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-800/50 p-1.5 rounded-lg transition-colors border border-emerald-200 dark:border-emerald-800/50" title="Approve Transaksi"><CheckCircle class="w-3.5 h-3.5" /></button>
                     <button @click="openEditModal(tx)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Transaksi"><Pencil class="w-3.5 h-3.5" /></button>
                   </div>
                 </td>
@@ -302,7 +318,13 @@
               </tr>
               <tr v-for="tx in pengeluaranTransactions" :key="tx.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
                 <td class="px-4 py-3 whitespace-nowrap"><div class="text-gray-900 dark:text-white font-medium">{{ tx.date }}</div></td>
-                <td class="px-4 py-3"><p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.name || tx.description">{{ tx.name || tx.description }}</p></td>
+                <td class="px-4 py-3">
+                  <p class="text-gray-900 dark:text-gray-200 font-medium truncate max-w-[200px]" :title="tx.name || tx.description">{{ tx.name || tx.description }}</p>
+                  <div class="flex items-center gap-2 mt-0.5 text-[10px] text-gray-500 dark:text-gray-400">
+                    <span class="font-mono text-gray-400">{{ tx.nomorTransaksi }}</span>
+                    <span v-if="tx.createdByName" class="bg-gray-100 dark:bg-white/5 px-1.5 py-0.5 rounded flex items-center gap-1"><User class="w-3 h-3"/> {{ tx.createdByName }}</span>
+                  </div>
+                </td>
                 <td class="px-4 py-3 whitespace-nowrap">
                   <span class="text-gray-600 dark:text-gray-400">{{ tx.category }}</span>
                   <span v-if="tx.program_id" class="ml-2 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800/30">{{ getProgramName(tx.program_id) }}</span>
@@ -310,11 +332,12 @@
                 <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{{ tx.account }}</span></td>
                 <td class="px-4 py-3 whitespace-nowrap">
                   <span v-if="tx.status === 'approved'" class="px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20">Approved</span>
-                  <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">Pending</span>
+                  <span v-else class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 ring-1 ring-amber-500/20">Draft</span>
                 </td>
                 <td :class="['px-4 py-3 whitespace-nowrap text-right font-semibold', tx.status === 'pending' ? 'text-gray-500 dark:text-gray-400' : 'text-rose-600 dark:text-rose-400']">- Rp {{ formatCurrencyLocal(tx.amount) }}</td>
                 <td class="px-4 py-3 whitespace-nowrap text-right w-[1%]">
                   <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button v-if="tx.status === 'pending' || tx.status === 'draft'" @click="approveTransaction(tx)" class="text-emerald-500 hover:text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-800/50 p-1.5 rounded-lg transition-colors border border-emerald-200 dark:border-emerald-800/50" title="Approve Transaksi"><CheckCircle class="w-3.5 h-3.5" /></button>
                     <button @click="openEditModal(tx)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit Transaksi"><Pencil class="w-3.5 h-3.5" /></button>
                   </div>
                 </td>
@@ -421,7 +444,7 @@
               </label>
               <label class="flex items-center gap-2 cursor-pointer group">
                 <input type="radio" v-model="catatForm.status" value="pending" class="text-secondary focus:ring-secondary w-4 h-4 bg-white dark:bg-gray-950 border-gray-300 dark:border-gray-700">
-                <span class="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">Pending</span>
+                <span class="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">Draft / Pending</span>
               </label>
             </div>
           </div>
@@ -457,7 +480,7 @@
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status Transaksi</label>
             <div class="flex flex-wrap gap-2">
               <button @click="advFilter.status = null" :class="['px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer ring-1 transition-colors', !advFilter.status ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 ring-emerald-500/50' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 ring-gray-300 dark:ring-white/10 hover:bg-gray-200 dark:hover:bg-gray-700']">Semua Status</button>
-              <button @click="advFilter.status = 'pending'" :class="['px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer ring-1 transition-colors', advFilter.status === 'pending' ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 ring-amber-500/50' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 ring-gray-300 dark:ring-white/10 hover:bg-gray-200 dark:hover:bg-gray-700']">Pending</button>
+              <button @click="advFilter.status = 'pending'" :class="['px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer ring-1 transition-colors', advFilter.status === 'pending' ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 ring-amber-500/50' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 ring-gray-300 dark:ring-white/10 hover:bg-gray-200 dark:hover:bg-gray-700']">Draft / Pending</button>
               <button @click="advFilter.status = 'approved'" :class="['px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer ring-1 transition-colors', advFilter.status === 'approved' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 ring-emerald-500/50' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 ring-gray-300 dark:ring-white/10 hover:bg-gray-200 dark:hover:bg-gray-700']">Approved</button>
             </div>
           </div>
@@ -514,7 +537,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale, HelpCircle, PieChart, ChevronDown, Wallet, Layers, Table } from 'lucide-vue-next'
+import { Search, Filter, Plus, ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, X, Pencil, Scale, HelpCircle, PieChart, ChevronDown, Wallet, Layers, Table, CheckCircle, User } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
 import { useDialogStore } from '@/stores/dialog'
@@ -719,7 +742,20 @@ const openEditModal = (tx) => {
   showCatatModal.value = true
 }
 
+const approveTransaction = async (tx) => {
+  if (confirm(`Setujui transaksi "${tx.name || tx.description}"?`)) {
+    try {
+      await keuanganStore.updateTransactionStatus(tx.id, 'approved')
+      toast.showToast('Transaksi berhasil disetujui', 'success')
+      refetchTransactions(keuanganStore.pagination.transactions.page)
+    } catch (err) {
+      toast.showToast('Gagal menyetujui transaksi', 'error')
+    }
+  }
+}
+
 const saveTransaction = async () => {
+  if (isSaving.value) return
   if (!catatForm.value.name) {
     toast.showToast('Nama transaksi wajib diisi', 'error')
     return

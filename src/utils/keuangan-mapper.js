@@ -204,6 +204,7 @@ export const mapDashboardFromApi = (data) => ({
   selisihBulanIni: data.selisih_bulan_ini || 0,
   transaksiTerbaru: (data.transaksi_terbaru || []).map(mapTransactionFromApi),
   periode: data.periode || {},
+  persentasePerubahan: data.persentase_perubahan || { pemasukan: 0, pengeluaran: 0 },
 })
 
 export const mapChartDataFromApi = (data) => {

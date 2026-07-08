@@ -121,6 +121,18 @@ export const useKeuanganStore = defineStore('keuangan', {
       this.programs = this.programs.filter(p => p.id !== id)
     },
 
+    async fetchProgramPhysicalBalances(id) {
+      const res = await api.get(`/keuangan/programs/${id}/physical-balances`)
+      return res.data?.data ?? res.data
+    },
+
+    async rolloverProgram(id, data) {
+      const res = await api.post(`/keuangan/programs/${id}/rollover`, data)
+      // Refresh programs after rollover
+      await this.fetchPrograms()
+      return res.data?.data ?? res.data
+    },
+
     // ======================================================================
     // Transactions
     // ======================================================================
@@ -222,13 +234,24 @@ export const useKeuanganStore = defineStore('keuangan', {
     },
 
     async adjustBalance(bankKasId, data) {
-      const res = await api.post(`/keuangan/bank-kas/${bankKasId}/adjust`, {
+      const res = await api.post(`/keuangan/bank-kas/${bankKasId}/adjustments`, {
         tanggal: data.tanggal || data.date,
-        saldo_sesudah: parseFloat(data.targetSaldo || data.target_saldo || 0),
+        target_saldo: parseFloat(data.targetSaldo || data.target_saldo || 0),
         deskripsi: data.deskripsi || data.description || null,
+        program_id: data.programId || data.program_id || null,
       })
       // Refresh the bank_kas list to get updated saldo
       await this.fetchBankKas()
+      return res.data?.data ?? res.data
+    },
+
+    async fetchBankKasActivities(id) {
+      const res = await api.get(`/keuangan/bank-kas/${id}/activities`)
+      return res.data?.data ?? res.data
+    },
+
+    async fetchBankKasProgramBalances(id) {
+      const res = await api.get(`/keuangan/bank-kas/${id}/program-balances`)
       return res.data?.data ?? res.data
     },
 

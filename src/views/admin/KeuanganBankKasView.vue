@@ -230,6 +230,11 @@
               <input type="number" v-model="rekForm.initialBalance" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="0">
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Saldo awal tidak bisa diubah setelah dibuat. Gunakan Penyesuaian Saldo nanti.</p>
             </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">QR Code / Logo Bank (Opsional)</label>
+              <input type="file" @change="handleFileUpload" accept="image/*" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" v-if="rekForm.qrImage">QR Code/Logo sudah tersimpan. Unggah yang baru untuk mengganti.</p>
+            </div>
           </div>
         </div>
         
@@ -246,15 +251,23 @@
     <div v-if="selectedDetailRekening" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="selectedDetailRekening = null"></div>
       
-      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Rekening</h3>
-          <button @click="selectedDetailRekening = null" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-            <X class="w-5 h-5" />
-          </button>
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Rekening</h3>
+            <button @click="selectedDetailRekening = null" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+              <X class="w-5 h-5" />
+            </button>
+          </div>
+          <div class="flex space-x-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <button @click="detailTab = 'info'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'info' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Info Umum</button>
+            <button @click="detailTab = 'aktivitas'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'aktivitas' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Aktivitas</button>
+            <button @click="detailTab = 'program'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'program' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Saldo Program</button>
+          </div>
         </div>
         
-        <div class="p-6 space-y-5 max-h-[70vh] overflow-y-auto custom-scrollbar-y">
+        <div class="p-6 space-y-5 max-h-[60vh] overflow-y-auto custom-scrollbar-y">
+          <template v-if="detailTab === 'info'">
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full flex items-center justify-center text-white" :class="getBgClass(selectedDetailRekening.color, selectedDetailRekening.isActive)">
               <component :is="getIcon(selectedDetailRekening.type)" class="w-6 h-6" />
@@ -283,15 +296,59 @@
               <span class="font-medium text-gray-900 dark:text-white text-right max-w-[150px]">{{ selectedDetailRekening.desc }}</span>
             </div>
           </div>
+          </template>
+
+          <template v-else-if="detailTab === 'aktivitas'">
+            <div v-if="isDetailLoading" class="flex justify-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+            </div>
+            <div v-else-if="!detailActivities.length" class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <p>Belum ada aktivitas pada rekening ini.</p>
+            </div>
+            <div v-else class="space-y-4">
+              <div v-for="act in detailActivities" :key="act.id" class="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-white/5 flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900 dark:text-white">{{ act.jenis === 'adjustment' ? 'Penyesuaian Saldo' : (act.bank_kas_tujuan_id === selectedDetailRekening.id ? 'Masuk (Mutasi)' : 'Keluar (Mutasi)') }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ new Date(act.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'}) }}</p>
+                  <p v-if="act.deskripsi" class="text-xs text-gray-600 dark:text-gray-300 mt-1">{{ act.deskripsi }}</p>
+                </div>
+                <div class="text-right">
+                  <p :class="['font-bold text-sm', act.jenis === 'adjustment' ? (act.nominal_perubahan > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400') : (act.bank_kas_tujuan_id === selectedDetailRekening.id ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400')]">
+                    {{ (act.jenis === 'adjustment' ? act.nominal_perubahan > 0 : act.bank_kas_tujuan_id === selectedDetailRekening.id) ? '+' : '' }}{{ act.jenis === 'adjustment' ? formatCurrencyLocal(act.nominal_perubahan) : formatCurrencyLocal(act.nominal) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template v-else-if="detailTab === 'program'">
+            <div v-if="isDetailLoading" class="flex justify-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+            </div>
+            <div v-else-if="!detailProgramBalances.length" class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <p>Tidak ada saldo program yang tercatat di rekening ini.</p>
+            </div>
+            <div v-else class="space-y-3">
+              <div v-for="pb in detailProgramBalances" :key="pb.program_id" class="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-white/5">
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-white">{{ pb.program?.nama || 'Program (Terhapus)' }}</h4>
+                </div>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">Rp {{ formatCurrencyLocal(pb.total_balance) }}</span>
+              </div>
+            </div>
+          </template>
         </div>
         
-        <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex flex-col gap-2">
-          <button @click="openPenyesuaianModal(selectedDetailRekening)" class="w-full px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 dark:text-emerald-300 dark:bg-emerald-500/20 dark:hover:bg-emerald-500/30 rounded-lg transition-colors flex items-center justify-center gap-2">
-            <Scale class="w-4 h-4" /> Penyesuaian Saldo (Rekonsiliasi)
+        <div v-if="detailTab === 'info'" class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row gap-2 justify-end">
+          <button @click="openEditRekeningModal(selectedDetailRekening)" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
+            <Pencil class="w-4 h-4" /> Edit
           </button>
-          <button @click="openEditRekeningModal(selectedDetailRekening)" class="w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
-            <Pencil class="w-4 h-4" /> Edit Rekening
+          <button @click="openPenyesuaianModal(selectedDetailRekening)" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 dark:text-emerald-300 dark:bg-emerald-500/20 dark:hover:bg-emerald-500/30 rounded-lg transition-colors flex items-center justify-center gap-2">
+            <Scale class="w-4 h-4" /> Penyesuaian Saldo
           </button>
+        </div>
+        <div v-else class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end">
+          <button @click="selectedDetailRekening = null" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Tutup</button>
         </div>
       </div>
     </div>
@@ -440,7 +497,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { 
   Plus, ArrowLeftRight, Landmark, Wallet, Briefcase, X, 
   Pin, Scale, Pencil, AlertTriangle, Info, ChevronLeft, ChevronRight, Search 
@@ -460,6 +517,39 @@ const selectedDetailRekening = ref(null)
 const showPenyesuaianModal = ref(false)
 const penyesuaianTarget = ref(null)
 const isSaving = ref(false)
+
+const detailTab = ref('info')
+const detailActivities = ref([])
+const detailProgramBalances = ref([])
+const isDetailLoading = ref(false)
+
+watch(selectedDetailRekening, (newVal) => {
+  if (newVal) {
+    detailTab.value = 'info'
+    detailActivities.value = []
+    detailProgramBalances.value = []
+  }
+})
+
+watch(detailTab, async (newVal) => {
+  if (!selectedDetailRekening.value) return
+  const id = selectedDetailRekening.value.id
+  if (newVal === 'aktivitas' && !detailActivities.value.length) {
+    isDetailLoading.value = true
+    try {
+      detailActivities.value = await keuanganStore.fetchBankKasActivities(id)
+    } finally {
+      isDetailLoading.value = false
+    }
+  } else if (newVal === 'program' && !detailProgramBalances.value.length) {
+    isDetailLoading.value = true
+    try {
+      detailProgramBalances.value = await keuanganStore.fetchBankKasProgramBalances(id)
+    } finally {
+      isDetailLoading.value = false
+    }
+  }
+})
 
 const closeAllModals = () => {
   showMutasiModal.value = false
@@ -549,22 +639,34 @@ const activityData = computed(() => {
 })
 
 // Modals
-const rekForm = ref({ name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true })
+const rekForm = ref({ name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null })
+const qrFile = ref(null)
+
+const handleFileUpload = (e) => {
+  if (e.target.files.length > 0) {
+    qrFile.value = e.target.files[0]
+  } else {
+    qrFile.value = null
+  }
+}
 
 const openTambahRekeningModal = () => {
   isEditRekeningMode.value = false
-  rekForm.value = { name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true }
+  rekForm.value = { name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null }
+  qrFile.value = null
   showFormRekeningModal.value = true
 }
 
 const openEditRekeningModal = (rek) => {
   isEditRekeningMode.value = true
   rekForm.value = { ...rek }
+  qrFile.value = null
   selectedDetailRekening.value = null
   showFormRekeningModal.value = true
 }
 
 const saveRekening = async () => {
+  if (isSaving.value) return
   if (!rekForm.value.name) {
     toast.showToast('Nama rekening wajib diisi', 'error')
     return
@@ -573,10 +675,10 @@ const saveRekening = async () => {
   isSaving.value = true
   try {
     if (isEditRekeningMode.value) {
-      await keuanganStore.updateBankKas(rekForm.value.id, rekForm.value)
+      await keuanganStore.updateBankKas(rekForm.value.id, rekForm.value, qrFile.value)
       toast.showToast('Rekening berhasil diubah', 'success')
     } else {
-      await keuanganStore.createBankKas(rekForm.value)
+      await keuanganStore.createBankKas(rekForm.value, qrFile.value)
       toast.showToast('Rekening berhasil ditambahkan', 'success')
     }
     showFormRekeningModal.value = false
@@ -614,6 +716,7 @@ const openPenyesuaianModal = (rek) => {
 }
 
 const simpanPenyesuaian = async () => {
+  if (isSaving.value) return
   if (!penyesuaianForm.value.reason) {
     toast.showToast('Alasan penyesuaian wajib diisi', 'error')
     return
@@ -646,6 +749,7 @@ const openMutasiModal = () => {
 }
 
 const simpanMutasi = async () => {
+  if (isSaving.value) return
   if (!mutasiForm.value.from || !mutasiForm.value.to || !mutasiForm.value.amount) {
     toast.showToast('Mohon lengkapi rekening asal, tujuan, dan nominal', 'error')
     return

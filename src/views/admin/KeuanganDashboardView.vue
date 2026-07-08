@@ -65,9 +65,17 @@
         </div>
         <div class="relative z-10">
           <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ formatRupiah(dashboard.pemasukanBulanIni) }}</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 font-medium">
-            Bulan ini
-          </p>
+          <div class="flex items-center gap-2 mt-2">
+            <span v-if="dashboard.persentasePerubahan" :class="[
+              'text-xs font-medium px-1.5 py-0.5 rounded flex items-center gap-0.5',
+              dashboard.persentasePerubahan.pemasukan >= 0 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400'
+            ]">
+              <TrendingUp v-if="dashboard.persentasePerubahan.pemasukan >= 0" class="w-3 h-3" />
+              <TrendingDown v-else class="w-3 h-3" />
+              {{ Math.abs(dashboard.persentasePerubahan.pemasukan) }}%
+            </span>
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Bulan ini</p>
+          </div>
         </div>
       </RouterLink>
 
@@ -84,9 +92,17 @@
         </div>
         <div class="relative z-10">
           <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ formatRupiah(dashboard.pengeluaranBulanIni) }}</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 font-medium">
-            Bulan ini
-          </p>
+          <div class="flex items-center gap-2 mt-2">
+            <span v-if="dashboard.persentasePerubahan" :class="[
+              'text-xs font-medium px-1.5 py-0.5 rounded flex items-center gap-0.5',
+              dashboard.persentasePerubahan.pengeluaran <= 0 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400'
+            ]">
+              <TrendingDown v-if="dashboard.persentasePerubahan.pengeluaran <= 0" class="w-3 h-3" />
+              <TrendingUp v-else class="w-3 h-3" />
+              {{ Math.abs(dashboard.persentasePerubahan.pengeluaran) }}%
+            </span>
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Bulan ini</p>
+          </div>
         </div>
       </RouterLink>
 
