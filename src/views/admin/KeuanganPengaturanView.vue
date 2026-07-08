@@ -39,15 +39,21 @@
         
         <!-- Tab: Master Data -->
         <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
-          <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
-              <Tags class="w-5 h-5 text-gray-400" />
-              Kategori Transaksi
-            </h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola jenis kategori pemasukan dan pengeluaran agar pencatatan lebih teratur.</p>
+          <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5 flex justify-between items-center">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                <Tags class="w-5 h-5 text-gray-400" />
+                Kategori Transaksi
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola jenis kategori pemasukan dan pengeluaran agar pencatatan lebih teratur.</p>
+            </div>
           </div>
           
-          <div class="p-6 sm:p-8 space-y-8">
+          <div v-if="isLoading" class="p-12 flex justify-center items-center">
+            <div class="w-8 h-8 border-3 border-gray-200 dark:border-gray-700 border-t-secondary rounded-full animate-spin"></div>
+          </div>
+
+          <div v-else class="p-6 sm:p-8 space-y-8">
             
             <!-- Kategori Pemasukan -->
             <div class="space-y-4">
@@ -55,7 +61,7 @@
                 <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                   <ArrowDownLeft class="w-4 h-4 text-emerald-500" /> Pemasukan
                 </h4>
-                <button type="button" @click="addCategory('in')" class="text-xs font-medium bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ring-1 ring-emerald-500/20">
+                <button type="button" @click="addCategory('pemasukan')" class="text-xs font-medium bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ring-1 ring-emerald-500/20">
                   <Plus class="w-3.5 h-3.5" /> Tambah
                 </button>
               </div>
@@ -66,8 +72,9 @@
                     type="text" 
                     class="w-full bg-transparent border-none focus:ring-0 px-0 py-0 text-sm font-medium text-gray-900 dark:text-white placeholder:text-gray-400"
                     placeholder="Nama Kategori..."
+                    @input="cat.isDirty = true"
                   />
-                  <button type="button" @click="removeCategory('in', index)" class="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 transition-all shrink-0 ml-2" title="Hapus">
+                  <button type="button" @click="removeCategory('pemasukan', index)" class="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 transition-all shrink-0 ml-2" title="Hapus">
                     <Trash2 class="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -82,7 +89,7 @@
                 <h4 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                   <ArrowUpRight class="w-4 h-4 text-rose-500" /> Pengeluaran
                 </h4>
-                <button type="button" @click="addCategory('out')" class="text-xs font-medium bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:hover:bg-rose-500/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ring-1 ring-rose-500/20">
+                <button type="button" @click="addCategory('pengeluaran')" class="text-xs font-medium bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:hover:bg-rose-500/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ring-1 ring-rose-500/20">
                   <Plus class="w-3.5 h-3.5" /> Tambah
                 </button>
               </div>
@@ -93,8 +100,9 @@
                     type="text" 
                     class="w-full bg-transparent border-none focus:ring-0 px-0 py-0 text-sm font-medium text-gray-900 dark:text-white placeholder:text-gray-400"
                     placeholder="Nama Kategori..."
+                    @input="cat.isDirty = true"
                   />
-                  <button type="button" @click="removeCategory('out', index)" class="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 transition-all shrink-0 ml-2" title="Hapus">
+                  <button type="button" @click="removeCategory('pengeluaran', index)" class="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 transition-all shrink-0 ml-2" title="Hapus">
                     <Trash2 class="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -110,48 +118,98 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Database, Tags, Save, Plus, Trash2, ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next'
+import { useKeuanganStore } from '@/stores/keuangan'
+import { useToastStore } from '@/stores/toast'
+
+const keuanganStore = useKeuanganStore()
+const toast = useToastStore()
 
 const isSaving = ref(false)
+const isLoading = ref(true)
 
-const kategoriPemasukan = ref([
-  { id: 1, name: 'Kotak Amal' },
-  { id: 2, name: 'Infaq Jumat' },
-  { id: 3, name: 'Zakat' },
-  { id: 4, name: 'Donasi Bebas' }
-])
+const kategoriPemasukan = ref([])
+const kategoriPengeluaran = ref([])
+const deletedCategories = ref([])
 
-const kategoriPengeluaran = ref([
-  { id: 1, name: 'Operasional' },
-  { id: 2, name: 'Listrik & Air' },
-  { id: 3, name: 'Pembangunan' },
-  { id: 4, name: 'Honor Penceramah' },
-  { id: 5, name: 'Kegiatan Sosial' }
-])
+onMounted(async () => {
+  isLoading.value = true
+  try {
+    await keuanganStore.fetchCategories()
+    populateCategories()
+  } catch (err) {
+    toast.showToast('Gagal memuat kategori', 'error')
+  } finally {
+    isLoading.value = false
+  }
+})
+
+const populateCategories = () => {
+  kategoriPemasukan.value = keuanganStore.categories
+    .filter(c => c.tipe === 'pemasukan')
+    .map(c => ({ id: c.id, name: c.name, tipe: c.tipe, isNew: false, isDirty: false }))
+    
+  kategoriPengeluaran.value = keuanganStore.categories
+    .filter(c => c.tipe === 'pengeluaran')
+    .map(c => ({ id: c.id, name: c.name, tipe: c.tipe, isNew: false, isDirty: false }))
+}
 
 const addCategory = (type) => {
-  if (type === 'in') {
-    kategoriPemasukan.value.push({ id: Date.now(), name: '' })
+  if (type === 'pemasukan') {
+    kategoriPemasukan.value.push({ id: `new-${Date.now()}`, name: '', tipe: 'pemasukan', isNew: true, isDirty: true })
   } else {
-    kategoriPengeluaran.value.push({ id: Date.now(), name: '' })
+    kategoriPengeluaran.value.push({ id: `new-${Date.now()}`, name: '', tipe: 'pengeluaran', isNew: true, isDirty: true })
   }
 }
 
 const removeCategory = (type, index) => {
-  if (type === 'in') {
-    kategoriPemasukan.value.splice(index, 1)
-  } else {
-    kategoriPengeluaran.value.splice(index, 1)
+  let targetArr = type === 'pemasukan' ? kategoriPemasukan.value : kategoriPengeluaran.value
+  const cat = targetArr[index]
+  
+  if (!cat.isNew) {
+    deletedCategories.value.push(cat.id)
   }
+  
+  targetArr.splice(index, 1)
 }
 
-const saveSettings = () => {
+const saveSettings = async () => {
   isSaving.value = true
-  setTimeout(() => {
+  try {
+    const promises = []
+    
+    // Handle Deletions
+    for (const id of deletedCategories.value) {
+      promises.push(keuanganStore.deleteCategory(id))
+    }
+    
+    // Handle Additions and Updates
+    const allCats = [...kategoriPemasukan.value, ...kategoriPengeluaran.value]
+    
+    for (const cat of allCats) {
+      if (!cat.name.trim()) continue // Skip empty names
+      
+      if (cat.isNew) {
+        promises.push(keuanganStore.createCategory({ name: cat.name, tipe: cat.tipe }))
+      } else if (cat.isDirty) {
+        promises.push(keuanganStore.updateCategory(cat.id, { name: cat.name, tipe: cat.tipe }))
+      }
+    }
+    
+    await Promise.all(promises)
+    
+    // Refetch to ensure sync with backend
+    await keuanganStore.fetchCategories()
+    populateCategories()
+    deletedCategories.value = [] // Reset deleted list
+    
+    toast.showToast('Pengaturan berhasil disimpan', 'success')
+  } catch (err) {
+    toast.showToast('Terjadi kesalahan saat menyimpan', 'error')
+  } finally {
     isSaving.value = false
-    // Show toast here if available
-  }, 1000)
+  }
 }
 </script>
 

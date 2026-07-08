@@ -1,193 +1,287 @@
 import { defineStore } from 'pinia'
-import { getStorage, setStorage } from '@/utils/storage'
-
-const parseSafe = (key) => {
-  try {
-    const val = getStorage(key)
-    return val ? JSON.parse(val) : null
-  } catch (e) {
-    return null
-  }
-}
+import api from '@/utils/api'
+import {
+  mapBankKasFromApi, mapBankKasToApi,
+  mapTransactionFromApi, mapTransactionToApi,
+  mapProgramFromApi, mapProgramToApi,
+  mapCategoryFromApi, mapCategoryToApi,
+  mapDashboardFromApi, mapChartDataFromApi,
+  extractPaginatedData,
+} from '@/utils/keuangan-mapper'
 
 export const useKeuanganStore = defineStore('keuangan', {
   state: () => ({
-    programs: [
-      { id: 1, name: 'PHBI Muharram 1446H', description: 'Peringatan Hari Besar Islam Muharram', startDate: '2026-07-01', endDate: '2026-07-15', status: 'Selesai' },
-      { id: 2, name: 'Renovasi Aula Utama', description: 'Dana khusus untuk renovasi atap dan lantai aula utama masjid', startDate: '2026-06-01', endDate: '2026-08-30', status: 'Aktif' },
-      { id: 3, name: 'Santunan Anak Yatim', description: 'Santunan rutin bulanan', startDate: '2026-01-01', endDate: '', status: 'Aktif' },
-      { id: 4, name: 'Pembangunan Menara', description: 'Program wakaf menara masjid', startDate: '2026-01-01', endDate: '', status: 'Aktif' },
-      { id: 5, name: 'Kajian Subuh Akbar', description: 'Kajian gabungan kecamatan', startDate: '2026-08-01', endDate: '2026-08-10', status: 'Aktif' },
-      { id: 6, name: 'Panitia Qurban 1447H', description: 'Tabungan Qurban jamaah', startDate: '2026-01-01', endDate: '', status: 'Aktif' },
-      { id: 7, name: 'Bantuan Bencana', description: 'Peduli musibah lokal', startDate: '2026-05-01', endDate: '2026-05-30', status: 'Selesai' },
-    ],
-    // Menggunakan dummy statis secara paksa (mengabaikan localStorage sementara)
-    transactions: [
-      { id: 1, date: '2026-06-12', description: 'Infaq Kotak Amal Jumat', category: 'Infaq Mingguan', account: 'BSI Masjid Jami Kassiti', program_id: null, type: 'in', status: 'approved', amount: 8500000 },
-      { id: 2, date: '2026-06-10', description: 'Donasi Renovasi Hamba Allah', category: 'Donasi Umum', account: 'BSI Masjid Jami Kassiti', program_id: 2, type: 'in', status: 'approved', amount: 15000000 },
-      { id: 3, date: '2026-06-08', description: 'Infaq Santunan Yatim', category: 'Donasi Umum', account: 'BSI Masjid Jami Kassiti', program_id: 3, type: 'in', status: 'approved', amount: 5000000 },
-      { id: 4, date: '2026-06-05', description: 'Wakaf Pembangunan Menara', category: 'Wakaf', account: 'BSI Masjid Jami Kassiti', program_id: 4, type: 'in', status: 'approved', amount: 25000000 },
-      { id: 5, date: '2026-06-01', description: 'Sponsor Kajian Subuh', category: 'Donasi Umum', account: 'BSI Masjid Jami Kassiti', program_id: 5, type: 'in', status: 'approved', amount: 2000000 },
-      { id: 6, date: '2026-07-14', description: 'Tabungan Qurban Jamaah', category: 'Lainnya', account: 'BSI Masjid Jami Kassiti', program_id: 6, type: 'in', status: 'approved', amount: 12000000 },
-      { id: 7, date: '2026-05-15', description: 'Donasi Bencana Banjir', category: 'Lainnya', account: 'BSI Masjid Jami Kassiti', program_id: 7, type: 'in', status: 'approved', amount: 3500000 },
-      { id: 8, date: '2026-06-11', description: 'Bayar Listrik & Air', category: 'Operasional', account: 'BSI Masjid Jami Kassiti', program_id: null, type: 'out', status: 'approved', amount: 1200000 },
-      { id: 9, date: '2026-06-01', description: 'Donasi Muharram (Hamba Allah)', category: 'Donasi Umum', account: 'BSI Masjid Jami Kassiti', program_id: 1, type: 'in', status: 'approved', amount: 5000000 },
-      { id: 10, date: '2026-06-05', description: 'Pembayaran DP Tukang Renovasi', category: 'Pemeliharaan', account: 'BSI Masjid Jami Kassiti', program_id: 2, type: 'out', status: 'approved', amount: 3000000 },
-    ],
-    accounts: [
-      { id: 1, name: 'Kotak Amal Utama', type: 'cash' },
-      { id: 2, name: 'BSI Masjid Jami Kassiti', type: 'bank' },
-      { id: 3, name: 'Kas Kecil Operasional', type: 'cash' },
-    ]
+    // Core data
+    programs: [],
+    transactions: [],
+    bankKasList: [],
+    categories: [],
+
+    // Dashboard
+    dashboardData: {},
+    chartData: { categories: [], pemasukan: [], pengeluaran: [] },
+
+    // Loading states
+    loading: {
+      programs: false,
+      transactions: false,
+      bankKas: false,
+      categories: false,
+      dashboard: false,
+      chart: false,
+    },
+
+    // Pagination
+    pagination: {
+      transactions: { page: 1, lastPage: 1, total: 0, perPage: 15 },
+      programs: { page: 1, lastPage: 1, total: 0, perPage: 15 },
+      bankKas: { page: 1, lastPage: 1, total: 0, perPage: 50 },
+      categories: { page: 1, lastPage: 1, total: 0, perPage: 100 },
+    },
   }),
+
   getters: {
-    programBalances(state) {
-      const balances = {}
-      // Initialize balances
-      state.programs.forEach(p => {
-        balances[p.id] = { in: 0, out: 0, total: 0 }
-      })
-      // Calculate
-      state.transactions.filter(t => t.status === 'approved' && t.program_id).forEach(t => {
-        if (balances[t.program_id]) {
-          if (t.type === 'in') {
-            balances[t.program_id].in += t.amount
-            balances[t.program_id].total += t.amount
-          } else {
-            balances[t.program_id].out += t.amount
-            balances[t.program_id].total -= t.amount
-          }
-        }
-      })
-      return balances
+    activeBankKas(state) {
+      return state.bankKasList.filter(bk => bk.isActive)
     },
-    generalBalance(state) {
-      let totalIn = 0
-      let totalOut = 0
-      state.transactions.filter(t => t.status === 'approved' && !t.program_id).forEach(t => {
-        if (t.type === 'in') {
-          totalIn += t.amount
-        } else {
-          totalOut += t.amount
-        }
-      })
-      return { in: totalIn, out: totalOut, total: totalIn - totalOut }
+    activePrograms(state) {
+      return state.programs.filter(p => p.status === 'Aktif')
     },
-    accountBalances(state) {
-      const balances = {}
-      state.accounts.forEach(a => {
-        balances[a.name] = { 
-          total: 0,
-          programs: {},
-          general: 0
-        }
-      })
-      
-      state.transactions.filter(t => t.status === 'approved').forEach(t => {
-        if (!balances[t.account]) return
-        
-        const sign = t.type === 'in' ? 1 : -1
-        const amount = t.amount * sign
-        
-        balances[t.account].total += amount
-        
-        if (t.program_id) {
-          if (!balances[t.account].programs[t.program_id]) {
-            balances[t.account].programs[t.program_id] = 0
-          }
-          balances[t.account].programs[t.program_id] += amount
-        } else {
-          balances[t.account].general += amount
-        }
-      })
-      return balances
-    }
+    kategoriBySide(state) {
+      return (tipe) => state.categories.filter(c => c.tipe === tipe)
+    },
   },
+
   actions: {
-    addProgram(data) {
-      const newId = this.programs.length > 0 ? Math.max(...this.programs.map((p) => p.id)) + 1 : 1
-      this.programs.push({ ...data, id: newId })
-      this.savePrograms()
-    },
-    updateProgram(id, updatedData) {
-      const index = this.programs.findIndex((p) => p.id === id)
-      if (index !== -1) {
-        this.programs[index] = { ...this.programs[index], ...updatedData }
-        this.savePrograms()
+    // ======================================================================
+    // Dashboard
+    // ======================================================================
+
+    async fetchDashboard(params = {}) {
+      this.loading.dashboard = true
+      try {
+        const res = await api.get('/keuangan/dashboard/overview', { params })
+        const payload = res.data?.data ?? res.data
+        this.dashboardData = mapDashboardFromApi(payload)
+      } catch (err) {
+        console.error('fetchDashboard error:', err)
+      } finally {
+        this.loading.dashboard = false
       }
     },
-    deleteProgram(id) {
-      this.programs = this.programs.filter((p) => p.id !== id)
-      // Remove program_id from transactions? Or maybe just keep them as historical data
-      this.savePrograms()
+
+    async fetchChartData(months = 6) {
+      this.loading.chart = true
+      try {
+        const res = await api.get('/keuangan/dashboard/chart/income-vs-expense', { params: { months } })
+        const payload = res.data?.data ?? res.data
+        this.chartData = mapChartDataFromApi(payload)
+      } catch (err) {
+        console.error('fetchChartData error:', err)
+      } finally {
+        this.loading.chart = false
+      }
     },
-    rolloverProgram(fromProgramId, toProgramId, amount, accountName) {
-      const date = new Date().toISOString().split('T')[0]
-      // Create out transaction from the old program
-      const txOut = {
-        id: Date.now(),
-        date: date,
-        description: 'Rollover sisa dana program ke tujuan',
-        category: 'Mutasi / Penyaluran',
-        account: accountName,
-        program_id: fromProgramId,
-        type: 'out',
+
+    // ======================================================================
+    // Programs
+    // ======================================================================
+
+    async fetchPrograms(params = {}) {
+      this.loading.programs = true
+      try {
+        const res = await api.get('/keuangan/programs', { params: { per_page: 100, ...params } })
+        const { items, currentPage, lastPage, total, perPage } = extractPaginatedData(res)
+        this.programs = items.map(mapProgramFromApi)
+        this.pagination.programs = { page: currentPage, lastPage, total, perPage }
+      } catch (err) {
+        console.error('fetchPrograms error:', err)
+      } finally {
+        this.loading.programs = false
+      }
+    },
+
+    async createProgram(data) {
+      const res = await api.post('/keuangan/programs', mapProgramToApi(data))
+      const created = res.data?.data ?? res.data
+      this.programs.unshift(mapProgramFromApi(created))
+      return created
+    },
+
+    async updateProgram(id, data) {
+      const res = await api.put(`/keuangan/programs/${id}`, mapProgramToApi(data))
+      const updated = res.data?.data ?? res.data
+      const index = this.programs.findIndex(p => p.id === id)
+      if (index !== -1) this.programs[index] = mapProgramFromApi(updated)
+      return updated
+    },
+
+    async deleteProgram(id) {
+      await api.delete(`/keuangan/programs/${id}`)
+      this.programs = this.programs.filter(p => p.id !== id)
+    },
+
+    // ======================================================================
+    // Transactions
+    // ======================================================================
+
+    async fetchTransactions(params = {}) {
+      this.loading.transactions = true
+      try {
+        const res = await api.get('/keuangan/transactions', { params: { per_page: 15, ...params } })
+        const { items, currentPage, lastPage, total, perPage } = extractPaginatedData(res)
+        this.transactions = items.map(mapTransactionFromApi)
+        this.pagination.transactions = { page: currentPage, lastPage, total, perPage }
+      } catch (err) {
+        console.error('fetchTransactions error:', err)
+      } finally {
+        this.loading.transactions = false
+      }
+    },
+
+    async createTransaction(data) {
+      const res = await api.post('/keuangan/transactions', mapTransactionToApi(data))
+      const created = res.data?.data ?? res.data
+      return mapTransactionFromApi(created)
+    },
+
+    async updateTransaction(id, data) {
+      const res = await api.put(`/keuangan/transactions/${id}`, mapTransactionToApi(data))
+      const updated = res.data?.data ?? res.data
+      return mapTransactionFromApi(updated)
+    },
+
+    async deleteTransaction(id) {
+      await api.delete(`/keuangan/transactions/${id}`)
+      this.transactions = this.transactions.filter(t => t.id !== id)
+    },
+
+    async updateTransactionStatus(id, status) {
+      const res = await api.patch(`/keuangan/transactions/${id}/status`, { status })
+      const updated = res.data?.data ?? res.data
+      const index = this.transactions.findIndex(t => t.id === id)
+      if (index !== -1) this.transactions[index] = mapTransactionFromApi(updated)
+      return updated
+    },
+
+    // ======================================================================
+    // Bank/Kas
+    // ======================================================================
+
+    async fetchBankKas(params = {}) {
+      this.loading.bankKas = true
+      try {
+        const res = await api.get('/keuangan/bank-kas', { params: { per_page: 50, ...params } })
+        const { items, currentPage, lastPage, total, perPage } = extractPaginatedData(res)
+        this.bankKasList = items.map(mapBankKasFromApi)
+        this.pagination.bankKas = { page: currentPage, lastPage, total, perPage }
+      } catch (err) {
+        console.error('fetchBankKas error:', err)
+      } finally {
+        this.loading.bankKas = false
+      }
+    },
+
+    async createBankKas(data, qrFile = null) {
+      const formData = new FormData()
+      const mapped = mapBankKasToApi(data)
+      Object.entries(mapped).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) formData.append(key, value)
+      })
+      if (qrFile) formData.append('qr_image', qrFile)
+
+      const res = await api.post('/keuangan/bank-kas', formData)
+      const created = res.data?.data ?? res.data
+      this.bankKasList.unshift(mapBankKasFromApi(created))
+      return created
+    },
+
+    async updateBankKas(id, data, qrFile = null) {
+      let res
+      if (qrFile) {
+        const formData = new FormData()
+        formData.append('_method', 'PUT')
+        const mapped = mapBankKasToApi(data)
+        Object.entries(mapped).forEach(([key, value]) => {
+          if (value !== null && value !== undefined) formData.append(key, value)
+        })
+        formData.append('qr_image', qrFile)
+        res = await api.post(`/keuangan/bank-kas/${id}`, formData)
+      } else {
+        res = await api.put(`/keuangan/bank-kas/${id}`, mapBankKasToApi(data))
+      }
+      const updated = res.data?.data ?? res.data
+      const index = this.bankKasList.findIndex(bk => bk.id === id)
+      if (index !== -1) this.bankKasList[index] = mapBankKasFromApi(updated)
+      return updated
+    },
+
+    async deleteBankKas(id) {
+      await api.delete(`/keuangan/bank-kas/${id}`)
+      this.bankKasList = this.bankKasList.filter(bk => bk.id !== id)
+    },
+
+    async adjustBalance(bankKasId, data) {
+      const res = await api.post(`/keuangan/bank-kas/${bankKasId}/adjust`, {
+        tanggal: data.tanggal || data.date,
+        saldo_sesudah: parseFloat(data.targetSaldo || data.target_saldo || 0),
+        deskripsi: data.deskripsi || data.description || null,
+      })
+      // Refresh the bank_kas list to get updated saldo
+      await this.fetchBankKas()
+      return res.data?.data ?? res.data
+    },
+
+    async createTransfer(data) {
+      const txData = {
+        type: 'transfer',
+        name: data.name || 'Mutasi Kas',
+        description: data.description || '',
+        amount: data.amount,
+        date: data.date,
+        bankKasAsalId: data.bankKasAsalId || data.bank_kas_asal_id,
+        bankKasTujuanId: data.bankKasTujuanId || data.bank_kas_tujuan_id,
+        biayaAdmin: data.biayaAdmin || 0,
         status: 'approved',
-        amount: parseInt(amount)
       }
-      // Create in transaction to the new program (or general kas)
-      const txIn = {
-        id: Date.now() + 1,
-        date: date,
-        description: 'Penerimaan rollover sisa dana',
-        category: 'Mutasi / Penerimaan',
-        account: accountName,
-        program_id: toProgramId || null, // null means general kas
-        type: 'in',
-        status: 'approved',
-        amount: parseInt(amount)
-      }
-      this.transactions.push(txOut, txIn)
-      this.saveTransactions()
+      return await this.createTransaction(txData)
     },
-    savePrograms() {
-      setStorage('admin_keuangan_programs', JSON.stringify(this.programs))
-    },
-    addTransaction(data) {
-      const newId = this.transactions.length > 0 ? Math.max(...this.transactions.map((t) => t.id)) + 1 : 1
-      this.transactions.push({ ...data, id: newId, amount: parseInt(data.amount) || 0 })
-      this.saveTransactions()
-    },
-    updateTransaction(id, updatedData) {
-      const index = this.transactions.findIndex((t) => t.id === id)
-      if (index !== -1) {
-        this.transactions[index] = { ...this.transactions[index], ...updatedData, amount: parseInt(updatedData.amount) || 0 }
-        this.saveTransactions()
+
+    // ======================================================================
+    // Categories
+    // ======================================================================
+
+    async fetchCategories(params = {}) {
+      this.loading.categories = true
+      try {
+        const res = await api.get('/keuangan/categories', { params: { per_page: 100, ...params } })
+        const { items } = extractPaginatedData(res)
+        this.categories = items.map(mapCategoryFromApi)
+      } catch (err) {
+        console.error('fetchCategories error:', err)
+      } finally {
+        this.loading.categories = false
       }
     },
-    deleteTransaction(id) {
-      this.transactions = this.transactions.filter((t) => t.id !== id)
-      this.saveTransactions()
+
+    async createCategory(data) {
+      const res = await api.post('/keuangan/categories', mapCategoryToApi(data))
+      const created = res.data?.data ?? res.data
+      this.categories.push(mapCategoryFromApi(created))
+      return created
     },
-    saveTransactions() {
-      setStorage('admin_keuangan_tx', JSON.stringify(this.transactions))
+
+    async updateCategory(id, data) {
+      const res = await api.put(`/keuangan/categories/${id}`, mapCategoryToApi(data))
+      const updated = res.data?.data ?? res.data
+      const index = this.categories.findIndex(c => c.id === id)
+      if (index !== -1) this.categories[index] = mapCategoryFromApi(updated)
+      return updated
     },
-    addBalanceAdjustment(account, amountDiff, programId) {
-      // Just mock it by creating an adjustment transaction
-      const date = new Date().toISOString().split('T')[0]
-      const tx = {
-        id: Date.now(),
-        date: date,
-        description: 'Penyesuaian Saldo',
-        category: 'Penyesuaian',
-        account: account,
-        program_id: programId || null,
-        type: amountDiff >= 0 ? 'in' : 'out',
-        status: 'approved',
-        amount: Math.abs(parseInt(amountDiff))
-      }
-      this.transactions.push(tx)
-      this.saveTransactions()
-    }
+
+    async deleteCategory(id) {
+      await api.delete(`/keuangan/categories/${id}`)
+      this.categories = this.categories.filter(c => c.id !== id)
+    },
   }
 })
