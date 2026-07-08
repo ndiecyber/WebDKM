@@ -255,6 +255,16 @@ export const useKeuanganStore = defineStore('keuangan', {
       return res.data?.data ?? res.data
     },
 
+    async transferAllBankKas(id, data) {
+      const res = await api.post(`/keuangan/bank-kas/${id}/transfer-all`, {
+        bank_kas_tujuan_id: data.bankKasTujuanId,
+        biaya_admin: data.biayaAdmin || 0,
+        deskripsi: data.description || '',
+        tanggal: data.date
+      })
+      return res.data?.data ?? res.data
+    },
+
     async createTransfer(data) {
       const txData = {
         type: 'transfer',

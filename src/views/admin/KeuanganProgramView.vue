@@ -106,15 +106,24 @@
               </td>
               <!-- Aksi -->
               <td class="px-4 py-3 whitespace-nowrap text-right align-top w-[1%]">
-                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button @click="openDetailModal(program)" class="text-gray-400 hover:text-secondary bg-gray-50 dark:bg-gray-800 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Detail & Riwayat">
-                    <Eye class="w-3.5 h-3.5" />
-                  </button>
-                  <button @click="openModal(program)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit">
-                    <Pencil class="w-3.5 h-3.5" />
-                  </button>
-                  <button @click="deleteProgram(program.id)" class="text-gray-400 hover:text-rose-500 bg-gray-50 dark:bg-gray-800 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Hapus">
-                    <Trash2 class="w-3.5 h-3.5" />
+                <div class="flex flex-col items-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="flex items-center gap-1">
+                    <button @click="openDetailModal(program)" class="text-gray-400 hover:text-secondary bg-gray-50 dark:bg-gray-800 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Detail & Riwayat">
+                      <Eye class="w-3.5 h-3.5" />
+                    </button>
+                    <button @click="openModal(program)" class="text-gray-400 hover:text-blue-500 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Edit">
+                      <Pencil class="w-3.5 h-3.5" />
+                    </button>
+                    <button @click="deleteProgram(program.id)" class="text-gray-400 hover:text-rose-500 bg-gray-50 dark:bg-gray-800 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-1.5 rounded-lg transition-colors border border-gray-200 dark:border-white/10" title="Hapus">
+                      <Trash2 class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <button 
+                    v-if="program.sisaSaldo > 0"
+                    @click="openRolloverModal(program)" 
+                    class="text-[10px] font-medium px-2.5 py-1.5 w-full rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20 transition-colors shadow-sm"
+                  >
+                    {{ program.status === 'Aktif' ? 'Tutup & Pindahkan Dana' : 'Pindahkan Sisa Dana' }}
                   </button>
                 </div>
               </td>
@@ -268,7 +277,6 @@
           </div>
           
           <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row gap-2 justify-end shrink-0">
-            <button v-if="selectedDetailProgram?.status === 'Aktif' && selectedDetailProgram?.sisaSaldo > 0" @click="openRolloverModal" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 border border-emerald-200 rounded-lg transition-colors shadow-sm dark:bg-emerald-500/20 dark:hover:bg-emerald-500/30 dark:border-emerald-500/30 dark:text-emerald-400">Pindahkan Sisa Dana</button>
             <button @click="goToTransactions(selectedDetailProgram.id)" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-secondary hover:text-white border border-secondary hover:bg-secondary rounded-lg transition-colors shadow-sm bg-white dark:bg-gray-900">Lihat Riwayat Transaksi</button>
             <button @click="showDetailModal = false" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">Tutup</button>
           </div>
@@ -296,12 +304,33 @@
               <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
             </div>
             <form v-else @submit.prevent="submitRollover" class="space-y-4">
+              <!-- Warning Banner -->
+              <div class="bg-yellow-50 dark:bg-yellow-500/10 p-4 rounded-xl ring-1 ring-yellow-200 dark:ring-yellow-500/20 flex gap-3">
+                <AlertCircle class="w-5 h-5 text-yellow-600 dark:text-yellow-500 shrink-0 mt-0.5" />
+                <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                  Proses ini akan menarik seluruh sisa dana yang tersisa dari rekening asalnya. <strong class="font-semibold">Setelah proses ini selesai, program akan otomatis ditutup (berstatus Selesai).</strong>
+                </p>
+              </div>
+
               <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Target Program (Penerima)</label>
-                <select v-model="rolloverForm.target_program_id" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
-                  <option value="">Kas Umum / Tanpa Program</option>
-                  <option v-for="p in activeProgramsForRollover" :key="p.id" :value="p.id">{{ p.nama }}</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Target Program (Penerima)</label>
+                <div class="space-y-2">
+                  <label class="flex items-center p-3 border rounded-lg cursor-pointer transition-colors" :class="rolloverForm.target_type === 'umum' ? 'bg-secondary/5 border-secondary dark:bg-secondary/10' : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <input type="radio" v-model="rolloverForm.target_type" value="umum" class="w-4 h-4 text-secondary border-gray-300 focus:ring-secondary">
+                    <span class="ml-3 block text-sm font-medium text-gray-900 dark:text-white">Kembalikan ke Kas Umum</span>
+                  </label>
+                  <label class="flex items-center p-3 border rounded-lg cursor-pointer transition-colors" :class="rolloverForm.target_type === 'program' ? 'bg-secondary/5 border-secondary dark:bg-secondary/10' : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'">
+                    <input type="radio" v-model="rolloverForm.target_type" value="program" class="w-4 h-4 text-secondary border-gray-300 focus:ring-secondary">
+                    <span class="ml-3 block text-sm font-medium text-gray-900 dark:text-white">Salurkan ke Program Lain</span>
+                  </label>
+                </div>
+                
+                <div v-if="rolloverForm.target_type === 'program'" class="mt-3">
+                  <select v-model="rolloverForm.target_program_id" required class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+                    <option value="" disabled selected>Pilih Program...</option>
+                    <option v-for="p in activeProgramsForRollover" :key="p.id" :value="p.id">{{ p.name }}</option>
+                  </select>
+                </div>
               </div>
               
               <div>
@@ -310,9 +339,8 @@
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rincian Fisik Sisa Dana</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sumber Dana yang Akan Dipindahkan</label>
                 <div class="bg-blue-50 dark:bg-blue-500/10 p-4 rounded-xl ring-1 ring-blue-200 dark:ring-blue-500/20 shadow-sm space-y-3">
-                  <p class="text-xs text-blue-700 dark:text-blue-400">Total sisa saldo tersebar di kas berikut dan akan dipindahkan seluruhnya.</p>
                   <div v-for="source in rolloverSources" :key="source.bank_kas_id" class="flex justify-between items-center pb-2 border-b border-blue-200/50 dark:border-blue-500/20 last:border-0 last:pb-0">
                     <span class="text-sm font-medium text-gray-900 dark:text-white">{{ source.nama_kas }}</span>
                     <span class="text-sm font-bold text-gray-900 dark:text-white">Rp {{ formatCurrencyLocal(source.amount) }}</span>
@@ -358,25 +386,27 @@ const showDetailModal = ref(false)
 const selectedDetailProgram = ref(null)
 
 const showRolloverModal = ref(false)
-const rolloverForm = ref({ target_program_id: '', deskripsi: '' })
+const rolloverForm = ref({ target_type: 'umum', target_program_id: '', deskripsi: '' })
 const rolloverSources = ref([])
 const isRolloverLoading = ref(false)
 const isSubmittingRollover = ref(false)
+const rolloverProgramId = ref(null)
 
 const activeProgramsForRollover = computed(() => {
-  if (!selectedDetailProgram.value) return []
-  return keuanganStore.programs.filter(p => p.status === 'Aktif' && p.id !== selectedDetailProgram.value.id)
+  if (!rolloverProgramId.value) return []
+  return keuanganStore.programs.filter(p => p.status === 'Aktif' && p.id !== rolloverProgramId.value)
 })
 
-const openRolloverModal = async () => {
-  showDetailModal.value = false
+const openRolloverModal = async (program) => {
+  if (showDetailModal.value) showDetailModal.value = false
+  rolloverProgramId.value = program.id
   showRolloverModal.value = true
-  rolloverForm.value = { target_program_id: '', deskripsi: '' }
+  rolloverForm.value = { target_type: 'umum', target_program_id: '', deskripsi: '' }
   rolloverSources.value = []
   isRolloverLoading.value = true
   
   try {
-    const balances = await keuanganStore.fetchProgramPhysicalBalances(selectedDetailProgram.value.id)
+    const balances = await keuanganStore.fetchProgramPhysicalBalances(program.id)
     rolloverSources.value = balances.map(b => ({
       bank_kas_id: b.bank_kas_id,
       nama_kas: b.nama_kas,
@@ -396,17 +426,17 @@ const submitRollover = async () => {
   
   try {
     const payload = {
-      target_program_id: rolloverForm.value.target_program_id || null,
+      target_program_id: rolloverForm.value.target_type === 'program' ? rolloverForm.value.target_program_id : null,
       deskripsi: rolloverForm.value.deskripsi,
       sources: rolloverSources.value.map(s => ({
         bank_kas_id: s.bank_kas_id,
         amount: s.amount
       }))
     }
-    await keuanganStore.rolloverProgram(selectedDetailProgram.value.id, payload)
+    await keuanganStore.rolloverProgram(rolloverProgramId.value, payload)
     toast.addToast('Sisa dana berhasil dipindahkan, program selesai', 'success')
     showRolloverModal.value = false
-    selectedDetailProgram.value = null
+    rolloverProgramId.value = null
     refetchPrograms(keuanganStore.pagination.programs.page)
   } catch (err) {
     toast.addToast(err.response?.data?.message || 'Gagal memindahkan sisa dana', 'error')
