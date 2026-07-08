@@ -306,5 +306,34 @@ export const useKeuanganStore = defineStore('keuangan', {
       await api.delete(`/keuangan/categories/${id}`)
       this.categories = this.categories.filter(c => c.id !== id)
     },
+
+    async batchUpdateCategories(categories) {
+      const payload = categories.map(c => ({
+        id: c.id,
+        nama: c.name || c.nama,
+        tipe: c.tipe,
+        status: c.status || 'aktif'
+      }))
+      await api.post('/keuangan/categories/batch', { categories: payload })
+      await this.fetchCategories()
+    },
+
+    // ======================================================================
+    // Trash (Recycle Bin)
+    // ======================================================================
+
+    async fetchTrashed(type, params = {}) {
+      // type can be 'transactions', 'bank-kas', 'categories', 'programs'
+      const res = await api.get(`/keuangan/${type}/trashed`, { params: { per_page: 50, ...params } })
+      return extractPaginatedData(res)
+    },
+
+    async restoreTrashed(type, id) {
+      await api.patch(`/keuangan/${type}/${id}/restore`)
+    },
+
+    async forceDeleteTrashed(type, id) {
+      await api.delete(`/keuangan/${type}/${id}/force`)
+    },
   }
 })

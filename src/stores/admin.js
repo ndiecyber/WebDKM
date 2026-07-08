@@ -83,16 +83,19 @@ export const useAdminStore = defineStore('admin', {
   }),
   getters: {
     currentRoleData: (state) => {
+      if (!Array.isArray(state.roles)) return null;
       return state.roles.find(r => r.key === state.currentUser?.role) || null;
     },
     hasModuleAccess: (state) => {
       return (moduleKey) => {
+        if (!Array.isArray(state.roles)) return false;
         const roleData = state.roles.find(r => r.key === state.currentUser?.role);
         return roleData ? roleData.modules.includes(moduleKey) : false;
       }
     },
     canManageRole: (state) => {
       return (targetHierarchy) => {
+        if (!Array.isArray(state.roles)) return false;
         const roleData = state.roles.find(r => r.key === state.currentUser?.role);
         // User can only manage roles with a hierarchy numerically strictly greater than their own (1 is highest)
         return roleData ? roleData.hierarchy < targetHierarchy : false;
@@ -573,7 +576,10 @@ export const useAdminStore = defineStore('admin', {
     async fetchUsers() {
       try {
         const res = await api.get('/users');
-        this.users = res.data.data || res.data;
+        const data = res.data.data || res.data;
+        if (Array.isArray(data)) {
+          this.users = data;
+        }
       } catch (err) {
         console.error('Failed to fetch users:', err);
         throw err;
@@ -623,7 +629,10 @@ export const useAdminStore = defineStore('admin', {
     async fetchRoles() {
       try {
         const res = await api.get('/roles');
-        this.roles = res.data.data || res.data;
+        const data = res.data.data || res.data;
+        if (Array.isArray(data)) {
+          this.roles = data;
+        }
       } catch (err) {
         console.error('Failed to fetch roles:', err);
         throw err;

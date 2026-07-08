@@ -56,6 +56,11 @@ const routes = [
         name: 'admin-keuangan-pengaturan',
         component: () => import('@/views/admin/KeuanganPengaturanView.vue')
       },
+      {
+        path: 'keuangan-sampah',
+        name: 'admin-keuangan-sampah',
+        component: () => import('@/views/admin/KeuanganTrashView.vue')
+      },
 
       // --- MODUL QURBAN ---
       {

@@ -235,6 +235,16 @@
               <input type="file" @change="handleFileUpload" accept="image/*" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" v-if="rekForm.qrImage">QR Code/Logo sudah tersimpan. Unggah yang baru untuk mengganti.</p>
             </div>
+            <div class="sm:col-span-2 flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Visibilitas Publik</label>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Tampilkan rekening ini di halaman donasi publik</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="rekForm.visibilitasPublik" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-secondary/30 dark:peer-focus:ring-secondary/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-secondary"></div>
+              </label>
+            </div>
           </div>
         </div>
         
@@ -639,7 +649,7 @@ const activityData = computed(() => {
 })
 
 // Modals
-const rekForm = ref({ name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null })
+const rekForm = ref({ name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null, visibilitasPublik: false })
 const qrFile = ref(null)
 
 const handleFileUpload = (e) => {
@@ -652,7 +662,7 @@ const handleFileUpload = (e) => {
 
 const openTambahRekeningModal = () => {
   isEditRekeningMode.value = false
-  rekForm.value = { name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null }
+  rekForm.value = { name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null, visibilitasPublik: false }
   qrFile.value = null
   showFormRekeningModal.value = true
 }

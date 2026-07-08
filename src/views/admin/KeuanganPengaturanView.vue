@@ -175,32 +175,34 @@ const removeCategory = (type, index) => {
 }
 
 const saveSettings = async () => {
+  if (isSaving.value) return
   isSaving.value = true
   try {
-    const promises = []
+    const deletePromises = []
     
     // Handle Deletions
     for (const id of deletedCategories.value) {
-      promises.push(keuanganStore.deleteCategory(id))
+      deletePromises.push(keuanganStore.deleteCategory(id))
+    }
+    if (deletePromises.length > 0) {
+      await Promise.all(deletePromises)
     }
     
-    // Handle Additions and Updates
+    // Handle Additions and Updates via Batch
     const allCats = [...kategoriPemasukan.value, ...kategoriPengeluaran.value]
+      .filter(cat => cat.name.trim())
+      .map(cat => ({
+        id: cat.isNew ? null : cat.id,
+        nama: cat.name,
+        tipe: cat.tipe
+      }))
     
-    for (const cat of allCats) {
-      if (!cat.name.trim()) continue // Skip empty names
-      
-      if (cat.isNew) {
-        promises.push(keuanganStore.createCategory({ name: cat.name, tipe: cat.tipe }))
-      } else if (cat.isDirty) {
-        promises.push(keuanganStore.updateCategory(cat.id, { name: cat.name, tipe: cat.tipe }))
-      }
+    if (allCats.length > 0) {
+      await keuanganStore.batchUpdateCategories(allCats)
+    } else {
+      await keuanganStore.fetchCategories()
     }
     
-    await Promise.all(promises)
-    
-    // Refetch to ensure sync with backend
-    await keuanganStore.fetchCategories()
     populateCategories()
     deletedCategories.value = [] // Reset deleted list
     
