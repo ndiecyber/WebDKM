@@ -369,7 +369,7 @@
           </button>
           <button v-else @click="goToSetoran" class="w-full py-3.5 bg-secondary hover:bg-secondary/90 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path><line x1="12" y1="9" x2="12" y2="15"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>
-            Tambah Setoran
+            Tambah Menabung
           </button>
         </div>
       </div>
