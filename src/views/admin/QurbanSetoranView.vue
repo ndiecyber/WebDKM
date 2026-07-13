@@ -291,7 +291,7 @@
             </template>
             <template v-else>
                <button v-if="selectedTx.status === 'success' && !qurbanStore.isArchiveMode" @click="cancelTransaction(selectedTx)" class="w-full mb-3 py-3 bg-red-600 text-white text-sm font-bold rounded-xl border border-red-700 hover:bg-red-700 shadow-md shadow-red-500/20 transition-colors flex items-center justify-center gap-2">
-                 <XCircle class="w-4 h-4" /> Void Transaksi Ini
+                 <XCircle class="w-4 h-4" /> Hapus Transaksi Ini
                </button>
                <button @click="selectedTx = null" class="w-full py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                 Tutup Struk
@@ -628,11 +628,11 @@ const verifyTransaction = async (id) => {
 const cancelTransaction = async (tx) => {
   const isSuccess = tx.status === 'success'
   const message = isSuccess 
-    ? 'PERHATIAN: Transaksi ini berstatus Sukses. Jika dibatalkan (VOID), saldo terkumpul milik jamaah akan dikurangi sebesar nominal transaksi. Anda yakin ingin melanjutkan?'
+    ? 'PERHATIAN: Transaksi ini berstatus Sukses. Jika dibatalkan (HAPUS), saldo terkumpul milik jamaah akan dikurangi sebesar nominal transaksi. Anda yakin ingin melanjutkan?'
     : 'Apakah Anda yakin ingin membatalkan transaksi pending ini?'
     
   const isConfirmed = await dialog.open({
-    title: isSuccess ? 'Void Transaksi Sukses' : 'Batalkan Transaksi',
+    title: isSuccess ? 'Hapus Transaksi Sukses' : 'Batalkan Transaksi',
     message: message,
     type: 'alert',
     confirmText: 'Ya, Batalkan',
