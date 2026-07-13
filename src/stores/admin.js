@@ -578,6 +578,42 @@ export const useAdminStore = defineStore('admin', {
       }
     },
     async fetchCommittee() {
+      // Static image fallback map using bundled local assets
+      const imageMap = {
+        'Ust. H. Iwa Kurniawan': new URL('@/assets/images/Ust. H Iwa Penasihat.webp', import.meta.url).href,
+        'Ust. H. Ade Karom': new URL('@/assets/images/Ust. H Ade Karom.webp', import.meta.url).href,
+        'Bpk. Sudiana Maska': new URL('@/assets/images/Bpk. Sudiana Maska.webp', import.meta.url).href,
+        'Bpk. H. Usman': new URL('@/assets/images/H Usman penasihat.webp', import.meta.url).href,
+        'Bpk. Ayi Sunarwan': new URL('@/assets/images/Bpk. Ayi Sunarwan.webp', import.meta.url).href,
+        "Ust. H. Ahmad Nasa'i": new URL('@/assets/images/dkm-nasai.webp', import.meta.url).href,
+        'Ust. H. M. Ainur Rofik': new URL('@/assets/images/M Ainur Rofiq.webp', import.meta.url).href,
+        'Ust. Randi Rizal': new URL('@/assets/images/dkm-randi.webp', import.meta.url).href,
+        'Ust. H. Irvan Ruchiat': new URL('@/assets/images/Ivan Ruchiat.webp', import.meta.url).href,
+        'Ust. H. Dani Ramdhani': new URL('@/assets/images/Dani Ramdhani.webp', import.meta.url).href,
+        'Usth. Neneng Aam Siti Marhamah': new URL('@/assets/images/Usth. Neneng Aam.webp', import.meta.url).href,
+        'Usth. Ai Jamaliah': new URL('@/assets/images/Usth. Ai Jamaliah.webp', import.meta.url).href,
+        'Usth. Rini Dewi Anggiani': new URL('@/assets/images/Usth. Rini Dewi Anggiani.webp', import.meta.url).href,
+        'Usth. Dede Asiah': new URL('@/assets/images/Usth. Dede Asiah.webp', import.meta.url).href,
+        'Bpk. Ali M. Abduh': new URL('@/assets/images/Ali M Abduh.webp', import.meta.url).href,
+        "Bpk. Gojali Abdul Syafi'i": new URL('@/assets/images/Gojali Abdul S.webp', import.meta.url).href,
+        'Usth. Rani Rahmayati': new URL('@/assets/images/Usth. Rani Rahmayati.webp', import.meta.url).href,
+        'Usth. Rayanthi': new URL('@/assets/images/Usth.Rayanthi.webp', import.meta.url).href,
+        'Bpk. H. Redi Sasriandi': new URL('@/assets/images/H Redi Sasriandi.webp', import.meta.url).href,
+        'Bpk. Aditya Astra Prayudha': new URL('@/assets/images/Bpk. Aditya Astra P.webp', import.meta.url).href,
+        'Bpk. Sukardi': new URL('@/assets/images/Sukardi.webp', import.meta.url).href,
+        'Bpk. Nanang Barkah': new URL('@/assets/images/Nanang Barkah.webp', import.meta.url).href,
+        'Ust. H. M. Ainur Rofiq': new URL('@/assets/images/M Ainur Rofiq.webp', import.meta.url).href,
+      };
+
+      const resolveImage = (name, apiImage) => {
+        // Use API image only if it's a valid http/https URL (not blob:, not null)
+        if (apiImage && apiImage.startsWith('http') && !apiImage.startsWith('blob:')) {
+          return apiImage;
+        }
+        // Otherwise fall back to local bundled image
+        return imageMap[name] || null;
+      };
+
       try {
         const res = await api.get('/web-profile/committee');
         const data = res.data.data || res.data;
@@ -586,7 +622,7 @@ export const useAdminStore = defineStore('admin', {
           id: m.id,
           name: m.name,
           role: m.role,
-          image: m.image || null,
+          image: resolveImage(m.name, m.image),
           isLeader: m.is_leader !== undefined ? Boolean(m.is_leader) : Boolean(m.isLeader || false)
         });
 
@@ -604,6 +640,7 @@ export const useAdminStore = defineStore('admin', {
         throw err;
       }
     },
+
     async saveCommittee() {
       try {
         await api.put('/web-profile/committee', this.committee);

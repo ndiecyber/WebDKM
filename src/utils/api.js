@@ -1,15 +1,8 @@
 import axios from 'axios';
 import { useToastStore } from '@/stores/toast';
 
-const getBaseURL = () => {
-  if (typeof window !== 'undefined' && window.location.hostname.includes('masjidkassiti.id')) {
-    return 'https://masjidkassiti.id/api-v1';
-  }
-  return import.meta.env.VITE_API_URL || 'http://api.localhost:8000/v1';
-};
-
 const api = axios.create({
-  baseURL: getBaseURL(),
+  baseURL: import.meta.env.VITE_API_URL || 'http://api.localhost:8000/v1',
   headers: {
     'Accept': 'application/json'
   }
