@@ -57,6 +57,7 @@
                 type="text" 
                 class="w-full bg-gray-900/50 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:bg-gray-900/80 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all shadow-inner relative z-0"
                 placeholder="Masukkan username"
+                autocapitalize="none"
                 required
               />
             </div>
@@ -74,6 +75,7 @@
                 type="password" 
                 class="w-full bg-gray-900/50 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:bg-gray-900/80 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all shadow-inner relative z-0"
                 placeholder="Masukkan password"
+                autocapitalize="none"
                 required
               />
             </div>
