@@ -114,7 +114,7 @@ async function handleLogin() {
   const success = await adminStore.login(username.value, password.value)
   
   if (success) {
-    router.push({ name: 'admin-dashboard' })
+    router.push({ name: adminStore.defaultRouteName })
   } else {
     errorMsg.value = 'Username atau password salah.'
   }

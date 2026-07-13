@@ -29,6 +29,7 @@ api.interceptors.response.use(
   (error) => {
     let errorMessage = 'Terjadi kesalahan pada server';
     let skipGlobalToast = false;
+    let action = null;
     
     if (error.response) {
       errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
@@ -60,11 +61,16 @@ api.interceptors.response.use(
       errorMessage = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.';
     }
 
+    if (errorMessage === 'Tidak ada periode aktif.') {
+      errorMessage = 'Tidak ada periode aktif. Silakan buat periode baru terlebih dahulu.';
+      action = { label: 'Buat Periode Baru', route: '/admin/qurban/periode' };
+    }
+
     // Show toast for error
     if (typeof skipGlobalToast === 'undefined' || !skipGlobalToast) {
       try {
         const toast = useToastStore();
-        toast.addToast(errorMessage, 'error');
+        toast.addToast(errorMessage, 'error', action);
       } catch (e) {
         console.error('Toast failed to display:', e);
       }

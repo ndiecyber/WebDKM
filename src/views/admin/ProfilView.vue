@@ -25,7 +25,7 @@
                   <Camera class="w-6 h-6 text-white" />
                 </button>
               </div>
-              <span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 text-xs font-semibold tracking-wider uppercase rounded-lg ring-1 ring-yellow-200 dark:ring-yellow-500/20 mb-2">Superadmin</span>
+              <span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 text-xs font-semibold tracking-wider uppercase rounded-lg ring-1 ring-yellow-200 dark:ring-yellow-500/20 mb-2">{{ currentRoleName }}</span>
             </div>
             
             <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ profile.name }}</h3>
@@ -37,7 +37,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-800 dark:text-gray-300">Akun Terverifikasi</p>
-                <p class="text-xs text-gray-500">Sejak 12 Jan 2024</p>
+                <p class="text-xs text-gray-500">Sejak {{ joinedDate }}</p>
               </div>
             </div>
           </div>
@@ -155,19 +155,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { User, Camera, ShieldCheck, UserCircle, Lock, Save } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
+import { useAdminStore } from '../../stores/admin'
 
 const toastStore = useToastStore()
+const adminStore = useAdminStore()
 const isSavingProfile = ref(false)
 const isSavingPassword = ref(false)
 
-// Mock Data
-const profile = ref({
-  name: 'Admin Utama',
-  email: 'admin@masjidkassiti.com'
+const currentRoleName = computed(() => {
+  return adminStore.currentUser?.role_data?.display_name || adminStore.currentUser?.role || 'User'
 })
+
+const joinedDate = computed(() => {
+  if (!adminStore.currentUser?.created_at) return 'Sekarang'
+  const date = new Date(adminStore.currentUser.created_at)
+  return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(date)
+})
+
+const profile = ref({
+  name: adminStore.currentUser?.name || '',
+  email: adminStore.currentUser?.email || ''
+})
+
+// watch if currentUser updates (e.g. initial load latency)
+watch(() => adminStore.currentUser, (newVal) => {
+  if (newVal) {
+    profile.value.name = newVal.name || ''
+    profile.value.email = newVal.email || ''
+  }
+}, { immediate: true, deep: true })
 
 const passwordForm = ref({
   current: '',
@@ -175,25 +194,42 @@ const passwordForm = ref({
   confirm: ''
 })
 
-function saveProfile() {
+async function saveProfile() {
+  if (!profile.value.name || !profile.value.email) {
+    toastStore.addToast('Nama dan Email harus diisi', 'error')
+    return
+  }
+
   isSavingProfile.value = true
-  setTimeout(() => {
-    isSavingProfile.value = false
+  try {
+    await adminStore.updateProfile(profile.value)
     toastStore.addToast('Profil berhasil diperbarui')
-  }, 800)
+  } catch (err) {
+    toastStore.addToast(err?.response?.data?.message || 'Gagal memperbarui profil', 'error')
+  } finally {
+    isSavingProfile.value = false
+  }
 }
 
-function savePassword() {
+async function savePassword() {
   if (passwordForm.value.new !== passwordForm.value.confirm) {
     toastStore.addToast('Konfirmasi password baru tidak cocok', 'error')
     return
   }
+  if (passwordForm.value.new.length < 8) {
+    toastStore.addToast('Password minimal 8 karakter', 'error')
+    return
+  }
   
   isSavingPassword.value = true
-  setTimeout(() => {
-    isSavingPassword.value = false
+  try {
+    await adminStore.updatePassword(passwordForm.value)
     toastStore.addToast('Password berhasil diubah')
     passwordForm.value = { current: '', new: '', confirm: '' }
-  }, 1000)
+  } catch (err) {
+    toastStore.addToast(err?.response?.data?.message || 'Gagal mengubah password', 'error')
+  } finally {
+    isSavingPassword.value = false
+  }
 }
 </script>

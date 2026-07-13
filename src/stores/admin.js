@@ -15,16 +15,8 @@ export const useAdminStore = defineStore('admin', {
   state: () => ({
     isAuthenticated: getStorage('admin_auth') === 'true',
     currentUser: parseSafe('admin_current_user') || { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin' },
-    roles: [
-      { id: 1, key: 'superadmin', name: 'Super Admin', hierarchy: 1, modules: ['web', 'keuangan', 'qurban', 'sistem'] },
-      { id: 2, key: 'bendahara', name: 'Bendahara', hierarchy: 2, modules: ['keuangan'] },
-      { id: 3, key: 'sekretaris', name: 'Sekretaris', hierarchy: 3, modules: ['web'] }
-    ],
-    users: [
-      { id: 1, username: 'admin', name: 'Super Admin', role: 'superadmin', password: 'admin123' },
-      { id: 2, username: 'bendahara', name: 'Bendahara', role: 'bendahara', password: 'password123' },
-      { id: 3, username: 'sekretaris', name: 'Sekretaris', role: 'sekretaris', password: 'password123' }
-    ],
+    roles: [],
+    users: [],
     auditLogs: parseSafe('admin_audit_logs') || [],
     committee: { dewanPenasihat: [], pengurusHarian: [], divisi: [] },
     kegiatan: [],
@@ -83,15 +75,34 @@ export const useAdminStore = defineStore('admin', {
   }),
   getters: {
     currentRoleData: (state) => {
+      if (state.currentUser?.role_data) return state.currentUser.role_data;
       if (!Array.isArray(state.roles)) return null;
       return state.roles.find(r => r.key === state.currentUser?.role) || null;
     },
     hasModuleAccess: (state) => {
       return (moduleKey) => {
+        if (state.currentUser?.role_data?.modules) {
+          return state.currentUser.role_data.modules.includes(moduleKey);
+        }
         if (!Array.isArray(state.roles)) return false;
         const roleData = state.roles.find(r => r.key === state.currentUser?.role);
         return roleData ? roleData.modules.includes(moduleKey) : false;
       }
+    },
+    defaultRouteName: (state) => {
+      let modules = [];
+      if (state.currentUser?.role_data?.modules) {
+        modules = state.currentUser.role_data.modules;
+      } else if (Array.isArray(state.roles)) {
+        const roleData = state.roles.find(r => r.key === state.currentUser?.role);
+        if (roleData) modules = roleData.modules;
+      }
+
+      if (modules.includes('web')) return 'admin-dashboard';
+      if (modules.includes('keuangan')) return 'admin-keuangan-dashboard';
+      if (modules.includes('qurban')) return 'admin-qurban-dashboard';
+      if (modules.includes('sistem')) return 'admin-pengguna';
+      return 'admin-dashboard';
     },
     canManageRole: (state) => {
       return (targetHierarchy) => {
@@ -180,6 +191,36 @@ export const useAdminStore = defineStore('admin', {
       localStorage.removeItem('auth_token');
       removeStorage('admin_auth');
       removeStorage('admin_current_user');
+    },
+    async updateProfile(data) {
+      try {
+        const response = await api.put('/profile', data);
+        const resData = response.data?.data || response.data;
+        if (resData && resData.user) {
+          // Keep existing properties like role_data that might not be returned in /profile
+          this.currentUser = { ...this.currentUser, ...resData.user };
+          setStorage('admin_current_user', JSON.stringify(this.currentUser));
+          this.logActivity('Update Profil', 'Memperbarui profil akun');
+          return true;
+        }
+        return false;
+      } catch (err) {
+        console.error('Update profile error:', err);
+        throw err;
+      }
+    },
+    async updatePassword(data) {
+      try {
+        await api.put('/profile/password', {
+          current_password: data.current,
+          new_password: data.new
+        });
+        this.logActivity('Ubah Password', 'Memperbarui password akun');
+        return true;
+      } catch (err) {
+        console.error('Update password error:', err);
+        throw err;
+      }
     },
     async fetchKegiatan() {
       try {
@@ -579,6 +620,8 @@ export const useAdminStore = defineStore('admin', {
         const data = res.data.data || res.data;
         if (Array.isArray(data)) {
           this.users = data;
+        } else if (data && Array.isArray(data.data)) {
+          this.users = data.data;
         }
       } catch (err) {
         console.error('Failed to fetch users:', err);

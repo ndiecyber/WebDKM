@@ -20,8 +20,18 @@
           <AlertCircle v-else class="w-5 h-5 text-red-400" />
         </div>
         
-        <!-- Message -->
-        <p class="text-white text-sm font-medium">{{ toast.message }}</p>
+        <!-- Message & Action -->
+        <div class="flex-1 min-w-0">
+          <p class="text-white text-sm font-medium">{{ toast.message }}</p>
+          <router-link 
+            v-if="toast.action" 
+            :to="toast.action.route" 
+            class="inline-block mt-1.5 text-xs font-bold text-yellow-400 hover:text-yellow-300 transition-colors uppercase tracking-wide"
+            @click="toastStore.removeToast(toast.id)"
+          >
+            {{ toast.action.label }} &rarr;
+          </router-link>
+        </div>
       </div>
     </TransitionGroup>
   </div>
