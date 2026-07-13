@@ -2,6 +2,30 @@ import { defineStore } from 'pinia'
 import { getStorage, setStorage, removeStorage } from '@/utils/storage'
 import api from '@/utils/api'
 
+// Static committee member image imports (Vite bundles these correctly)
+import imgIwa from '@/assets/images/Ust. H Iwa Penasihat.webp'
+import imgAdeKarom from '@/assets/images/Ust. H Ade Karom.webp'
+import imgSudiana from '@/assets/images/Bpk. Sudiana Maska.webp'
+import imgUsman from '@/assets/images/H Usman penasihat.webp'
+import imgAyi from '@/assets/images/Bpk. Ayi Sunarwan.webp'
+import imgNasai from '@/assets/images/dkm-nasai.webp'
+import imgRofiq from '@/assets/images/M Ainur Rofiq.webp'
+import imgRandi from '@/assets/images/dkm-randi.webp'
+import imgIrvan from '@/assets/images/dkm-irvan.webp'
+import imgDani from '@/assets/images/dkm-dani.webp'
+import imgNenengAam from '@/assets/images/Usth. Neneng Aam.webp'
+import imgAiJamaliah from '@/assets/images/Usth. Ai Jamaliah.webp'
+import imgRiniDewi from '@/assets/images/Usth. Rini Dewi Anggiani.webp'
+import imgDedeAsiah from '@/assets/images/Usth. Dede Asiah.webp'
+import imgAliAbduh from '@/assets/images/Ali M Abduh.webp'
+import imgGojali from '@/assets/images/Gojali Abdul S.webp'
+import imgRaniRahmayati from '@/assets/images/Usth. Rani Rahmayati.webp'
+import imgRayanthi from '@/assets/images/Usth.Rayanthi.webp'
+import imgRediSasriandi from '@/assets/images/H Redi Sasriandi.webp'
+import imgAdityaAstra from '@/assets/images/Bpk. Aditya Astra P.webp'
+import imgSukardi from '@/assets/images/Sukardi.webp'
+import imgNanangBarkah from '@/assets/images/Nanang Barkah.webp'
+
 const parseSafe = (key) => {
   try {
     const val = getStorage(key)
@@ -578,46 +602,47 @@ export const useAdminStore = defineStore('admin', {
       }
     },
     async fetchCommittee() {
-      // Static image fallback map using bundled local assets
+      // Map member names → statically-imported bundled images
+      // NOTE: Must use static imports (top of file) — Vite cannot resolve '@' alias in new URL() at runtime
       const imageMap = {
-        'Ust. H. Iwa Kurniawan': new URL('@/assets/images/Ust. H Iwa Penasihat.webp', import.meta.url).href,
-        'Ust. H. Ade Karom': new URL('@/assets/images/Ust. H Ade Karom.webp', import.meta.url).href,
-        'Bpk. Sudiana Maska': new URL('@/assets/images/Bpk. Sudiana Maska.webp', import.meta.url).href,
-        'Bpk. H. Usman': new URL('@/assets/images/H Usman penasihat.webp', import.meta.url).href,
-        'Bpk. Ayi Sunarwan': new URL('@/assets/images/Bpk. Ayi Sunarwan.webp', import.meta.url).href,
-        "Ust. H. Ahmad Nasa'i": new URL('@/assets/images/dkm-nasai.webp', import.meta.url).href,
-        'Ust. H. M. Ainur Rofik': new URL('@/assets/images/M Ainur Rofiq.webp', import.meta.url).href,
-        'Ust. Randi Rizal': new URL('@/assets/images/dkm-randi.webp', import.meta.url).href,
-        'Ust. H. Irvan Ruchiat': new URL('@/assets/images/Ivan Ruchiat.webp', import.meta.url).href,
-        'Ust. H. Dani Ramdhani': new URL('@/assets/images/Dani Ramdhani.webp', import.meta.url).href,
-        'Usth. Neneng Aam Siti Marhamah': new URL('@/assets/images/Usth. Neneng Aam.webp', import.meta.url).href,
-        'Usth. Ai Jamaliah': new URL('@/assets/images/Usth. Ai Jamaliah.webp', import.meta.url).href,
-        'Usth. Rini Dewi Anggiani': new URL('@/assets/images/Usth. Rini Dewi Anggiani.webp', import.meta.url).href,
-        'Usth. Dede Asiah': new URL('@/assets/images/Usth. Dede Asiah.webp', import.meta.url).href,
-        'Bpk. Ali M. Abduh': new URL('@/assets/images/Ali M Abduh.webp', import.meta.url).href,
-        "Bpk. Gojali Abdul Syafi'i": new URL('@/assets/images/Gojali Abdul S.webp', import.meta.url).href,
-        'Usth. Rani Rahmayati': new URL('@/assets/images/Usth. Rani Rahmayati.webp', import.meta.url).href,
-        'Usth. Rayanthi': new URL('@/assets/images/Usth.Rayanthi.webp', import.meta.url).href,
-        'Bpk. H. Redi Sasriandi': new URL('@/assets/images/H Redi Sasriandi.webp', import.meta.url).href,
-        'Bpk. Aditya Astra Prayudha': new URL('@/assets/images/Bpk. Aditya Astra P.webp', import.meta.url).href,
-        'Bpk. Sukardi': new URL('@/assets/images/Sukardi.webp', import.meta.url).href,
-        'Bpk. Nanang Barkah': new URL('@/assets/images/Nanang Barkah.webp', import.meta.url).href,
-        'Ust. H. M. Ainur Rofiq': new URL('@/assets/images/M Ainur Rofiq.webp', import.meta.url).href,
+        'Ust. H. Iwa Kurniawan':          imgIwa,
+        'Ust. H. Ade Karom':              imgAdeKarom,
+        'Bpk. Sudiana Maska':             imgSudiana,
+        'Bpk. H. Usman':                  imgUsman,
+        'Bpk. Ayi Sunarwan':              imgAyi,
+        "Ust. H. Ahmad Nasa'i":           imgNasai,
+        'Ust. H. M. Ainur Rofik':         imgRofiq,
+        'Ust. H. M. Ainur Rofiq':         imgRofiq,
+        'Ust. Randi Rizal':               imgRandi,
+        'Ust. H. Irvan Ruchiat':          imgIrvan,
+        'Ust. H. Dani Ramdhani':          imgDani,
+        'Usth. Neneng Aam Siti Marhamah': imgNenengAam,
+        'Usth. Ai Jamaliah':              imgAiJamaliah,
+        'Usth. Rini Dewi Anggiani':       imgRiniDewi,
+        'Usth. Dede Asiah':               imgDedeAsiah,
+        'Bpk. Ali M. Abduh':              imgAliAbduh,
+        "Bpk. Gojali Abdul Syafi'i":      imgGojali,
+        'Usth. Rani Rahmayati':           imgRaniRahmayati,
+        'Usth. Rayanthi':                 imgRayanthi,
+        'Bpk. H. Redi Sasriandi':         imgRediSasriandi,
+        'Bpk. Aditya Astra Prayudha':     imgAdityaAstra,
+        'Bpk. Sukardi':                   imgSukardi,
+        'Bpk. Nanang Barkah':             imgNanangBarkah,
       };
 
       const resolveImage = (name, apiImage) => {
-        // Use API image only if it's a valid http/https URL (not blob:, not null)
-        if (apiImage && apiImage.startsWith('http') && !apiImage.startsWith('blob:')) {
+        // Use API image only if it's a valid https URL (not blob:, not null, not empty)
+        if (apiImage && typeof apiImage === 'string' && apiImage.startsWith('https://') && !apiImage.startsWith('blob:')) {
           return apiImage;
         }
-        // Otherwise fall back to local bundled image
+        // Otherwise use local bundled image by member name
         return imageMap[name] || null;
       };
 
       try {
         const res = await api.get('/web-profile/committee');
         const data = res.data.data || res.data;
-        
+
         const mapMember = (m) => ({
           id: m.id,
           name: m.name,
