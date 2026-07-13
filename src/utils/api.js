@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useToastStore } from '@/stores/toast';
 
 const api = axios.create({
-  baseURL: 'http://api.localhost:8000/v1',
+  baseURL: import.meta.env.VITE_API_URL || 'http://api.localhost:8000/v1',
   headers: {
     'Accept': 'application/json'
   }
