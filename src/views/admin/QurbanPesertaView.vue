@@ -151,19 +151,19 @@
 
               <td class="px-4 py-3 whitespace-nowrap">
                 <div class="text-sm font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
-                  <span>{{ peserta.target_type === 'sapi' ? '🐄' : '🐐' }}</span>
-                  <span>{{ peserta.animal_group?.name || (peserta.target_type === 'sapi' ? 'Sapi (Belum diatur)' : 'Kambing') }}</span>
+                  <span>{{ !peserta.target_type ? '❓' : (peserta.target_type === 'sapi' ? '🐄' : '🐐') }}</span>
+                  <span>{{ peserta.animal_group?.name || (!peserta.target_type ? 'Belum Memilih Hewan' : (peserta.target_type === 'sapi' ? 'Sapi (Belum diatur)' : 'Kambing')) }}</span>
                 </div>
               </td>
 
               <td class="px-4 py-3 whitespace-nowrap">
                 <div class="flex items-center gap-1.5 mb-1.5">
                   <span class="text-sm font-bold text-gray-900 dark:text-white">{{ formatRupiah(peserta.collected_amount) }}</span>
-                  <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">/ {{ formatRupiah(peserta.target_amount) }}</span>
+                  <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">/ {{ Number(peserta.target_amount) > 0 ? formatRupiah(peserta.target_amount) : 'Belum Ditentukan' }}</span>
                 </div>
                 <div class="w-full max-w-[140px] h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden border border-gray-200 dark:border-white/5">
                   <div class="h-full rounded-full transition-all duration-500"
-                       :class="peserta.collected_amount >= peserta.target_amount ? 'bg-emerald-500' : 'bg-secondary'"
+                       :class="Number(peserta.collected_amount) >= Number(peserta.target_amount) ? 'bg-emerald-500' : 'bg-secondary'"
                        :style="{ width: getPercentage(peserta) + '%' }">
                   </div>
                 </div>
@@ -174,7 +174,13 @@
                   <span v-if="peserta.transactions && peserta.transactions.some(tx => tx.status === 'pending')" class="px-2 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 text-[10px] uppercase tracking-wider rounded-md font-bold animate-pulse border border-amber-200 dark:border-amber-500/20" title="Ada tagihan pending">
                     Pending
                   </span>
-                  <span v-else-if="peserta.collected_amount >= peserta.target_amount" class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                  <span v-if="!peserta.target_type" class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border border-gray-200 dark:border-white/10">
+                    Belum Memilih
+                  </span>
+                  <span v-else-if="Number(peserta.collected_amount) > Number(peserta.target_amount)" class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/20">
+                    Kelebihan
+                  </span>
+                  <span v-else-if="Number(peserta.collected_amount) === Number(peserta.target_amount)" class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
                     Lunas
                   </span>
                   <span v-else class="px-2 py-0.5 inline-flex text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
@@ -273,7 +279,7 @@
             <div class="border border-gray-200 dark:border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center bg-white dark:bg-gray-900 shadow-sm">
               <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Status Tabungan</span>
               <div class="mb-2">
-                <span v-if="selectedPeserta.collected_amount >= selectedPeserta.target_amount" class="px-3 py-1 bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                <span v-if="Number(selectedPeserta.collected_amount) >= Number(selectedPeserta.target_amount)" class="px-3 py-1 bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 text-[10px] font-bold rounded-lg uppercase tracking-wider">
                   Sudah Lunas
                 </span>
                 <span v-else class="px-3 py-1 bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 text-[10px] font-bold rounded-lg uppercase tracking-wider">
@@ -309,8 +315,12 @@
             </div>
             
             <div class="flex justify-between items-center text-sm pt-2">
-              <span class="text-gray-500 dark:text-gray-400 font-medium">Kekurangan</span>
-              <span class="font-bold text-amber-500 dark:text-amber-400">{{ formatRupiah(Math.max(0, selectedPeserta.target_amount - selectedPeserta.collected_amount)) }}</span>
+              <span class="text-gray-500 dark:text-gray-400 font-medium">
+                {{ Number(selectedPeserta.collected_amount) > Number(selectedPeserta.target_amount) ? 'Kelebihan Bayar' : 'Kekurangan' }}
+              </span>
+              <span class="font-bold" :class="Number(selectedPeserta.collected_amount) > Number(selectedPeserta.target_amount) ? 'text-emerald-500 dark:text-emerald-400' : 'text-amber-500 dark:text-amber-400'">
+                {{ formatRupiah(Math.abs(Number(selectedPeserta.target_amount) - Number(selectedPeserta.collected_amount))) }}
+              </span>
             </div>
           </div>
 
@@ -324,7 +334,8 @@
             <div class="space-y-3">
               <template v-if="selectedPeserta.transactions && selectedPeserta.transactions.length > 0">
                 <div v-for="tx in selectedPeserta.transactions" :key="tx.id" 
-                  :class="['p-4 rounded-2xl border flex items-center justify-between shadow-sm', tx.status === 'pending' ? 'border-amber-300 dark:border-amber-500/50 bg-white dark:bg-gray-900' : 'border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900']">
+                  @click="goToTransaction(tx.id)"
+                  :class="['p-4 rounded-2xl border flex items-center justify-between shadow-sm cursor-pointer hover:-translate-y-0.5 transition-all', tx.status === 'pending' ? 'border-amber-300 dark:border-amber-500/50 bg-white dark:bg-gray-900 hover:shadow-amber-500/10' : 'border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-emerald-500/10']">
                   
                   <div class="flex items-center gap-3">
                     <div :class="['w-10 h-10 rounded-xl flex items-center justify-center shrink-0', tx.status === 'pending' ? 'bg-amber-50 text-amber-500 dark:bg-amber-500/10 dark:text-amber-400' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400']">
@@ -351,8 +362,12 @@
           
         </div>
 
-        <div v-if="!qurbanStore.isArchiveMode" class="p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900">
-          <button @click="goToSetoran" class="w-full py-3.5 bg-secondary hover:bg-secondary/90 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
+        <div v-if="!qurbanStore.isArchiveMode" class="p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 flex gap-3">
+          <button v-if="Number(selectedPeserta.collected_amount) > Number(selectedPeserta.target_amount)" @click="confirmRefund" class="w-full py-3.5 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Tarik Kelebihan
+          </button>
+          <button v-else @click="goToSetoran" class="w-full py-3.5 bg-secondary hover:bg-secondary/90 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path><line x1="12" y1="9" x2="12" y2="15"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>
             Tambah Setoran
           </button>
@@ -392,7 +407,8 @@
             
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pilihan Target Hewan</label>
-              <select v-model="formData.target_type" :disabled="modalType === 'edit'" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:opacity-70">
+              <select v-model="formData.target_type" :disabled="modalType === 'edit' && selectedPeserta?.target_type" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:opacity-70">
+                <option :value="null" disabled>❓ Belum Memilih Hewan</option>
                 <option value="sapi">🐄 Sapi (Kolektif)</option>
                 <option value="kambing">🐐 Kambing (Mandiri)</option>
               </select>
@@ -460,13 +476,17 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Users, Search, Eye, X, Plus, Edit2, Trash2, MapPin, Phone, User, Filter, ChevronDown, Check, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-vue-next'
-import { qurbanMockData } from '@/utils/qurbanMock'
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
+import { useToastStore } from '@/stores/toast'
+import { useDialogStore } from '@/stores/dialog'
+import api from '@/utils/api'
 
 // STATE
 const router = useRouter()
 const qurbanStore = useQurbanStore()
+const toastStore = useToastStore()
+const dialog = useDialogStore()
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
 const searchQuery = ref('')
@@ -500,24 +520,40 @@ const setFilter = (value) => {
 
 const formData = ref({ name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' })
 
-// MOCK DATA 
-const mockPeserta = ref([])
+// DATA
+const pesertaData = ref([])
+
+const fetchPesertaData = async () => {
+  localLoading.value = true
+  try {
+    const params = qurbanStore.selectedPeriodId ? { period_id: qurbanStore.selectedPeriodId } : {}
+    const response = await api.get('/qurban/shohibuls', { params })
+    if (response.data?.success) {
+      pesertaData.value = response.data.data
+    }
+  } catch (err) {
+    if (err.response?.status !== 404) {
+      toastStore.addToast('Gagal memuat data peserta', 'error')
+    }
+    pesertaData.value = []
+  } finally {
+    localLoading.value = false
+  }
+}
 
 onMounted(() => {
-  setTimeout(() => {
-    mockPeserta.value = qurbanMockData.shohibuls;
-    localLoading.value = false
-  }, 1000)
+  fetchPesertaData()
 })
 
-watch(() => qurbanStore.selectedPeriodId, () => {
-  // Simulate fetching data for the new period
-  mockPeserta.value = qurbanMockData.shohibuls.slice().sort(() => Math.random() - 0.5)
+watch(() => qurbanStore.selectedPeriodId, (newVal) => {
+  if (newVal) {
+    fetchPesertaData()
+  }
 })
 
 // COMPUTED FILTERS
 const filteredPeserta = computed(() => {
-  return mockPeserta.value.filter(p => {
+  return pesertaData.value.filter(p => {
     const q = searchQuery.value.toLowerCase()
     const matchesSearch = p.name.toLowerCase().includes(q) || p.id.toString().includes(q) || p.address.toLowerCase().includes(q)
     
@@ -530,9 +566,9 @@ const filteredPeserta = computed(() => {
     if (advancedFilters.value.status === 'pending') {
       matchesAdvanced = hasPending
     } else if (advancedFilters.value.status === 'lunas') {
-      matchesAdvanced = !hasPending && p.collected_amount >= p.target_amount
+      matchesAdvanced = !hasPending && Number(p.collected_amount) >= Number(p.target_amount)
     } else if (advancedFilters.value.status === 'proses') {
-      matchesAdvanced = !hasPending && p.collected_amount < p.target_amount
+      matchesAdvanced = !hasPending && Number(p.collected_amount) < Number(p.target_amount)
     }
     
     return matchesSearch && matchesFilter && matchesAdvanced
@@ -549,11 +585,22 @@ const paginatedPeserta = computed(() => {
 
 // METHODS
 const formatRupiah = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
-const getPercentage = (peserta) => Math.min(Math.round((peserta.collected_amount / peserta.target_amount) * 100), 100)
+const getPercentage = (peserta) => {
+  if (!peserta.target_amount || Number(peserta.target_amount) === 0) return 0;
+  const percentage = (Number(peserta.collected_amount) / Number(peserta.target_amount)) * 100
+  return Math.min(percentage, 100)
+}
 
 const goToSetoran = () => {
+  if (!selectedPeserta.value) return
+  const id = selectedPeserta.value.id
   closeModal()
-  router.push('/admin/qurban/setoran')
+  router.push({ name: 'admin-qurban-setoran', query: { add_shohibul: id } })
+}
+
+const goToTransaction = (txId) => {
+  closeModal()
+  router.push({ name: 'admin-qurban-setoran', query: { open_tx: txId } })
 }
 
 const getInitials = (name) => {
@@ -562,39 +609,124 @@ const getInitials = (name) => {
 }
 
 // Modal Handlers
-const openDetails = (peserta) => { selectedPeserta.value = peserta; modalType.value = 'detail'; document.body.style.overflow = 'hidden' }
+const openDetails = async (peserta) => { 
+  selectedPeserta.value = peserta; 
+  modalType.value = 'detail'; 
+  document.body.style.overflow = 'hidden';
+  // Fetch full details for full transaction history
+  try {
+    const res = await api.get('/qurban/shohibuls/' + peserta.id)
+    if (res.data?.success) {
+      selectedPeserta.value = res.data.data
+      // Ensure transactions have a 'date' field compatible with template
+      if (selectedPeserta.value.transactions) {
+        selectedPeserta.value.transactions = selectedPeserta.value.transactions.map(tx => ({
+          ...tx,
+          date: new Date(tx.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        }))
+      }
+    }
+  } catch(e) {
+    console.error(e)
+  }
+}
 const openAddModal = () => { 
   formData.value = { name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' }
   modalType.value = 'add'; document.body.style.overflow = 'hidden' 
 }
 const openEditModal = (peserta) => { 
   selectedPeserta.value = peserta; 
-  formData.value = { ...peserta }
+  formData.value = { name: peserta.name, phone: peserta.phone, address: peserta.address, target_type: peserta.target_type }
   modalType.value = 'edit'; document.body.style.overflow = 'hidden' 
 }
 
-const confirmDelete = (peserta) => { 
+const confirmDelete = async (peserta) => { 
   if (peserta.collected_amount > 0 || (peserta.transactions && peserta.transactions.some(tx => tx.status === 'pending'))) {
-    alert(`DITOLAK SISTEM: Shohibul ${peserta.name} memiliki saldo aktif (${formatRupiah(peserta.collected_amount)}) atau transaksi yang masih pending. Batalkan transaksi atau selesaikan refund sebelum menghapus peserta!`)
+    await dialog.open({
+      title: 'Penolakan Sistem',
+      message: `Shohibul ${peserta.name} memiliki saldo aktif (${formatRupiah(peserta.collected_amount)}) atau transaksi yang masih pending. Batalkan transaksi atau selesaikan refund sebelum menghapus peserta!`,
+      type: 'alert',
+      confirmText: 'Mengerti'
+    })
     return
   }
   selectedPeserta.value = peserta; modalType.value = 'delete'; document.body.style.overflow = 'hidden' 
 }
-const closeModal = () => { modalType.value = null; selectedPeserta.value = null; document.body.style.overflow = '' }
-
-// Actions
-const submitForm = () => {
-  if (modalType.value === 'add') {
-    alert(`Fungsi Register API dipanggil! Peserta baru dibuat dan setoran awal Rp ${formData.value.initial_amount} berhasil dicatat melalui ${formData.value.payment_method}.`)
-  } else if (modalType.value === 'edit') {
-    alert(`Fungsi Update API dipanggil! Berhasil menyimpan perubahan identitas peserta.`)
-  }
-  closeModal()
+const closeModal = () => {
+  modalType.value = null
+  selectedPeserta.value = null
+  document.body.style.overflow = ''
 }
 
-const executeDelete = () => {
-  alert('Fungsi Destroy API dipanggil! Peserta berhasil dihapus.')
-  closeModal()
+const confirmRefund = async () => {
+  const excess = Number(selectedPeserta.value.collected_amount) - Number(selectedPeserta.value.target_amount)
+  if (excess <= 0) return
+
+  const isConfirmed = await dialog.open({
+    title: 'Tarik Kelebihan Dana',
+    message: `Apakah Anda yakin ingin menarik/mengembalikan kelebihan dana sebesar ${formatRupiah(excess)} untuk peserta ini?`,
+    type: 'confirm',
+    confirmText: 'Ya, Tarik Dana'
+  })
+
+  if (isConfirmed) {
+    try {
+      const res = await api.post(`/qurban/admin/shohibuls/${selectedPeserta.value.id}/refund`, { amount: excess })
+      if (res.data?.success) {
+        toastStore.addToast('Kelebihan dana berhasil ditarik', 'success')
+        fetchPesertaData()
+        selectedPeserta.value.collected_amount -= excess
+        if (res.data.data) {
+          if (!selectedPeserta.value.transactions) selectedPeserta.value.transactions = []
+          selectedPeserta.value.transactions.unshift(res.data.data)
+        }
+      }
+    } catch (err) {
+      toastStore.addToast(err.response?.data?.message || 'Gagal menarik dana', 'error')
+    }
+  }
+}
+
+// Actions
+const submitForm = async () => {
+  try {
+    if (modalType.value === 'add') {
+      const payload = { ...formData.value }
+      const res = await api.post('/qurban/shohibuls/register', payload)
+      if (res.data?.success) {
+        toastStore.addToast('Peserta berhasil didaftarkan', 'success')
+        fetchPesertaData()
+      }
+    } else if (modalType.value === 'edit') {
+      const payload = {
+        name: formData.value.name,
+        phone: formData.value.phone,
+        address: formData.value.address
+      }
+      const res = await api.put('/qurban/admin/shohibuls/' + selectedPeserta.value.id, payload)
+      if (res.data?.success) {
+        toastStore.addToast('Data peserta berhasil diperbarui', 'success')
+        fetchPesertaData()
+      }
+    }
+    closeModal()
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal menyimpan data', 'error')
+  }
+}
+
+const executeDelete = async () => {
+  try {
+    const res = await api.delete('/qurban/admin/shohibuls/' + selectedPeserta.value.id)
+    if (res.data?.success) {
+      toastStore.addToast('Peserta berhasil dihapus', 'success')
+      fetchPesertaData()
+    }
+    closeModal()
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal menghapus data', 'error')
+    closeModal()
+  }
 }
 </script>
 

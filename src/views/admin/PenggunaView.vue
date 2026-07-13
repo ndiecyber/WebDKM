@@ -285,7 +285,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { Plus, Edit, Trash2, X, Save, ArrowUp, ArrowDown } from 'lucide-vue-next'
 import { useAdminStore } from '../../stores/admin'
 import { useToastStore } from '../../stores/toast'
@@ -294,6 +294,11 @@ import { useDialogStore } from '../../stores/dialog'
 const adminStore = useAdminStore()
 const toastStore = useToastStore()
 const dialog = useDialogStore()
+
+onMounted(() => {
+  adminStore.fetchUsers()
+  adminStore.fetchRoles()
+})
 
 // TABS
 const activeTab = ref('users')
@@ -308,7 +313,8 @@ const availableModules = [
 
 // SORTED USERS
 const sortedUsers = computed(() => {
-  return [...adminStore.users].sort((a, b) => {
+  const usersArray = Array.isArray(adminStore.users) ? adminStore.users : []
+  return [...usersArray].sort((a, b) => {
     const roleA = adminStore.roles.find(r => r.key === a.role)
     const roleB = adminStore.roles.find(r => r.key === b.role)
     const hierarchyA = roleA ? roleA.hierarchy : 999
@@ -432,7 +438,8 @@ async function confirmDeleteUser(id) {
 
 // =================== ROLES LOGIC ===================
 const sortedRoles = computed(() => {
-  return [...adminStore.roles].sort((a, b) => a.hierarchy - b.hierarchy)
+  const rolesArray = Array.isArray(adminStore.roles) ? adminStore.roles : []
+  return [...rolesArray].sort((a, b) => a.hierarchy - b.hierarchy)
 })
 
 const isRoleModalOpen = ref(false)

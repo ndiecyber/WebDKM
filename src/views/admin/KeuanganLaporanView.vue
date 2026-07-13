@@ -21,16 +21,22 @@
           <span class="text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">Ukuran A4</span>
         </div>
         
-        <!-- Preview Container (Overflow handles mobile scrolling) -->
+        <!-- Preview Container -->
         <div class="flex-1 overflow-auto custom-scrollbar-y p-4 sm:p-8 bg-gray-100/50 dark:bg-[#0a0a0a]">
-          <!-- Wrapper for Pages -->
           <div id="report-paper" class="flex flex-col items-center gap-8 pb-8 min-w-max">
-            <ReportKegiatanTemplate v-if="processedReport" :report="processedReport" :showQR="showQR" :customQR="customQRUrl" />
+            
+            <div v-if="isLoadingReport" class="h-full w-full max-w-[794px] min-h-[800px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col items-center justify-center text-gray-500 space-y-4">
+              <Loader2 class="w-12 h-12 animate-spin text-secondary" />
+              <p class="font-medium text-sm">Menyusun Laporan...</p>
+            </div>
+            
+            <ReportKegiatanTemplate v-else-if="processedReport" :report="processedReport" :showQR="showQR" :customQR="customQRUrl" />
             
             <div v-else class="h-full w-full max-w-[794px] min-h-[800px] bg-white/50 dark:bg-gray-900/50 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-2xl flex flex-col items-center justify-center text-gray-400 opacity-80 space-y-4">
               <FileText class="w-16 h-16" />
-              <p class="font-medium text-sm">Pilih laporan di panel kanan untuk melihat preview</p>
+              <p class="font-medium text-sm">Pilih laporan kegiatan di panel kanan untuk melihat preview</p>
             </div>
+            
           </div>
         </div>
       </div>
@@ -45,39 +51,26 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Jenis Laporan</label>
               <select class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all">
-                <option value="kegiatan">Kegiatan Khusus</option>
+                <option value="kegiatan">Kegiatan Khusus / Program</option>
                 <option value="mutasi" disabled>Mutasi Rekening (Segera)</option>
                 <option value="kas" disabled>Buku Kas Umum (Segera)</option>
               </select>
             </div>
 
-            <!-- Pilih Tahun -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Tahun</label>
-              <select v-model="selectedYear" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all">
-                <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
-              </select>
-            </div>
-
-            <!-- Pilih Kegiatan -->
+            <!-- Pilih Program -->
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nama Kegiatan / Program</label>
               <select v-model="selectedReportId" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all">
                 <option value="">-- Pilih Kegiatan --</option>
-                <optgroup label="Program dari Sistem">
-                  <option v-for="report in dynamicFilteredReports" :key="report.id" :value="report.id">
-                    {{ report.title }}
-                  </option>
-                </optgroup>
-                <optgroup label="Contoh Laporan Lama">
-                  <option v-for="report in filteredReports" :key="report.id" :value="report.id">
-                    {{ report.title }}
+                <optgroup label="Program Tersedia">
+                  <option v-for="program in keuanganStore.programs" :key="program.id" :value="program.id">
+                    {{ program.name }} ({{ program.status }})
                   </option>
                 </optgroup>
               </select>
             </div>
             
-            <div v-if="selectedReport" class="space-y-4 pt-4 border-t border-gray-200 dark:border-white/10 mt-4">
+            <div v-if="selectedReportId && dynamicReportTemplate" class="space-y-4 pt-4 border-t border-gray-200 dark:border-white/10 mt-4">
               <h4 class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Kustomisasi Dokumen</h4>
               
               <!-- Override Tanggal -->
@@ -88,13 +81,13 @@
               
               <!-- Override Ketua -->
               <div>
-                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Ketua (Opsional)</label>
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Ketua Panitia</label>
                 <input v-model="overrideKetua" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" />
               </div>
 
               <!-- Override Bendahara -->
               <div>
-                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Bendahara (Opsional)</label>
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Bendahara Panitia</label>
                 <input v-model="overrideBendahara" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" />
               </div>
 
@@ -119,13 +112,13 @@
                 </button>
               </div>
 
-              <!-- QR Code Upload (Hanya muncul jika QR aktif) -->
+              <!-- QR Code Upload -->
               <div v-if="showQR" class="pt-2 border-t border-gray-100 dark:border-white/5">
                 <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Upload QR Kustom (Opsional)</label>
                 <div v-if="!customQRUrl" class="flex items-center justify-center w-full">
                   <label class="flex flex-col items-center justify-center w-full h-14 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-950 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors">
                     <div class="flex flex-col items-center justify-center pt-2 pb-2">
-                      <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">Klik untuk upload gambar .png/.jpg</p>
+                      <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">Klik untuk upload gambar</p>
                     </div>
                     <input type="file" class="hidden" accept="image/*" @change="handleQRUpload" />
                   </label>
@@ -145,7 +138,7 @@
           <div class="pt-6 mt-6 border-t border-gray-200 dark:border-white/10">
             <button 
               @click="exportToPDF" 
-              :disabled="!selectedReport || isExporting"
+              :disabled="!selectedReportId || isExporting || isLoadingReport"
               class="w-full justify-center bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-bold px-4 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
               <Loader2 v-if="isExporting" class="w-5 h-5 animate-spin" />
@@ -161,124 +154,26 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { Download, Monitor, FileText, Info, Loader2 } from 'lucide-vue-next'
 import ReportKegiatanTemplate from '@/components/ui/ReportKegiatanTemplate.vue'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useDialogStore } from '@/stores/dialog'
+import { useToastStore } from '@/stores/toast'
+import { validateFileSize } from '@/utils/fileValidator'
+import api from '@/utils/api'
 
 const keuanganStore = useKeuanganStore()
 const dialog = useDialogStore()
-
-
-// --- MOCK DATA (Copy dari FinanceSection) ---
-const mockReports = [
-  {
-    id: 'kas-jan-2026',
-    title: 'KAS DKMJ KASSITI',
-    year: '2026',
-    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
-    date: 'Periode Bulan Januari 2026',
-    pemasukan: [
-      { no: 1, tanggal: '', uraian: 'Saldo Bulan Desember 2025', jumlah: 138200 },
-      { no: 2, tanggal: '', uraian: 'Kencleng Bln. Januari 2026', jumlah: 2233900 },
-      { no: 3, tanggal: '', uraian: 'Saldo Kegiatan PHBI Isra\' Mi\'raj 1447H', jumlah: 2437000 },
-      { no: 4, tanggal: '', uraian: 'Hamba Allah 9/01/2026', jumlah: 50000 },
-      { no: 5, tanggal: '', uraian: 'Hamba Allah 13/01/2026', jumlah: 50000 },
-      { no: 6, tanggal: '', uraian: 'Hamba Allah 31/01/2026', jumlah: 150000 }
-    ],
-    pengeluaran: [
-      { no: 1, tanggal: '', uraian: '2 Marbot Masjid 1/1/26', jumlah: 600000 },
-      { no: 2, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 2/1/26', jumlah: 70000 },
-      { no: 3, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 9/1/26', jumlah: 70000 },
-      { no: 4, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 16/1/26', jumlah: 70000 },
-      { no: 5, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 23/1/26', jumlah: 70000 },
-      { no: 6, tanggal: '', uraian: 'Khotib Imam & Muadzin Jum\'at 30/1/26', jumlah: 70000 },
-      { no: 7, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Umum Selasa 7/1/26', jumlah: 100000 },
-      { no: 8, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Umum Selasa 13/1/26', jumlah: 100000 },
-      { no: 9, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Umum Selasa 27/1/26', jumlah: 100000 },
-      { no: 10, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu 3/1/26', jumlah: 100000 },
-      { no: 11, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu 10/1/26', jumlah: 100000 },
-      { no: 12, tanggal: '', uraian: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu 24/1/26', jumlah: 100000 },
-      { no: 13, tanggal: '', uraian: 'Mubalig Pengajian Bulanan Ibu-Ibu Sabtu 31/1/26', jumlah: 150000 },
-      { no: 14, tanggal: '', uraian: '5 Lt Bensin Mesin Potong Rumput 2/1/26', jumlah: 80000 },
-      { no: 15, tanggal: '', uraian: '2 Petugas Potong Rumput 5/1/26', jumlah: 150000 },
-      { no: 16, tanggal: '', uraian: 'Service Mixer & Speaker Masjid 7/1/26', jumlah: 100000 },
-      { no: 17, tanggal: '', uraian: '80 Nasi Box Pengajian Bulanan Ibu-Ibu 31/1/26', jumlah: 800000 }
-    ],
-    totalPemasukan: 5059100,
-    totalPengeluaran: 2830000,
-    sisaSaldo: 2229100,
-    terbilang: 'Dua Juta Dua Ratus Dua Puluh Sembilan Ribu Seratus Rupiah',
-    keterangan: '',
-    ketua: 'Irvan Ruchiat',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'KETUA DKMJ KASSITI'
-  },
-  {
-    id: 'isra-miraj',
-    title: 'PHBI Isra’ Mi’raj',
-    year: '2026',
-    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
-    date: '18 Januari 2026M / 1447H',
-    pemasukan: [
-      { no: 1, tanggal: '10 Jan 2026', uraian: 'Total Open Donasi Warga Perum Arjamukti', jumlah: 6682000 }
-    ],
-    pengeluaran: [
-      { no: 1, tanggal: '12 Jan 2026', uraian: '170 Box Nasi Kuning Dewasa', jumlah: 1360000 },
-      { no: 2, tanggal: '12 Jan 2026', uraian: '150 Box Nasi Kuning Anak', jumlah: 900000 },
-      { no: 3, tanggal: '12 Jan 2026', uraian: '25 Porsi Paket Nasi Prasmanan', jumlah: 500000 },
-      { no: 4, tanggal: '15 Jan 2026', uraian: 'Mubaligh / Penceramah', jumlah: 700000 },
-      { no: 5, tanggal: '15 Jan 2026', uraian: 'Qori Al-Quran', jumlah: 100000 },
-      { no: 6, tanggal: '16 Jan 2026', uraian: 'Bingkisan Mubalig', jumlah: 110000 },
-      { no: 7, tanggal: '16 Jan 2026', uraian: '2 Runtuy Kopi dan Rokok', jumlah: 97000 },
-      { no: 8, tanggal: '17 Jan 2026', uraian: 'Air Mineral 4 Dus @18.000', jumlah: 72000 },
-      { no: 9, tanggal: '17 Jan 2026', uraian: 'Air Mineral 8 Dus @17.000', jumlah: 136000 },
-      { no: 10, tanggal: '17 Jan 2026', uraian: '1 Banner Frontlite 280 (3x2M) @25.000', jumlah: 150000 },
-      { no: 11, tanggal: '18 Jan 2026', uraian: 'TIM Petugas Kebersihan', jumlah: 100000 },
-      { no: 12, tanggal: '18 Jan 2026', uraian: 'Akomodasi', jumlah: 20000 }
-    ],
-    totalPemasukan: 6682000,
-    totalPengeluaran: 4245000,
-    sisaSaldo: 2437000,
-    terbilang: 'Dua Juta Empat Ratus Tiga Puluh Tujuh Ribu Rupiah',
-    keterangan: '',
-    ketua: 'Irvan Ruchiat',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Ketua Panitia'
-  },
-  {
-    id: 'maulid-nabi',
-    title: 'PHBI Maulid Nabi',
-    year: '2026',
-    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
-    date: '12 Rabiul Awal 1447H',
-    pemasukan: [
-      { no: 1, tanggal: '01 Rabiul Awal', uraian: 'Infaq Jamaah Pengajian Rutin', jumlah: 4500000 },
-      { no: 2, tanggal: '05 Rabiul Awal', uraian: 'Donasi Hamba Allah', jumlah: 1500000 }
-    ],
-    pengeluaran: [
-      { no: 1, tanggal: '10 Rabiul Awal', uraian: 'Honor Penceramah', jumlah: 1000000 },
-      { no: 2, tanggal: '11 Rabiul Awal', uraian: 'Konsumsi (200 Box @15.000)', jumlah: 3000000 },
-      { no: 3, tanggal: '11 Rabiul Awal', uraian: 'Dekorasi & Tenda', jumlah: 1200000 },
-      { no: 4, tanggal: '12 Rabiul Awal', uraian: 'Kebersihan', jumlah: 200000 }
-    ],
-    totalPemasukan: 6000000,
-    totalPengeluaran: 5400000,
-    sisaSaldo: 600000,
-    terbilang: 'Enam Ratus Ribu Rupiah',
-    keterangan: 'Sisa dana disetorkan ke Kas Utama DKM',
-    ketua: 'Ahmad Syafiq',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Ketua Panitia'
-  }
-]
+const toast = useToastStore()
 
 // --- State ---
-const availableYears = ['2026', '2025', '2024']
-const selectedYear = ref('2026')
 const selectedReportId = ref('')
 const isExporting = ref(false)
+const isLoadingReport = ref(false)
+
+// --- Dynamic Report State ---
+const dynamicReportTemplate = ref(null)
 
 // --- Export Override State ---
 const overrideKetua = ref('')
@@ -288,9 +183,93 @@ const overrideDate = ref('')
 const showQR = ref(true)
 const customQRUrl = ref(null)
 
+onMounted(async () => {
+  if (keuanganStore.programs.length === 0) {
+    await keuanganStore.fetchPrograms({ per_page: 100 })
+  }
+})
+
+// Build report by fetching transactions for the selected program
+watch(selectedReportId, async (newVal) => {
+  if (!newVal) {
+    dynamicReportTemplate.value = null
+    return
+  }
+  
+  const program = keuanganStore.programs.find(p => p.id === newVal)
+  if (!program) return
+  
+  isLoadingReport.value = true
+  try {
+    // Fetch all approved transactions for this program
+    const res = await api.get('/keuangan/transactions', { 
+      params: { 
+        program_id: program.id, 
+        per_page: 500, // large enough to cover typical program transactions
+        status: 'approved' 
+      } 
+    })
+    
+    const txs = res.data.data.data // Access paginated data items
+    
+    const pemasukan = txs.filter(t => t.tipe === 'in').map((t, idx) => ({ no: idx+1, tanggal: t.tanggal, uraian: t.deskripsi, jumlah: t.nominal }))
+    const pengeluaran = txs.filter(t => t.tipe === 'out').map((t, idx) => ({ no: idx+1, tanggal: t.tanggal, uraian: t.deskripsi, jumlah: t.nominal }))
+    
+    const totalPemasukan = pemasukan.reduce((sum, item) => sum + item.jumlah, 0)
+    const totalPengeluaran = pengeluaran.reduce((sum, item) => sum + item.jumlah, 0)
+    
+    dynamicReportTemplate.value = {
+      id: `prog-${program.id}`,
+      title: `${program.name.toUpperCase()}`,
+      year: program.startDate ? program.startDate.substring(0, 4) : new Date().getFullYear().toString(),
+      subtitle: 'DKM MASJID',
+      date: `Periode: ${program.startDate} s.d ${program.endDate || 'Sekarang'}`,
+      pemasukan,
+      pengeluaran,
+      totalPemasukan,
+      totalPengeluaran,
+      sisaSaldo: totalPemasukan - totalPengeluaran,
+      terbilang: '-', 
+      keterangan: program.description || '',
+      ketua: 'Ketua Panitia',
+      bendahara: 'Bendahara Panitia',
+      ttdKiriTitle: 'Ketua Panitia'
+    }
+    
+    // Auto-fill overrides
+    overrideKetua.value = dynamicReportTemplate.value.ketua
+    overrideBendahara.value = dynamicReportTemplate.value.bendahara
+    customNote.value = dynamicReportTemplate.value.keterangan
+    overrideDate.value = dynamicReportTemplate.value.date
+    showQR.value = true
+    
+  } catch (err) {
+    toast.addToast('Gagal memuat data laporan', 'error')
+    selectedReportId.value = ''
+  } finally {
+    isLoadingReport.value = false
+  }
+})
+
+const processedReport = computed(() => {
+  if (!dynamicReportTemplate.value) return null
+  return {
+    ...dynamicReportTemplate.value,
+    ketua: overrideKetua.value || dynamicReportTemplate.value.ketua,
+    bendahara: overrideBendahara.value || dynamicReportTemplate.value.bendahara,
+    keterangan: customNote.value !== '' ? customNote.value : dynamicReportTemplate.value.keterangan,
+    date: overrideDate.value || dynamicReportTemplate.value.date
+  }
+})
+
+// --- QR Upload Logic ---
 const handleQRUpload = (e) => {
   const file = e.target.files[0]
   if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = '' 
+      return
+    }
     if (customQRUrl.value) URL.revokeObjectURL(customQRUrl.value)
     customQRUrl.value = URL.createObjectURL(file)
   }
@@ -301,84 +280,9 @@ const removeCustomQR = () => {
   customQRUrl.value = null
 }
 
-// --- Computed ---
-const dynamicReports = computed(() => {
-  return keuanganStore.programs.map(p => {
-    const txs = keuanganStore.transactions.filter(t => t.program_id === p.id && t.status === 'approved')
-    const pemasukan = txs.filter(t => t.type === 'in').map((t, idx) => ({ no: idx+1, tanggal: t.date, uraian: t.description, jumlah: t.amount }))
-    const pengeluaran = txs.filter(t => t.type === 'out').map((t, idx) => ({ no: idx+1, tanggal: t.date, uraian: t.description, jumlah: t.amount }))
-    const totalPemasukan = pemasukan.reduce((sum, item) => sum + item.jumlah, 0)
-    const totalPengeluaran = pengeluaran.reduce((sum, item) => sum + item.jumlah, 0)
-    
-    return {
-      id: `prog-${p.id}`,
-      title: `${p.name.toUpperCase()}`,
-      year: p.startDate ? p.startDate.substring(0, 4) : new Date().getFullYear().toString(),
-      subtitle: 'DKM KASSITI',
-      date: `Periode: ${p.startDate} s.d ${p.endDate || 'Selesai'}`,
-      pemasukan,
-      pengeluaran,
-      totalPemasukan,
-      totalPengeluaran,
-      sisaSaldo: totalPemasukan - totalPengeluaran,
-      terbilang: '-', 
-      keterangan: p.description,
-      ketua: 'Ketua Panitia',
-      bendahara: 'Bendahara Panitia',
-      ttdKiriTitle: 'Ketua Panitia'
-    }
-  })
-})
-
-const dynamicFilteredReports = computed(() => {
-  return dynamicReports.value.filter(r => r.year === selectedYear.value)
-})
-
-const filteredReports = computed(() => {
-  return mockReports.filter(r => r.year === selectedYear.value)
-})
-
-const selectedReport = computed(() => {
-  return dynamicReports.value.find(r => r.id === selectedReportId.value) || 
-         mockReports.find(r => r.id === selectedReportId.value) || 
-         null
-})
-
-const processedReport = computed(() => {
-  if (!selectedReport.value) return null
-  return {
-    ...selectedReport.value,
-    ketua: overrideKetua.value || selectedReport.value.ketua,
-    bendahara: overrideBendahara.value || selectedReport.value.bendahara,
-    keterangan: customNote.value !== '' ? customNote.value : selectedReport.value.keterangan,
-    date: overrideDate.value || selectedReport.value.date
-  }
-})
-
-// Auto-reset and sync overrides when report changes
-watch(selectedReport, (newVal) => {
-  if (newVal) {
-    overrideKetua.value = newVal.ketua || ''
-    overrideBendahara.value = newVal.bendahara || ''
-    customNote.value = newVal.keterangan || ''
-    overrideDate.value = newVal.date || ''
-    showQR.value = true
-  } else {
-    overrideKetua.value = ''
-    overrideBendahara.value = ''
-    customNote.value = ''
-    overrideDate.value = ''
-  }
-})
-
-// Auto-reset when year changes
-watch(selectedYear, () => {
-  selectedReportId.value = ''
-})
-
-// --- Export Logic (Using Native Print for 100% Fidelity & Tailwind v4 support) ---
+// --- Export Logic ---
 const exportToPDF = () => {
-  if (!selectedReport.value) return
+  if (!processedReport.value) return
   isExporting.value = true
   
   setTimeout(() => {
@@ -429,10 +333,8 @@ const exportToPDF = () => {
       `
       document.head.appendChild(style)
       
-      // Trigger native browser print (can Save as PDF)
       window.print()
       
-      // Cleanup
       document.body.removeChild(printContainer)
       document.head.removeChild(style)
       

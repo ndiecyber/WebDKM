@@ -12,7 +12,7 @@
       
       <div class="flex items-center gap-3">
         <span class="hidden sm:flex text-xs bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 px-3 py-2 rounded-lg font-bold items-center ring-1 ring-red-500/20 shadow-sm">
-          <Clock class="w-4 h-4 mr-1.5" /> Sisa {{ store.period.days_remaining }} Hari
+          <Clock class="w-4 h-4 mr-1.5" /> Sisa {{ Math.ceil(store.period.days_remaining) }} Hari
         </span>
 
         <QurbanPeriodSelector />
@@ -157,7 +157,7 @@
                     <span v-if="tx.status === 'success'" class="px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400">Sukses</span>
                     <span v-else-if="tx.status === 'pending'" class="px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400">Pending</span>
                   </div>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ formatDate(tx.created_at) }} • {{ tx.method || 'Transfer' }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ formatDate(tx.created_at) }} • {{ tx.payment_method || 'Transfer' }}</p>
                 </div>
               </div>
               <div class="text-right flex items-center gap-3">
@@ -238,16 +238,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { 
   Wallet, CheckCircle, TrendingUp, TrendingDown, Users, PieChart, 
   AlertCircle, Calendar, Clock, ArrowUpRight
 } from 'lucide-vue-next'
-import { qurbanMockData } from '@/utils/qurbanMock'
+import api from '@/utils/api'
 import QurbanPeriodSelector from '@/components/admin/qurban/QurbanPeriodSelector.vue'
 import { useQurbanStore } from '@/stores/qurban'
+import { useToastStore } from '@/stores/toast'
 
 const qurbanStore = useQurbanStore()
+const toastStore = useToastStore()
 
 const localLoading = ref(true)
 const isLoading = computed(() => qurbanStore.isLoading || localLoading.value)
@@ -273,28 +275,43 @@ const store = ref({
   animals: { sapi_shohibul: 0, kambing_shohibul: 0, sapi_groups: 0, estimated_sapi: 0 },
   pending_transactions: 0,
   recent_transactions: [],
-  settings: { hargaSapi: 28000000, hargaSlotSapi: 4000000, hargaKambing: 3500000 }
+  settings: { hargaSapi: 0, hargaSlotSapi: 0, hargaKambing: 0 }
 })
 
-onMounted(() => {
-  setTimeout(() => {
-    const daysRemaining = Math.max(0, Math.ceil((new Date(qurbanMockData.period.deadline_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+const fetchDashboardData = async () => {
+  localLoading.value = true
+  try {
+    const params = qurbanStore.selectedPeriodId ? { period_id: qurbanStore.selectedPeriodId } : {}
+    const response = await api.get('/qurban/dashboard/stats', { params })
     
-    store.value = {
-      period: {
-        id: qurbanMockData.period.id,
-        name: qurbanMockData.period.name,
-        deadline_date: qurbanMockData.period.deadline_date,
-        days_remaining: daysRemaining
-      },
-      summary: qurbanMockData.summary,
-      animals: qurbanMockData.animals,
-      pending_transactions: qurbanMockData.transactions.filter(t => t.status === 'pending').length,
-      recent_transactions: qurbanMockData.transactions.slice(0, 5),
-      settings: qurbanMockData.settings
+    if (response.data?.success) {
+      const data = response.data.data
+      store.value = {
+        ...data,
+        settings: {
+          hargaSapi: (data.settings?.sapi_price_per_slot || 0) * 7,
+          hargaSlotSapi: data.settings?.sapi_price_per_slot || 0,
+          hargaKambing: data.settings?.kambing_price || 0
+        }
+      }
     }
+  } catch (err) {
+    if (err.response?.status !== 404) {
+      toastStore.addToast('Gagal memuat data dashboard qurban', 'error')
+    }
+  } finally {
     localLoading.value = false
-  }, 1200)
+  }
+}
+
+onMounted(() => {
+  fetchDashboardData()
+})
+
+watch(() => qurbanStore.selectedPeriodId, (newVal) => {
+  if (newVal) {
+    fetchDashboardData()
+  }
 })
 </script>
 

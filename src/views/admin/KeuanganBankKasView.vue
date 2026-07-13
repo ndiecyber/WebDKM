@@ -21,16 +21,16 @@
     </div>
     
     <!-- Filter & Search Section -->
-    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
-      <div class="relative w-full md:w-96">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+    <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-4 shadow-md relative z-20">
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <Search class="w-4 h-4 text-gray-400" />
         </div>
         <input 
           v-model="searchQuery" 
           type="text" 
           placeholder="Cari rekening atau kas..." 
-          class="w-full bg-gray-50 dark:bg-gray-950 border-0 ring-1 ring-gray-300 dark:ring-white/10 rounded-lg pl-9 pr-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-secondary transition-all text-sm shadow-md"
+          class="block w-full pl-11 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl leading-5 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary sm:text-sm transition-colors shadow-sm"
         />
       </div>
       <div class="flex items-center gap-2 w-full md:w-auto">
@@ -43,10 +43,21 @@
       </div>
     </div>
 
+    <!-- Loading Skeleton -->
+    <div v-if="keuanganStore.loading.bankKas" class="flex gap-4 sm:gap-6 overflow-x-auto pt-2 pb-4">
+      <div v-for="i in 3" :key="i" class="relative shrink-0 w-[280px] sm:w-[320px] h-[180px] bg-white dark:bg-gray-800 rounded-2xl animate-pulse">
+        <div class="p-5 h-full flex flex-col justify-between">
+          <div class="w-2/3 h-5 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div class="w-1/3 h-4 bg-gray-200 dark:bg-gray-700 rounded mt-2"></div>
+          <div class="w-3/4 h-8 bg-gray-200 dark:bg-gray-700 rounded mt-4"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Cards Section -->
-    <div class="relative group/scroll" v-if="sortedRekening.length > 0">
+    <div class="relative group/scroll" v-else-if="sortedRekening.length > 0">
       <div 
-        class="flex gap-4 sm:gap-6 overflow-x-auto pt-4 pb-6 custom-scrollbar-x snap-x snap-mandatory scroll-smooth"
+        class="flex gap-4 sm:gap-6 overflow-x-auto pt-2 pb-4 custom-scrollbar-x snap-x snap-mandatory scroll-smooth"
         @wheel="handleHorizontalScroll"
         ref="cardContainerRef"
       >
@@ -54,12 +65,12 @@
         v-for="rek in sortedRekening" 
         :key="rek.id"
         @click="openDetailRekening(rek)"
-        class="relative shrink-0 w-[280px] sm:w-[320px] snap-center overflow-hidden rounded-2xl text-white p-6 shadow-lg group cursor-pointer ring-1 ring-black/5 dark:ring-white/10 transition-transform hover:-translate-y-1"
+        class="relative shrink-0 w-[280px] sm:w-[320px] snap-center overflow-hidden rounded-2xl text-white p-5 shadow-lg group cursor-pointer ring-1 ring-black/5 dark:ring-white/10 transition-transform hover:-translate-y-1"
         :class="getBgClass(rek.color, rek.isActive)"
       >
         <!-- Pin Button -->
         <button 
-          @click.stop="togglePin(rek.id)" 
+          @click.stop="togglePin(rek)" 
           class="absolute top-4 right-4 z-20 p-2 rounded-full transition-colors"
           :class="rek.isPinned ? 'bg-white/30 text-white' : 'text-white/40 hover:bg-white/10 hover:text-white'"
           title="Sematkan / Lepaskan"
@@ -71,7 +82,7 @@
           <component :is="getIcon(rek.type)" class="w-32 h-32" />
         </div>
         
-        <div class="relative z-10 flex flex-col h-full justify-between min-h-[160px]">
+        <div class="relative z-10 flex flex-col h-full justify-between min-h-[140px]">
           <div class="flex items-center justify-between pr-10">
             <h3 class="font-medium tracking-wide truncate pr-2 text-white/90" :class="{'line-through opacity-75': !rek.isActive}">{{ rek.name }}</h3>
           </div>
@@ -79,8 +90,8 @@
             <span class="px-2.5 py-1 text-xs font-semibold rounded-md backdrop-blur-sm border border-white/20 bg-white/10">{{ rek.type }}</span>
             <span v-if="!rek.isActive" class="px-2.5 py-1 text-xs font-semibold rounded-md backdrop-blur-sm border border-rose-500/30 bg-rose-500/30 text-rose-50">Nonaktif</span>
           </div>
-          <div class="mt-8">
-            <p class="text-3xl font-bold tracking-tight">Rp {{ formatCurrency(rek.balance) }}</p>
+          <div class="mt-4">
+            <p class="text-3xl font-bold tracking-tight">Rp {{ formatCurrencyLocal(rek.balance) }}</p>
             <p class="text-white/70 text-sm mt-1 font-mono tracking-wider">{{ rek.accountNo || rek.desc }}</p>
           </div>
         </div>
@@ -106,54 +117,52 @@
     <!-- Riwayat Aktivitas Kas -->
     <div class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl overflow-hidden shadow-md">
       <div class="p-6 border-b border-gray-300 dark:border-white/5 flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Riwayat Aktivitas Kas</h3>
-        <button class="text-sm font-medium text-secondary hover:text-yellow-600 transition-colors">Lihat Semua</button>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Riwayat Mutasi & Aktivitas Kas</h3>
+        <RouterLink to="/admin/keuangan-transaksi?tipe=transfer" class="text-sm font-medium text-secondary hover:text-yellow-600 transition-colors">Lihat Semua</RouterLink>
       </div>
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm text-gray-600 dark:text-gray-400 min-w-[800px]">
-          <thead class="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-950/50 border-b border-gray-300 dark:border-white/5">
-            <tr>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tanggal</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tipe</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Dari / Rekening Terkait</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Ke Tujuan</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Nominal</th>
-              <th scope="col" class="px-6 py-4 font-semibold tracking-wider text-right">Aksi</th>
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5 text-left border-collapse">
+          <thead class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-white/5">
+            <tr class="text-[11px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th scope="col" class="px-4 py-3 font-bold">Tanggal</th>
+              <th scope="col" class="px-4 py-3 font-bold">Tipe</th>
+              <th scope="col" class="px-4 py-3 font-bold">Dari / Rekening Terkait</th>
+              <th scope="col" class="px-4 py-3 font-bold">Ke Tujuan</th>
+              <th scope="col" class="px-4 py-3 font-bold">Nominal</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-            <tr v-for="act in activityData" :key="act.id" class="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors group">
-              <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white font-medium">{{ act.date }}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="[
-                  'px-2.5 py-1 text-xs font-semibold rounded-md',
-                  act.activityType === 'mutasi' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 ring-1 ring-blue-500/20' : 
-                  (act.subType === 'plus' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-1 ring-emerald-500/20' : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400 ring-1 ring-rose-500/20')
-                ]">
-                  {{ act.activityType === 'mutasi' ? 'Mutasi Antar Kas' : 'Penyesuaian Saldo' }}
+          <tbody class="divide-y divide-gray-100 dark:divide-white/5 text-sm text-gray-600 dark:text-gray-400">
+            <tr v-if="!activityData.length" class="text-center">
+              <td colspan="5" class="px-4 py-8 text-gray-400">Belum ada riwayat mutasi / aktivitas kas terkini.</td>
+            </tr>
+            <tr v-for="act in activityData" :key="act.id" class="hover:bg-gray-50/80 dark:hover:bg-white/[0.02] transition-colors group">
+              <td class="px-4 py-3 whitespace-nowrap text-gray-900 dark:text-white font-medium">{{ act.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span class="px-2.5 py-1 text-xs font-semibold rounded-md ring-1" :class="{
+                  'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 ring-emerald-500/20': act.type === 'in',
+                  'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400 ring-rose-500/20': act.type === 'out',
+                  'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 ring-blue-500/20': act.type === 'transfer'
+                }">
+                  {{ act.type === 'in' ? 'Pemasukan' : (act.type === 'out' ? 'Pengeluaran' : 'Mutasi Kas') }}
                 </span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ act.name }}</p>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="inline-flex items-center gap-2">
-                  <span v-if="act.activityType === 'mutasi'" class="w-2 h-2 rounded-full bg-rose-400"></span>
-                  <Scale v-else class="w-4 h-4 text-gray-400" />
-                  {{ act.from }}
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span v-if="act.bankKasAsal" class="inline-flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+                  {{ act.bankKasAsal }}
                 </span>
+                <span v-else class="text-gray-400">-</span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span v-if="act.activityType === 'mutasi'" class="inline-flex items-center gap-2">
+              <td class="px-4 py-3 whitespace-nowrap">
+                <span v-if="act.bankKasTujuan" class="inline-flex items-center gap-2">
                   <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  {{ act.to }}
+                  {{ act.bankKasTujuan }}
                 </span>
-                <span v-else class="text-gray-400 dark:text-gray-500 italic">- N/A -</span>
+                <span v-else class="text-gray-400">-</span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap font-semibold" :class="act.subType === 'minus' ? 'text-rose-600 dark:text-rose-400' : (act.subType === 'plus' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-white')">
-                {{ act.subType === 'minus' ? '-' : (act.subType === 'plus' ? '+' : '') }} Rp {{ formatCurrency(act.amount) }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right">
-                <button @click="openDetailActivity(act)" class="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
-                  Detail
-                </button>
+              <td class="px-4 py-3 whitespace-nowrap font-semibold text-gray-900 dark:text-white">
+                Rp {{ formatCurrencyLocal(act.amount) }}
               </td>
             </tr>
           </tbody>
@@ -162,7 +171,6 @@
     </div>
 
     <!-- Modals -->
-    
     <!-- Modal Tambah / Edit Rekening -->
     <div v-if="showFormRekeningModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="showFormRekeningModal = false"></div>
@@ -226,21 +234,32 @@
             </div>
             <div class="sm:col-span-2" v-if="!isEditRekeningMode">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Saldo Awal (Rp) <span class="text-rose-500">*</span></label>
-              <input type="number" v-model="rekForm.balance" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="0">
+              <input type="number" v-model="rekForm.initialBalance" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="0">
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Saldo awal tidak bisa diubah setelah dibuat. Gunakan Penyesuaian Saldo nanti.</p>
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Upload QR Code / Image (Opsional)</label>
-              <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 text-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
-                <p class="text-xs text-gray-500 dark:text-gray-400">Klik atau drop file gambar QR (Maks 2MB)</p>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">QR Code / Logo Bank (Opsional)</label>
+              <input type="file" @change="handleFileUpload" accept="image/*" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" v-if="rekForm.qrImage">QR Code/Logo sudah tersimpan. Unggah yang baru untuk mengganti.</p>
+            </div>
+            <div class="sm:col-span-2 flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Visibilitas Publik</label>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Tampilkan rekening ini di halaman donasi publik</p>
               </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="rekForm.visibilitasPublik" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-secondary/30 dark:peer-focus:ring-secondary/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-secondary"></div>
+              </label>
             </div>
           </div>
         </div>
         
         <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
           <button @click="showFormRekeningModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
-          <button @click="showFormRekeningModal = false" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors">Simpan Rekening</button>
+          <button @click="saveRekening" :disabled="isSaving" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors disabled:opacity-70">
+            {{ isSaving ? 'Menyimpan...' : 'Simpan Rekening' }}
+          </button>
         </div>
       </div>
     </div>
@@ -249,15 +268,23 @@
     <div v-if="selectedDetailRekening" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="selectedDetailRekening = null"></div>
       
-      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Rekening</h3>
-          <button @click="selectedDetailRekening = null" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-            <X class="w-5 h-5" />
-          </button>
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Rekening</h3>
+            <button @click="selectedDetailRekening = null" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+              <X class="w-5 h-5" />
+            </button>
+          </div>
+          <div class="flex space-x-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <button @click="detailTab = 'info'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'info' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Info Umum</button>
+            <button @click="detailTab = 'aktivitas'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'aktivitas' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Aktivitas</button>
+            <button @click="detailTab = 'program'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'program' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Saldo Program</button>
+          </div>
         </div>
         
-        <div class="p-6 space-y-5 max-h-[70vh] overflow-y-auto custom-scrollbar-y">
+        <div class="p-6 space-y-5 max-h-[60vh] overflow-y-auto custom-scrollbar-y">
+          <template v-if="detailTab === 'info'">
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full flex items-center justify-center text-white" :class="getBgClass(selectedDetailRekening.color, selectedDetailRekening.isActive)">
               <component :is="getIcon(selectedDetailRekening.type)" class="w-6 h-6" />
@@ -271,48 +298,8 @@
           <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 space-y-3">
             <div class="flex justify-between items-center text-sm border-b border-gray-200 dark:border-gray-700 pb-2">
               <span class="text-gray-500 dark:text-gray-400">Total Saldo Fisik</span>
-              <span class="font-bold text-lg text-gray-900 dark:text-white">Rp {{ formatCurrency(getAccountTotalBalance(selectedDetailRekening.name)) }}</span>
+              <span class="font-bold text-lg text-gray-900 dark:text-white">Rp {{ formatCurrencyLocal(selectedDetailRekening.balance) }}</span>
             </div>
-            <!-- Rincian Alokasi Dana (Fund Accounting) -->
-            <div class="pt-1 pb-2">
-              <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Komposisi Saldo</p>
-              
-              <!-- Visual Stacked Bar -->
-              <div class="w-full h-2.5 rounded-full overflow-hidden flex mb-3 bg-gray-200 dark:bg-gray-700" v-if="getAccountTotalBalance(selectedDetailRekening.name) > 0">
-                <div 
-                  class="h-full bg-gray-400 dark:bg-gray-500 transition-all duration-500" 
-                  :style="{ width: getPercentage(getAccountGeneralBalance(selectedDetailRekening.name), getAccountTotalBalance(selectedDetailRekening.name)) + '%' }"
-                  title="Kas Umum"
-                ></div>
-                <div 
-                  v-for="(amount, progId, index) in getAccountProgramBalances(selectedDetailRekening.name)" 
-                  :key="progId"
-                  class="h-full transition-all duration-500"
-                  :class="getColorClass(index)"
-                  :style="{ width: getPercentage(amount, getAccountTotalBalance(selectedDetailRekening.name)) + '%' }"
-                  :title="getProgramName(progId)"
-                ></div>
-              </div>
-
-              <!-- List Nominal -->
-              <div class="space-y-2.5 max-h-36 overflow-y-auto custom-scrollbar-y pr-1.5">
-                <div class="flex justify-between text-sm items-center">
-                  <div class="flex items-center gap-2 shrink-0">
-                    <span class="w-2.5 h-2.5 rounded-full bg-gray-400 dark:bg-gray-500 shrink-0"></span>
-                    <span class="text-gray-600 dark:text-gray-300 truncate max-w-[140px]" title="Kas Umum">Kas Umum</span>
-                  </div>
-                  <span class="font-medium text-gray-900 dark:text-white text-right">Rp {{ formatCurrency(getAccountGeneralBalance(selectedDetailRekening.name)) }}</span>
-                </div>
-                <div v-for="(amount, progId, index) in getAccountProgramBalances(selectedDetailRekening.name)" :key="progId" class="flex justify-between text-sm items-center">
-                  <div class="flex items-center gap-2 shrink-0">
-                    <span class="w-2.5 h-2.5 rounded-full shrink-0" :class="getColorClass(index)"></span>
-                    <span class="text-gray-600 dark:text-gray-300 truncate max-w-[140px]" :title="getProgramName(progId)">{{ getProgramName(progId) }}</span>
-                  </div>
-                  <span class="font-medium text-gray-900 dark:text-white text-right">Rp {{ formatCurrency(amount) }}</span>
-                </div>
-              </div>
-            </div>
-
             <div class="flex justify-between text-sm pt-2 border-t border-gray-200 dark:border-gray-700" v-if="selectedDetailRekening.accountNo">
               <span class="text-gray-500 dark:text-gray-400">No. Rekening</span>
               <span class="font-medium text-gray-900 dark:text-white font-mono">{{ selectedDetailRekening.accountNo }}</span>
@@ -326,21 +313,66 @@
               <span class="font-medium text-gray-900 dark:text-white text-right max-w-[150px]">{{ selectedDetailRekening.desc }}</span>
             </div>
           </div>
+          </template>
 
-          <!-- Dummy QR Placeholder if exists -->
-          <div v-if="selectedDetailRekening.type === 'Dompet Digital' || selectedDetailRekening.type === 'Bank'" class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center">
-            <QrCode class="w-20 h-20 text-gray-300 dark:text-gray-600 mb-2" />
-            <p class="text-xs text-gray-500">QR Code tersedia</p>
-          </div>
+          <template v-else-if="detailTab === 'aktivitas'">
+            <div v-if="isDetailLoading" class="flex justify-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+            </div>
+            <div v-else-if="!detailActivities.length" class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <p>Belum ada aktivitas pada rekening ini.</p>
+            </div>
+            <div v-else class="space-y-4">
+              <div v-for="act in detailActivities" :key="act.id" class="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-white/5 flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900 dark:text-white">{{ act.nama || (act.is_pemasukan ? 'Pemasukan' : 'Pengeluaran') }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ new Date(act.tanggal).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) }}</p>
+                  <p v-if="act.deskripsi" class="text-xs text-gray-600 dark:text-gray-300 mt-1">{{ act.deskripsi }}</p>
+                </div>
+                <div class="text-right">
+                  <p :class="['font-bold text-sm', act.is_pemasukan ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400']">
+                    {{ act.is_pemasukan ? '+' : '-' }}{{ formatCurrencyLocal(Math.abs(act.nominal)) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template v-else-if="detailTab === 'program'">
+            <div v-if="isDetailLoading" class="flex justify-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+            </div>
+            <div v-else-if="!detailProgramBalances.length" class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <p>Tidak ada saldo program yang tercatat di rekening ini.</p>
+            </div>
+            <div v-else class="space-y-4">
+              <div class="flex justify-center mb-4">
+                <apexchart type="donut" width="300" :options="programChartOptions" :series="programChartSeries"></apexchart>
+              </div>
+              <div class="space-y-3">
+                <div v-for="pb in detailProgramBalances" :key="pb.program_id" class="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-white/5">
+                  <div>
+                    <h4 class="font-medium text-gray-900 dark:text-white">{{ pb.nama_program || 'Program (Terhapus)' }}</h4>
+                  </div>
+                  <span class="font-bold" :class="pb.saldo >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">
+                    {{ pb.saldo < 0 ? '- ' : '' }}Rp {{ formatCurrencyLocal(Math.abs(pb.saldo)) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </template>
         </div>
         
-        <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex flex-col gap-2">
-          <button @click="openPenyesuaianModal(selectedDetailRekening)" class="w-full px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 dark:text-emerald-300 dark:bg-emerald-500/20 dark:hover:bg-emerald-500/30 rounded-lg transition-colors flex items-center justify-center gap-2">
-            <Scale class="w-4 h-4" /> Penyesuaian Saldo (Rekonsiliasi)
+        <div v-if="detailTab === 'info'" class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row gap-2 justify-end">
+          <button @click="openEditRekeningModal(selectedDetailRekening)" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
+            <Pencil class="w-4 h-4" /> Edit
           </button>
-          <button @click="openEditRekeningModal(selectedDetailRekening)" class="w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
-            <Pencil class="w-4 h-4" /> Edit Rekening
+          <button @click="openPenyesuaianModal(selectedDetailRekening)" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 dark:text-emerald-300 dark:bg-emerald-500/20 dark:hover:bg-emerald-500/30 rounded-lg transition-colors flex items-center justify-center gap-2">
+            <Scale class="w-4 h-4" /> Penyesuaian Saldo
           </button>
+        </div>
+        <div v-else class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end">
+          <button @click="selectedDetailRekening = null" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Tutup</button>
         </div>
       </div>
     </div>
@@ -376,7 +408,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Saldo Sistem Saat Ini</label>
               <div class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-700 dark:text-gray-300 font-mono">
-                Rp {{ formatCurrency(getAccountTotalBalance(penyesuaianTarget.name)) }}
+                Rp {{ formatCurrencyLocal(penyesuaianTarget.balance) }}
               </div>
             </div>
             <div>
@@ -389,27 +421,44 @@
           <div v-if="penyesuaianForm.actualBalance !== ''" class="p-4 rounded-lg flex justify-between items-center" :class="penyesuaianDiff === 0 ? 'bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:border-gray-700' : (penyesuaianDiff > 0 ? 'bg-emerald-50 border border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20' : 'bg-rose-50 border border-rose-200 dark:bg-rose-500/10 dark:border-rose-500/20')">
             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Selisih Penyesuaian</span>
             <span class="font-bold" :class="penyesuaianDiff === 0 ? 'text-gray-900 dark:text-white' : (penyesuaianDiff > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400')">
-              {{ penyesuaianDiff > 0 ? '+' : '' }}Rp {{ formatCurrency(penyesuaianDiff) }}
+              {{ penyesuaianDiff > 0 ? '+ ' : (penyesuaianDiff < 0 ? '- ' : '') }}Rp {{ formatCurrencyLocal(Math.abs(penyesuaianDiff)) }}
             </span>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bebankan/Tambahkan ke Program (Opsional)</label>
+            <div v-if="isPenyesuaianLoading" class="text-sm text-gray-500 flex items-center gap-2 py-2">
+              <div class="animate-spin rounded-full h-4 w-4 border-2 border-secondary/50 border-t-secondary"></div>
+              Memuat data program...
+            </div>
+            <div v-else>
+              <select v-model="penyesuaianForm.program_id" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
+                <option value="">Kas Umum / Tanpa Program (Alokasi: {{ penyesuaianKasUmumBalance < 0 ? '-' : '' }}Rp {{ formatCurrencyLocal(Math.abs(penyesuaianKasUmumBalance)) }})</option>
+                <option v-for="p in penyesuaianProgramOptions" :key="p.program_id" :value="p.program_id">{{ p.nama_program }} (Alokasi: {{ p.saldo < 0 ? '-' : '' }}Rp {{ formatCurrencyLocal(Math.abs(p.saldo)) }})</option>
+              </select>
+              <div v-if="penyesuaianDiff < 0 && ((penyesuaianForm.program_id === '' && penyesuaianKasUmumBalance < Math.abs(penyesuaianDiff)) || (penyesuaianForm.program_id !== '' && penyesuaianProgramOptions.find(p => p.program_id === penyesuaianForm.program_id)?.saldo < Math.abs(penyesuaianDiff)))" class="mt-2 text-xs text-rose-600 dark:text-rose-400 flex items-start gap-1">
+                <AlertTriangle class="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                <span>Peringatan: Pemotongan dana melebihi alokasi yang dipilih. Alokasi ini akan menjadi minus (defisit).</span>
+              </div>
+            </div>
           </div>
 
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alasan Penyesuaian <span class="text-rose-500">*</span></label>
             <input type="text" v-model="penyesuaianForm.reason" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="Misal: Uang fisik kurang karena kembalian">
           </div>
-
+          
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bebankan selisih pada Program (Opsional)</label>
-            <select v-model="penyesuaianForm.program_id" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
-              <option :value="null">Kas Umum (Default)</option>
-              <option v-for="p in activePrograms" :key="p.id" :value="p.id">{{ p.name }}</option>
-            </select>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal</label>
+            <input type="date" v-model="penyesuaianForm.date" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all [color-scheme:light] dark:[color-scheme:dark]">
           </div>
         </div>
         
         <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
           <button @click="showPenyesuaianModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
-          <button @click="simpanPenyesuaian" :disabled="penyesuaianDiff === 0" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg shadow-sm transition-colors">Sesuaikan Saldo</button>
+          <button @click="simpanPenyesuaian" :disabled="penyesuaianDiff === 0 || isSaving" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg shadow-sm transition-colors">
+            {{ isSaving ? 'Memproses...' : 'Sesuaikan Saldo' }}
+          </button>
         </div>
       </div>
     </div>
@@ -438,21 +487,39 @@
             <div class="space-y-1">
               <label class="block text-sm font-medium text-rose-600 dark:text-rose-400">Dari Rekening</label>
               <select v-model="mutasiForm.from" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
-                <option v-for="rek in sortedRekening" :key="rek.id" :value="rek.id">{{ rek.name }} (Rp {{ formatCurrency(rek.balance) }})</option>
+                <option value="">Pilih Rekening Asal</option>
+                <option v-for="rek in keuanganStore.activeBankKas" :key="rek.id" :value="rek.id">{{ rek.name }} (Rp {{ formatCurrencyLocal(rek.balance) }})</option>
               </select>
             </div>
             <div class="space-y-1">
               <label class="block text-sm font-medium text-emerald-600 dark:text-emerald-400">Ke Rekening</label>
               <select v-model="mutasiForm.to" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
-                <option v-for="rek in sortedRekening" :key="rek.id" :value="rek.id">{{ rek.name }}</option>
+                <option value="">Pilih Rekening Tujuan</option>
+                <option v-for="rek in keuanganStore.activeBankKas" :key="rek.id" :value="rek.id" :disabled="rek.id === mutasiForm.from">{{ rek.name }}</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2 space-y-1">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alokasi Dana <span v-if="isMutasiLoading" class="inline-block animate-spin w-3 h-3 border-2 border-secondary border-t-transparent rounded-full ml-2"></span></label>
+              <select v-model="mutasiForm.program_id" :disabled="!mutasiForm.from || isMutasiLoading" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all disabled:opacity-50 disabled:bg-gray-100 dark:disabled:bg-gray-900">
+                <option value="" disabled v-if="!mutasiForm.from">Pilih rekening asal terlebih dahulu</option>
+                <template v-else>
+                  <option value="ALL" class="font-bold text-secondary">Pindahkan Seluruh Saldo & Program</option>
+                  <option value="">Kas Umum / Tanpa Program (Saldo: {{ mutasiKasUmumBalance < 0 ? '-' : '' }}Rp {{ formatCurrencyLocal(Math.abs(mutasiKasUmumBalance)) }})</option>
+                  <option v-for="p in mutasiProgramOptions" :key="p.program_id" :value="p.program_id">
+                    {{ p.nama_program }} (Saldo: {{ p.saldo < 0 ? '-' : '' }}Rp {{ formatCurrencyLocal(Math.abs(p.saldo)) }})
+                  </option>
+                </template>
               </select>
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nominal Mutasi <span class="text-rose-500">*</span></label>
-              <input type="number" v-model="mutasiForm.amount" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-lg font-bold text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" placeholder="0">
+              <div class="flex justify-between items-center mb-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nominal Mutasi <span class="text-rose-500">*</span></label>
+                <button v-if="mutasiForm.from && mutasiForm.program_id !== 'ALL'" @click="mutasiForm.amount = Math.max(0, mutasiSelectedBalance - (mutasiForm.adminFee || 0))" class="text-xs font-medium text-secondary hover:text-yellow-600 transition-colors">Mutasi Semua</button>
+              </div>
+              <input type="number" v-model="mutasiForm.amount" :disabled="mutasiForm.program_id === 'ALL'" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-lg font-bold text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all disabled:opacity-50 disabled:bg-gray-100 dark:disabled:bg-gray-900" placeholder="0">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Biaya Admin (Opsional)</label>
@@ -471,107 +538,40 @@
             </div>
           </div>
           
-          <div v-if="mutasiForm.amount && mutasiForm.adminFee" class="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex justify-between items-center text-sm">
+          <div v-if="mutasiForm.amount && (Number(mutasiForm.amount) + Number(mutasiForm.adminFee || 0) > mutasiSelectedBalance)" class="bg-rose-50 dark:bg-rose-500/10 p-3 rounded-lg flex items-start gap-3 border border-rose-200 dark:border-rose-500/20 text-xs text-rose-600 dark:text-rose-400 leading-relaxed">
+            <AlertTriangle class="w-4 h-4 shrink-0 mt-0.5" />
+            <p>Total mutasi (termasuk biaya admin) melebihi saldo alokasi yang dipilih (Rp {{ formatCurrencyLocal(mutasiSelectedBalance) }}). Mutasi tidak dapat diproses.</p>
+          </div>
+          <div v-else-if="mutasiForm.amount && mutasiForm.adminFee" class="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex justify-between items-center text-sm">
             <span class="text-gray-600 dark:text-gray-400">Total Potongan Kas Asal:</span>
-            <span class="font-bold text-rose-600 dark:text-rose-400">Rp {{ formatCurrency(Number(mutasiForm.amount) + Number(mutasiForm.adminFee)) }}</span>
+            <span class="font-bold text-rose-600 dark:text-rose-400">Rp {{ formatCurrencyLocal(Number(mutasiForm.amount) + Number(mutasiForm.adminFee)) }}</span>
           </div>
 
         </div>
         
         <div class="px-6 py-4 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
           <button @click="showMutasiModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>
-          <button @click="showMutasiModal = false" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors">Proses Mutasi</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Detail Aktivitas -->
-    <div v-if="selectedActivity" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
-      <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="selectedActivity = null"></div>
-      
-      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform transition-all relative z-10 animate-fade-in-up">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail {{ selectedActivity.activityType === 'mutasi' ? 'Mutasi' : 'Penyesuaian' }}</h3>
-          <button @click="selectedActivity = null" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-            <X class="w-5 h-5" />
+          <button @click="simpanMutasi" :disabled="isSaving || (mutasiForm.amount && (Number(mutasiForm.amount) + Number(mutasiForm.adminFee || 0) > mutasiSelectedBalance))" class="px-4 py-2 text-sm font-medium text-white bg-secondary hover:bg-yellow-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-secondary">
+            {{ isSaving ? 'Memproses...' : 'Proses Mutasi' }}
           </button>
         </div>
-        
-        <div class="p-6 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar-y">
-          <div class="text-center">
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Nominal</p>
-            <p class="text-3xl font-bold" :class="selectedActivity.subType === 'minus' ? 'text-rose-600 dark:text-rose-400' : (selectedActivity.subType === 'plus' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-white')">
-              {{ selectedActivity.subType === 'minus' ? '-' : (selectedActivity.subType === 'plus' ? '+' : '') }}Rp {{ formatCurrency(selectedActivity.amount) }}
-            </p>
-            <span class="inline-block mt-2 px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300">Selesai / Valid</span>
-          </div>
-
-          <!-- Timeline mutasi -->
-          <div v-if="selectedActivity.activityType === 'mutasi'" class="space-y-4 relative">
-            <div class="absolute left-3 top-2 bottom-2 w-px bg-gray-200 dark:bg-gray-700"></div>
-            <div class="relative flex items-start gap-4">
-              <div class="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-500/20 flex items-center justify-center shrink-0 z-10 ring-4 ring-white dark:ring-gray-900">
-                <ArrowUpRight class="w-3 h-3 text-rose-600 dark:text-rose-400" />
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 dark:text-gray-400">Dari</p>
-                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ selectedActivity.from }}</p>
-              </div>
-            </div>
-            <div class="relative flex items-start gap-4">
-              <div class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0 z-10 ring-4 ring-white dark:ring-gray-900">
-                <ArrowDownLeft class="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <p class="text-xs text-gray-500 dark:text-gray-400">Ke</p>
-                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ selectedActivity.to }}</p>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Or single info for penyesuaian -->
-          <div v-else class="flex flex-col items-center justify-center text-center">
-            <Scale class="w-8 h-8 text-gray-400 mb-2" />
-            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ selectedActivity.from }}</p>
-            <p class="text-xs text-gray-500 mt-1">Rekonsiliasi / Penyesuaian Saldo</p>
-          </div>
-
-          <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 space-y-2">
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-500 dark:text-gray-400">Tanggal</span>
-              <span class="font-medium text-gray-900 dark:text-white">{{ selectedActivity.date }}</span>
-            </div>
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-500 dark:text-gray-400">Keterangan</span>
-              <span class="font-medium text-gray-900 dark:text-white text-right max-w-[150px]">{{ selectedActivity.desc }}</span>
-            </div>
-            <div class="flex justify-between text-sm" v-if="selectedActivity.adminFee">
-              <span class="text-gray-500 dark:text-gray-400">Biaya Admin</span>
-              <span class="font-medium text-rose-600 dark:text-rose-400">Rp {{ formatCurrency(selectedActivity.adminFee) }}</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { 
-  Plus, ArrowLeftRight, Landmark, Wallet, Briefcase, HardHat, X, 
-  ArrowUpRight, ArrowDownLeft, Pin, Scale, Pencil, QrCode, AlertTriangle, Info, ChevronLeft, ChevronRight, Search 
+  Plus, ArrowLeftRight, Landmark, Wallet, Briefcase, X, 
+  Pin, Scale, Pencil, AlertTriangle, Info, ChevronLeft, ChevronRight, Search 
 } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
+import { formatCurrency as formatCurrencyLocal } from '@/utils/keuangan-mapper'
 
 const keuanganStore = useKeuanganStore()
 const toast = useToastStore()
-
-const activePrograms = computed(() => keuanganStore.programs.filter(p => p.status === 'Aktif'))
-const getProgramName = (id) => keuanganStore.programs.find(p => p.id === Number(id))?.name || ''
-
 
 // State untuk Modal & Mode
 const showMutasiModal = ref(false)
@@ -580,20 +580,94 @@ const isEditRekeningMode = ref(false)
 const selectedDetailRekening = ref(null)
 const showPenyesuaianModal = ref(false)
 const penyesuaianTarget = ref(null)
-const selectedActivity = ref(null)
+const isSaving = ref(false)
+
+const detailTab = ref('info')
+const detailActivities = ref([])
+const detailProgramBalances = ref([])
+const isDetailLoading = ref(false)
+
+const validChartData = computed(() => detailProgramBalances.value.filter(pb => pb.saldo > 0))
+const programChartSeries = computed(() => validChartData.value.map(pb => pb.saldo))
+const programChartOptions = computed(() => {
+  const isDark = document.documentElement.classList.contains('dark')
+  return {
+    chart: { type: 'donut', background: 'transparent' },
+    labels: validChartData.value.map(pb => pb.nama_program || 'Unknown'),
+    theme: { mode: isDark ? 'dark' : 'light' },
+    stroke: { show: true, colors: isDark ? ['#1f2937'] : ['#ffffff'], width: 2 },
+    dataLabels: { enabled: false },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '70%',
+          labels: {
+            show: true,
+            name: { show: true, fontSize: '12px', color: isDark ? '#9ca3af' : '#6b7280' },
+            value: {
+              show: true,
+              fontSize: '14px',
+              fontWeight: 600,
+              color: isDark ? '#f3f4f6' : '#111827',
+              formatter: (val) => 'Rp ' + parseInt(val).toLocaleString('id-ID')
+            },
+            total: {
+              show: true,
+              label: 'Total Alokasi',
+              color: isDark ? '#9ca3af' : '#6b7280',
+              formatter: () => {
+                const total = detailProgramBalances.value.reduce((sum, pb) => sum + pb.saldo, 0)
+                return 'Rp ' + total.toLocaleString('id-ID')
+              }
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      y: { formatter: (val) => 'Rp ' + parseInt(val).toLocaleString('id-ID') }
+    },
+    legend: { show: false }
+  }
+})
+
+watch(selectedDetailRekening, (newVal) => {
+  if (newVal) {
+    detailTab.value = 'info'
+    detailActivities.value = []
+    detailProgramBalances.value = []
+  }
+})
+
+watch(detailTab, async (newVal) => {
+  if (!selectedDetailRekening.value) return
+  const id = selectedDetailRekening.value.id
+  if (newVal === 'aktivitas' && !detailActivities.value.length) {
+    isDetailLoading.value = true
+    try {
+      detailActivities.value = await keuanganStore.fetchBankKasActivities(id)
+    } finally {
+      isDetailLoading.value = false
+    }
+  } else if (newVal === 'program' && !detailProgramBalances.value.length) {
+    isDetailLoading.value = true
+    try {
+      detailProgramBalances.value = await keuanganStore.fetchBankKasProgramBalances(id)
+    } finally {
+      isDetailLoading.value = false
+    }
+  }
+})
 
 const closeAllModals = () => {
   showMutasiModal.value = false
   showFormRekeningModal.value = false
   selectedDetailRekening.value = null
   showPenyesuaianModal.value = false
-  selectedActivity.value = null
 }
 
 const handleKeydown = (e) => {
-  if (e.key === 'Escape') {
-    closeAllModals()
-  }
+  if (e.key === 'Escape') closeAllModals()
 }
 
 // Scroll Handling
@@ -609,13 +683,18 @@ const checkScroll = () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleKeydown)
   window.addEventListener('resize', checkScroll)
   if (cardContainerRef.value) {
     cardContainerRef.value.addEventListener('scroll', checkScroll)
-    setTimeout(checkScroll, 100) // Initial check
+    setTimeout(checkScroll, 100)
   }
+
+  await Promise.all([
+    keuanganStore.fetchBankKas(),
+    keuanganStore.fetchTransactions({ per_page: 5 }) // Fetch all latest activities
+  ])
 })
 
 onUnmounted(() => {
@@ -628,188 +707,286 @@ onUnmounted(() => {
 
 const handleHorizontalScroll = (e) => {
   if (cardContainerRef.value) {
-    // Check if the scroll is primarily horizontal (e.g. from a trackpad swipe)
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      return; // Allow native horizontal scrolling to handle it
-    }
-    
-    // If it's a vertical mouse wheel, translate to horizontal
-    e.preventDefault();
-    cardContainerRef.value.scrollBy({
-      left: e.deltaY > 0 ? 100 : -100,
-      behavior: 'auto'
-    })
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return
+    e.preventDefault()
+    cardContainerRef.value.scrollBy({ left: e.deltaY > 0 ? 100 : -100, behavior: 'auto' })
   }
 }
 
 const scrollCards = (direction) => {
   if (cardContainerRef.value) {
-    const scrollAmount = 300 // default scroll
-    cardContainerRef.value.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth'
-    })
+    cardContainerRef.value.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' })
   }
 }
 
-// Data Mockup Rekening
-const rekeningData = ref([
-  { id: 1, name: 'BSI Masjid Jami Kassiti', type: 'Bank', accountNo: '7123 4567 8900', ownerName: 'Masjid Kassiti', desc: 'Rekening penerimaan utama', balance: 45250000, color: 'emerald', isPinned: true, isActive: true },
-  { id: 2, name: 'Kotak Amal Utama', type: 'Kas Tunai', accountNo: '', ownerName: '', desc: 'Dihitung setiap Jumat', balance: 5150000, color: 'blue', isPinned: true, isActive: true },
-  { id: 3, name: 'Kas Kecil Operasional', type: 'Kas Tunai', accountNo: '', ownerName: '', desc: 'Dipegang Bendahara', balance: 850000, color: 'gray', isPinned: false, isActive: true },
-  { id: 4, name: 'Kas Pembangunan', type: 'Kas Tunai', accountNo: '', ownerName: '', desc: 'Renovasi area wudhu', balance: 12000000, color: 'amber', isPinned: false, isActive: true },
-  { id: 5, name: 'Bank Muamalat', type: 'Bank', accountNo: '312 445 6678', ownerName: 'DKM Kassiti', desc: 'Dana Cadangan', balance: 20000000, color: 'purple', isPinned: false, isActive: false },
-])
-
+// Data Handling
 const searchQuery = ref('')
 const filterStatus = ref('all') // 'active', 'inactive', 'all'
 
 const sortedRekening = computed(() => {
-  return [...rekeningData.value]
+  return [...keuanganStore.bankKasList]
     .filter(r => {
-      // Filter Status
+      const matchSearch = r.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+                          (r.accountNo && r.accountNo.includes(searchQuery.value))
+      if (!matchSearch) return false
       if (filterStatus.value === 'active' && !r.isActive) return false
       if (filterStatus.value === 'inactive' && r.isActive) return false
-      
-      // Filter Search
-      if (searchQuery.value) {
-        const query = searchQuery.value.toLowerCase()
-        const matchName = r.name.toLowerCase().includes(query)
-        const matchNo = r.accountNo && r.accountNo.toLowerCase().includes(query)
-        const matchType = r.type.toLowerCase().includes(query)
-        return matchName || matchNo || matchType
-      }
       return true
     })
-    .map(r => ({
-      ...r,
-      // Sync balance with store
-      balance: getAccountTotalBalance(r.name) || r.balance
-    }))
     .sort((a, b) => {
-      if (a.isPinned === b.isPinned) return 0;
-      return a.isPinned ? -1 : 1;
-    });
+      if (a.isPinned !== b.isPinned) return b.isPinned ? 1 : -1
+      if (a.isActive !== b.isActive) return b.isActive ? 1 : -1
+      return b.balance - a.balance
+    })
 })
 
-// Pin Logic
-const togglePin = (id) => {
-  const index = rekeningData.value.findIndex(r => r.id === id)
-  if (index === -1) return
+const activityData = computed(() => {
+  return keuanganStore.transactions.slice(0, 5)
+})
 
-  if (rekeningData.value[index].isPinned) {
-    rekeningData.value[index].isPinned = false
+// Modals
+const rekForm = ref({ name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null, visibilitasPublik: false })
+const qrFile = ref(null)
+
+const handleFileUpload = (e) => {
+  if (e.target.files.length > 0) {
+    qrFile.value = e.target.files[0]
   } else {
-    // Cek jumlah pinned saat ini
-    const pinnedCount = rekeningData.value.filter(r => r.isPinned).length
-    if (pinnedCount >= 3) {
-      // Cari pinned pertama/paling lama untuk di-unpin (asumsi: yang pertama ditemukan di array)
-      const firstPinned = rekeningData.value.find(r => r.isPinned)
-      if (firstPinned) firstPinned.isPinned = false
-    }
-    rekeningData.value[index].isPinned = true
+    qrFile.value = null
   }
-}
-
-// Modal Data Models
-const rekForm = ref({ id: null, name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', balance: '', isActive: true })
-
-const getTodayDate = () => {
-  const d = new Date();
-  const month = '' + (d.getMonth() + 1);
-  const day = '' + d.getDate();
-  const year = d.getFullYear();
-  return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
-}
-
-const mutasiForm = ref({ from: null, to: null, amount: '', adminFee: '', date: getTodayDate(), desc: '' })
-
-const penyesuaianForm = ref({ actualBalance: '', reason: '', program_id: null })
-
-const penyesuaianDiff = computed(() => {
-  if (!penyesuaianTarget.value || penyesuaianForm.value.actualBalance === '') return 0;
-  return Number(penyesuaianForm.value.actualBalance) - getAccountTotalBalance(penyesuaianTarget.value.name);
-})
-
-// Store Integration Helpers
-const getAccountTotalBalance = (accountName) => {
-  return keuanganStore.accountBalances[accountName]?.total || 0
-}
-
-const getAccountGeneralBalance = (accountName) => {
-  return keuanganStore.accountBalances[accountName]?.general || 0
-}
-
-const getAccountProgramBalances = (accountName) => {
-  return keuanganStore.accountBalances[accountName]?.programs || {}
-}
-
-const getPercentage = (part, total) => {
-  if (total === 0) return 0
-  return (part / total) * 100
-}
-
-const getColorClass = (index) => {
-  const colors = ['bg-emerald-500', 'bg-blue-500', 'bg-amber-500', 'bg-purple-500', 'bg-rose-500', 'bg-teal-500']
-  // Use index instead of array order since object keys iteration order might not be strictly an array index, but vue v-for with object gives (value, key, index)
-  const safeIndex = typeof index === 'number' ? index : 0;
-  return colors[safeIndex % colors.length]
-}
-
-// Actions
-const formatCurrency = (val) => {
-  return new Intl.NumberFormat('id-ID').format(val || 0)
 }
 
 const openTambahRekeningModal = () => {
   isEditRekeningMode.value = false
-  rekForm.value = { id: null, name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', balance: '', isActive: true }
+  rekForm.value = { name: '', type: 'Bank', color: 'emerald', accountNo: '', ownerName: '', desc: '', initialBalance: '', isActive: true, qrImage: null, visibilitasPublik: false }
+  qrFile.value = null
   showFormRekeningModal.value = true
+}
+
+const openEditRekeningModal = (rek) => {
+  isEditRekeningMode.value = true
+  rekForm.value = { ...rek }
+  qrFile.value = null
+  selectedDetailRekening.value = null
+  showFormRekeningModal.value = true
+}
+
+const saveRekening = async () => {
+  if (isSaving.value) return
+  if (!rekForm.value.name) {
+    toast.addToast('Nama rekening wajib diisi', 'error')
+    return
+  }
+
+  isSaving.value = true
+  try {
+    if (isEditRekeningMode.value) {
+      await keuanganStore.updateBankKas(rekForm.value.id, rekForm.value, qrFile.value)
+      toast.addToast('Rekening berhasil diubah', 'success')
+    } else {
+      await keuanganStore.createBankKas(rekForm.value, qrFile.value)
+      toast.addToast('Rekening berhasil ditambahkan', 'success')
+    }
+    showFormRekeningModal.value = false
+  } catch (err) {
+    toast.addToast(err.response?.data?.message || 'Gagal menyimpan rekening', 'error')
+  } finally {
+    isSaving.value = false
+  }
 }
 
 const openDetailRekening = (rek) => {
   selectedDetailRekening.value = rek
 }
 
-const openEditRekeningModal = (rek) => {
-  selectedDetailRekening.value = null
-  isEditRekeningMode.value = true
-  rekForm.value = { ...rek }
-  showFormRekeningModal.value = true
-}
-
-const openPenyesuaianModal = (rek) => {
-  selectedDetailRekening.value = null
-  penyesuaianTarget.value = rek
-  penyesuaianForm.value = { actualBalance: '', reason: '', program_id: null }
-  showPenyesuaianModal.value = true
-}
-
-const simpanPenyesuaian = () => {
-  if (penyesuaianDiff.value !== 0) {
-    keuanganStore.addBalanceAdjustment(
-      penyesuaianTarget.value.name, 
-      penyesuaianDiff.value, 
-      penyesuaianForm.value.program_id
-    )
-    toast.showToast('Penyesuaian saldo berhasil disimpan', 'success')
+const togglePin = async (rek) => {
+  try {
+    await keuanganStore.updateBankKas(rek.id, { isPinned: !rek.isPinned })
+    toast.addToast(rek.isPinned ? 'Rekening dilepaskan' : 'Rekening disematkan', 'success')
+  } catch (err) {
+    toast.addToast('Gagal merubah status semat', 'error')
   }
-  showPenyesuaianModal.value = false
 }
+
+// Penyesuaian Saldo (Rekonsiliasi)
+const penyesuaianForm = ref({ actualBalance: '', reason: '', date: new Date().toISOString().split('T')[0], program_id: '' })
+const penyesuaianProgramOptions = ref([])
+const isPenyesuaianLoading = ref(false)
+
+const penyesuaianDiff = computed(() => {
+  if (!penyesuaianTarget.value || penyesuaianForm.value.actualBalance === '') return 0
+  return Number(penyesuaianForm.value.actualBalance) - Number(penyesuaianTarget.value.balance)
+})
+
+const penyesuaianKasUmumBalance = computed(() => {
+  if (!penyesuaianTarget.value) return 0
+  const programTotal = penyesuaianProgramOptions.value.reduce((sum, p) => sum + Number(p.saldo), 0)
+  return Number(penyesuaianTarget.value.balance) - programTotal
+})
+
+const openPenyesuaianModal = async (rek) => {
+  penyesuaianTarget.value = rek
+  penyesuaianForm.value = { actualBalance: '', reason: '', date: new Date().toISOString().split('T')[0], program_id: '' }
+  penyesuaianProgramOptions.value = []
+  showPenyesuaianModal.value = true
+
+  isPenyesuaianLoading.value = true
+  try {
+    const balances = await keuanganStore.fetchBankKasProgramBalances(rek.id)
+    penyesuaianProgramOptions.value = balances.filter(b => b.program_id !== null)
+  } catch (err) {
+    toast.addToast('Gagal memuat opsi program', 'error')
+  } finally {
+    isPenyesuaianLoading.value = false
+  }
+}
+
+const simpanPenyesuaian = async () => {
+  if (isSaving.value) return
+  if (!penyesuaianForm.value.reason) {
+    toast.addToast('Alasan penyesuaian wajib diisi', 'error')
+    return
+  }
+  if (penyesuaianDiff.value !== 0) {
+    isSaving.value = true
+    try {
+      await keuanganStore.adjustBalance(penyesuaianTarget.value.id, {
+        targetSaldo: penyesuaianForm.value.actualBalance,
+        deskripsi: penyesuaianForm.value.reason,
+        date: penyesuaianForm.value.date,
+        program_id: penyesuaianForm.value.program_id || null
+      })
+      toast.addToast('Penyesuaian saldo berhasil disimpan', 'success')
+      showPenyesuaianModal.value = false
+      selectedDetailRekening.value = null
+    } catch (err) {
+      toast.addToast(err.response?.data?.message || 'Gagal menyimpan penyesuaian', 'error')
+    } finally {
+      isSaving.value = false
+    }
+  }
+}
+
+// Mutasi
+const mutasiForm = ref({ from: '', to: '', amount: '', adminFee: '', date: new Date().toISOString().split('T')[0], desc: '', program_id: '' })
+const mutasiProgramOptions = ref([])
+const isMutasiLoading = ref(false)
+
+watch(() => mutasiForm.value.from, async (newVal) => {
+  mutasiForm.value.program_id = ''
+  mutasiProgramOptions.value = []
+  if (newVal) {
+    isMutasiLoading.value = true
+    try {
+      const balances = await keuanganStore.fetchBankKasProgramBalances(newVal)
+      mutasiProgramOptions.value = balances.filter(b => b.program_id !== null)
+    } catch (err) {
+      toast.addToast('Gagal memuat opsi program', 'error')
+    } finally {
+      isMutasiLoading.value = false
+    }
+  }
+})
+
+const mutasiKasUmumBalance = computed(() => {
+  if (!mutasiForm.value.from) return 0
+  const fromRek = keuanganStore.activeBankKas.find(r => r.id === mutasiForm.value.from)
+  if (!fromRek) return 0
+  const programTotal = mutasiProgramOptions.value.reduce((sum, p) => sum + Number(p.saldo), 0)
+  return Number(fromRek.balance) - programTotal
+})
+
+const mutasiKasTotalBalance = computed(() => {
+  if (!mutasiForm.value.from) return 0
+  const fromRek = keuanganStore.activeBankKas.find(r => r.id === mutasiForm.value.from)
+  return fromRek ? Number(fromRek.balance) : 0
+})
+
+const mutasiSelectedBalance = computed(() => {
+  if (mutasiForm.value.program_id === 'ALL') {
+    return mutasiKasTotalBalance.value
+  }
+  if (mutasiForm.value.program_id === '') {
+    return mutasiKasUmumBalance.value
+  }
+  const prog = mutasiProgramOptions.value.find(p => p.program_id === mutasiForm.value.program_id)
+  return prog ? Number(prog.saldo) : 0
+})
+
+watch(() => mutasiForm.value.program_id, (newVal) => {
+  if (newVal === 'ALL') {
+    mutasiForm.value.amount = Math.max(0, mutasiKasTotalBalance.value - (mutasiForm.value.adminFee || 0))
+  }
+})
+
+watch(() => mutasiForm.value.adminFee, (newVal) => {
+  if (mutasiForm.value.program_id === 'ALL') {
+    mutasiForm.value.amount = Math.max(0, mutasiKasTotalBalance.value - (newVal || 0))
+  }
+})
 
 const openMutasiModal = () => {
-  mutasiForm.value = { from: null, to: null, amount: '', adminFee: '', date: getTodayDate(), desc: '' }
+  mutasiForm.value = { from: '', to: '', amount: '', adminFee: '', date: new Date().toISOString().split('T')[0], desc: '', program_id: '' }
+  mutasiProgramOptions.value = []
   showMutasiModal.value = true
 }
 
-const openDetailActivity = (act) => {
-  selectedActivity.value = act
+const simpanMutasi = async () => {
+  if (isSaving.value) return
+  if (!mutasiForm.value.from || !mutasiForm.value.to || !mutasiForm.value.amount) {
+    toast.addToast('Mohon lengkapi rekening asal, tujuan, dan nominal', 'error')
+    return
+  }
+  if (mutasiForm.value.from === mutasiForm.value.to) {
+    toast.addToast('Rekening asal dan tujuan tidak boleh sama', 'error')
+    return
+  }
+
+  const totalDeduction = Number(mutasiForm.value.amount) + Number(mutasiForm.value.adminFee || 0)
+  if (totalDeduction > mutasiSelectedBalance.value) {
+    toast.addToast('Saldo alokasi tidak mencukupi untuk mutasi ini', 'error')
+    return
+  }
+
+  isSaving.value = true
+  try {
+    if (mutasiForm.value.program_id === 'ALL') {
+      await keuanganStore.transferAllBankKas(mutasiForm.value.from, {
+        bankKasTujuanId: mutasiForm.value.to,
+        biayaAdmin: mutasiForm.value.adminFee,
+        description: mutasiForm.value.desc,
+        date: mutasiForm.value.date
+      })
+    } else {
+      await keuanganStore.createTransaction({
+        type: 'transfer',
+        name: 'Mutasi Kas',
+        description: mutasiForm.value.desc,
+        amount: mutasiForm.value.amount,
+        biayaAdmin: mutasiForm.value.adminFee,
+        bankKasAsalId: mutasiForm.value.from,
+        bankKasTujuanId: mutasiForm.value.to,
+        programId: mutasiForm.value.program_id || null,
+        date: mutasiForm.value.date
+      })
+    }
+    toast.addToast('Mutasi kas berhasil dicatat', 'success')
+    showMutasiModal.value = false
+    // Refresh bank_kas to update balances
+    await keuanganStore.fetchBankKas()
+    // Refresh transactions to show recent transfer in activity table
+    await keuanganStore.fetchTransactions({ per_page: 5 })
+  } catch (err) {
+    toast.addToast(err.response?.data?.message || 'Gagal memproses mutasi', 'error')
+  } finally {
+    isSaving.value = false
+  }
 }
 
 // Helpers
 const getIcon = (type) => {
-  if (type === 'Bank') return Landmark
-  if (type === 'Kas Tunai') return Wallet
+  if (type === 'Bank' || type === 'rekening') return Landmark
+  if (type === 'Kas Tunai' || type === 'tunai') return Wallet
   return Briefcase
 }
 
@@ -822,18 +999,9 @@ const getBgClass = (color, isActive = true) => {
     case 'amber': return 'bg-gradient-to-br from-amber-600 to-orange-800 shadow-amber-900/20' + opacity
     case 'rose': return 'bg-gradient-to-br from-rose-600 to-red-800 shadow-rose-900/20' + opacity
     case 'gray': return 'bg-gradient-to-br from-gray-700 to-gray-900 shadow-gray-900/20' + opacity
-    default: return 'bg-gradient-to-br from-gray-700 to-gray-900 shadow-gray-900/20' + opacity
+    default: return 'bg-gradient-to-br from-emerald-600 to-teal-800 shadow-emerald-900/20' + opacity
   }
 }
-
-// Activity Data Mockup
-const activityData = [
-  { id: 1, activityType: 'mutasi', subType: 'none', date: '10 Okt 2023', from: 'Kotak Amal Utama', to: 'BSI Masjid Jami Kassiti', amount: 3000000, desc: 'Setor tunai hasil Jumat', adminFee: 0 },
-  { id: 2, activityType: 'penyesuaian', subType: 'plus', date: '08 Okt 2023', from: 'Kas Kecil Operasional', to: null, amount: 50000, desc: 'Ditemukan selisih lebih di laci', adminFee: 0 },
-  { id: 3, activityType: 'mutasi', subType: 'none', date: '05 Okt 2023', from: 'BSI Masjid Jami Kassiti', to: 'Kas Kecil Operasional', amount: 1000000, desc: 'Tarik tunai untuk operasional', adminFee: 5000 },
-  { id: 4, activityType: 'penyesuaian', subType: 'minus', date: '01 Okt 2023', from: 'Kotak Amal Utama', to: null, amount: 20000, desc: 'Terselip kembalian', adminFee: 0 },
-]
-
 </script>
 
 <style scoped>

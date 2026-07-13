@@ -125,6 +125,7 @@ import { Save, Phone } from 'lucide-vue-next'
 import { useQurbanStore } from '@/stores/qurban'
 import { useAdminStore } from '@/stores/admin'
 import { useToastStore } from '@/stores/toast'
+import api from '@/utils/api'
 
 const qurbanStore = useQurbanStore()
 const adminStore = useAdminStore()
@@ -143,11 +144,25 @@ const globalWhatsappList = computed(() => {
   return adminStore.generalSettings?.whatsapp || []
 })
 
-onMounted(() => {
-  // Load settings from store
-  if (qurbanStore.settings) {
-    settings.value = { ...qurbanStore.settings }
+const fetchSettings = async () => {
+  try {
+    const res = await api.get('/qurban/admin/settings')
+    if (res.data?.success && res.data.data) {
+      const dbSettings = res.data.data
+      settings.value = {
+        whatsappType: dbSettings.whatsappType || 'global',
+        selectedGlobalWaId: dbSettings.selectedGlobalWaId || 1,
+        customWaName: dbSettings.customWaName || '',
+        customWaNumber: dbSettings.customWaNumber || ''
+      }
+    }
+  } catch (err) {
+    console.error('Failed to fetch qurban settings', err)
   }
+}
+
+onMounted(() => {
+  fetchSettings()
   
   // Set default selection if empty
   if (settings.value.whatsappType === 'global' && !settings.value.selectedGlobalWaId && globalWhatsappList.value.length > 0) {
@@ -155,7 +170,7 @@ onMounted(() => {
   }
 })
 
-const saveSettings = () => {
+const saveSettings = async () => {
   isSaving.value = true
   
   // Validate custom number if chosen
@@ -167,11 +182,21 @@ const saveSettings = () => {
     }
   }
 
-  setTimeout(() => {
-    qurbanStore.updateSettings(settings.value)
+  try {
+    const payload = {
+      settings: settings.value
+    }
+    const res = await api.put('/qurban/admin/settings', payload)
+    if (res.data?.success) {
+      toast.addToast('Pengaturan Qurban berhasil disimpan!', 'success')
+      // optionally update store
+      qurbanStore.settings = settings.value
+    }
+  } catch (err) {
+    toast.addToast(err.response?.data?.message || 'Gagal menyimpan pengaturan', 'error')
+  } finally {
     isSaving.value = false
-    toast.addToast('Pengaturan Qurban berhasil disimpan!', 'success')
-  }, 600)
+  }
 }
 </script>
 

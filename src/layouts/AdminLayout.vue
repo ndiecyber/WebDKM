@@ -241,15 +241,6 @@
               <span v-if="!isSidebarCollapsed" class="truncate">Data Shohibul</span>
             </router-link>
             <router-link 
-              :to="{ name: 'admin-qurban-target' }"
-              :title="isSidebarCollapsed ? 'Target Hewan' : ''"
-              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
-              :class="[$route.name === 'admin-qurban-target' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
-            >
-              <Target class="w-5 h-5 shrink-0" />
-              <span v-if="!isSidebarCollapsed" class="truncate">Target Hewan</span>
-            </router-link>
-            <router-link 
               :to="{ name: 'admin-qurban-setoran' }"
               :title="isSidebarCollapsed ? 'Riwayat Setoran' : ''"
               class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
@@ -257,6 +248,15 @@
             >
               <History class="w-5 h-5 shrink-0" />
               <span v-if="!isSidebarCollapsed" class="truncate">Riwayat Setoran</span>
+            </router-link>
+            <router-link 
+              :to="{ name: 'admin-qurban-target' }"
+              :title="isSidebarCollapsed ? 'Target Hewan' : ''"
+              class="flex items-center gap-3 py-3 rounded-xl transition-all duration-300 text-sm font-medium group relative overflow-hidden"
+              :class="[$route.name === 'admin-qurban-target' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-linear-to-r from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20 shadow-sm scale-100' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 hover:scale-105 transform', isSidebarCollapsed ? 'justify-center px-0' : 'px-4']"
+            >
+              <Target class="w-5 h-5 shrink-0" />
+              <span v-if="!isSidebarCollapsed" class="truncate">Target Hewan</span>
             </router-link>
             <router-link 
               :to="{ name: 'admin-qurban-periode' }"
@@ -360,14 +360,6 @@
 
       <!-- Page Content -->
       <div class="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col">
-        <!-- Mockup Warning Banner (Fitur Tim Baru) -->
-        <div class="mb-6 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-4 flex items-start gap-3 shadow-sm shrink-0">
-          <AlertTriangle class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-          <div>
-            <h4 class="text-sm font-semibold text-amber-800 dark:text-amber-400">Mode Pratinjau (Mockup)</h4>
-            <p class="text-xs text-amber-700 dark:text-amber-500 mt-1">Halaman admin saat ini beroperasi dalam mode mockup (data lokal) untuk keperluan analisis dan pengembangan backend (API). Perubahan yang Anda lakukan di sini tidak akan terhubung ke database asli, beberapa pengaturan tidak mengubah yang ada di landing page.</p>
-          </div>
-        </div>
 
         <div class="max-w-7xl mx-auto w-full flex-1">
           <router-view></router-view>
@@ -385,7 +377,7 @@ import ToastContainer from '../components/ui/ToastContainer.vue'
 import ConfirmDialog from '../components/ui/ConfirmDialog.vue'
 // Menggabungkan ikon dari kedua sisi (termasuk fitur Qurban & fitur Log Aktivitas/Admin)
 import { 
-  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon, ShieldCheck, Activity, AlertTriangle, Target, Users, History, ClipboardList
+  LayoutDashboard, Home, Calendar, LogOut, Menu, User, Globe, Image, Briefcase, Settings, Wallet, ChevronRight, ArrowLeftRight, Landmark, FileBarChart, Sun, Moon, ShieldCheck, Activity, AlertTriangle, Target, Users, History, ClipboardList, Trash2
 } from 'lucide-vue-next'
 import logoLight from '@/assets/images/logo-kustom.webp'
 import logoDark from '@/assets/images/logo-kustom2.webp'
@@ -487,6 +479,7 @@ const pageTitle = computed(() => {
   if (route.name === 'admin-keuangan-bank-kas') return 'Bank & Kas'
   if (route.name === 'admin-keuangan-laporan') return 'Laporan Keuangan'
   if (route.name === 'admin-keuangan-pengaturan') return 'Pengaturan Keuangan'
+  if (route.name === 'admin-keuangan-sampah') return 'Kotak Sampah'
   if (route.name === 'admin-keuangan-program') return 'Program & Kegiatan'
 
   // Title Qurban DKM
@@ -500,8 +493,8 @@ const pageTitle = computed(() => {
   return 'Admin Panel'
 })
 
-function handleLogout() {
-  adminStore.logout()
+async function handleLogout() {
+  await adminStore.logout()
   router.push({ name: 'admin-login' })
 }
 </script>

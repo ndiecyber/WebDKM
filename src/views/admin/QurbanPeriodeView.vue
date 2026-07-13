@@ -10,8 +10,9 @@
         @click="openWizard"
         class="bg-secondary hover:bg-yellow-500 text-white dark:text-gray-950 font-bold px-5 py-2.5 rounded-xl shadow-md shadow-secondary/20 transition-all text-sm flex items-center gap-2 justify-center shrink-0"
       >
-        <FolderSync class="w-4 h-4" />
-        <span>Tutup Buku & Buka Periode Baru</span>
+        <FolderSync class="w-4 h-4" v-if="settings.id" />
+        <Plus class="w-4 h-4" v-else />
+        <span>{{ settings.id ? 'Tutup Buku & Buka Periode Baru' : 'Buka Periode Baru' }}</span>
       </button>
     </div>
 
@@ -269,7 +270,7 @@
           <div class="flex justify-between items-start mb-4">
             <div>
               <h3 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
-                Tutup Buku & Mulai Periode Baru
+                {{ settings.id ? 'Tutup Buku & Mulai Periode Baru' : 'Mulai Periode Baru' }}
               </h3>
               <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Langkah {{ wizardModal.step }} dari 2</p>
             </div>
@@ -299,17 +300,30 @@
             
             <div class="p-5 bg-gray-50/50 dark:bg-gray-800/30 rounded-xl border border-gray-100 dark:border-white/5 space-y-3">
               <h4 class="font-bold text-gray-900 dark:text-white text-sm border-b border-gray-200 dark:border-gray-700 pb-2">Ringkasan Sistem Saat Ini</h4>
-              <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Judul Periode</span>
-                <span class="font-bold text-gray-900 dark:text-white">{{ settings.periodeName }}</span>
+              
+              <!-- Data Ringkasan (Hanya Tampil Jika Ada Periode Aktif) -->
+              <div v-if="settings.id" class="space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500 dark:text-gray-400">Periode yang akan ditutup</span>
+                  <span class="font-bold text-gray-900 dark:text-white">{{ settings.periodeName }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500 dark:text-gray-400">Total Hewan (Sapi/Kambing)</span>
+                  <span class="font-bold text-gray-900 dark:text-white">{{ activePeriodStats.totalSapi }} Sapi / {{ activePeriodStats.totalKambing }} Kambing</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500 dark:text-gray-400">Estimasi Jamaah Carry-over</span>
+                  <span class="font-bold text-amber-600 dark:text-amber-400">{{ activePeriodStats.sapiBelumLunas + activePeriodStats.kambingBelumLunas }} Orang (Belum Lunas)</span>
+                </div>
               </div>
-              <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Total Hewan (Sapi/Kambing)</span>
-                <span class="font-bold text-gray-900 dark:text-white">12 Sapi / 8 Kambing</span>
-              </div>
-              <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Estimasi Jamaah Carry-over</span>
-                <span class="font-bold text-amber-600 dark:text-amber-400">14 Orang (Belum Lunas)</span>
+              
+              <div v-else>
+                <div class="p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-lg flex items-start gap-3">
+                  <AlertTriangle class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                  <p class="text-xs text-blue-700 dark:text-blue-400">
+                    Belum ada periode aktif. Pembuatan periode baru ini tidak akan melakukan migrasi data carry-over karena ini adalah periode pertama.
+                  </p>
+                </div>
               </div>
             </div>
             
@@ -478,6 +492,14 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { Calendar, Archive, History, Edit2, FolderSync, AlertTriangle, X, Check, ArrowRight, ArrowLeft } from 'lucide-vue-next'
+import api from '@/utils/api'
+import { useToastStore } from '@/stores/toast'
+import { useQurbanStore } from '@/stores/qurban'
+import { useRouter } from 'vue-router'
+
+const toastStore = useToastStore()
+const qurbanStore = useQurbanStore()
+const router = useRouter()
 
 // Utilities
 const formatRupiah = (value) => {
@@ -502,57 +524,57 @@ const settings = ref({
 })
 
 const riwayatPeriode = ref([])
+const activePeriodStats = ref({
+  totalSapi: 0,
+  totalKambing: 0,
+  sapiBelumLunas: 0,
+  kambingBelumLunas: 0
+})
 
-// Simulasi load data dari endpoint `active` dan `index`
-onMounted(() => {
-  const responseActive = {
-    id: 1,
-    name: 'Qurban 1447 H / 2026 M',
-    deadline_date: '2026-06-18',
-    sapi_price_per_slot: 4000000,
-    kambing_price: 3500000,
-    is_active: true
+const fetchPeriodsData = async () => {
+  try {
+    const res = await api.get('/qurban/admin/periods')
+    if (res.data?.success) {
+      const active = res.data.data.find(p => p.is_active)
+      if (active) {
+        settings.value = {
+          id: active.id,
+          periodeName: active.name,
+          deadline: active.deadline_date,
+          hargaSapiSlot: active.sapi_price_per_slot,
+          hargaKambing: active.kambing_price,
+          isRegistrationOpen: active.is_registration_open !== false
+        }
+        
+        activePeriodStats.value = {
+          totalSapi: active.totalSapi || 0,
+          totalKambing: active.totalKambing || 0,
+          sapiBelumLunas: active.sapiBelumLunas || 0,
+          kambingBelumLunas: active.kambingBelumLunas || 0
+        }
+      }
+      
+      riwayatPeriode.value = res.data.data.filter(p => !p.is_active).map(p => ({
+        id: p.id,
+        name: p.name,
+        closed_date: formatDate(p.updated_at),
+        totalSapi: p.totalSapi || 0,
+        sapiLunas: p.sapiLunas || 0,
+        sapiBelumLunas: p.sapiBelumLunas || 0,
+        totalKambing: p.totalKambing || 0,
+        kambingLunas: p.kambingLunas || 0,
+        kambingBelumLunas: p.kambingBelumLunas || 0,
+        totalShohibul: p.totalShohibul || 0,
+        totalDana: p.totalDana || 0
+      }))
+    }
+  } catch (err) {
+    toastStore.addToast('Gagal mengambil data periode', 'error')
   }
+}
 
-  settings.value.id = responseActive.id
-  settings.value.periodeName = responseActive.name
-  settings.value.deadline = responseActive.deadline_date
-  settings.value.hargaSapiSlot = responseActive.sapi_price_per_slot
-  settings.value.hargaKambing = responseActive.kambing_price
-  settings.value.isRegistrationOpen = true
-
-  riwayatPeriode.value = [
-    { 
-      id: 2, 
-      name: 'Qurban 1446 H / 2025 M', 
-      closed_date: '10 Juli 2025', 
-      hargaSapiSlot: 3800000, 
-      hargaKambing: 3200000,
-      totalSapi: 15,
-      sapiLunas: 13,
-      sapiBelumLunas: 2,
-      totalKambing: 40,
-      kambingLunas: 38,
-      kambingBelumLunas: 2,
-      totalShohibul: 145,
-      totalDana: 527000000
-    },
-    { 
-      id: 3, 
-      name: 'Qurban 1445 H / 2024 M', 
-      closed_date: '20 Juni 2024', 
-      hargaSapiSlot: 3500000, 
-      hargaKambing: 3000000,
-      totalSapi: 12,
-      sapiLunas: 12,
-      sapiBelumLunas: 0,
-      totalKambing: 35,
-      kambingLunas: 34,
-      kambingBelumLunas: 1,
-      totalShohibul: 119,
-      totalDana: 399000000
-    },
-  ]
+onMounted(() => {
+  fetchPeriodsData()
 })
 
 // MODAL EDIT
@@ -564,10 +586,27 @@ const openEditModal = () => {
   editModal.value.isOpen = true
 }
 
-const saveEdit = () => {
-  settings.value = { ...editForm.value }
-  editModal.value.isOpen = false
-  alert('Pengaturan periode berhasil diperbarui.')
+const saveEdit = async () => {
+  try {
+    const payload = {
+      name: editForm.value.periodeName,
+      deadline_date: editForm.value.deadline,
+      sapi_price_per_slot: editForm.value.hargaSapiSlot,
+      kambing_price: editForm.value.hargaKambing,
+      is_registration_open: editForm.value.isRegistrationOpen
+    }
+    
+    const res = await api.put('/qurban/admin/periods/active', payload)
+    if (res.data?.success) {
+      toastStore.addToast('Pengaturan periode berhasil diperbarui', 'success')
+      editModal.value.isOpen = false
+      fetchPeriodsData()
+      qurbanStore.isFetchingPeriods = false
+      qurbanStore.fetchPeriods()
+    }
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal menyimpan pengaturan', 'error')
+  }
 }
 
 // MODAL REKAPITULASI
@@ -580,8 +619,9 @@ const openRecapModal = (history) => {
 
 const goToDashboard = (periodId) => {
   recapModal.value.isOpen = false
-  // Secara nyata: router.push({ name: 'admin-qurban-dashboard' }) dan store set period
-  alert(`Sistem akan beralih ke Mode Arsip untuk periode ID: ${periodId} dan membuka halaman Dashboard Qurban.`)
+  qurbanStore.changeSelectedPeriod(periodId)
+  router.push({ name: 'admin-qurban-dashboard' })
+  toastStore.addToast(`Sistem beralih ke Mode Arsip`, 'info')
 }
 
 // WIZARD MODAL
@@ -616,36 +656,33 @@ const openWizard = () => {
   }
 }
 
-const executeWizard = () => {
-  // 1. Pindahkan setting saat ini ke riwayat
-  riwayatPeriode.value.unshift({
-    id: Math.floor(Math.random() * 1000),
-    name: settings.value.periodeName,
-    closed_date: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-    hargaSapiSlot: settings.value.hargaSapiSlot,
-    hargaKambing: settings.value.hargaKambing,
-    totalSapi: 12,
-    sapiLunas: 10,
-    sapiBelumLunas: 2,
-    totalKambing: 8,
-    kambingLunas: 7,
-    kambingBelumLunas: 1,
-    totalShohibul: 92,
-    totalDana: 350000000
-  })
-  
-  // 2. Set active period dengan form baru
-  settings.value.id = Math.floor(Math.random() * 1000)
-  settings.value.periodeName = wizardModal.value.form.periodeName
-  settings.value.deadline = wizardModal.value.form.deadline
-  settings.value.hargaSapiSlot = wizardModal.value.form.hargaSapiSlot
-  settings.value.hargaKambing = wizardModal.value.form.hargaKambing
-  settings.value.isRegistrationOpen = true
-
-  // 3. Tutup modal
-  wizardModal.value.isOpen = false
-  
-  alert('Proses Tutup Buku & Buat Periode Baru berhasil!\nData jamaah carry-over telah diwariskan ke periode yang baru ini.')
+const executeWizard = async () => {
+  try {
+    const payload = {
+      name: wizardModal.value.form.periodeName,
+      deadline_date: wizardModal.value.form.deadline,
+      sapi_price_per_slot: wizardModal.value.form.hargaSapiSlot,
+      kambing_price: wizardModal.value.form.hargaKambing,
+      is_active: true
+    }
+    
+    let res;
+    if (settings.value.id) {
+      res = await api.post('/qurban/admin/rollover/execute', payload)
+    } else {
+      res = await api.post('/qurban/admin/periods', payload)
+    }
+    
+    if (res.data?.success) {
+      toastStore.addToast(settings.value.id ? 'Proses Tutup Buku & Buat Periode Baru berhasil' : 'Periode Baru berhasil dibuat', 'success')
+      wizardModal.value.isOpen = false
+      fetchPeriodsData()
+      qurbanStore.isFetchingPeriods = false
+      qurbanStore.fetchPeriods()
+    }
+  } catch (err) {
+    toastStore.addToast(err.response?.data?.message || 'Gagal melakukan rollover', 'error')
+  }
 }
 </script>
 

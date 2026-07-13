@@ -90,11 +90,7 @@
           </button>
         </form>
 
-        <!-- Footer / Demo Credentials -->
-        <div class="mt-8 text-center text-[10px] text-gray-400 uppercase tracking-widest">
-          <p>Kredensial Demo:</p>
-          <p class="mt-1 font-bold text-gray-300"><span class="text-emerald-400">admin</span> / <span class="text-emerald-400">admin123</span></p>
-        </div>
+        <!-- Clean UI (Demo footer removed) -->
       </div>
     </div>
   </div>
@@ -113,12 +109,12 @@ const username = ref('')
 const password = ref('')
 const errorMsg = ref('')
 
-function handleLogin() {
+async function handleLogin() {
   errorMsg.value = ''
-  const success = adminStore.login(username.value, password.value)
+  const success = await adminStore.login(username.value, password.value)
   
   if (success) {
-    router.push({ name: 'admin-dashboard' })
+    router.push({ name: adminStore.defaultRouteName })
   } else {
     errorMsg.value = 'Username atau password salah.'
   }

@@ -1,30 +1,18 @@
 import { defineStore } from 'pinia'
-import { getStorage, setStorage } from '@/utils/storage'
-
-const parseSafe = (key, defaultVal) => {
-  try {
-    const val = getStorage(key)
-    return val ? JSON.parse(val) : defaultVal
-  } catch (e) {
-    return defaultVal
-  }
-}
+import api from '@/utils/api'
 
 export const useQurbanStore = defineStore('qurban', {
   state: () => ({
-    periods: [
-      { id: '1447', label: '1447 H / 2026 M', status: 'aktif' },
-      { id: '1446', label: '1446 H / 2025 M', status: 'arsip' },
-      { id: '1445', label: '1445 H / 2024 M', status: 'arsip' }
-    ],
-    selectedPeriodId: '1447',
+    periods: [],
+    selectedPeriodId: null,
     isLoading: false,
-    settings: parseSafe('qurban_settings', {
-      whatsappType: 'global', // 'global' or 'custom'
+    isFetchingPeriods: false,
+    settings: {
+      whatsappType: 'global',
       selectedGlobalWaId: 1,
       customWaName: '',
       customWaNumber: ''
-    })
+    }
   }),
   getters: {
     activePeriod: (state) => state.periods.find(p => p.status === 'aktif'),
@@ -35,46 +23,36 @@ export const useQurbanStore = defineStore('qurban', {
     }
   },
   actions: {
+    async fetchPeriods() {
+      if (this.isFetchingPeriods) return
+      this.isFetchingPeriods = true
+      try {
+        const response = await api.get('/qurban/admin/periods')
+        if (response.data?.success) {
+          this.periods = response.data.data.map(p => ({
+            ...p,
+            label: p.name,
+            status: p.is_active ? 'aktif' : 'arsip'
+          }))
+          
+          if (!this.selectedPeriodId && this.periods.length > 0) {
+            const active = this.periods.find(p => p.status === 'aktif')
+            this.selectedPeriodId = active ? active.id : this.periods[0].id
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch qurban periods', error)
+      } finally {
+        this.isFetchingPeriods = false
+      }
+    },
     changeSelectedPeriod(id) {
       if (this.selectedPeriodId !== id) {
         this.selectedPeriodId = id
-        this.triggerLoading()
-      }
-    },
-    triggerLoading() {
-      this.isLoading = true
-      setTimeout(() => {
-        this.isLoading = false
-      }, 800)
-    },
-    addPeriod(newPeriod) {
-      this.periods.unshift({
-        id: newPeriod.id,
-        label: newPeriod.label,
-        status: 'persiapan'
-      })
-    },
-    setActivePeriod(id) {
-      // Set all 'aktif' to 'arsip'
-      this.periods.forEach(p => {
-        if (p.status === 'aktif') p.status = 'arsip'
-      })
-      // Set target to 'aktif'
-      const target = this.periods.find(p => p.id === id)
-      if (target) {
-        target.status = 'aktif'
-      }
-      this.selectedPeriodId = id
-    },
-    archivePeriod(id) {
-      const target = this.periods.find(p => p.id === id)
-      if (target) {
-        target.status = 'arsip'
       }
     },
     updateSettings(newSettings) {
       this.settings = { ...this.settings, ...newSettings }
-      setStorage('qurban_settings', JSON.stringify(this.settings))
     }
   }
 })

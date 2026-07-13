@@ -837,11 +837,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check, Mail, Facebook, Youtube, Twitter, Trash2 } from 'lucide-vue-next'
-import { useAdminStore } from '../../stores/admin'
-import { useToastStore } from '../../stores/toast'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useAdminStore } from '@/stores/admin'
+import { useToastStore } from '@/stores/toast'
+import api from '@/utils/api'
 import { useDialogStore } from '../../stores/dialog'
+import { Globe, Link as LinkIcon, Instagram, Phone, MapPin, Save, Bold, Italic, Underline, Heading1, Heading2, List, ListOrdered, AlignLeft, AlignCenter, Heart, Plus, X, Users, Check, Mail, Facebook, Youtube, Twitter, Trash2 } from 'lucide-vue-next'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
@@ -916,7 +918,7 @@ const hasChanges = computed(() => {
   return isSettingsChanged || isCtaChanged || isMasterDataChanged || isCommitteeChanged
 })
 
-onMounted(() => {
+onMounted(async () => {
   observer = new IntersectionObserver(([entry]) => {
     isTopButtonVisible.value = entry.isIntersecting
   }, { threshold: 0 })
@@ -925,6 +927,37 @@ onMounted(() => {
     observer.observe(topButtonRef.value)
   }
 
+  // Fetch from database API
+  await adminStore.fetchGeneralSettings()
+  await adminStore.fetchCtaSettings()
+  await adminStore.fetchMasterData()
+  await adminStore.fetchCommittee()
+
+  // Populate form refs with fresh data
+  settings.value = JSON.parse(JSON.stringify(adminStore.generalSettings))
+  
+  // Migration for older localStorage data where whatsapp might still be a string
+  if (typeof settings.value.whatsapp === 'string') {
+    settings.value.whatsapp = [{ id: 1, name: 'Pengurus / Umum', number: settings.value.whatsapp }]
+  }
+  if (!settings.value.email) settings.value.email = ''
+  if (!settings.value.alamatLengkap) settings.value.alamatLengkap = ''
+  if (!settings.value.kota) settings.value.kota = ''
+  if (!settings.value.kodepos) settings.value.kodepos = ''
+  if (!settings.value.mapsIframe) settings.value.mapsIframe = ''
+  if (!settings.value.teleponKantor) settings.value.teleponKantor = ''
+  if (settings.value.twitter === undefined) settings.value.twitter = ''
+  if (settings.value.tiktok === undefined) settings.value.tiktok = ''
+
+  ctaSettings.value = JSON.parse(JSON.stringify(adminStore.ctaSettings))
+  masterData.value = JSON.parse(JSON.stringify(adminStore.masterData))
+
+  const newCData = adminStore.committee || {}
+  committee.value = {
+    dewanPenasihat: newCData.dewanPenasihat ? JSON.parse(JSON.stringify(newCData.dewanPenasihat)) : [],
+    pengurusHarian: newCData.pengurusHarian ? JSON.parse(JSON.stringify(newCData.pengurusHarian)) : [],
+    divisi: newCData.divisi ? JSON.parse(JSON.stringify(newCData.divisi)) : []
+  }
 })
 
 onUnmounted(() => {
@@ -1026,7 +1059,7 @@ async function addDivisi() {
   
   if (name) {
     committee.value.divisi.push({
-      id: name.toLowerCase().replace(/\s+/g, '-'),
+      id: Date.now(),
       name: name,
       members: []
     })
@@ -1044,34 +1077,56 @@ async function removeDivisi(index) {
   }
 }
 
-function handlePhotoUpload(event, member) {
+async function handlePhotoUpload(event, member) {
   const file = event.target.files[0]
   if (!file) return
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    member.image = e.target.result
+  if (!validateFileSize(file)) {
+    event.target.value = ''
+    return
   }
-  reader.readAsDataURL(file)
+  
+  // Show local preview immediately for better UX
+  const previewUrl = URL.createObjectURL(file)
+  member.image = previewUrl
+
+  // Upload to backend
+  const formData = new FormData()
+  formData.append('image', file)
+  
+  try {
+    const res = await api.post('/web-profile/committee/upload-photo', formData)
+    if (res.data && res.data.data && res.data.data.image_path) {
+      member.image = res.data.data.image_path
+      URL.revokeObjectURL(previewUrl)
+    }
+  } catch (error) {
+    toastStore.addToast('Gagal mengunggah foto pengurus', 'error')
+    member.image = null // Revert on failure
+    URL.revokeObjectURL(previewUrl)
+  }
 }
 
-function saveSettings() {
+async function saveSettings() {
   isSaving.value = true
   
-  // Simulate API call
-  setTimeout(() => {
-    adminStore.generalSettings = { ...settings.value }
+  try {
+    adminStore.generalSettings = JSON.parse(JSON.stringify(settings.value))
     adminStore.ctaSettings = JSON.parse(JSON.stringify(ctaSettings.value))
     adminStore.masterData = JSON.parse(JSON.stringify(masterData.value))
     adminStore.committee = JSON.parse(JSON.stringify(committee.value))
     
-    adminStore.saveGeneralSettings()
-    adminStore.saveCtaSettings()
-    adminStore.saveMasterData()
-    adminStore.saveCommittee()
+    await adminStore.saveGeneralSettings()
+    await adminStore.saveCtaSettings()
+    await adminStore.saveMasterData()
+    await adminStore.saveCommittee()
     
-    isSaving.value = false
     toastStore.addToast('Pengaturan umum berhasil disimpan')
-  }, 1000)
+  } catch (err) {
+    console.error('Failed to save settings:', err)
+    toastStore.addToast('Gagal menyimpan pengaturan', 'error')
+  } finally {
+    isSaving.value = false
+  }
 }
 </script>
 

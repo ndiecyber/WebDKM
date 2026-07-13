@@ -156,9 +156,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !adminStore.isAuthenticated) {
     next({ name: 'admin-login' })
   } else if (to.meta.guestOnly && adminStore.isAuthenticated) {
-    next({ name: 'admin-dashboard' })
+    next({ name: adminStore.defaultRouteName })
   } else if (to.meta.requiresSystem && !adminStore.hasModuleAccess('sistem')) {
-    next({ name: 'admin-dashboard' })
+    next({ name: adminStore.defaultRouteName })
   } else {
     next()
   }

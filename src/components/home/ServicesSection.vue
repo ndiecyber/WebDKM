@@ -65,7 +65,7 @@
           <!-- Badge -->
           <div 
             v-if="service.badge"
-            :class="`absolute top-2 right-2 sm:top-6 sm:right-6 px-2 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-xs font-bold uppercase tracking-wider rounded-full ${service.badgeColor}`"
+            :class="`absolute top-2 right-2 sm:top-6 sm:right-6 px-2 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-xs font-bold uppercase tracking-wider rounded-full ${adminStore.getBadgeColor(service.badge)}`"
           >
             {{ service.badge }}
           </div>
@@ -123,11 +123,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import ServiceModal from '@/components/ui/ServiceModal.vue'
 
-import communityImg from '@/assets/images/community-prayer.webp'
-import quranImg from '@/assets/images/quran-study.webp'
-import interiorImg from '@/assets/images/mosque-interior.webp'
-import exteriorImg from '@/assets/images/mosque-exterior.webp'
-import heroImg from '@/assets/images/hero-mosque.webp'
 import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.webp'
 import { createSilhouetteMask } from '@/utils/image'
 import { useAdminStore } from '@/stores/admin'

@@ -49,7 +49,7 @@
                 {{ service.title }}
               </h3>
               <!-- Badge -->
-              <span v-if="service.badge" :class="`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full ${service.badgeColor}`">
+              <span v-if="service.badge" :class="`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full ${adminStore.getBadgeColor(service.badge)}`">
                 {{ service.badge }}
               </span>
             </div>

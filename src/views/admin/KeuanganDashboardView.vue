@@ -9,34 +9,26 @@
           Ringkasan performa finansial Masjid Jami Kassiti bulan ini.
         </p>
       </div>
-      <div class="flex items-center gap-3">
-        <div class="relative">
-          <button @click="showMonthDropdown = !showMonthDropdown" class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium px-4 py-2 rounded-lg transition-colors ring-1 ring-gray-300 dark:ring-white/10 shadow-md text-sm flex items-center gap-2 min-w-[150px] justify-between">
-            <div class="flex items-center gap-2">
-              <Calendar class="w-4 h-4 text-gray-400" />
-              <span>{{ selectedMonth }}</span>
-            </div>
-            <ChevronDown class="w-4 h-4 ml-1 text-gray-400" />
-          </button>
-          
-          <div v-if="showMonthDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-lg z-20 py-1 overflow-hidden animate-fade-in-down max-h-60 overflow-y-auto custom-scrollbar">
-            <button 
-              v-for="month in months" 
-              :key="month"
-              @click="selectedMonth = month; showMonthDropdown = false"
-              :class="['w-full text-left px-4 py-2 text-sm transition-colors', selectedMonth === month ? 'bg-secondary/10 text-secondary dark:bg-secondary/20 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700']"
-            >
-              {{ month }}
-            </button>
-          </div>
-          <!-- Backdrop -->
-          <div v-if="showMonthDropdown" @click="showMonthDropdown = false" class="fixed inset-0 z-10"></div>
-        </div>
+      <div class="flex items-center gap-2">
+        <select v-model="selectedMonthOnly" @change="refetchDashboard" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary/50 transition-all shadow-sm">
+          <option v-for="(month, idx) in monthNames" :key="month" :value="idx + 1">{{ month }}</option>
+        </select>
+        <select v-model="selectedYearOnly" @change="refetchDashboard" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary/50 transition-all shadow-sm">
+          <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Loading Skeleton -->
+    <div v-if="keuanganStore.loading.dashboard" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div v-for="i in 4" :key="i" class="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-md animate-pulse">
+        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4"></div>
+        <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
       </div>
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       
       <!-- Stat: Total Saldo -->
       <RouterLink to="/admin/keuangan-bank-kas" class="relative overflow-hidden bg-linear-to-br from-emerald-600 to-teal-800 rounded-2xl p-6 shadow-lg shadow-emerald-900/20 text-white group block hover:-translate-y-1 hover:shadow-emerald-900/30 transition-all duration-300">
@@ -51,7 +43,7 @@
             <p class="text-sm font-medium text-emerald-100">Total Saldo Tersedia</p>
           </div>
           <div>
-            <h3 class="text-3xl font-bold tracking-tight">Rp 51.250.000</h3>
+            <h3 class="text-3xl font-bold tracking-tight">{{ formatRupiah(dashboard.totalSaldo) }}</h3>
             <p class="text-xs text-emerald-200 mt-2 flex items-center gap-1 font-medium bg-white/10 w-max px-2 py-1 rounded backdrop-blur-sm">
               <CheckCircle class="w-3 h-3" />
               Tervalidasi & Sinkron
@@ -72,11 +64,18 @@
           </div>
         </div>
         <div class="relative z-10">
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Rp 15.400.000</h3>
-          <p class="text-sm text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-medium">
-            <ArrowUpRight class="w-4 h-4" />
-            +12% dari bulan lalu
-          </p>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ formatRupiah(dashboard.pemasukanBulanIni) }}</h3>
+          <div class="flex items-center gap-2 mt-2">
+            <span v-if="dashboard.persentasePerubahan" :class="[
+              'text-xs font-medium px-1.5 py-0.5 rounded flex items-center gap-0.5',
+              dashboard.persentasePerubahan.pemasukan >= 0 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400'
+            ]">
+              <TrendingUp v-if="dashboard.persentasePerubahan.pemasukan >= 0" class="w-3 h-3" />
+              <TrendingDown v-else class="w-3 h-3" />
+              {{ Math.abs(dashboard.persentasePerubahan.pemasukan) }}%
+            </span>
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Bulan ini</p>
+          </div>
         </div>
       </RouterLink>
 
@@ -92,11 +91,18 @@
           </div>
         </div>
         <div class="relative z-10">
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Rp 4.250.000</h3>
-          <p class="text-sm text-rose-600 dark:text-rose-400 mt-2 flex items-center gap-1 font-medium">
-            <ArrowDownRight class="w-4 h-4" />
-            -5% dari bulan lalu
-          </p>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ formatRupiah(dashboard.pengeluaranBulanIni) }}</h3>
+          <div class="flex items-center gap-2 mt-2">
+            <span v-if="dashboard.persentasePerubahan" :class="[
+              'text-xs font-medium px-1.5 py-0.5 rounded flex items-center gap-0.5',
+              dashboard.persentasePerubahan.pengeluaran <= 0 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400'
+            ]">
+              <TrendingDown v-if="dashboard.persentasePerubahan.pengeluaran <= 0" class="w-3 h-3" />
+              <TrendingUp v-else class="w-3 h-3" />
+              {{ Math.abs(dashboard.persentasePerubahan.pengeluaran) }}%
+            </span>
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Bulan ini</p>
+          </div>
         </div>
       </RouterLink>
 
@@ -112,7 +118,7 @@
           </div>
         </div>
         <div class="relative z-10">
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Rp 11.150.000</h3>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{{ formatRupiah(dashboard.selisihBulanIni) }}</h3>
           <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 flex items-center gap-1 font-medium">
             Penambahan Saldo
           </p>
@@ -137,10 +143,6 @@
             
             <!-- Dropdown Menu -->
             <div v-if="showChartMenu" class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 rounded-lg shadow-lg z-20 py-1 overflow-hidden animate-fade-in-down">
-              <button @click="exportChart" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
-                <Image class="w-4 h-4 text-gray-400" />
-                Unduh PNG
-              </button>
               <button v-if="chartType === 'line'" @click="toggleChartType" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-3">
                 <BarChart3 class="w-4 h-4 text-gray-400" />
                 Ubah ke Diagram Batang
@@ -170,8 +172,11 @@
           </RouterLink>
         </div>
         <div class="p-2 flex-1">
-          <ul class="divide-y divide-gray-100 dark:divide-white/5">
-            <li v-for="tx in recentTransactions" :key="tx.id" class="p-4 hover:bg-gray-50 dark:hover:bg-white/[0.02] rounded-xl transition-colors flex items-center justify-between">
+          <div v-if="!dashboard.transaksiTerbaru?.length" class="flex flex-col items-center justify-center h-full py-8 text-gray-400">
+            <p class="text-sm">Belum ada transaksi</p>
+          </div>
+          <ul v-else class="divide-y divide-gray-100 dark:divide-white/5">
+            <li v-for="tx in dashboard.transaksiTerbaru?.slice(0, 5)" :key="tx.id" class="p-4 hover:bg-gray-50 dark:hover:bg-white/[0.02] rounded-xl transition-colors flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div :class="[
                   'w-10 h-10 rounded-full flex items-center justify-center shrink-0 ring-1',
@@ -181,7 +186,7 @@
                   <ArrowUpRight v-else class="w-5 h-5" />
                 </div>
                 <div>
-                  <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ tx.title }}</p>
+                  <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ tx.name || tx.description }}</p>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ tx.date }} • {{ tx.category }}</p>
                 </div>
               </div>
@@ -190,7 +195,7 @@
                   'text-sm font-bold',
                   tx.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-900 dark:text-white'
                 ]">
-                  {{ tx.type === 'in' ? '+' : '-' }}Rp {{ tx.amount }}
+                  {{ tx.type === 'in' ? '+' : '-' }}{{ formatRupiah(tx.amount) }}
                 </p>
               </div>
             </li>
@@ -203,24 +208,35 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { 
   Calendar, Wallet, TrendingUp, TrendingDown, Scale, 
   MoreHorizontal, ChevronDown, Landmark, CheckCircle,
   ArrowUpRight, ArrowDownRight, ArrowDownLeft, Image, BarChart3, LineChart, ArrowRight
 } from 'lucide-vue-next'
 import VueApexCharts from 'vue3-apexcharts'
+import { useKeuanganStore } from '@/stores/keuangan'
+import { formatRupiah } from '@/utils/keuangan-mapper'
+
+const keuanganStore = useKeuanganStore()
 
 // Month Dropdown Setup
-const showMonthDropdown = ref(false)
 const currentDate = new Date()
 const currentYear = currentDate.getFullYear()
 const monthNames = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ]
-const months = monthNames.map(m => `${m} ${currentYear}`)
-const selectedMonth = ref(`${monthNames[currentDate.getMonth()]} ${currentYear}`)
+const availableYears = [currentYear, currentYear - 1, currentYear - 2]
+const selectedMonthOnly = ref(currentDate.getMonth() + 1) // 1-indexed for BE
+const selectedYearOnly = ref(currentYear)
+
+// Dashboard data computed
+const dashboard = computed(() => keuanganStore.dashboardData)
+
+const refetchDashboard = () => {
+  keuanganStore.fetchDashboard({ bulan: selectedMonthOnly.value, tahun: selectedYearOnly.value })
+}
 
 // Chart Setup
 const showChartMenu = ref(false)
@@ -232,22 +248,10 @@ const toggleChartType = () => {
   showChartMenu.value = false
 }
 
-const exportChart = () => {
-  if (cashFlowChart.value) {
-    cashFlowChart.value.chart.dataURI().then(({ imgURI }) => {
-      const a = document.createElement("a");
-      a.href = imgURI;
-      a.download = `arus-kas-${selectedMonth.value.toLowerCase().replace(' ', '-')}.png`;
-      a.click();
-    });
-  }
-  showChartMenu.value = false
-}
-
-// Chart Mockup Data
-const chartSeries = ref([
-  { name: 'Pemasukan', data: [15, 20, 18, 25, 22, 30] },
-  { name: 'Pengeluaran', data: [5, 4, 8, 5, 6, 4] }
+// Chart data from store
+const chartSeries = computed(() => [
+  { name: 'Pemasukan', data: keuanganStore.chartData.pemasukan },
+  { name: 'Pengeluaran', data: keuanganStore.chartData.pengeluaran }
 ])
 
 const chartOptions = computed(() => ({
@@ -268,7 +272,7 @@ const chartOptions = computed(() => ({
     colors: chartType.value === 'line' ? ['#10b981', '#f43f5e'] : ['transparent'] 
   },
   xaxis: {
-    categories: ['Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'],
+    categories: keuanganStore.chartData.categories,
     axisBorder: { show: false },
     axisTicks: { show: false },
     labels: { style: { colors: '#9ca3af' } }
@@ -276,7 +280,11 @@ const chartOptions = computed(() => ({
   yaxis: {
     labels: { 
       style: { colors: '#9ca3af' }, 
-      formatter: (value) => `Rp ${value}M` 
+      formatter: (value) => {
+        if (value >= 1000000) return `Rp ${(value / 1000000).toFixed(1)}M`
+        if (value >= 1000) return `Rp ${(value / 1000).toFixed(0)}K`
+        return `Rp ${value}`
+      }
     }
   },
   grid: { 
@@ -288,18 +296,17 @@ const chartOptions = computed(() => ({
   legend: { show: false },
   tooltip: {
     theme: 'dark',
-    y: { formatter: (val) => `Rp ${val}.000.000` }
+    y: { formatter: (val) => formatRupiah(val) }
   }
 }))
 
-// Transactions Mockup Data
-const recentTransactions = [
-  { id: 1, title: 'Infaq Jumat', category: 'Kotak Amal', date: '10 Okt', amount: '3.250.000', type: 'in' },
-  { id: 2, title: 'Donasi Hamba Allah', category: 'Transfer BSI', date: '08 Okt', amount: '1.000.000', type: 'in' },
-  { id: 3, title: 'Bayar Listrik & Air', category: 'Operasional', date: '05 Okt', amount: '850.000', type: 'out' },
-  { id: 4, title: 'Honor Penceramah', category: 'Dakwah', date: '04 Okt', amount: '500.000', type: 'out' },
-  { id: 5, title: 'Infaq Jumat', category: 'Kotak Amal', date: '03 Okt', amount: '2.800.000', type: 'in' },
-]
+// Fetch data on mount
+onMounted(async () => {
+  await Promise.all([
+    keuanganStore.fetchDashboard({ bulan: selectedMonthOnly.value, tahun: selectedYearOnly.value }),
+    keuanganStore.fetchChartData(6),
+  ])
+})
 </script>
 
 <style scoped>

@@ -5,9 +5,9 @@ export const useToastStore = defineStore('toast', {
     toasts: []
   }),
   actions: {
-    addToast(message, type = 'success') {
+    addToast(message, type = 'success', action = null) {
       const id = Date.now()
-      this.toasts.push({ id, message, type })
+      this.toasts.push({ id, message, type, action })
       
       // Auto remove after 3.5 seconds
       setTimeout(() => {

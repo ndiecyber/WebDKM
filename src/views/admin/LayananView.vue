@@ -122,7 +122,7 @@
                 </div>
                 <div v-if="form.bgImage" class="absolute inset-0 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center group">
                   <img :src="form.bgImage" class="w-full h-full object-cover opacity-90 dark:opacity-80" />
-                  <button @click.prevent="form.bgImage = null" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                  <button @click.prevent="form.bgImage = null; bgFile = null" class="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
                     <X class="w-4 h-4" />
                   </button>
                 </div>
@@ -359,15 +359,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Plus, Edit2, Trash2, X, Briefcase, Users, User, BookOpen, GraduationCap, Heart, HandCoins, Gem, MapPin, Building, UploadCloud } from 'lucide-vue-next'
 import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
 import { useDialogStore } from '../../stores/dialog'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
 const dialog = useDialogStore()
+
+onMounted(() => {
+  adminStore.fetchLayanan()
+})
 
 const iconMap = {
   Users, BookOpen, GraduationCap, Heart, HandCoins, Gem, Briefcase, MapPin, Building
@@ -399,6 +404,7 @@ const getDefaultForm = () => ({
 const form = ref(getDefaultForm())
 
 function openModal(item = null) {
+  bgFile.value = null
   if (item) {
     isEditing.value = true
     form.value = { 
@@ -423,30 +429,70 @@ function openModal(item = null) {
 
 // Upload Handlers
 const isDraggingBg = ref(false)
+const bgFile = ref(null)
+
 function handleBgDrop(e) {
   isDraggingBg.value = false
   const file = e.dataTransfer?.files[0]
-  if (file && file.type.startsWith('image/')) form.value.bgImage = URL.createObjectURL(file)
+  if (file && file.type.startsWith('image/')) {
+    if (!validateFileSize(file)) return
+    bgFile.value = file
+    form.value.bgImage = URL.createObjectURL(file)
+  }
 }
 function handleBgSelect(e) {
   const file = e.target.files[0]
-  if (file) form.value.bgImage = URL.createObjectURL(file)
+  if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
+    bgFile.value = file
+    form.value.bgImage = URL.createObjectURL(file)
+  }
 }
 
 const isDraggingContact = ref(false)
 function handleContactDrop(e) {
   isDraggingContact.value = false
   const file = e.dataTransfer?.files[0]
-  if (file && file.type.startsWith('image/')) form.value.details.supervisorImage = URL.createObjectURL(file)
+  if (file && file.type.startsWith('image/')) {
+    if (!validateFileSize(file)) return
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      form.value.details.supervisorImage = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
 }
 function handleContactSelect(e) {
   const file = e.target.files[0]
-  if (file) form.value.details.supervisorImage = URL.createObjectURL(file)
+  if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      form.value.details.supervisorImage = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
 }
 
 function handleStaffSelect(e, index) {
   const file = e.target.files[0]
-  if (file) form.value.details.staff[index].image = URL.createObjectURL(file)
+  if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      form.value.details.staff[index].image = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
 }
 
 // Staff Management
@@ -479,10 +525,41 @@ function saveItem() {
   }
   delete dataToSave.details.requirementsStr
   
+  // Use FormData for file upload
+  const formData = new FormData()
+  
+  function appendFormData(data, rootName) {
+    if (Array.isArray(data)) {
+      data.forEach((val, index) => {
+        appendFormData(val, `${rootName}[${index}]`);
+      });
+    } else if (typeof data === 'object' && data !== null) {
+      Object.keys(data).forEach(key => {
+        appendFormData(data[key], `${rootName}[${key}]`);
+      });
+    } else {
+      if (data !== null && data !== undefined) {
+        formData.append(rootName, data);
+      }
+    }
+  }
+
+  // Append text fields
+  Object.keys(dataToSave).forEach(key => {
+    if (key !== 'bgImage') { // exclude bgImage string
+      appendFormData(dataToSave[key], key);
+    }
+  });
+
+  // Append new image file if selected
+  if (bgFile.value) {
+    formData.append('bg_image', bgFile.value);
+  }
+  
   if (isEditing.value) {
-    adminStore.updateLayanan(form.value.id, dataToSave)
+    adminStore.updateLayanan(form.value.id, formData)
   } else {
-    adminStore.addLayanan(dataToSave)
+    adminStore.addLayanan(formData)
   }
   
   toastStore.addToast(isEditing.value ? 'Layanan berhasil diperbarui' : 'Layanan baru berhasil ditambahkan')

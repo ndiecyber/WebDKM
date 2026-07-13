@@ -335,6 +335,7 @@ import { useToastStore } from '../../stores/toast'
 import { useAdminStore } from '../../stores/admin'
 import { useDialogStore } from '../../stores/dialog'
 import RichTextEditor from '../../components/ui/RichTextEditor.vue'
+import { validateFileSize } from '@/utils/fileValidator'
 
 const toastStore = useToastStore()
 const adminStore = useAdminStore()
@@ -360,6 +361,7 @@ onUnmounted(() => {
 
 const isDragging = ref(false)
 const fileInput = ref(null)
+const selectedImageFile = ref(null)
 
 const getDefaultForm = () => ({
   id: null,
@@ -384,6 +386,8 @@ const handleDrop = (e) => {
   isDragging.value = false
   const file = e.dataTransfer?.files[0]
   if (file && file.type.startsWith('image/')) {
+    if (!validateFileSize(file)) return
+    selectedImageFile.value = file
     const reader = new FileReader()
     reader.onload = (e) => {
       form.value.image = e.target.result
@@ -397,6 +401,11 @@ const handleDrop = (e) => {
 const handleFileSelect = (e) => {
   const file = e.target.files[0]
   if (file) {
+    if (!validateFileSize(file)) {
+      e.target.value = ''
+      return
+    }
+    selectedImageFile.value = file
     const reader = new FileReader()
     reader.onload = (e) => {
       form.value.image = e.target.result
@@ -408,15 +417,20 @@ const handleFileSelect = (e) => {
 const openAddModal = () => {
   isEditing.value = false
   form.value = getDefaultForm()
+  selectedImageFile.value = null
   showModal.value = true
   document.body.style.overflow = 'hidden'
 }
 
 const openEditModal = (item) => {
   isEditing.value = true
+  selectedImageFile.value = null
   
   // Try to create a date string from day and month if it's missing (simulation purposes)
   let itemDate = item.date
+  if (itemDate && typeof itemDate === 'string' && itemDate.includes('T')) {
+    itemDate = itemDate.split('T')[0]
+  }
   if (!itemDate && item.day && item.month) {
     // This is just a mock logic to show a date since we changed from inputs
     // In a real app the backend provides YYYY-MM-DD
@@ -438,7 +452,7 @@ const closeModal = () => {
   document.body.style.overflow = ''
 }
 
-const saveKegiatan = () => {
+const saveKegiatan = async () => {
   if (!form.value.title || !form.value.category || !form.value.description) return
   
   if (form.value.date) {
@@ -447,32 +461,35 @@ const saveKegiatan = () => {
     form.value.month = d.toLocaleString('id-ID', { month: 'short' }).replace('.', '')
   }
 
-  if (isEditing.value) {
-    const index = adminStore.kegiatan.findIndex(k => k.id === form.value.id)
-    if (index !== -1) {
-      adminStore.kegiatan[index] = { ...form.value }
-      adminStore.saveKegiatan()
-    }
-    toastStore.addToast('Berita berhasil diperbarui', 'success')
-  } else {
-    const newId = adminStore.kegiatan.length > 0 ? Math.max(...adminStore.kegiatan.map(k => k.id)) + 1 : 1
-    
-    // Pick a default image if available and user didn't upload one
-    let defImg = form.value.image
-    if (!defImg && adminStore.kegiatan.length > 0) {
-      defImg = adminStore.kegiatan[0].image
-    }
-
-    adminStore.kegiatan.push({
-      ...form.value,
-      id: newId,
-      image: defImg
-    })
-    adminStore.saveKegiatan()
-    toastStore.addToast('Berita baru berhasil ditambahkan', 'success')
+  const formData = new FormData()
+  formData.append('title', form.value.title)
+  formData.append('type', form.value.type)
+  formData.append('category', form.value.category)
+  formData.append('description', form.value.description)
+  formData.append('content', form.value.content || '')
+  formData.append('author', form.value.author)
+  formData.append('date', form.value.date)
+  if (form.value.time) formData.append('time', form.value.time)
+  if (form.value.location) formData.append('location', form.value.location)
+  if (form.value.badge) formData.append('badge', form.value.badge)
+  
+  if (selectedImageFile.value) {
+    formData.append('image', selectedImageFile.value)
   }
   
-  closeModal()
+  try {
+    if (isEditing.value) {
+      await adminStore.updateKegiatan(form.value.id, formData)
+      toastStore.addToast('Berita berhasil diperbarui', 'success')
+    } else {
+      await adminStore.addKegiatan(formData)
+      toastStore.addToast('Berita baru berhasil ditambahkan', 'success')
+    }
+    
+    closeModal()
+  } catch (e) {
+    // Error is handled globally by api.js
+  }
 }
 
 async function deleteItem(item) {
@@ -484,9 +501,12 @@ async function deleteItem(item) {
   })
   
   if (confirmed) {
-    adminStore.kegiatan = adminStore.kegiatan.filter(k => k.id !== item.id)
-    adminStore.saveKegiatan()
-    toastStore.addToast('Berita berhasil dihapus', 'error')
+    try {
+      await adminStore.deleteKegiatan(item.id)
+      toastStore.addToast('Berita berhasil dihapus', 'success')
+    } catch (e) {
+      // handled globally
+    }
   }
 }
 </script>
