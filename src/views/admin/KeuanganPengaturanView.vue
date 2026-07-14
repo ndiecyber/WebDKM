@@ -254,8 +254,17 @@ const populateSettings = () => {
 
 const handleFileUpload = (e) => {
   if (e.target.files.length > 0) {
-    qrImageFile.value = e.target.files[0]
-    qrImagePreviewUrl.value = URL.createObjectURL(qrImageFile.value)
+    const file = e.target.files[0]
+    
+    // Validasi ukuran file (Max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.addToast('Ukuran gambar maksimal 5MB. Silakan pilih atau kompres gambar agar lebih kecil.', 'error')
+      e.target.value = '' // Reset input
+      return
+    }
+
+    qrImageFile.value = file
+    qrImagePreviewUrl.value = URL.createObjectURL(file)
   }
 }
 
