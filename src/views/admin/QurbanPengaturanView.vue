@@ -25,10 +25,22 @@
         <div class="flex md:flex-col gap-1 min-w-max md:min-w-0">
           <button 
             type="button"
-            class="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-3 px-4 md:px-3 py-2.5 rounded-lg transition-all text-sm text-left whitespace-nowrap md:whitespace-normal"
+            @click="activeTab = 'contact'"
+            class="flex items-center gap-3 px-4 md:px-3 py-2.5 rounded-lg transition-all text-sm text-left whitespace-nowrap md:whitespace-normal"
+            :class="activeTab === 'contact' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold w-full' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 w-full'"
           >
-            <Phone class="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <Phone class="w-4 h-4 shrink-0" :class="activeTab === 'contact' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'" />
             <span>Kontak & Layanan</span>
+          </button>
+          
+          <button 
+            type="button"
+            @click="activeTab = 'payment'"
+            class="flex items-center gap-3 px-4 md:px-3 py-2.5 rounded-lg transition-all text-sm text-left whitespace-nowrap md:whitespace-normal"
+            :class="activeTab === 'payment' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold w-full' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 w-full'"
+          >
+            <CreditCard class="w-4 h-4 shrink-0" :class="activeTab === 'payment' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'" />
+            <span>Mode Pembayaran</span>
           </button>
         </div>
       </div>
@@ -37,7 +49,7 @@
       <div class="flex-1 w-full min-w-0">
         
         <!-- Tab: Kontak & Layanan -->
-        <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
+        <section v-if="activeTab === 'contact'" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
           <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
               <Phone class="w-5 h-5 text-gray-400" />
@@ -114,6 +126,119 @@
           </div>
         </section>
 
+        <!-- Tab: Mode Pembayaran -->
+        <section v-if="activeTab === 'payment'" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
+          <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+              <CreditCard class="w-5 h-5 text-gray-400" />
+              Mode Pembayaran
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Pilih mode pembayaran yang digunakan oleh jamaah pada aplikasi Tabungan Qurban.</p>
+          </div>
+          
+          <div class="p-6 sm:p-8 space-y-6">
+            <!-- Toggle -->
+            <div class="flex flex-col sm:flex-row gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50/50 dark:bg-gray-800/30">
+              <label class="flex items-start gap-3 cursor-pointer group flex-1">
+                <input type="radio" v-model="settings.payment_mode" value="manual" class="mt-1 text-emerald-600 focus:ring-emerald-500" />
+                <div>
+                  <span class="block text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors">Manual (QRIS & Transfer BSI)</span>
+                  <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">Jamaah bayar via QRIS statis atau transfer ke rekening masjid, lalu upload bukti</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-3 cursor-pointer group flex-1">
+                <input type="radio" v-model="settings.payment_mode" value="gateway" class="mt-1 text-emerald-600 focus:ring-emerald-500" />
+                <div>
+                  <span class="block text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors">Payment Gateway (PaKasir)</span>
+                  <span class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">Pembayaran otomatis via QRIS dinamis dan Virtual Account</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Manual Config (conditional) -->
+            <div v-if="settings.payment_mode === 'manual'" class="space-y-6 pt-2 animate-fade-in">
+              
+              <!-- QRIS Config -->
+              <div class="space-y-4">
+                <h4 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <QrCode class="w-4 h-4 text-gray-400" />
+                  Konfigurasi QRIS
+                </h4>
+                <div class="space-y-3">
+                  <div class="space-y-1.5">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">QRIS String</label>
+                    <textarea 
+                      v-model="settings.manual_qris_string"
+                      rows="3"
+                      class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 transition-all text-sm shadow-sm font-mono"
+                      placeholder="00020101021126..."
+                    ></textarea>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Merchant</label>
+                      <input 
+                        v-model="settings.manual_qris_name"
+                        type="text" 
+                        class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 transition-all text-sm shadow-sm"
+                        placeholder="DKM JAMI KASSITI"
+                      />
+                    </div>
+                    <div class="space-y-1.5">
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">NMID <span class="text-gray-400 text-xs">(opsional)</span></label>
+                      <input 
+                        v-model="settings.manual_qris_nmid"
+                        type="text" 
+                        class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 transition-all text-sm shadow-sm"
+                        placeholder="ID 1023262832646"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bank Config -->
+              <div class="space-y-4">
+                <h4 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <Landmark class="w-4 h-4 text-gray-400" />
+                  Konfigurasi Rekening Bank
+                </h4>
+                <div class="space-y-3">
+                  <div class="space-y-1.5">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Bank</label>
+                    <input 
+                      v-model="settings.manual_bank_name"
+                      type="text" 
+                      class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 transition-all text-sm shadow-sm"
+                      placeholder="BSI"
+                    />
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor Rekening</label>
+                      <input 
+                        v-model="settings.manual_bank_account"
+                        type="text" 
+                        class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 transition-all text-sm shadow-sm"
+                        placeholder="7453555555"
+                      />
+                    </div>
+                    <div class="space-y-1.5">
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Atas Nama</label>
+                      <input 
+                        v-model="settings.manual_bank_holder"
+                        type="text" 
+                        class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-transparent dark:ring-1 dark:ring-white/10 rounded-lg px-3 py-2 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 transition-all text-sm shadow-sm"
+                        placeholder="DKM Masjid Jami Kassiti"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   </form>
@@ -121,7 +246,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Save, Phone } from 'lucide-vue-next'
+import { Save, Phone, CreditCard, Landmark, QrCode } from 'lucide-vue-next'
 import { useQurbanStore } from '@/stores/qurban'
 import { useAdminStore } from '@/stores/admin'
 import { useToastStore } from '@/stores/toast'
@@ -132,12 +257,21 @@ const adminStore = useAdminStore()
 const toast = useToastStore()
 
 const isSaving = ref(false)
+const activeTab = ref('contact')
 
 const settings = ref({
   whatsappType: 'global',
   selectedGlobalWaId: 1,
   customWaName: '',
-  customWaNumber: ''
+  customWaNumber: '',
+  // Mode Pembayaran
+  payment_mode: 'manual',
+  manual_qris_string: '',
+  manual_qris_name: '',
+  manual_qris_nmid: '',
+  manual_bank_name: '',
+  manual_bank_account: '',
+  manual_bank_holder: '',
 })
 
 const globalWhatsappList = computed(() => {
@@ -153,7 +287,14 @@ const fetchSettings = async () => {
         whatsappType: dbSettings.whatsappType || 'global',
         selectedGlobalWaId: dbSettings.selectedGlobalWaId || 1,
         customWaName: dbSettings.customWaName || '',
-        customWaNumber: dbSettings.customWaNumber || ''
+        customWaNumber: dbSettings.customWaNumber || '',
+        payment_mode: dbSettings.payment_mode || 'manual',
+        manual_qris_string: dbSettings.manual_qris_string || '',
+        manual_qris_name: dbSettings.manual_qris_name || '',
+        manual_qris_nmid: dbSettings.manual_qris_nmid || '',
+        manual_bank_name: dbSettings.manual_bank_name || '',
+        manual_bank_account: dbSettings.manual_bank_account || '',
+        manual_bank_holder: dbSettings.manual_bank_holder || '',
       }
     }
   } catch (err) {
@@ -173,10 +314,20 @@ onMounted(() => {
 const saveSettings = async () => {
   isSaving.value = true
   
-  // Validate custom number if chosen
+  // Validate custom number if WhatsApp custom is chosen
   if (settings.value.whatsappType === 'custom') {
     if (!settings.value.customWaName || !settings.value.customWaNumber) {
       toast.addToast('Harap lengkapi nama dan nomor WA khusus panitia.', 'error')
+      isSaving.value = false
+      return
+    }
+  }
+
+  // Validate manual config if manual mode is chosen
+  if (settings.value.payment_mode === 'manual') {
+    if (!settings.value.manual_qris_string || !settings.value.manual_qris_name || 
+        !settings.value.manual_bank_name || !settings.value.manual_bank_account || !settings.value.manual_bank_holder) {
+      toast.addToast('Harap lengkapi semua isian konfigurasi pembayaran manual.', 'error')
       isSaving.value = false
       return
     }
@@ -189,7 +340,6 @@ const saveSettings = async () => {
     const res = await api.put('/qurban/admin/settings', payload)
     if (res.data?.success) {
       toast.addToast('Pengaturan Qurban berhasil disimpan!', 'success')
-      // optionally update store
       qurbanStore.settings = settings.value
     }
   } catch (err) {
