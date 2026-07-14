@@ -22,14 +22,16 @@
         <!-- Body -->
         <div class="p-6 overflow-y-auto custom-scrollbar">
           <!-- Tabs -->
-          <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl mb-6">
+          <div v-if="!isLoading && (hasBank || hasQris)" class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl mb-6">
             <button 
+              v-if="hasBank"
               @click="activeTab = 'bank'" 
               :class="['flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300', activeTab === 'bank' ? 'bg-white dark:bg-gray-700 text-primary shadow-md' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']"
             >
               Transfer Bank
             </button>
             <button 
+              v-if="hasQris"
               @click="activeTab = 'qris'" 
               :class="['flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300', activeTab === 'qris' ? 'bg-white dark:bg-gray-700 text-primary shadow-md' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300']"
             >
@@ -37,23 +39,31 @@
             </button>
           </div>
 
+          <div v-if="isLoading" class="p-12 flex justify-center items-center">
+            <div class="w-8 h-8 border-3 border-gray-200 dark:border-gray-700 border-t-primary rounded-full animate-spin"></div>
+          </div>
+          
+          <div v-else-if="!hasBank && !hasQris" class="p-8 text-center text-gray-500 dark:text-gray-400">
+            Mode pembayaran donasi belum diatur oleh admin.
+          </div>
+
           <!-- Tab Content: Bank -->
-          <div v-if="activeTab === 'bank'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div v-else-if="activeTab === 'bank' && hasBank" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <!-- Bank 1 -->
             <div class="p-4 rounded-2xl border border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-gray-800/50 hover:border-primary/30 transition-colors group">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
-                    <img :src="bsiLogo" alt="BSI Logo" class="w-full h-full object-contain" />
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
+                    <Landmark class="w-7 h-7" />
                   </div>
                   <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white text-lg">Bank Syariah Indonesia (BSI)</h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">a.n. DKM Masjid Jami Kassiti</p>
+                    <h4 class="font-bold text-gray-900 dark:text-white text-lg">{{ settings.donation_payment_bank }}</h4>
+                    <p v-if="settings.donation_payment_name" class="text-sm text-gray-500 dark:text-gray-400">a.n. {{ settings.donation_payment_name }}</p>
                   </div>
                 </div>
                 <div class="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-xl shadow-inner border border-gray-300 dark:border-white/5">
-                  <span class="font-mono font-bold text-base sm:text-lg text-primary tracking-wider">7453 555 555</span>
-                  <button @click="copyText('7453555555')" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Salin Nomor Rekening">
+                  <span class="font-mono font-bold text-base sm:text-lg text-primary tracking-wider">{{ formatAccount(settings.donation_payment_account) }}</span>
+                  <button @click="copyText(settings.donation_payment_account)" class="p-2 text-gray-400 hover:text-primary transition-colors" title="Salin Nomor Rekening">
                     <Copy class="w-4 h-4" />
                   </button>
                 </div>
@@ -66,19 +76,19 @@
           </div>
 
           <!-- Tab Content: QRIS -->
-          <div v-else-if="activeTab === 'qris'" class="animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div v-else-if="activeTab === 'qris' && hasQris" class="animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div class="flex justify-center">
               <!-- QRIS 1 -->
               <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-3xl border border-gray-300 dark:border-white/10 text-center hover:border-primary/30 transition-colors w-full max-w-[280px]">
                 <p class="font-bold text-gray-900 dark:text-white mb-3 text-sm">QRIS Zakat, Infaq & Sedekah</p>
-                <div class="bg-white p-1 rounded-2xl shadow-lg inline-block cursor-pointer hover:scale-105 transition-transform duration-300 w-full" @click="expandedImage = qris1" title="Perbesar Gambar">
-                  <img :src="qris1" alt="QRIS DKMJ" class="w-full h-auto object-contain rounded-xl" />
+                <div class="bg-white p-1 rounded-2xl shadow-lg inline-block cursor-pointer hover:scale-105 transition-transform duration-300 w-full" @click="expandedImage = qrisUrl" title="Perbesar Gambar">
+                  <img :src="qrisUrl" alt="QRIS DKM" class="w-full h-auto object-contain rounded-xl" />
                 </div>
                 <div class="flex items-center justify-center gap-4 mt-4">
-                  <button @click="expandedImage = qris1" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
+                  <button @click="expandedImage = qrisUrl" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
                     <Maximize2 class="w-3 h-3" /> Perbesar
                   </button>
-                  <a :href="qris1" download="QRIS_Operasional_DKMJ.webp" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
+                  <a :href="qrisUrl" download="QRIS_Donasi_DKM.webp" target="_blank" class="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary-light transition-colors">
                     <Download class="w-3 h-3" /> Simpan
                   </a>
                 </div>
@@ -109,12 +119,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { X, Heart, Copy, Download, Info, Maximize2 } from 'lucide-vue-next'
-import qris1 from '@/assets/images/QRIS DKMJ.webp'
-import qris2 from '@/assets/images/QRIS DKMJ2.webp'
-import bsiLogo from '@/assets/images/bsi-logo.webp'
+import { ref, onMounted, computed, watch } from 'vue'
+import { X, Heart, Copy, Download, Info, Maximize2, Landmark } from 'lucide-vue-next'
 import { useToastStore } from '@/stores/toast'
+import { useKeuanganStore } from '@/stores/keuangan'
+import api from '@/utils/api'
 
 const props = defineProps({
   isOpen: Boolean
@@ -124,6 +133,45 @@ const emit = defineEmits(['close'])
 
 const activeTab = ref('bank')
 const expandedImage = ref(null)
+const isLoading = ref(true)
+
+const keuanganStore = useKeuanganStore()
+const baseUrl = api.defaults.baseURL.replace(/\/v1\/?$/, '').replace(/\/api\/?$/, '')
+
+const settings = computed(() => keuanganStore.settings || {})
+const hasBank = computed(() => !!(settings.value.donation_payment_bank && settings.value.donation_payment_account))
+const hasQris = computed(() => !!settings.value.donation_qris_image_path)
+const qrisUrl = computed(() => hasQris.value ? `${baseUrl}/storage/${settings.value.donation_qris_image_path}` : null)
+
+// Determine which tab to show by default when modal opens
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    if (hasBank.value) activeTab.value = 'bank'
+    else if (hasQris.value) activeTab.value = 'qris'
+  }
+})
+
+onMounted(async () => {
+  isLoading.value = true
+  try {
+    await keuanganStore.fetchPublicSettings()
+    if (hasBank.value) activeTab.value = 'bank'
+    else if (hasQris.value) activeTab.value = 'qris'
+  } catch (e) {
+    console.error(e)
+  } finally {
+    isLoading.value = false
+  }
+})
+
+const formatAccount = (acc) => {
+  if (!acc) return ''
+  const str = String(acc).replace(/\D/g, '')
+  if (str.length === 10) {
+    return `${str.slice(0,4)} ${str.slice(4,7)} ${str.slice(7,10)}`
+  }
+  return acc
+}
 
 const copyText = (text) => {
   navigator.clipboard.writeText(text)

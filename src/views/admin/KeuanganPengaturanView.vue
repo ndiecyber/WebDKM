@@ -26,10 +26,30 @@
         <div class="flex md:flex-col gap-1 min-w-max md:min-w-0">
           <button 
             type="button"
-            class="flex items-center gap-3 px-4 md:px-3 py-2.5 rounded-lg transition-all text-sm text-left whitespace-nowrap md:whitespace-normal bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold"
+            @click="activeTab = 'master_data'"
+            :class="[
+              'flex items-center gap-3 px-4 md:px-3 py-2.5 rounded-lg transition-all text-sm text-left whitespace-nowrap md:whitespace-normal font-semibold',
+              activeTab === 'master_data' 
+                ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' 
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+            ]"
           >
-            <Database class="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <Database class="w-4 h-4 shrink-0" :class="activeTab === 'master_data' ? 'text-emerald-600 dark:text-emerald-400' : ''" />
             <span>Master Data</span>
+          </button>
+
+          <button 
+            type="button"
+            @click="activeTab = 'donasi_publik'"
+            :class="[
+              'flex items-center gap-3 px-4 md:px-3 py-2.5 rounded-lg transition-all text-sm text-left whitespace-nowrap md:whitespace-normal font-semibold',
+              activeTab === 'donasi_publik' 
+                ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' 
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+            ]"
+          >
+            <CreditCard class="w-4 h-4 shrink-0" :class="activeTab === 'donasi_publik' ? 'text-emerald-600 dark:text-emerald-400' : ''" />
+            <span>Pembayaran Donasi</span>
           </button>
         </div>
       </div>
@@ -38,7 +58,7 @@
       <div class="flex-1 w-full min-w-0">
         
         <!-- Tab: Master Data -->
-        <section class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
+        <section v-if="activeTab === 'master_data'" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
           <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5 flex justify-between items-center">
             <div>
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
@@ -112,6 +132,64 @@
           </div>
         </section>
 
+        <!-- Tab: Mode Pembayaran Donasi -->
+        <section v-else-if="activeTab === 'donasi_publik'" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
+          <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5 flex justify-between items-center">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                <CreditCard class="w-5 h-5 text-gray-400" />
+                Pembayaran Donasi
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Konfigurasi rekening tujuan transfer dan QRIS yang akan ditampilkan pada Halaman Donasi Publik.</p>
+            </div>
+          </div>
+          
+          <div v-if="isLoading" class="p-12 flex justify-center items-center">
+            <div class="w-8 h-8 border-3 border-gray-200 dark:border-gray-700 border-t-secondary rounded-full animate-spin"></div>
+          </div>
+
+          <div v-else class="p-6 sm:p-8 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Bank / Dompet Digital</label>
+                  <input v-model="donationSettings.donation_payment_bank" type="text" placeholder="Cth: Bank Syariah Indonesia (BSI), BCA, OVO" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor Rekening</label>
+                  <input v-model="donationSettings.donation_payment_account" type="text" placeholder="Cth: 1234567890" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Atas Nama</label>
+                  <input v-model="donationSettings.donation_payment_name" type="text" placeholder="Cth: DKM Masjid Jami Kassiti" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" />
+                </div>
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gambar QRIS (Opsional)</label>
+                <div class="relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl transition-all overflow-hidden group" :class="qrImagePreviewUrl ? 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800' : 'border-gray-300 dark:border-gray-700 hover:border-secondary hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer'">
+                  
+                  <template v-if="qrImagePreviewUrl">
+                    <img :src="qrImagePreviewUrl" class="w-full h-full object-contain p-2" alt="QRIS Preview" />
+                    <button type="button" @click="removeQrisImage" class="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600 z-10">
+                      <X class="w-4 h-4" />
+                    </button>
+                  </template>
+                  
+                  <template v-else>
+                    <input type="file" @change="handleFileUpload" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                    <div class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 pointer-events-none p-4 text-center">
+                      <UploadCloud class="w-8 h-8 mb-2" />
+                      <p class="text-sm font-medium"><span class="text-secondary">Klik untuk unggah</span> atau seret gambar</p>
+                      <p class="text-xs mt-1">SVG, PNG, JPG atau WEBP</p>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   </div>
@@ -119,31 +197,72 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Database, Tags, Save, Plus, Trash2, ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next'
+import { Database, Tags, Save, Plus, Trash2, ArrowDownLeft, ArrowUpRight, CreditCard, UploadCloud, X } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
 
 const keuanganStore = useKeuanganStore()
 const toast = useToastStore()
+import api from '@/utils/api'
+const baseUrl = api.defaults.baseURL.replace(/\/v1\/?$/, '').replace(/\/api\/?$/, '')
 
+const activeTab = ref('master_data')
 const isSaving = ref(false)
 const isLoading = ref(true)
 
+// Master Data State
 const kategoriPemasukan = ref([])
 const kategoriPengeluaran = ref([])
 const deletedCategories = ref([])
 
+// Donation Settings State
+const donationSettings = ref({
+  donation_payment_bank: '',
+  donation_payment_account: '',
+  donation_payment_name: '',
+})
+const qrImageFile = ref(null)
+const qrImagePreviewUrl = ref(null)
+
 onMounted(async () => {
   isLoading.value = true
   try {
-    await keuanganStore.fetchCategories()
+    await Promise.all([
+      keuanganStore.fetchCategories(),
+      keuanganStore.fetchSettings()
+    ])
     populateCategories()
+    populateSettings()
   } catch (err) {
-    toast.addToast('Gagal memuat kategori', 'error')
+    toast.addToast('Gagal memuat pengaturan', 'error')
   } finally {
     isLoading.value = false
   }
 })
+
+const populateSettings = () => {
+  const s = keuanganStore.settings || {}
+  donationSettings.value.donation_payment_bank = s.donation_payment_bank || ''
+  donationSettings.value.donation_payment_account = s.donation_payment_account || ''
+  donationSettings.value.donation_payment_name = s.donation_payment_name || ''
+  if (s.donation_qris_image_path) {
+    qrImagePreviewUrl.value = `${baseUrl}/storage/${s.donation_qris_image_path}`
+  } else {
+    qrImagePreviewUrl.value = null
+  }
+}
+
+const handleFileUpload = (e) => {
+  if (e.target.files.length > 0) {
+    qrImageFile.value = e.target.files[0]
+    qrImagePreviewUrl.value = URL.createObjectURL(qrImageFile.value)
+  }
+}
+
+const removeQrisImage = () => {
+  qrImageFile.value = null
+  qrImagePreviewUrl.value = null
+}
 
 const populateCategories = () => {
   kategoriPemasukan.value = keuanganStore.categories
@@ -178,35 +297,55 @@ const saveSettings = async () => {
   if (isSaving.value) return
   isSaving.value = true
   try {
-    const deletePromises = []
-    
-    // Handle Deletions
-    for (const id of deletedCategories.value) {
-      deletePromises.push(keuanganStore.deleteCategory(id))
+    if (activeTab.value === 'master_data') {
+      const deletePromises = []
+      
+      // Handle Deletions
+      for (const id of deletedCategories.value) {
+        deletePromises.push(keuanganStore.deleteCategory(id))
+      }
+      if (deletePromises.length > 0) {
+        await Promise.all(deletePromises)
+      }
+      
+      // Handle Additions and Updates via Batch
+      const allCats = [...kategoriPemasukan.value, ...kategoriPengeluaran.value]
+        .filter(cat => cat.name.trim())
+        .map(cat => ({
+          id: cat.isNew ? null : cat.id,
+          nama: cat.name,
+          tipe: cat.tipe
+        }))
+      
+      if (allCats.length > 0) {
+        await keuanganStore.batchUpdateCategories(allCats)
+      } else {
+        await keuanganStore.fetchCategories()
+      }
+      
+      populateCategories()
+      deletedCategories.value = [] // Reset deleted list
+      
+      toast.addToast('Kategori berhasil disimpan', 'success')
+      
+    } else if (activeTab.value === 'donasi_publik') {
+      const formData = new FormData()
+      formData.append('settings[donation_payment_bank]', donationSettings.value.donation_payment_bank)
+      formData.append('settings[donation_payment_account]', donationSettings.value.donation_payment_account)
+      formData.append('settings[donation_payment_name]', donationSettings.value.donation_payment_name)
+      
+      if (!qrImagePreviewUrl.value && !qrImageFile.value) {
+        formData.append('settings[donation_qris_image_path]', '')
+      }
+      
+      if (qrImageFile.value) {
+        formData.append('qris_image', qrImageFile.value)
+      }
+      
+      await keuanganStore.updateSettings(formData)
+      populateSettings()
+      toast.addToast('Mode Pembayaran berhasil disimpan', 'success')
     }
-    if (deletePromises.length > 0) {
-      await Promise.all(deletePromises)
-    }
-    
-    // Handle Additions and Updates via Batch
-    const allCats = [...kategoriPemasukan.value, ...kategoriPengeluaran.value]
-      .filter(cat => cat.name.trim())
-      .map(cat => ({
-        id: cat.isNew ? null : cat.id,
-        nama: cat.name,
-        tipe: cat.tipe
-      }))
-    
-    if (allCats.length > 0) {
-      await keuanganStore.batchUpdateCategories(allCats)
-    } else {
-      await keuanganStore.fetchCategories()
-    }
-    
-    populateCategories()
-    deletedCategories.value = [] // Reset deleted list
-    
-    toast.addToast('Pengaturan berhasil disimpan', 'success')
   } catch (err) {
     toast.addToast('Terjadi kesalahan saat menyimpan', 'error')
   } finally {
