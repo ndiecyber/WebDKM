@@ -242,7 +242,7 @@
               <input type="file" @change="handleFileUpload" accept="image/*" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" v-if="rekForm.qrImage">QR Code/Logo sudah tersimpan. Unggah yang baru untuk mengganti.</p>
             </div>
-            <div class="sm:col-span-2 flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+            <div v-if="false" class="sm:col-span-2 flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Visibilitas Publik</label>
                 <p class="text-xs text-gray-500 dark:text-gray-400">Tampilkan rekening ini di halaman donasi publik</p>
@@ -279,7 +279,7 @@
           <div class="flex space-x-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
             <button @click="detailTab = 'info'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'info' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Info Umum</button>
             <button @click="detailTab = 'aktivitas'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'aktivitas' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Aktivitas</button>
-            <button @click="detailTab = 'program'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'program' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Saldo Program</button>
+            <button @click="detailTab = 'program'" :class="['flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-colors', detailTab === 'program' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200']">Alokasi Saldo</button>
           </div>
         </div>
         

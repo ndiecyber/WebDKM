@@ -82,20 +82,20 @@
           <p class="text-white/60 text-sm leading-relaxed mb-4">
             Salurkan donasi terbaik Anda untuk kemakmuran masjid dan kesejahteraan umat.
           </p>
-          <div class="bg-white/5 border border-white/10 rounded-xl p-4 mt-2 hover:border-secondary/30 hover:bg-white/10 transition-all duration-300 group">
+          <div v-if="hasBank" class="bg-white/5 border border-white/10 rounded-xl p-4 mt-2 hover:border-secondary/30 hover:bg-white/10 transition-all duration-300 group">
             <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                <Heart class="w-5 h-5 text-secondary group-hover:scale-110 transition-transform" />
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500/20 transition-colors">
+                <Landmark class="w-5 h-5 group-hover:scale-110 transition-transform" />
               </div>
               <div>
-                <p class="text-white/90 text-sm font-medium">Bank Syariah Indonesia</p>
-                <p class="text-white/50 text-xs">a.n DKM Masjid Jami Kassiti</p>
+                <p class="text-white/90 text-sm font-medium">{{ keuanganSettings.donation_payment_bank }}</p>
+                <p v-if="keuanganSettings.donation_payment_name" class="text-white/50 text-xs">a.n {{ keuanganSettings.donation_payment_name }}</p>
               </div>
             </div>
             <div class="flex items-center justify-between mt-3 bg-dark/50 rounded-lg p-3 border border-white/5">
-              <span class="text-secondary font-mono font-bold tracking-widest text-sm sm:text-base">{{ bankAccount }}</span>
+              <span class="text-secondary font-mono font-bold tracking-widest text-sm sm:text-base">{{ formatAccount(keuanganSettings.donation_payment_account) }}</span>
               <button 
-                @click="copyAccount"
+                @click="copyAccount(keuanganSettings.donation_payment_account)"
                 class="p-2 rounded-md hover:bg-white/10 transition-all active:scale-90 text-white/70 hover:text-white"
                 :title="isCopied ? 'Tersalin!' : 'Salin Rekening'"
               >
@@ -103,6 +103,10 @@
                 <Copy v-else class="w-4 h-4" />
               </button>
             </div>
+          </div>
+          <div v-else-if="!hasBank && hasQris" class="bg-white/5 border border-white/10 rounded-xl p-4 mt-2 text-center">
+            <p class="text-white/80 text-sm mb-2">QRIS Tersedia</p>
+            <p class="text-white/50 text-xs">Silakan gunakan tombol donasi di atas untuk scan QRIS.</p>
           </div>
         </div>
 
@@ -173,14 +177,20 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Twitter, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck, GraduationCap, HandCoins } from 'lucide-vue-next'
+import { MapPin, Phone, Mail, Clock, Heart, Facebook, Instagram, Youtube, Twitter, Copy, CheckCircle2, Map, Users, BookOpen, HeartHandshake, Mic, Volume2, ArrowRight, Car, ShieldCheck, GraduationCap, HandCoins, Landmark } from 'lucide-vue-next'
 import logoImg from '@/assets/images/logo-kustom2.webp'
 import sholatSilhouetteImg from '@/assets/images/sholat-silhouette.webp'
 import { createSilhouetteMask } from '@/utils/image'
 import { scrollToSection } from '@/utils/scroll'
 import { useAdminStore } from '@/stores/admin'
+import { useKeuanganStore } from '@/stores/keuangan'
 
 const adminStore = useAdminStore()
+const keuanganStore = useKeuanganStore()
+const keuanganSettings = computed(() => keuanganStore.settings || {})
+const hasBank = computed(() => !!(keuanganSettings.value.donation_payment_bank && keuanganSettings.value.donation_payment_account))
+const hasQris = computed(() => !!keuanganSettings.value.donation_qris_image_path)
+
 const currentYear = computed(() => new Date().getFullYear())
 
 const iconMap = {
@@ -195,14 +205,26 @@ const processedSholatIcon = ref('')
 
 onMounted(async () => {
   processedSholatIcon.value = await createSilhouetteMask(sholatSilhouetteImg)
+  
+  if (Object.keys(keuanganStore.settings).length === 0) {
+    keuanganStore.fetchPublicSettings()
+  }
 })
+
+const formatAccount = (acc) => {
+  if (!acc) return ''
+  const str = String(acc).replace(/\D/g, '')
+  if (str.length === 10) {
+    return `${str.slice(0,4)} ${str.slice(4,7)} ${str.slice(7,10)}`
+  }
+  return acc
+}
 
 // Copy Bank Account Logic
 const isCopied = ref(false)
-const bankAccount = '7453 555 555'
 
-const copyAccount = () => {
-  navigator.clipboard.writeText('7453555555')
+const copyAccount = (accountNumber) => {
+  navigator.clipboard.writeText(accountNumber)
   isCopied.value = true
   setTimeout(() => {
     isCopied.value = false

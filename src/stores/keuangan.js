@@ -20,6 +20,9 @@ export const useKeuanganStore = defineStore('keuangan', {
     // Dashboard
     dashboardData: {},
     chartData: { categories: [], pemasukan: [], pengeluaran: [] },
+    
+    // Settings
+    settings: {},
 
     // Loading states
     loading: {
@@ -29,6 +32,7 @@ export const useKeuanganStore = defineStore('keuangan', {
       categories: false,
       dashboard: false,
       chart: false,
+      settings: false,
     },
 
     // Pagination
@@ -344,6 +348,50 @@ export const useKeuanganStore = defineStore('keuangan', {
 
     async forceDeleteTrashed(type, id) {
       await api.delete(`/keuangan/${type}/${id}/force`)
+    },
+    
+    // ======================================================================
+    // Settings
+    // ======================================================================
+
+    async fetchSettings() {
+      this.loading.settings = true
+      try {
+        const res = await api.get('/keuangan/settings')
+        this.settings = res.data?.data ?? res.data ?? {}
+        return this.settings
+      } catch (err) {
+        console.error('fetchSettings error:', err)
+        throw err
+      } finally {
+        this.loading.settings = false
+      }
+    },
+
+    async fetchPublicSettings() {
+      // Don't set loading state to avoid interfering with admin views
+      try {
+        const res = await api.get('/keuangan/public/settings')
+        this.settings = { ...this.settings, ...(res.data?.data ?? res.data ?? {}) }
+        return this.settings
+      } catch (err) {
+        console.error('fetchPublicSettings error:', err)
+        throw err
+      }
+    },
+
+    async updateSettings(formData) {
+      this.loading.settings = true
+      try {
+        const res = await api.post('/keuangan/settings', formData)
+        this.settings = res.data?.data ?? res.data ?? {}
+        return this.settings
+      } catch (err) {
+        console.error('updateSettings error:', err)
+        throw err
+      } finally {
+        this.loading.settings = false
+      }
     },
   }
 })
