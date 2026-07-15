@@ -238,6 +238,45 @@ export const formatCurrency = (val) => {
   return Math.abs(val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
 
+export const formatDateId = (dateString) => {
+  if (!dateString) return ''
+  try {
+    const parts = dateString.split('-')
+    if (parts.length !== 3) return dateString
+    const [year, month, day] = parts
+    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+    return `${parseInt(day, 10)} ${months[parseInt(month, 10) - 1]} ${year}`
+  } catch (e) {
+    return dateString
+  }
+}
+
+export const terbilang = (angka) => {
+  if (angka === undefined || angka === null || isNaN(angka)) return '-'
+  const isNegative = angka < 0
+  angka = Math.abs(angka)
+  if (angka === 0) return 'Nol Rupiah'
+  
+  const huruf = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas']
+  
+  const bagi = (num) => {
+    if (num < 12) return huruf[num]
+    if (num < 20) return huruf[num - 10] + ' Belas'
+    if (num < 100) return huruf[Math.floor(num / 10)] + ' Puluh ' + huruf[num % 10]
+    if (num < 200) return 'Seratus ' + bagi(num - 100)
+    if (num < 1000) return huruf[Math.floor(num / 100)] + ' Ratus ' + bagi(num % 100)
+    if (num < 2000) return 'Seribu ' + bagi(num - 1000)
+    if (num < 1000000) return bagi(Math.floor(num / 1000)) + ' Ribu ' + bagi(num % 1000)
+    if (num < 1000000000) return bagi(Math.floor(num / 1000000)) + ' Juta ' + bagi(num % 1000000)
+    if (num < 1000000000000) return bagi(Math.floor(num / 1000000000)) + ' Miliar ' + bagi(num % 1000000000)
+    if (num < 1000000000000000) return bagi(Math.floor(num / 1000000000000)) + ' Triliun ' + bagi(num % 1000000000000)
+    return ''
+  }
+  
+  let hasil = bagi(angka).trim().replace(/\s+/g, ' ')
+  return (isNegative ? 'Minus ' : '') + hasil + ' Rupiah'
+}
+
 /**
  * Extract paginated data from Laravel's paginated response.
  * Works with both ApiResponse wrapper and raw paginate() output.

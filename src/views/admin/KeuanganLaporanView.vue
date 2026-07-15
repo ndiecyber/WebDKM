@@ -23,14 +23,14 @@
         
         <!-- Preview Container -->
         <div class="flex-1 overflow-auto custom-scrollbar-y p-4 sm:p-8 bg-gray-100/50 dark:bg-[#0a0a0a]">
-          <div id="report-paper" class="flex flex-col items-center gap-8 pb-8 min-w-max">
+          <div id="report-paper" class="flex flex-col items-center gap-8 pb-8 w-full mx-auto">
             
             <div v-if="isLoadingReport" class="h-full w-full max-w-[794px] min-h-[800px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col items-center justify-center text-gray-500 space-y-4">
               <Loader2 class="w-12 h-12 animate-spin text-secondary" />
               <p class="font-medium text-sm">Menyusun Laporan...</p>
             </div>
             
-            <ReportKegiatanTemplate v-else-if="processedReport" :report="processedReport" :showQR="showQR" :customQR="customQRUrl" />
+            <ReportKegiatanTemplate v-else-if="processedReport" :report="processedReport" :showQR="showQR" :customQR="customQRUrl" :isPrintMode="true" />
             
             <div v-else class="h-full w-full max-w-[794px] min-h-[800px] bg-white/50 dark:bg-gray-900/50 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-2xl flex flex-col items-center justify-center text-gray-400 opacity-80 space-y-4">
               <FileText class="w-16 h-16" />
@@ -81,14 +81,16 @@
               
               <!-- Override Ketua -->
               <div>
-                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Ketua Panitia</label>
-                <input v-model="overrideKetua" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" />
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Penanda Tangan (Kiri)</label>
+                <input v-model="overrideTtdKiriTitle" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all mb-1" placeholder="Contoh: Ketua Panitia" />
+                <input v-model="overrideKetua" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" placeholder="Nama Ketua" />
               </div>
 
               <!-- Override Bendahara -->
               <div>
-                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Bendahara Panitia</label>
-                <input v-model="overrideBendahara" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" />
+                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Penanda Tangan (Kanan)</label>
+                <input v-model="overrideTtdKananTitle" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all mb-1" placeholder="Contoh: Bendahara" />
+                <input v-model="overrideBendahara" type="text" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary outline-none transition-all" placeholder="Nama Bendahara" />
               </div>
 
               <!-- Custom Notes -->
@@ -162,6 +164,7 @@ import { useDialogStore } from '@/stores/dialog'
 import { useToastStore } from '@/stores/toast'
 import { validateFileSize } from '@/utils/fileValidator'
 import api from '@/utils/api'
+import { extractPaginatedData, mapTransactionFromApi, terbilang, formatDateId } from '@/utils/keuangan-mapper'
 
 const keuanganStore = useKeuanganStore()
 const dialog = useDialogStore()
@@ -180,6 +183,8 @@ const overrideKetua = ref('')
 const overrideBendahara = ref('')
 const customNote = ref('')
 const overrideDate = ref('')
+const overrideTtdKiriTitle = ref('')
+const overrideTtdKananTitle = ref('')
 const showQR = ref(true)
 const customQRUrl = ref(null)
 
@@ -210,10 +215,11 @@ watch(selectedReportId, async (newVal) => {
       } 
     })
     
-    const txs = res.data.data.data // Access paginated data items
+    const rawTxs = extractPaginatedData(res).items
+    const txs = rawTxs.map(mapTransactionFromApi)
     
-    const pemasukan = txs.filter(t => t.tipe === 'in').map((t, idx) => ({ no: idx+1, tanggal: t.tanggal, uraian: t.deskripsi, jumlah: t.nominal }))
-    const pengeluaran = txs.filter(t => t.tipe === 'out').map((t, idx) => ({ no: idx+1, tanggal: t.tanggal, uraian: t.deskripsi, jumlah: t.nominal }))
+    const pemasukan = txs.filter(t => t.type === 'in').map((t, idx) => ({ no: idx+1, tanggal: t.date, uraian: t.description || t.name, jumlah: t.amount }))
+    const pengeluaran = txs.filter(t => t.type === 'out').map((t, idx) => ({ no: idx+1, tanggal: t.date, uraian: t.description || t.name, jumlah: t.amount }))
     
     const totalPemasukan = pemasukan.reduce((sum, item) => sum + item.jumlah, 0)
     const totalPengeluaran = pengeluaran.reduce((sum, item) => sum + item.jumlah, 0)
@@ -222,25 +228,28 @@ watch(selectedReportId, async (newVal) => {
       id: `prog-${program.id}`,
       title: `${program.name.toUpperCase()}`,
       year: program.startDate ? program.startDate.substring(0, 4) : new Date().getFullYear().toString(),
-      subtitle: 'DKM MASJID',
-      date: `Periode: ${program.startDate} s.d ${program.endDate || 'Sekarang'}`,
+      subtitle: program.description || 'MASJID JAMI KASSITI',
+      date: program.endDate ? `${formatDateId(program.startDate)} - ${formatDateId(program.endDate)}` : `${formatDateId(program.startDate)}`,
       pemasukan,
       pengeluaran,
       totalPemasukan,
       totalPengeluaran,
       sisaSaldo: totalPemasukan - totalPengeluaran,
-      terbilang: '-', 
-      keterangan: program.description || '',
+      terbilang: terbilang(totalPemasukan - totalPengeluaran), 
+      keterangan: '',
       ketua: 'Ketua Panitia',
       bendahara: 'Bendahara Panitia',
-      ttdKiriTitle: 'Ketua Panitia'
+      ttdKiriTitle: 'Ketua Panitia',
+      ttdKananTitle: 'Bendahara Panitia'
     }
     
     // Auto-fill overrides
     overrideKetua.value = dynamicReportTemplate.value.ketua
     overrideBendahara.value = dynamicReportTemplate.value.bendahara
+    overrideTtdKiriTitle.value = dynamicReportTemplate.value.ttdKiriTitle
+    overrideTtdKananTitle.value = dynamicReportTemplate.value.ttdKananTitle
     customNote.value = dynamicReportTemplate.value.keterangan
-    overrideDate.value = dynamicReportTemplate.value.date
+    overrideDate.value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
     showQR.value = true
     
   } catch (err) {
@@ -257,8 +266,10 @@ const processedReport = computed(() => {
     ...dynamicReportTemplate.value,
     ketua: overrideKetua.value || dynamicReportTemplate.value.ketua,
     bendahara: overrideBendahara.value || dynamicReportTemplate.value.bendahara,
+    ttdKiriTitle: overrideTtdKiriTitle.value || dynamicReportTemplate.value.ttdKiriTitle,
+    ttdKananTitle: overrideTtdKananTitle.value || dynamicReportTemplate.value.ttdKananTitle,
     keterangan: customNote.value !== '' ? customNote.value : dynamicReportTemplate.value.keterangan,
-    date: overrideDate.value || dynamicReportTemplate.value.date
+    printDate: overrideDate.value
   }
 })
 

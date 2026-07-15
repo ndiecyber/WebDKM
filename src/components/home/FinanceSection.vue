@@ -516,6 +516,7 @@ import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import SpecialReportModal from '@/components/ui/SpecialReportModal.vue'
 import { useAdminStore } from '@/stores/admin'
 import { useKeuanganStore } from '@/stores/keuangan'
+import { formatDateId } from '@/utils/keuangan-mapper'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -715,17 +716,23 @@ const monthlyReportObj = computed(() => {
   const totalPengeluaranNum = parseNumber(monthData.pengeluaranFull)
   const saldoAkhirNum = parseNumber(monthData.saldoAkhirFull)
 
-  // Pemasukan: masukkan Saldo Awal sebagai item pertama
-  const pemasukanList = [
-    {
-      no: 1,
-      tanggal: `01 ${monthName.substring(0, 3)} ${year}`,
+  // Pemasukan: masukkan Saldo Awal jika tidak nol
+  const monthNamesFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+  const monthIdx = monthNamesFull.indexOf(monthName) + 1
+  const monthStr = monthIdx.toString().padStart(2, '0')
+  
+  const pemasukanList = []
+  let inIdx = 1
+  
+  if (saldoAwalNum !== 0) {
+    pemasukanList.push({
+      no: inIdx++,
+      tanggal: `${year}-${monthStr}-01`,
       uraian: 'Saldo Awal Kas & Bank',
       jumlah: saldoAwalNum
-    }
-  ]
+    })
+  }
 
-  let inIdx = 2
   if (monthData.transactions) {
     monthData.transactions
       .filter(t => t.type === 'in')
@@ -761,7 +768,7 @@ const monthlyReportObj = computed(() => {
     id: `finance-${monthName.toLowerCase()}-${year}`,
     title: `Kas & Bank Bulanan (${monthName} ${year})`,
     subtitle: 'MASJID JAMI KASSITI',
-    date: `Periode: 01 ${monthName} ${year} - ${getLastDayOfMonth(monthName)} ${monthName} ${year}`,
+    date: `01 ${monthName} ${year} - ${getLastDayOfMonth(monthName)} ${monthName} ${year}`,
     pemasukan: pemasukanList,
     pengeluaran: pengeluaranList,
     totalPemasukan: saldoAwalNum + totalPemasukanNum,
@@ -863,13 +870,13 @@ const loadPublicPrograms = async () => {
         year: p.startDate ? p.startDate.substring(0,4) : (p.createdAt ? p.createdAt.substring(0,4) : ''),
         icon: randomIcon,
         subtitle: p.description || 'Kegiatan DKM',
-        date: p.startDate || 'Sepanjang Waktu',
+        date: p.startDate ? (p.endDate ? `${formatDateId(p.startDate)} - ${formatDateId(p.endDate)}` : `${formatDateId(p.startDate)}`) : 'Sepanjang Waktu',
         pemasukan: pemasukanData,
         pengeluaran: pengeluaranData,
         totalPemasukan: p.pemasukan || 0,
         totalPengeluaran: p.pengeluaran || 0,
         sisaSaldo: p.sisaSaldo || 0,
-        terbilang: 'Lihat Detail',
+        terbilang: (p.sisaSaldo || 0) < 0 ? 'Minus ' + angkaKeTeks(Math.abs(p.sisaSaldo || 0)) + ' Rupiah' : angkaKeTeks(p.sisaSaldo || 0) + ' Rupiah',
       };
     });
   } catch (err) {
