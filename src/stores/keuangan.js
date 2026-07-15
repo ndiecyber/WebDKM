@@ -105,6 +105,18 @@ export const useKeuanganStore = defineStore('keuangan', {
       }
     },
 
+    async fetchPublicPrograms(params = {}) {
+      try {
+        const res = await api.get('/keuangan/public/programs', { params })
+        // Return raw data or map it if it's the same structure
+        const items = res.data?.data ?? res.data ?? []
+        return items.map(mapProgramFromApi)
+      } catch (err) {
+        console.error('fetchPublicPrograms error:', err)
+        return []
+      }
+    },
+
     async createProgram(data) {
       const res = await api.post('/keuangan/programs', mapProgramToApi(data))
       const created = res.data?.data ?? res.data

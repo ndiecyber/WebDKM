@@ -157,6 +157,7 @@ export const mapProgramFromApi = (data) => ({
   jumlahTransaksi: data.jumlah_transaksi || 0,
   createdAt: data.created_at,
   updatedAt: data.updated_at,
+  transactions: (data.transactions || []).map(mapTransactionFromApi),
 })
 
 export const mapProgramToApi = (data) => ({

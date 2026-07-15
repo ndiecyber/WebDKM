@@ -51,6 +51,20 @@
             <CreditCard class="w-4 h-4 shrink-0" :class="activeTab === 'donasi_publik' ? 'text-emerald-600 dark:text-emerald-400' : ''" />
             <span>Pembayaran Donasi</span>
           </button>
+
+          <button 
+            type="button"
+            @click="activeTab = 'tampilan_publik'"
+            :class="[
+              'flex items-center gap-3 px-4 md:px-3 py-2.5 rounded-lg transition-all text-sm text-left whitespace-nowrap md:whitespace-normal font-semibold',
+              activeTab === 'tampilan_publik' 
+                ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' 
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+            ]"
+          >
+            <MonitorPlay class="w-4 h-4 shrink-0" :class="activeTab === 'tampilan_publik' ? 'text-emerald-600 dark:text-emerald-400' : ''" />
+            <span>Tampilan Publik</span>
+          </button>
         </div>
       </div>
 
@@ -190,6 +204,70 @@
           </div>
         </section>
 
+        <!-- Tab: Tampilan Publik -->
+        <section v-else-if="activeTab === 'tampilan_publik'" class="bg-white dark:bg-gray-900 ring-1 ring-gray-300 dark:ring-white/10 rounded-xl shadow-md animate-fade-in">
+          <div class="p-6 sm:p-8 border-b border-gray-300 dark:border-white/5 flex justify-between items-center">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                <MonitorPlay class="w-5 h-5 text-gray-400" />
+                Tampilan Publik
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Atur program/kegiatan yang akan ditampilkan di Landing Page publik.</p>
+            </div>
+          </div>
+          
+          <div v-if="isLoading" class="p-12 flex justify-center items-center">
+            <div class="w-8 h-8 border-3 border-gray-200 dark:border-gray-700 border-t-secondary rounded-full animate-spin"></div>
+          </div>
+
+          <div v-else class="p-6 sm:p-8 space-y-6">
+            <div class="max-w-2xl space-y-6">
+              
+              <!-- Mode Tampilan -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Mode Tampilan Program</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <!-- Option: Active -->
+                  <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-gray-900 p-4 shadow-sm focus:outline-none transition-colors"
+                         :class="publicSettings.landing_program_mode === 'active' ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-gray-300 dark:border-gray-700'">
+                    <input type="radio" v-model="publicSettings.landing_program_mode" value="active" class="sr-only" />
+                    <span class="flex flex-1">
+                      <span class="flex flex-col">
+                        <span class="block text-sm font-medium text-gray-900 dark:text-white">Program Aktif Saja</span>
+                        <span class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">Hanya tampilkan program yang sedang berjalan.</span>
+                      </span>
+                    </span>
+                    <CheckCircle2 v-if="publicSettings.landing_program_mode === 'active'" class="h-5 w-5 text-emerald-600" />
+                  </label>
+
+                  <!-- Option: Latest -->
+                  <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-gray-900 p-4 shadow-sm focus:outline-none transition-colors"
+                         :class="publicSettings.landing_program_mode === 'latest' ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-gray-300 dark:border-gray-700'">
+                    <input type="radio" v-model="publicSettings.landing_program_mode" value="latest" class="sr-only" />
+                    <span class="flex flex-1">
+                      <span class="flex flex-col">
+                        <span class="block text-sm font-medium text-gray-900 dark:text-white">Program Terbaru</span>
+                        <span class="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400">Tampilkan program terbaru terlepas dari statusnya.</span>
+                      </span>
+                    </span>
+                    <CheckCircle2 v-if="publicSettings.landing_program_mode === 'latest'" class="h-5 w-5 text-emerald-600" />
+                  </label>
+                </div>
+              </div>
+
+              <!-- Batas Maksimal -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jumlah Maksimal Program Ditampilkan</label>
+                <div class="mt-1">
+                  <input v-model="publicSettings.landing_program_limit" type="number" min="1" max="12" class="w-full sm:w-48 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all" />
+                </div>
+                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Tentukan berapa banyak kartu kegiatan yang akan dirender di halaman depan (Rekomendasi: 3 atau 4).</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   </div>
@@ -197,7 +275,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Database, Tags, Save, Plus, Trash2, ArrowDownLeft, ArrowUpRight, CreditCard, UploadCloud, X } from 'lucide-vue-next'
+import { Database, Tags, Save, Plus, Trash2, ArrowDownLeft, ArrowUpRight, CreditCard, UploadCloud, X, MonitorPlay, CheckCircle2 } from 'lucide-vue-next'
 import { useKeuanganStore } from '@/stores/keuangan'
 import { useToastStore } from '@/stores/toast'
 
@@ -223,6 +301,12 @@ const donationSettings = ref({
 })
 const qrImageFile = ref(null)
 const qrImagePreviewUrl = ref(null)
+
+// Public View Settings State
+const publicSettings = ref({
+  landing_program_mode: 'active',
+  landing_program_limit: 3
+})
 
 onMounted(async () => {
   isLoading.value = true
@@ -250,6 +334,8 @@ const populateSettings = () => {
   } else {
     qrImagePreviewUrl.value = null
   }
+  publicSettings.value.landing_program_mode = s.landing_program_mode || 'active'
+  publicSettings.value.landing_program_limit = parseInt(s.landing_program_limit) || 3
 }
 
 const handleFileUpload = (e) => {
@@ -345,6 +431,15 @@ const saveSettings = async () => {
       await keuanganStore.updateSettings(formData)
       populateSettings()
       toast.addToast('Mode Pembayaran berhasil disimpan', 'success')
+      
+    } else if (activeTab.value === 'tampilan_publik') {
+      const formData = new FormData()
+      formData.append('settings[landing_program_mode]', publicSettings.value.landing_program_mode)
+      formData.append('settings[landing_program_limit]', publicSettings.value.landing_program_limit)
+      
+      await keuanganStore.updateSettings(formData)
+      populateSettings()
+      toast.addToast('Tampilan Publik berhasil disimpan', 'success')
     }
   } catch (err) {
     toast.addToast('Terjadi kesalahan saat menyimpan', 'error')

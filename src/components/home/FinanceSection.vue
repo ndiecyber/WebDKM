@@ -398,7 +398,7 @@
         </div>
         <div class="flex justify-between items-center mb-4 px-2 sm:px-1 relative z-50">
           <h4 class="text-xs sm:text-sm font-semibold text-gray-500 dark:text-gray-400">Rincian Laporan Kegiatan</h4>
-          <div class="flex items-center gap-2 sm:gap-3">
+          <div class="flex items-center gap-2 sm:gap-3" v-if="isLatestMode">
             <span class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium hidden sm:inline-block">Pilih Tahun:</span>
           <div class="relative inline-block z-50" ref="yearDropdownRef">
             <button 
@@ -515,10 +515,12 @@ import { Wallet, TrendingUp, TrendingDown, BadgeCheck, ShieldCheck, CalendarDays
 import IslamicPattern from '@/components/ui/IslamicPattern.vue'
 import SpecialReportModal from '@/components/ui/SpecialReportModal.vue'
 import { useAdminStore } from '@/stores/admin'
+import { useKeuanganStore } from '@/stores/keuangan'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const adminStore = useAdminStore()
+const keuanganStore = useKeuanganStore()
 const headerRef = ref(null)
 const cardsRef = ref(null)
 const dividerRef = ref(null)
@@ -861,198 +863,69 @@ const selectedYear = ref('2026');
 const selectYear = (year) => {
   selectedYear.value = year;
   isYearDropdownOpen.value = false;
+  loadPublicPrograms();
 };
 
-// Data Mockup Laporan Khusus
-const specialReports = [
-  {
-    id: 'isra-miraj',
-    title: 'PHBI Isra’ Mi’raj',
-    year: '2026',
-    icon: Star,
-    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
-    date: '18 Januari 2026M / 1447H',
-    pemasukan: [
-      { no: 1, tanggal: '10 Jan 2026', uraian: 'Total Open Donasi Warga Perum Arjamukti', jumlah: 6682000 }
-    ],
-    pengeluaran: [
-      { no: 1, tanggal: '12 Jan 2026', uraian: '170 Box Nasi Kuning Dewasa', jumlah: 1360000 },
-      { no: 2, tanggal: '12 Jan 2026', uraian: '150 Box Nasi Kuning Anak', jumlah: 900000 },
-      { no: 3, tanggal: '12 Jan 2026', uraian: '25 Porsi Paket Nasi Prasmanan', jumlah: 500000 },
-      { no: 4, tanggal: '15 Jan 2026', uraian: 'Mubaligh / Penceramah', jumlah: 700000 },
-      { no: 5, tanggal: '15 Jan 2026', uraian: 'Qori Al-Quran', jumlah: 100000 },
-      { no: 6, tanggal: '16 Jan 2026', uraian: 'Bingkisan Mubalig', jumlah: 110000 },
-      { no: 7, tanggal: '16 Jan 2026', uraian: '2 Runtuy Kopi dan Rokok', jumlah: 97000 },
-      { no: 8, tanggal: '17 Jan 2026', uraian: 'Air Mineral 4 Dus @18.000', jumlah: 72000 },
-      { no: 9, tanggal: '17 Jan 2026', uraian: 'Air Mineral 8 Dus @17.000', jumlah: 136000 },
-      { no: 10, tanggal: '17 Jan 2026', uraian: '1 Banner Frontlite 280 (3x2M) @25.000', jumlah: 150000 },
-      { no: 11, tanggal: '18 Jan 2026', uraian: 'TIM Petugas Kebersihan', jumlah: 100000 },
-      { no: 12, tanggal: '18 Jan 2026', uraian: 'Akomodasi', jumlah: 20000 }
-    ],
-    totalPemasukan: 6682000,
-    totalPengeluaran: 4245000,
-    sisaSaldo: 2437000,
-    terbilang: 'Dua Juta Empat Ratus Tiga Puluh Tujuh Ribu Rupiah',
-    keterangan: '',
-    ketua: 'Irvan Ruchiat',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Ketua Panitia'
-  },
-  {
-    id: 'maulid-nabi',
-    title: 'PHBI Maulid Nabi',
-    year: '2026',
-    icon: BookOpen,
-    subtitle: 'PERUM ARJAMUKTI KENCANA RAYA',
-    date: '12 Rabiul Awal 1447H',
-    pemasukan: [
-      { no: 1, tanggal: '01 Rabiul Awal', uraian: 'Infaq Jamaah Pengajian Rutin', jumlah: 4500000 },
-      { no: 2, tanggal: '05 Rabiul Awal', uraian: 'Donasi Hamba Allah', jumlah: 1500000 }
-    ],
-    pengeluaran: [
-      { no: 1, tanggal: '10 Rabiul Awal', uraian: 'Honor Penceramah', jumlah: 1000000 },
-      { no: 2, tanggal: '11 Rabiul Awal', uraian: 'Konsumsi (200 Box @15.000)', jumlah: 3000000 },
-      { no: 3, tanggal: '11 Rabiul Awal', uraian: 'Dekorasi & Tenda', jumlah: 1200000 },
-      { no: 4, tanggal: '12 Rabiul Awal', uraian: 'Kebersihan', jumlah: 200000 }
-    ],
-    totalPemasukan: 6000000,
-    totalPengeluaran: 5400000,
-    sisaSaldo: 600000,
-    terbilang: 'Enam Ratus Ribu Rupiah',
-    keterangan: 'Sisa dana disetorkan ke Kas Utama DKM',
-    ketua: 'Ahmad Syafiq',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Ketua Panitia'
-  },
-  {
-    id: 'kegiatan-zakat',
-    title: 'Kegiatan Zakat',
-    year: '2026',
-    icon: HeartHandshake,
-    subtitle: 'PANITIA ZAKAT 1447 H / 2026 M PERUM ARJAMUKTI KENCANA RAYA',
-    date: 'Sabtu, 21 Maret 2026',
-    pemasukan: [
-      { no: 1, tanggal: '01 Mar 2026', uraian: 'Zakat Fitrah 493 Jiwa', jumlah: 12654000 },
-      { no: 2, tanggal: '15 Mar 2026', uraian: 'Total Infaq / Sedekah', jumlah: 1498000 }
-    ],
-    pengeluaran: [
-      { no: 1, tanggal: '18 Mar 2026', uraian: 'Fotocopy Formulir Zakat (Diambil dari pos sedekah)', jumlah: 38500 },
-      { no: 2, tanggal: '18 Mar 2026', uraian: '2 Pack Paperline (Diambil dari pos sedekah)', jumlah: 28000 },
-      { no: 3, tanggal: '19 Mar 2026', uraian: '3 Pack K.30 Piala (Diambil dari pos sedekah)', jumlah: 69000 },
-      { no: 4, tanggal: '20 Mar 2026', uraian: 'Bensin Akomodasi (Diambil dari pos sedekah)', jumlah: 10000 },
-      { no: 5, tanggal: '20 Mar 2026', uraian: 'Setoran ke Desa (Baznas)', jumlah: 250000 },
-      { no: 6, tanggal: '21 Mar 2026', uraian: '92 Amplop x @100.000 (Mustahik Zakat Dalam Perum)', jumlah: 9200000 },
-      { no: 7, tanggal: '21 Mar 2026', uraian: '33 Amplop x @100.000 (Mustahik Zakat Luar Perum)', jumlah: 3300000 },
-      { no: 8, tanggal: '21 Mar 2026', uraian: '6 Amil Zakat Inti (Diambil dari pos sedekah)', jumlah: 800000 }
-    ],
-    totalPemasukan: 14152000,
-    totalPengeluaran: 13695500,
-    sisaSaldo: 456500,
-    terbilang: 'Empat Ratus Lima Puluh Enam Ribu Lima Ratus Rupiah',
-    keterangan: 'Sisa saldo disetorkan ke KAS DKMJ KASSITI',
-    ketua: 'H. Redi Sasriandi',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Ketua Panitia'
-  },
-  {
-    id: 'kegiatan-qurban',
-    title: 'Kegiatan Qurban',
-    year: '2026',
-    icon: Gift,
-    subtitle: 'PANITIA QURBAN DKMJ KASSITI 1447H / 2026M',
-    date: 'Perum Arjamukti Kencana Raya',
-    pemasukan: [
-      { no: 1, uraian: 'Kas awal dari DKM Kassiti', jumlah: 1000000 },
-      { no: 2, uraian: 'Titipan 21 Peserta Qurban Hewan Sapi', jumlah: 81900000 },
-      { no: 3, uraian: 'Infak OPS 24 Peserta Qurban Hewan Sapi & Domba', jumlah: 2550000 },
-      { no: 4, uraian: 'Penjualan Kulit Hewan Qurban Sapi & Domba', jumlah: 437000 }
-    ],
-    pengeluaran: [
-      { no: 1, uraian: 'DP Pembelian 3 Ekor Hewan Qurban Sapi', jumlah: 6000000 },
-      { no: 2, uraian: 'Biaya Mempertajam Perkakas Pisau & Kapak', jumlah: 150000 },
-      { no: 3, uraian: 'ATK, Print dan Foto Copy', jumlah: 50000 },
-      { no: 4, uraian: 'Pelunasan Pembelian 3 Ekor Hewan Qurban Sapi', jumlah: 76500000 },
-      { no: 5, uraian: '5 Karung BB 6 @12.000', jumlah: 60000 },
-      { no: 6, uraian: '6 Pack Keresek Apel 26 Hitam', jumlah: 90000 },
-      { no: 7, uraian: '5 Leunjer Bambu Haur', jumlah: 75000 },
-      { no: 8, uraian: '3 Pack Cup Gelas Plastik Zetta', jumlah: 21000 },
-      { no: 9, uraian: 'Gas Elpiji 3 Kg', jumlah: 21000 },
-      { no: 10, uraian: 'Isi Ulang Galon Aqua', jumlah: 23000 },
-      { no: 11, uraian: '1/2 ons Karet Hijau', jumlah: 3000 },
-      { no: 12, uraian: 'Tenda 120 Meter', jumlah: 1000000 },
-      { no: 13, uraian: 'Konsumsi Makan & Snack Hari Raya', jumlah: 693700 },
-      { no: 14, uraian: 'Mata Gerinda WD 5 Inch', jumlah: 30000 },
-      { no: 15, uraian: '2 Petugas Tim Kebersihan', jumlah: 150000 },
-      { no: 16, uraian: 'Pengembalian Kas awal ke DKM Kassiti', jumlah: 1000000 }
-    ],
-    totalPemasukan: 85887000,
-    totalPengeluaran: 85866700,
-    sisaSaldo: 20300,
-    terbilang: 'Dua Puluh Ribu Tiga Ratus Rupiah',
-    keterangan: 'Sisa saldo KAS Kegiatan Qurban di Infaqkan ke Masjid Kassiti.',
-    ketua: 'H. Redi Sasriandi',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Mengetahui, Ketua Panitia'
-  },
-  {
-    id: 'imtihan-akhirussanah',
-    title: 'Imtihan Akhirussanah',
-    year: '2025',
-    icon: GraduationCap,
-    subtitle: 'TPQ / MADRASAH DKMJ KASSITI',
-    date: 'Tahun Ajaran 2025/2026',
-    pemasukan: [
-      { no: 1, uraian: 'Iuran Wali Santri', jumlah: 3500000 },
-      { no: 2, uraian: 'Donasi Simpatisan', jumlah: 1200000 },
-      { no: 3, uraian: 'Subsidi Kas DKM', jumlah: 500000 }
-    ],
-    pengeluaran: [
-      { no: 1, uraian: 'Sewa Tenda & Panggung', jumlah: 1500000 },
-      { no: 2, uraian: 'Piala dan Piagam Penghargaan', jumlah: 800000 },
-      { no: 3, uraian: 'Konsumsi Santri dan Undangan', jumlah: 1800000 },
-      { no: 4, uraian: 'Dokumentasi', jumlah: 300000 },
-      { no: 5, uraian: 'Hadiah Lomba', jumlah: 500000 }
-    ],
-    totalPemasukan: 5200000,
-    totalPengeluaran: 4900000,
-    sisaSaldo: 300000,
-    terbilang: 'Tiga Ratus Ribu Rupiah',
-    keterangan: 'Disimpan untuk kas TPQ',
-    ketua: 'Ust. Hasan Basri',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Kepala TPQ'
-  },
-  {
-    id: 'renovasi-wudhu',
-    title: 'Renovasi Tempat Wudhu',
-    year: '2024',
-    icon: Gift,
-    subtitle: 'PANITIA PEMBANGUNAN MASJID KASSITI',
-    date: '15 Agustus 2024',
-    pemasukan: [
-      { no: 1, tanggal: '01 Agt 2024', uraian: 'Kas Awal Pembangunan', jumlah: 5000000 },
-      { no: 2, tanggal: '05 Agt 2024', uraian: 'Sumbangan Donatur Utama', jumlah: 15000000 },
-      { no: 3, tanggal: '10 Agt 2024', uraian: 'Infaq Kotak Amal Khusus', jumlah: 3450000 }
-    ],
-    pengeluaran: [
-      { no: 1, tanggal: '06 Agt 2024', uraian: 'Pembelian Semen & Pasir', jumlah: 4500000 },
-      { no: 2, tanggal: '08 Agt 2024', uraian: 'Keramik & Pipa Air', jumlah: 6800000 },
-      { no: 3, tanggal: '12 Agt 2024', uraian: 'Upah Tukang Pekan 1', jumlah: 3500000 },
-      { no: 4, tanggal: '15 Agt 2024', uraian: 'Alat Sanitasi & Keran Air', jumlah: 2450000 }
-    ],
-    totalPemasukan: 23450000,
-    totalPengeluaran: 17250000,
-    sisaSaldo: 6200000,
-    terbilang: 'Enam Juta Dua Ratus Ribu Rupiah',
-    keterangan: 'Pekerjaan renovasi area wudhu pria selesai dengan lancar.',
-    ketua: 'H. Redi Sasriandi',
-    bendahara: 'Randi Rizal',
-    ttdKiriTitle: 'Ketua Panitia'
+const isLatestMode = ref(false);
+const specialReports = ref([]);
+
+const loadPublicPrograms = async () => {
+  try {
+    const settings = await keuanganStore.fetchPublicSettings();
+    isLatestMode.value = settings.landing_program_mode === 'latest';
+    
+    const yearParam = isLatestMode.value ? selectedYear.value : null;
+    const programs = await keuanganStore.fetchPublicPrograms({ year: yearParam });
+    
+    const universalIcons = [Star, HeartHandshake, Gift, Wallet, Activity, BadgeCheck, ShieldCheck];
+    
+    specialReports.value = programs.map((p, index) => {
+      // Pick a pseudo-random icon based on index or just random
+      const randomIcon = universalIcons[index % universalIcons.length];
+      
+      // Pisahkan dan format transaksi
+      let noPemasukan = 1;
+      const pemasukanData = (p.transactions || [])
+        .filter(t => t.type === 'in' || t.type === 'pemasukan')
+        .map(t => ({
+          no: noPemasukan++,
+          tanggal: t.date,
+          uraian: t.name || t.description,
+          jumlah: t.amount,
+        }));
+        
+      let noPengeluaran = 1;
+      const pengeluaranData = (p.transactions || [])
+        .filter(t => t.type === 'out' || t.type === 'pengeluaran')
+        .map(t => ({
+          no: noPengeluaran++,
+          tanggal: t.date,
+          uraian: t.name || t.description,
+          jumlah: t.amount,
+        }));
+
+      return {
+        id: p.id,
+        title: p.name || 'Program DKM',
+        year: p.startDate ? p.startDate.substring(0,4) : (p.createdAt ? p.createdAt.substring(0,4) : ''),
+        icon: randomIcon,
+        subtitle: p.description || 'Kegiatan DKM',
+        date: p.startDate || 'Sepanjang Waktu',
+        pemasukan: pemasukanData,
+        pengeluaran: pengeluaranData,
+        totalPemasukan: p.pemasukan || 0,
+        totalPengeluaran: p.pengeluaran || 0,
+        sisaSaldo: p.sisaSaldo || 0,
+        terbilang: 'Lihat Detail',
+      };
+    });
+  } catch (err) {
+    console.error('Failed to load public programs:', err);
   }
-];
+};
 
 const filteredSpecialReports = computed(() => {
-  return specialReports.filter(report => report.year === selectedYear.value);
+  return specialReports.value; // Filter dilakukan di backend
 });
 
 const counter1 = ref(null)
@@ -1297,6 +1170,8 @@ onMounted(() => {
   animateAllCounters(true)
   animateSparklines(true)
   animateProgressBars(true)
+  
+  loadPublicPrograms()
 })
 </script>
 
