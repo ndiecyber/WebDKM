@@ -418,7 +418,7 @@
             >
               <div v-show="isYearDropdownOpen" class="absolute right-0 mt-2 w-full min-w-[90px] bg-white dark:bg-[#1a1f2e] border border-gray-200 dark:border-white/10 rounded-xl shadow-xl z-[60] overflow-hidden">
                 <div class="max-h-48 overflow-y-auto custom-scrollbar py-1">
-                  <button v-for="year in ['2026', '2025', '2024']" :key="year" @click="selectYear(year)" class="w-full text-left px-4 py-2 text-xs sm:text-sm transition-colors hover:bg-gray-50 dark:hover:bg-white/5" :class="selectedYear === year ? 'text-primary dark:text-secondary font-bold bg-primary/5 dark:bg-secondary/5' : 'text-gray-600 dark:text-gray-400 font-medium'">
+                  <button v-for="year in summaryYears" :key="year" @click="selectYear(year)" class="w-full text-left px-4 py-2 text-xs sm:text-sm transition-colors hover:bg-gray-50 dark:hover:bg-white/5" :class="selectedYear === year ? 'text-primary dark:text-secondary font-bold bg-primary/5 dark:bg-secondary/5' : 'text-gray-600 dark:text-gray-400 font-medium'">
                     {{ year }}
                   </button>
                 </div>
@@ -508,7 +508,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Wallet, TrendingUp, TrendingDown, BadgeCheck, ShieldCheck, CalendarDays, ArrowUpRight, ArrowDownRight, Activity, BookOpen, HeartHandshake, Gift, GraduationCap, LayoutList, Star, ChevronDown } from 'lucide-vue-next'
@@ -550,140 +550,88 @@ const formatRupiah = (angka) => {
 }
 
 // Tambahkan ref untuk filter bulan dan rincian data bulanan
-const selectedMonth = ref('Januari');
+const monthNamesFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const currentDate = new Date();
+const selectedMonth = ref(monthNamesFull[currentDate.getMonth()]);
 const isDropdownOpen = ref(false);
 const dropdownRef = ref(null);
-const months = ['Januari', 'April', 'Mei', 'Juni'];
+const months = monthNamesFull;
 const activeTab = ref('Semua');
 
-const monthlyFinanceData = {
-  'Januari': {
-    saldoAwal: '0,14',
-    saldoAwalFull: '138.200',
-    pemasukan: '5,06',
-    pemasukanFull: '5.059.100',
-    pengeluaran: '2,83',
-    pengeluaranFull: '2.830.000',
-    saldoAkhir: '2,23',
-    saldoAkhirFull: '2.229.100',
-    selisihBersih: '2.229.100',
-    transactions: [
-      { date: '01 Jan 2026', description: '2 Marbot Masjid', category: 'Operasional', type: 'out', amount: 600000 },
-      { date: '02 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
-      { date: '02 Jan 2026', description: '5 Lt Bensin Mesin Potong Rumput', category: 'Operasional', type: 'out', amount: 80000 },
-      { date: '03 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 100000 },
-      { date: '05 Jan 2026', description: '2 Petugas Potong Rumput', category: 'Operasional', type: 'out', amount: 150000 },
-      { date: '07 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Umum Selasa', category: 'Kajian', type: 'out', amount: 100000 },
-      { date: '07 Jan 2026', description: 'Service Mixer & Speaker Masjid', category: 'Fasilitas', type: 'out', amount: 100000 },
-      { date: '09 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
-      { date: '09 Jan 2026', description: 'Hamba Allah', category: 'Donasi', type: 'in', amount: 50000 },
-      { date: '10 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 100000 },
-      { date: '13 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Umum Selasa', category: 'Kajian', type: 'out', amount: 100000 },
-      { date: '13 Jan 2026', description: 'Hamba Allah', category: 'Donasi', type: 'in', amount: 50000 },
-      { date: '16 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
-      { date: '23 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
-      { date: '24 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 100000 },
-      { date: '27 Jan 2026', description: 'Mubalig dan konsumsi Pengajian Umum Selasa', category: 'Kajian', type: 'out', amount: 100000 },
-      { date: '30 Jan 2026', description: 'Khotib Imam & Muadzin Jum\'at', category: 'Operasional', type: 'out', amount: 70000 },
-      { date: '31 Jan 2026', description: 'Kencleng Bln. Januari 2026', category: 'Kotak Amal', type: 'in', amount: 2233900 },
-      { date: '31 Jan 2026', description: 'Saldo Kegiatan PHBI Isra\' Mi\'raj 1447H', category: 'Kegiatan', type: 'in', amount: 2437000 },
-      { date: '31 Jan 2026', description: 'Hamba Allah', category: 'Donasi', type: 'in', amount: 150000 },
-      { date: '31 Jan 2026', description: 'Mubalig Pengajian Bulanan Ibu-Ibu Sabtu', category: 'Kajian', type: 'out', amount: 150000 },
-      { date: '31 Jan 2026', description: '80 Nasi Box Pengajian Bulanan Ibu-Ibu', category: 'Kajian', type: 'out', amount: 800000 }
-    ],
-    trend: {
-      saldo: [0.14, 0.2, 0.3, 0.5, 1.0, 1.5, 2.23],
-      income: [0, 0.05, 0.05, 0, 0, 0, 4.82],
-      expense: [0.6, 0.25, 0.2, 0.17, 0.17, 0.17, 1.12]
-    }
-  },
-  'April': {
-    saldoAwal: '80,50',
-    saldoAwalFull: '80.500.000',
-    pemasukan: '12,24',
-    pemasukanFull: '12.240.000',
-    pengeluaran: '8,00',
-    pengeluaranFull: '8.000.000',
-    saldoAkhir: '84,74',
-    saldoAkhirFull: '84.740.000',
-    selisihBersih: '4.240.000',
-    transactions: [
-      { date: '02 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 2450000 },
-      { date: '05 Apr 2026', description: 'Biaya Kebersihan & Pemeliharaan Masjid', category: 'Operasional', type: 'out', amount: 750000 },
-      { date: '09 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 2680000 },
-      { date: '12 Apr 2026', description: 'Pembayaran Listrik & Internet Bulanan', category: 'Operasional', type: 'out', amount: 1250000 },
-      { date: '15 Apr 2026', description: 'Sumbangan Donatur Pembangunan Aula', category: 'Donasi', type: 'in', amount: 3500000 },
-      { date: '16 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 2110000 },
-      { date: '20 Apr 2026', description: 'Honorarium Imam & Muadzin Bulanan', category: 'Operasional', type: 'out', amount: 4500000 },
-      { date: '23 Apr 2026', description: 'Kotak Amal Sholat Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 1500000 },
-      { date: '26 Apr 2026', description: 'Pembelian Sabun & Alat Kebersihan', category: 'Operasional', type: 'out', amount: 500000 },
-      { date: '29 Apr 2026', description: 'Infaq Shodaqoh Hamba Allah', category: 'Donasi', type: 'in', amount: 1000000 }
-    ],
-    trend: {
-      saldo: [80.5, 82.2, 81.45, 82.88, 86.38, 83.88, 84.74],
-      income: [2.45, 0, 2.68, 0, 3.5, 2.11, 1.5],
-      expense: [0, 0.75, 0, 1.25, 0, 4.5, 0.5]
-    }
-  },
-  'Mei': {
-    saldoAwal: '84,74',
-    saldoAwalFull: '84.739.781',
-    pemasukan: '15,00',
-    pemasukanFull: '15.000.000',
-    pengeluaran: '8,00',
-    pengeluaranFull: '8.000.000',
-    saldoAkhir: '91,74',
-    saldoAkhirFull: '91.739.781',
-    selisihBersih: '7.000.000',
-    transactions: [
-      { date: '01 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 3250000 },
-      { date: '04 Mei 2026', description: 'Pemeliharaan AC Ruang Sholat Utama', category: 'Operasional', type: 'out', amount: 1200000 },
-      { date: '08 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 2950000 },
-      { date: '10 Mei 2026', description: 'Pembelian Perlengkapan Sound System', category: 'Fasilitas', type: 'out', amount: 1800000 },
-      { date: '15 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 3100000 },
-      { date: '19 Mei 2026', description: 'Pembayaran Rekening Listrik & Air', category: 'Operasional', type: 'out', amount: 1500000 },
-      { date: '22 Mei 2026', description: 'Infaq Kotak Amal Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 3700000 },
-      { date: '25 Mei 2026', description: 'Honorarium Imam, Khotib & Muadzin', category: 'Operasional', type: 'out', amount: 3500000 },
-      { date: '29 Mei 2026', description: 'Sumbangan Donatur Pengembangan TPQ', category: 'Donasi', type: 'in', amount: 2000000 }
-    ],
-    trend: {
-      saldo: [84.74, 87.99, 86.79, 89.74, 91.04, 87.54, 91.74],
-      income: [3.25, 0, 2.95, 0, 3.1, 3.7, 2.0],
-      expense: [0, 1.2, 0, 1.8, 0, 3.5, 0]
-    }
-  },
-  'Juni': {
-    saldoAwal: '91,74',
-    saldoAwalFull: '91.739.781',
-    pemasukan: '18,50',
-    pemasukanFull: '18.500.000',
-    pengeluaran: '10,25',
-    pengeluaranFull: '10.250.000',
-    saldoAkhir: '99,99',
-    saldoAkhirFull: '99.989.781',
-    selisihBersih: '8.250.000',
-    transactions: [
-      { date: '02 Jun 2026', description: 'Sumbangan Pembangunan Kanopi Masjid', category: 'Donasi', type: 'in', amount: 5000000 },
-      { date: '05 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 1', category: 'Kotak Amal', type: 'in', amount: 2850000 },
-      { date: '08 Jun 2026', description: 'Bantuan Sosial Paket Sembako Yatim', category: 'Sosial', type: 'out', amount: 2500000 },
-      { date: '12 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 2', category: 'Kotak Amal', type: 'in', amount: 3120000 },
-      { date: '15 Jun 2026', description: 'Pembayaran Listrik, Air & Wifi Bulanan', category: 'Operasional', type: 'out', amount: 1750000 },
-      { date: '19 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 3', category: 'Kotak Amal', type: 'in', amount: 3430000 },
-      { date: '22 Jun 2026', description: 'Pembelian Cat Tembok dan Alat Kerja Bakti', category: 'Operasional', type: 'out', amount: 1500000 },
-      { date: '26 Jun 2026', description: 'Kotak Amal Sholat Jumat Pekan 4', category: 'Kotak Amal', type: 'in', amount: 4100000 },
-      { date: '28 Jun 2026', description: 'Honorarium Bulanan Marbot & Pengajar', category: 'Operasional', type: 'out', amount: 4500000 }
-    ],
-    trend: {
-      saldo: [91.74, 96.74, 99.59, 97.09, 100.21, 98.71, 99.99],
-      income: [5.0, 2.85, 0, 3.12, 3.43, 4.1, 0],
-      expense: [0, 0, 2.5, 0, 1.75, 1.5, 4.5]
-    }
-  }
-};
+const monthlyFinanceData = ref({})
+const currentReportData = ref({
+  saldoAwal: 0,
+  pemasukan: 0,
+  pengeluaran: 0,
+  saldoAkhir: 0,
+  transactions: []
+})
 
 const currentMonthData = computed(() => {
-  return monthlyFinanceData[selectedMonth.value] || monthlyFinanceData['Mei'];
-});
+  return monthlyFinanceData.value[selectedMonth.value] || {
+    saldoAwal: '0,00',
+    saldoAwalFull: '0',
+    pemasukan: '0,00',
+    pemasukanFull: '0',
+    pengeluaran: '0,00',
+    pengeluaranFull: '0',
+    saldoAkhir: '0,00',
+    saldoAkhirFull: '0',
+    selisihBersih: '0',
+    transactions: [],
+    trend: {
+      saldo: [0, 0, 0, 0, 0, 0, 0],
+      income: [0, 0, 0, 0, 0, 0, 0],
+      expense: [0, 0, 0, 0, 0, 0, 0]
+    }
+  }
+})
+
+const loadMonthlyReport = async () => {
+  const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const monthIndex = monthNames.indexOf(selectedMonth.value) + 1;
+  const year = summarySelectedYear.value; 
+  
+  const report = await keuanganStore.fetchPublicMonthlyReport(monthIndex, year);
+  if (report) {
+    currentReportData.value = report;
+    
+    // Transaksi sudah di-map di store (mapTransactionFromApi), jadi kita gunakan field FE
+    const mappedTransactions = report.transactions.map(t => ({
+      date: t.date,
+      description: t.description || t.name || 'Transaksi',
+      category: t.category || 'Lainnya',
+      type: t.type,
+      amount: t.amount
+    }));
+
+    monthlyFinanceData.value = {
+      ...monthlyFinanceData.value,
+      [selectedMonth.value]: {
+        saldoAwal: (report.saldoAwal / 1000000).toFixed(2).replace('.', ','),
+      saldoAwalFull: formatRupiah(report.saldoAwal),
+      pemasukan: (report.pemasukan / 1000000).toFixed(2).replace('.', ','),
+      pemasukanFull: formatRupiah(report.pemasukan),
+      pengeluaran: (report.pengeluaran / 1000000).toFixed(2).replace('.', ','),
+      pengeluaranFull: formatRupiah(report.pengeluaran),
+      saldoAkhir: (report.saldoAkhir / 1000000).toFixed(2).replace('.', ','),
+      saldoAkhirFull: formatRupiah(report.saldoAkhir),
+      selisihBersih: formatRupiah(Math.abs(report.pemasukan - report.pengeluaran)),
+      transactions: mappedTransactions,
+      trend: {
+        saldo: [0, 0, 0, 0, 0, 0, report.saldoAkhir / 1000000],
+        income: [0, 0, 0, 0, 0, 0, report.pemasukan / 1000000],
+        expense: [0, 0, 0, 0, 0, 0, report.pengeluaran / 1000000]
+      }
+      }
+    };
+    
+    await nextTick();
+    animateAllCounters(false);
+    animateSparklines(false);
+    animateProgressBars(false);
+  }
+}
 
 const filteredTransactions = computed(() => {
   const txs = currentMonthData.value.transactions || []
@@ -698,6 +646,7 @@ const filteredTransactions = computed(() => {
 const selectMonth = (month) => {
   selectedMonth.value = month;
   isDropdownOpen.value = false;
+  loadMonthlyReport();
 };
 
 // Computed property untuk menentukan teks label bulan secara dinamis pada kartu utama
@@ -831,6 +780,8 @@ const openMonthlyReport = () => {
 
 // Handle click outside to close dropdown
 onMounted(() => {
+  loadMonthlyReport();
+  
   document.addEventListener('click', (e) => {
     if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
       isDropdownOpen.value = false;
@@ -847,18 +798,20 @@ onMounted(() => {
 // Dropdown state untuk summary tahun
 const isSummaryYearDropdownOpen = ref(false);
 const summaryYearDropdownRef = ref(null);
-const summarySelectedYear = ref('2026');
-const summaryYears = ['2026', '2025', '2024'];
+const currentYearStr = new Date().getFullYear().toString();
+const summarySelectedYear = ref(currentYearStr);
+const summaryYears = [currentYearStr, (new Date().getFullYear() - 1).toString(), (new Date().getFullYear() - 2).toString()];
 
 const selectSummaryYear = (year) => {
   summarySelectedYear.value = year;
   isSummaryYearDropdownOpen.value = false;
+  loadMonthlyReport();
 };
 
 // Dropdown state untuk tahun
 const isYearDropdownOpen = ref(false);
 const yearDropdownRef = ref(null);
-const selectedYear = ref('2026');
+const selectedYear = ref(currentYearStr);
 
 const selectYear = (year) => {
   selectedYear.value = year;
@@ -1040,7 +993,6 @@ const resetTilt = (index) => {
   cardTilts.value[index] = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
 }
 
-import { watch } from 'vue'
 
 const animateCounter = (element, targetValue, duration = 1.0, isDecimal = false, useScrollTrigger = false) => {
   if (!element) return

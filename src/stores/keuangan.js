@@ -74,6 +74,24 @@ export const useKeuanganStore = defineStore('keuangan', {
       }
     },
 
+    async fetchPublicMonthlyReport(month, year) {
+      try {
+        const res = await api.get('/keuangan/public/monthly-report', { params: { month, year } })
+        const data = res.data?.data ?? res.data
+        return {
+          periode: data.periode,
+          saldoAwal: data.saldo_awal,
+          pemasukan: data.pemasukan,
+          pengeluaran: data.pengeluaran,
+          saldoAkhir: data.saldo_akhir,
+          transactions: (data.transactions || []).map(mapTransactionFromApi)
+        }
+      } catch (err) {
+        console.error('fetchPublicMonthlyReport error:', err)
+        return null
+      }
+    },
+
     async fetchChartData(months = 6) {
       this.loading.chart = true
       try {
