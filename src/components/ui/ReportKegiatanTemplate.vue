@@ -131,8 +131,8 @@
       <div v-if="page.showSignatures" class="flex items-end pt-4 sm:pt-6 pb-2 break-inside-avoid text-sm mt-4 sm:mt-8 border-t border-gray-200 w-full px-2 sm:px-12" :class="isPrintMode ? 'justify-between' : 'justify-center'">
         <!-- Kiri: Ketua -->
         <div v-if="isPrintMode" class="flex flex-col items-center text-center">
-          <p class="text-[10px] sm:text-xs text-gray-900 mb-12 sm:mb-16">{{ report.ttdKiriTitle || 'Ketua Panitia' }}</p>
-          <p class="text-[10px] sm:text-xs font-bold text-gray-900 underline">{{ report.ketua }}</p>
+          <p class="text-[10px] sm:text-xs text-gray-900 mb-12 sm:mb-16 min-h-[16px]">{{ report.ttdKiriTitle }}</p>
+          <p class="text-[10px] sm:text-xs font-bold text-gray-900 underline min-h-[16px]">{{ report.ketua }}</p>
         </div>
 
         <!-- Tengah (QR Code) -->
@@ -144,8 +144,8 @@
 
         <!-- Kanan: Bendahara -->
         <div v-if="isPrintMode" class="flex flex-col items-center text-center">
-          <p class="text-[10px] sm:text-xs text-gray-900 mb-12 sm:mb-16">{{ report.ttdKananTitle || 'Bendahara Panitia' }}</p>
-          <p class="text-[10px] sm:text-xs font-bold text-gray-900 underline">{{ report.bendahara }}</p>
+          <p class="text-[10px] sm:text-xs text-gray-900 mb-12 sm:mb-16 min-h-[16px]">{{ report.ttdKananTitle }}</p>
+          <p class="text-[10px] sm:text-xs font-bold text-gray-900 underline min-h-[16px]">{{ report.bendahara }}</p>
         </div>
       </div>
       

@@ -237,10 +237,10 @@ watch(selectedReportId, async (newVal) => {
       sisaSaldo: totalPemasukan - totalPengeluaran,
       terbilang: terbilang(totalPemasukan - totalPengeluaran), 
       keterangan: '',
-      ketua: 'Ketua Panitia',
-      bendahara: 'Bendahara Panitia',
-      ttdKiriTitle: 'Ketua Panitia',
-      ttdKananTitle: 'Bendahara Panitia'
+      ketua: '',
+      bendahara: '',
+      ttdKiriTitle: '',
+      ttdKananTitle: ''
     }
     
     // Auto-fill overrides
@@ -264,11 +264,11 @@ const processedReport = computed(() => {
   if (!dynamicReportTemplate.value) return null
   return {
     ...dynamicReportTemplate.value,
-    ketua: overrideKetua.value || dynamicReportTemplate.value.ketua,
-    bendahara: overrideBendahara.value || dynamicReportTemplate.value.bendahara,
-    ttdKiriTitle: overrideTtdKiriTitle.value || dynamicReportTemplate.value.ttdKiriTitle,
-    ttdKananTitle: overrideTtdKananTitle.value || dynamicReportTemplate.value.ttdKananTitle,
-    keterangan: customNote.value !== '' ? customNote.value : dynamicReportTemplate.value.keterangan,
+    ketua: overrideKetua.value,
+    bendahara: overrideBendahara.value,
+    ttdKiriTitle: overrideTtdKiriTitle.value,
+    ttdKananTitle: overrideTtdKananTitle.value,
+    keterangan: customNote.value !== '' ? customNote.value : '',
     printDate: overrideDate.value
   }
 })
