@@ -74,6 +74,24 @@ export const useKeuanganStore = defineStore('keuangan', {
       }
     },
 
+    async fetchPublicMonthlyReport(month, year) {
+      try {
+        const res = await api.get('/keuangan/public/monthly-report', { params: { month, year } })
+        const data = res.data?.data ?? res.data
+        return {
+          periode: data.periode,
+          saldoAwal: data.saldo_awal,
+          pemasukan: data.pemasukan,
+          pengeluaran: data.pengeluaran,
+          saldoAkhir: data.saldo_akhir,
+          transactions: (data.transactions || []).map(mapTransactionFromApi)
+        }
+      } catch (err) {
+        console.error('fetchPublicMonthlyReport error:', err)
+        return null
+      }
+    },
+
     async fetchChartData(months = 6) {
       this.loading.chart = true
       try {
@@ -102,6 +120,18 @@ export const useKeuanganStore = defineStore('keuangan', {
         console.error('fetchPrograms error:', err)
       } finally {
         this.loading.programs = false
+      }
+    },
+
+    async fetchPublicPrograms(params = {}) {
+      try {
+        const res = await api.get('/keuangan/public/programs', { params })
+        // Return raw data or map it if it's the same structure
+        const items = res.data?.data ?? res.data ?? []
+        return items.map(mapProgramFromApi)
+      } catch (err) {
+        console.error('fetchPublicPrograms error:', err)
+        return []
       }
     },
 
