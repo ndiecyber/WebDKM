@@ -436,7 +436,9 @@
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Metode Pembayaran</label>
                   <select v-model="formData.payment_method" required class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-secondary transition-all">
                     <option value="tunai">Tunai (Diterima Langsung)</option>
-                    <option value="transfer">Transfer Bank (Cek Mutasi)</option>
+                    <option v-if="paymentMode !== 'manual'" value="transfer">Transfer Bank (Cek Mutasi)</option>
+                    <option v-if="paymentMode === 'manual'" value="qris">QRIS</option>
+                    <option v-if="paymentMode === 'manual'" value="transfer_bsi">Transfer BSI</option>
                   </select>
                 </div>
               </div>
@@ -518,6 +520,7 @@ const setFilter = (value) => {
   currentPage.value = 1
 }
 
+const paymentMode = ref('gateway')
 const formData = ref({ name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' })
 
 // DATA
@@ -541,8 +544,22 @@ const fetchPesertaData = async () => {
   }
 }
 
+const fetchPaymentMode = async () => {
+  try {
+    const res = await api.get('/qurban/admin/settings')
+    if (res.data?.success) {
+      const settings = res.data.data
+      const pm = settings.find(s => s.key === 'payment_mode')
+      if (pm) paymentMode.value = pm.value
+    }
+  } catch (e) {
+    // Fallback to 'gateway' if settings can't be fetched
+  }
+}
+
 onMounted(() => {
   fetchPesertaData()
+  fetchPaymentMode()
 })
 
 watch(() => qurbanStore.selectedPeriodId, (newVal) => {
@@ -632,7 +649,8 @@ const openDetails = async (peserta) => {
 }
 const openAddModal = () => { 
   formData.value = { name: '', phone: '', address: '', target_type: 'sapi', initial_amount: 0, payment_method: 'tunai' }
-  modalType.value = 'add'; document.body.style.overflow = 'hidden' 
+  modalType.value = 'add'
+  document.body.style.overflow = 'hidden' 
 }
 const openEditModal = (peserta) => { 
   selectedPeserta.value = peserta; 
