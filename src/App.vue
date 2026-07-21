@@ -22,13 +22,15 @@ const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 const adminStore = useAdminStore()
 
 onMounted(() => {
-  // Fetch real database data for the public website sections
-  adminStore.fetchLayanan()
-  adminStore.fetchKegiatan()
-  adminStore.fetchGallery()
-  adminStore.fetchCommittee()
-  adminStore.fetchGeneralSettings()
-  adminStore.fetchCtaSettings()
-  adminStore.fetchMasterData()
+  // Fetch real database data for the public website sections only if not in admin
+  if (!isAdminRoute.value) {
+    adminStore.fetchLayanan()
+    adminStore.fetchKegiatan()
+    adminStore.fetchGallery()
+    adminStore.fetchCommittee()
+    adminStore.fetchGeneralSettings()
+    adminStore.fetchCtaSettings()
+    adminStore.fetchMasterData()
+  }
 })
 </script>

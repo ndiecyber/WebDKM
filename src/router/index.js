@@ -146,11 +146,49 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition
     }
-    return { top: 0, behavior: 'smooth' }
+    return { top: 0 } // Dibuat instant agar perpindahan page terasa cepat
   },
 })
 
+// Simple progress bar
+const startProgress = () => {
+  if (document.getElementById('route-progress')) return
+  const progress = document.createElement('div')
+  progress.id = 'route-progress'
+  progress.style.position = 'fixed'
+  progress.style.top = '0'
+  progress.style.left = '0'
+  progress.style.height = '3px'
+  progress.style.background = '#10b981' // emerald-500
+  progress.style.zIndex = '99999'
+  progress.style.transition = 'width 0.4s ease, opacity 0.3s ease'
+  progress.style.width = '15%'
+  progress.style.boxShadow = '0 0 10px #10b981, 0 0 5px #10b981'
+  document.body.appendChild(progress)
+  
+  // Fake progress
+  setTimeout(() => {
+    const el = document.getElementById('route-progress')
+    if (el) el.style.width = '70%'
+  }, 50)
+}
+
+const stopProgress = () => {
+  const el = document.getElementById('route-progress')
+  if (el) {
+    el.style.width = '100%'
+    setTimeout(() => {
+      el.style.opacity = '0'
+      setTimeout(() => el.remove(), 300)
+    }, 200)
+  }
+}
+
 router.beforeEach((to, from, next) => {
+  if (to.path !== from.path) {
+    startProgress()
+  }
+
   const adminStore = useAdminStore()
   
   if (to.meta.requiresAuth && !adminStore.isAuthenticated) {
@@ -162,6 +200,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+router.afterEach(() => {
+  stopProgress()
 })
 
 export default router
