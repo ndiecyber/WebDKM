@@ -249,7 +249,7 @@
             <p class="text-3xl font-black text-gray-900 dark:text-white mt-1">{{ formatRupiah(selectedTx.amount) }}</p>
           </div>
           
-          <div class="p-6 space-y-4 bg-gray-50 dark:bg-gray-800/50">
+          <div class="p-6 space-y-4 bg-gray-50 dark:bg-gray-800/50 max-h-[60vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center text-sm border-b border-gray-200 dark:border-gray-700 pb-2">
               <span class="text-gray-500 dark:text-gray-400 font-medium">ID Transaksi</span>
               <span class="font-bold text-gray-900 dark:text-white uppercase">{{ selectedTx.id }}</span>
